@@ -5,12 +5,14 @@
 #include <QLabel>
 #include <QAction>
 
+class Picture;
+
 class ImageViewer : public QScrollArea { Q_OBJECT
 
 public:
   
   /** Constructeurs et destructeurs */
-  ImageViewer();
+  ImageViewer(Picture*);
   ~ImageViewer();
                
 private:

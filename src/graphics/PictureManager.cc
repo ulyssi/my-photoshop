@@ -1,18 +1,16 @@
 #include "PictureManager.hh"
 
-PictureManager::PictureManager(UserInterface*)
-m_userInterface(UserInterface)
-{
-  m_listPictureButton = new QList();  
-}
+#include "UserInterface.hh"
+#include "PictureButton.hh"
+#include "PictureModifier.hh"
 
-PictureManager::~PictureManager() {
-  delete m_listPictureButton;
+PictureManager::PictureManager(UserInterface* userInterface) :
+  m_userInterface(userInterface),
+  m_listPictureButton()
+{}
 
-}
+PictureManager::~PictureManager() {}
 
-PictureManager::addPictureModifier(PictureModifier * pictureModifier ) {
-  PictureButton t_pictureButton = new PictureButton(PictureModifier); 
-  m_listPictureButton.append(t_pictureButton);
-  
+void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
+  m_listPictureButton.append(new PictureButton(pictureModifier));
 }

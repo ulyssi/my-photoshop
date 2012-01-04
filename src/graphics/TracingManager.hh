@@ -3,18 +3,22 @@
 
 #include <QListWidget>
 
+class PictureModifier;
+
 class TracingManager : public QListWidget { Q_OBJECT
 
 public:
 
   /** Constructeurs et destructeur */
-  TracingManager(PictureModifier);
+  TracingManager(PictureModifier*);
   ~TracingManager();
 
   /** Accesseurs */
   PictureModifier* getPictureModifier() const;
   
 private:
+
+  /** Attributs */
   PictureModifier* m_pictureModifier;
 
 };

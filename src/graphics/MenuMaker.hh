@@ -1,9 +1,13 @@
 #ifndef _MENUMAKER_HH_
 #define _MENUMAKER_HH_
 
+#include <QObject>
 #include <QMenu>
 
-class MenuMaker {
+class UserInterface;
+class ActionMaker;
+
+class MenuMaker : public QObject {
 
 public:
 
@@ -12,13 +16,16 @@ public:
   ~MenuMaker();
 
   /** Accesseurs */
-  QMenu* getFileMenu();
-  QMenu* getEditMenu();
-  QMenu* getViewMenu();
-  QMenu* getOperationMenu();
-  QMenu* getHelpMenu();
+  QMenu* getFileMenu() const;
+  QMenu* getEditMenu() const;
+  QMenu* getViewMenu() const;
+  QMenu* getOperationMenu() const;
+  QMenu* getHelpMenu() const;
 
 private:
+
+  /** Accesseurs internes */
+  ActionMaker* getActionMaker() const;
 
   /** Methodes internes */
   void createFileMenu();
@@ -28,6 +35,8 @@ private:
   void createHelpMenu();
 
   /** Attributs */
+  UserInterface* m_userInterface;
+
   QMenu* m_fileMenu;
   QMenu* m_editMenu;
   QMenu* m_viewMenu;

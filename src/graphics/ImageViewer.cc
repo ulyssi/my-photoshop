@@ -1,6 +1,8 @@
 #include "ImageViewer.hh"
 
-ImageViewer::ImageViewer() {
+#include "Picture.hh"
+
+ImageViewer::ImageViewer(Picture* picture) {
   m_imageLabel = new QLabel;
   m_imageLabel->setBackgroundRole(QPalette::Base);
   m_imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

@@ -2,12 +2,11 @@
 #define _USERINTERFACE_HH_
 
 #include <QMainWindow>
-#include <QApplication>
 #include <QTabWidget>
 
-#include "ActionMaker.hh"
-#include "MenuMaker.hh"
-#include "PictureManager.hh"
+class ActionMaker;
+class MenuMaker;
+class PictureManager;
 
 class UserInterface : public QMainWindow { Q_OBJECT
 
@@ -16,6 +15,9 @@ public:
   /** Constructeurs et destructeur */
   UserInterface();
   ~UserInterface();
+
+  /** Accesseurs */
+  ActionMaker* getActionMaker() const;
                  
 private:
 

@@ -1,10 +1,10 @@
 #ifndef _PICTUREMODIFIER_HH_
 #define _PICTUREMODIFIER_HH_
 
-#include "UserInterface.hh"
-#include "ImageViewer.hh"
-#include "TracingManager.hh"
-#include "../model/Picture.hh"
+class Picture;
+class UserInterface;
+class ImageViewer;
+class TracingManager;
 
 class PictureModifier  {
 
@@ -15,6 +15,7 @@ public :
   ~PictureModifier(); 
   
   /** Accesseurs */
+  Picture* getPicture() const;
   ImageViewer* getImageViewer() const;
   TracingManager* getTracingManager() const;
 

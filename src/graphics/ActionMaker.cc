@@ -1,5 +1,10 @@
 #include "ActionMaker.hh"
 
+#include <QObject>
+#include <QMessageBox>
+#include <QApplication>
+
+#include "UserInterface.hh"
 
 /** Constructeurs et destructeur */
 ActionMaker::ActionMaker(UserInterface* userInterface) :
@@ -14,9 +19,27 @@ ActionMaker::ActionMaker(UserInterface* userInterface) :
 
 ActionMaker::~ActionMaker() {}
 
+/** Accesseurs */
+QAction* ActionMaker::getOpenAction() const { return m_openAct; }
+QAction* ActionMaker::getSaveAction() const { return m_saveAct; }
+QAction* ActionMaker::getExitAction() const { return m_exitAct; }
+
+QAction* ActionMaker::getUndoAction() const { return m_undoAct; }
+QAction* ActionMaker::getRedoAction() const { return m_redoAct; }
+
+QAction* ActionMaker::getZoomInAction() const { return m_zoomInAct; }
+QAction* ActionMaker::getZoomOutAction() const { return m_zoomOutAct; }
+QAction* ActionMaker::getNormalSizeAction() const { return m_normalSizeAct; }
+QAction* ActionMaker::getFitToWindowAction() const { return m_fitToWindowAct; }
+
+QAction* ActionMaker::getBlackAndWhiteAction() const { return m_blackAndWhiteAct; }
+QAction* ActionMaker::getRescaleAction() const { return m_rescaleAct; }
+
+QAction* ActionMaker::getAboutAction() const { return m_aboutAct; }
+QAction* ActionMaker::getAboutQtAction() const { return m_aboutQtAct; }
 
 /** Methodes */
-void UserInterface::updateActions() {
+void ActionMaker::updateActions() {
   m_openAct->setEnabled(false);
   m_saveAct->setEnabled(false);
   m_exitAct->setEnabled(false);
@@ -38,35 +61,34 @@ void UserInterface::updateActions() {
 
 
 /** Slots */
-void UserInterface::open() {}
+void ActionMaker::open() {}
 
-void UserInterface::save() {}
+void ActionMaker::save() {}
 
-void UserInterface::exit() {}
-
-
-void UserInterface::undo() {}
-
-void UserInterface::redo() {}
+void ActionMaker::exit() {}
 
 
-void UserInterface::zoomIn() {}
+void ActionMaker::undo() {}
 
-void UserInterface::zoomOut() {}
-
-void UserInterface::normalSize() {}
-
-void UserInterface::fitToWindow() {}
+void ActionMaker::redo() {}
 
 
-void UserInterface::blackAndWhite() {}
+void ActionMaker::zoomIn() {}
 
-void UserInterface::rescale() {}
+void ActionMaker::zoomOut() {}
+
+void ActionMaker::normalSize() {}
+
+void ActionMaker::fitToWindow() {}
 
 
-void UserInterface::about() {
-  QMessageBox::about(this, tr("About MyPhotoShop"),
-                     tr("Blablabla..."));
+void ActionMaker::blackAndWhite() {}
+
+void ActionMaker::rescale() {}
+
+
+void ActionMaker::about() {
+  QMessageBox::about((QWidget*)this, tr("About MyPhotoShop"), tr("Blablabla..."));
 }
 
 
@@ -133,5 +155,5 @@ void ActionMaker::createHelpAction() {
   connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
   
   m_aboutQtAct = new QAction(tr("About &Qt"), this);
-  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(QApplication::aboutQt()));
 }

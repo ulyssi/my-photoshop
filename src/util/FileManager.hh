@@ -1,11 +1,16 @@
-#include <Qstring>
-#include <Qimage>
+#ifndef _FILEMANAGER_HH_
+#define _FILEMANAGER_HH_
 
-namespace FileManager{
+#include <QString>
+#include <QImage>
+
+namespace FileManager {
+  
   /*todo changer qimage vers format interne */
-Public:
-  Qimage loadQ( Qstring & path);
-  void saveQ(Qstring & path, Qimage im);
+  // public:
+ 
+  QImage loadQ(QString & path);
+  bool saveQ(QString & path, QImage im);
 
   /*
   //conversion Qimage->structure interne:
@@ -39,4 +44,6 @@ Public:
   }
   */
 
-}
+};
+
+#endif

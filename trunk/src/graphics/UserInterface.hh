@@ -1,5 +1,6 @@
 #include <QMainWindow>
 #include <QApplication>
+#include <QTabWidget>
 #include <QAction>
 #include <QMenu>
 
@@ -9,7 +10,7 @@ class UserInterface : public QMainWindow { Q_OBJECT
 
 public:
 
-  /** Constructeurs et destructeurs */
+  /** Constructeurs et destructeur */
   UserInterface();
   ~UserInterface();
                  
@@ -37,6 +38,8 @@ private:
   void updateActions();
 
   /** Attributs */
+  QTabWidget* m_tabWidget;
+
   QMenu* m_fileMenu;
   QMenu* m_editMenu;
   QMenu* m_operationMenu;

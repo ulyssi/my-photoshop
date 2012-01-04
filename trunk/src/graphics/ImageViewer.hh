@@ -1,3 +1,6 @@
+#ifndef _IMAGEVIEWER_HH_
+#define _IMAGEVIEWER_HH_
+
 #include <QScrollArea>
 #include <QLabel>
 #include <QAction>
@@ -19,3 +22,5 @@ private:
   double m_scaleFactor;
   QLabel *m_imageLabel;
 };
+
+#endif

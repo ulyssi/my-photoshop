@@ -1,3 +1,6 @@
+#ifndef _PICTUREMODIFIER_HH_
+#define _PICTUREMODIFIER_HH_
+
 #include "UserInterface.hh"
 #include "ImageViewer.hh"
 #include "TracingManager.hh"
@@ -23,3 +26,5 @@ private :
   ImageViewer* m_imageViewer;
   TracingManager* m_tracingManager;
 };
+
+#endif

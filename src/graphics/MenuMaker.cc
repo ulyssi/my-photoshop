@@ -1,70 +1,71 @@
 #include "MenuMaker.hh"
 
+#include <QObject>
+
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
 
+
+
+
+
 /** Constructeurs et destructeur */
-MenuMaker::MenuMaker(UserInterface* userInterface) :
-  m_userInterface(userInterface)
-{
-  createFileMenu();
-  createEditMenu();
-  createViewMenu();
-  createOperationMenu();
-  createHelpMenu();
-}
+MenuMaker::MenuMaker(ActionMaker* actionMaker, UserInterface* userInterface) :
+  m_fileMenu(createFileMenu(actionMaker, userInterface)),
+  m_editMenu(createEditMenu(actionMaker, userInterface)),
+  m_viewMenu(createViewMenu(actionMaker, userInterface)),
+  m_helpMenu(createHelpMenu(actionMaker, userInterface)),
+  m_operationMenu(createOperationMenu(actionMaker, userInterface))
+{}
 
 MenuMaker::~MenuMaker() {}
 
 
 /** Accesseurs */
-
 QMenu* MenuMaker::getFileMenu() const { return m_fileMenu; }
-
 QMenu* MenuMaker::getEditMenu() const { return m_editMenu; }
-
 QMenu* MenuMaker::getViewMenu() const { return m_viewMenu; }
-
-QMenu* MenuMaker::getOperationMenu() const { return m_operationMenu; }
-
 QMenu* MenuMaker::getHelpMenu() const { return m_helpMenu; }
-
-
-/** Accesseurs internes */
-ActionMaker* MenuMaker::getActionMaker() const { return m_userInterface->getActionMaker(); } 
+QMenu* MenuMaker::getOperationMenu() const { return m_operationMenu; }
 
 
 /** Methodes internes */
-void MenuMaker::createFileMenu() {
-  m_fileMenu = new QMenu(tr("&File"), m_userInterface);
-  m_fileMenu->addAction(getActionMaker()->getOpenAction());
-  m_fileMenu->addAction(getActionMaker()->getSaveAction());
-  m_fileMenu->addSeparator();
-  m_fileMenu->addAction(getActionMaker()->getExitAction());
+QMenu* MenuMaker::createFileMenu(ActionMaker* actionMaker, UserInterface* userInterface) {
+  QMenu* menu = new QMenu(QObject::tr("&File"), userInterface);
+  menu->addAction(actionMaker->getOpenAction());
+  menu->addAction(actionMaker->getSaveAction());
+  menu->addSeparator();
+  menu->addAction(actionMaker->getExitAction());
+  return menu;
 }
 
-void MenuMaker::createEditMenu() {
-  m_editMenu = new QMenu(tr("&Edit"), m_userInterface);
-  m_editMenu->addAction(getActionMaker()->getUndoAction());
-  m_editMenu->addAction(getActionMaker()->getRedoAction());
+QMenu* MenuMaker::createEditMenu(ActionMaker* actionMaker, UserInterface* userInterface) {
+  QMenu* menu = new QMenu(QObject::tr("&Edit"), userInterface);
+  menu->addAction(actionMaker->getUndoAction());
+  menu->addAction(actionMaker->getRedoAction());
+  return menu;
 }
 
-void MenuMaker::createViewMenu() {
-  m_viewMenu = new QMenu(tr("&View"), m_userInterface);
-  m_viewMenu->addAction(getActionMaker()->getZoomInAction());
-  m_viewMenu->addAction(getActionMaker()->getZoomOutAction());
-  m_viewMenu->addAction(getActionMaker()->getNormalSizeAction());
-  m_viewMenu->addAction(getActionMaker()->getFitToWindowAction());
+QMenu* MenuMaker::createViewMenu(ActionMaker* actionMaker, UserInterface* userInterface) {
+  QMenu* menu = new QMenu(QObject::tr("&View"), userInterface);
+  menu->addAction(actionMaker->getZoomInAction());
+  menu->addAction(actionMaker->getZoomOutAction());
+  menu->addAction(actionMaker->getNormalSizeAction());
+  menu->addAction(actionMaker->getFitToWindowAction());
+  return menu;
 }
 
-void MenuMaker::createOperationMenu() {
-  m_operationMenu = new QMenu(tr("&Operation"), m_userInterface);
-  m_operationMenu->addAction(getActionMaker()->getBlackAndWhiteAction());
-  m_operationMenu->addAction(getActionMaker()->getRescaleAction());
+QMenu* MenuMaker::createHelpMenu(ActionMaker* actionMaker, UserInterface* userInterface) {
+  QMenu* menu = new QMenu(QObject::tr("&Help"), userInterface);
+  menu->addAction(actionMaker->getAboutAction());
+  menu->addAction(actionMaker->getAboutQtAction());
+  return menu;
 }
 
-void MenuMaker::createHelpMenu() {
-  m_helpMenu = new QMenu(tr("&Help"), m_userInterface);
-  m_helpMenu->addAction(getActionMaker()->getAboutAction());
-  m_helpMenu->addAction(getActionMaker()->getAboutQtAction());
+QMenu* MenuMaker::createOperationMenu(ActionMaker* actionMaker, UserInterface* userInterface) {
+  QMenu* menu = new QMenu(QObject::tr("&Operation"), userInterface);
+  menu->addAction(actionMaker->getBlackAndWhiteAction());
+  menu->addAction(actionMaker->getRescaleAction());
+  return menu;
 }
+

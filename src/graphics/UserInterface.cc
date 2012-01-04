@@ -1,4 +1,5 @@
 #include <QMenuBar>
+#include <QMessageBox>
 
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
@@ -34,3 +35,33 @@ UserInterface::~UserInterface() {
 /** Accesseurs */
 ActionMaker* UserInterface::getActionMaker() const { return m_actionMaker; }
 
+/** Slots */
+void UserInterface::open() {}
+
+void UserInterface::save() {}
+
+void UserInterface::exit() {}
+
+
+void UserInterface::undo() {}
+
+void UserInterface::redo() {}
+
+
+void UserInterface::zoomIn() {}
+
+void UserInterface::zoomOut() {}
+
+void UserInterface::normalSize() {}
+
+void UserInterface::fitToWindow() {}
+
+
+void UserInterface::blackAndWhite() {}
+
+void UserInterface::rescale() {}
+
+
+void UserInterface::about(){
+  QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
+}

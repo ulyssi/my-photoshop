@@ -1,5 +1,5 @@
-#ifndef _USERINTERFACE_HH_
-#define _USERINTERFACE_HH_
+#ifndef _USER_INTERFACE_HH_
+#define _USER_INTERFACE_HH_
 
 #include <QMainWindow>
 #include <QTabWidget>
@@ -18,7 +18,7 @@ public:
 
   /** Accesseurs */
   ActionMaker* getActionMaker() const;
-          
+
 public slots:
   
   /** Slots */
@@ -38,10 +38,7 @@ public slots:
   void rescale();
 
   void about();
-
-
-
-       
+      
 private:
 
   /** Attributs */
@@ -49,6 +46,7 @@ private:
   MenuMaker* m_menuMaker;
   PictureManager* m_pictureManager;
   QTabWidget* m_tabWidget;
+
 };
 
 #endif

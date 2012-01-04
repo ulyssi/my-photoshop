@@ -3,8 +3,8 @@
 #include "graphics/UserInterface.hh"
 
 int main(int argc, char **argv) {
-  QApplication qtApp(argc, argv);
+  QApplication application(argc, argv);
   UserInterface userInterface;
   userInterface.show();
-  return qtApp.exec();
+  return application.exec();
 }

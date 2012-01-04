@@ -1,47 +1,42 @@
 #ifndef _MENUMAKER_HH_
 #define _MENUMAKER_HH_
 
-#include <QObject>
 #include <QMenu>
 
 class UserInterface;
 class ActionMaker;
 
-class MenuMaker : public QObject {
+
+class MenuMaker {
 
 public:
 
   /** Constructeurs et destructeur */
-  MenuMaker(UserInterface*);
+  MenuMaker(ActionMaker*, UserInterface*);
   ~MenuMaker();
 
   /** Accesseurs */
   QMenu* getFileMenu() const;
   QMenu* getEditMenu() const;
   QMenu* getViewMenu() const;
-  QMenu* getOperationMenu() const;
   QMenu* getHelpMenu() const;
+  QMenu* getOperationMenu() const;
 
 private:
 
-  /** Accesseurs internes */
-  ActionMaker* getActionMaker() const;
-
   /** Methodes internes */
-  void createFileMenu();
-  void createEditMenu();
-  void createViewMenu();
-  void createOperationMenu();
-  void createHelpMenu();
+  QMenu* createFileMenu(ActionMaker*, UserInterface*);
+  QMenu* createEditMenu(ActionMaker*, UserInterface*);
+  QMenu* createViewMenu(ActionMaker*, UserInterface*);
+  QMenu* createHelpMenu(ActionMaker*, UserInterface*);
+  QMenu* createOperationMenu(ActionMaker*, UserInterface*);
 
   /** Attributs */
-  UserInterface* m_userInterface;
-
   QMenu* m_fileMenu;
   QMenu* m_editMenu;
   QMenu* m_viewMenu;
-  QMenu* m_operationMenu;
   QMenu* m_helpMenu;
+  QMenu* m_operationMenu;
 
 };
 

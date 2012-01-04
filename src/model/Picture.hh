@@ -1,19 +1,21 @@
-#include <string>
-
+#include <Qstring>
+#include <Qimage>
+using namespace std;
 class Picture {
   
 public:
 
   /** Constructeurs et destructeur */
-  Picture(std:string path);
+  Picture(Qstring path);
   ~Picture();
 
   /** Accesseurs */
-  QImage getImage() const;
+  QImage& getImage() const;
 
 private:
 
   /** Attributs */
-  std::string m_path;
+  Qstring & m_path;
+  Qimage image;
 
 }

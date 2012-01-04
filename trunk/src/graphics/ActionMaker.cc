@@ -1,7 +1,6 @@
 #include "ActionMaker.hh"
 
 #include <QObject>
-#include <QMessageBox>
 #include <QApplication>
 
 #include "UserInterface.hh"
@@ -60,100 +59,70 @@ void ActionMaker::updateActions() {
 }
 
 
-/** Slots */
-void ActionMaker::open() {}
-
-void ActionMaker::save() {}
-
-void ActionMaker::exit() {}
-
-
-void ActionMaker::undo() {}
-
-void ActionMaker::redo() {}
-
-
-void ActionMaker::zoomIn() {}
-
-void ActionMaker::zoomOut() {}
-
-void ActionMaker::normalSize() {}
-
-void ActionMaker::fitToWindow() {}
-
-
-void ActionMaker::blackAndWhite() {}
-
-void ActionMaker::rescale() {}
-
-
-void ActionMaker::about() {
-  QMessageBox::about((QWidget*)this, tr("About MyPhotoShop"), tr("Blablabla..."));
-}
 
 
 /** Methodes internes */
 void ActionMaker::createFileAction() {
-  m_openAct = new QAction(tr("&Open..."), this);
+  m_openAct = new QAction(tr("&Open..."), m_userInterface);
   m_openAct->setShortcut(tr("Ctrl+O"));
-  connect(m_openAct, SIGNAL(triggered()), this, SLOT(open()));
+  connect(m_openAct, SIGNAL(triggered()),m_userInterface, SLOT(open()));
 
-  m_saveAct = new QAction(tr("&Save..."), this);
+  m_saveAct = new QAction(tr("&Save..."), m_userInterface);
   m_saveAct->setShortcut(tr("Ctrl+S"));
-  connect(m_saveAct, SIGNAL(triggered()), this, SLOT(save()));
+  connect(m_saveAct, SIGNAL(triggered()), m_userInterface, SLOT(save()));
 
-  m_exitAct = new QAction(tr("E&xit"), this);
+  m_exitAct = new QAction(tr("E&xit"), m_userInterface);
   m_exitAct->setShortcut(tr("Ctrl+Q"));
-  connect(m_exitAct, SIGNAL(triggered()), this, SLOT(exit()));
+  connect(m_exitAct, SIGNAL(triggered()), m_userInterface, SLOT(exit()));
 }
 
 void ActionMaker::createEditAction() {
-  m_undoAct = new QAction(tr("&Undo"), this);
+  m_undoAct = new QAction(tr("&Undo"), m_userInterface);
   m_undoAct->setShortcut(tr("Ctrl+Z"));
-  connect(m_undoAct, SIGNAL(triggered()), this, SLOT(undo()));
+  connect(m_undoAct, SIGNAL(triggered()), m_userInterface, SLOT(undo()));
   
-  m_redoAct = new QAction(tr("&Redo"), this);
+  m_redoAct = new QAction(tr("&Redo"), m_userInterface);
   m_redoAct->setShortcut(tr("Ctrl+E"));
-  connect(m_redoAct, SIGNAL(triggered()), this, SLOT(redo()));
+  connect(m_redoAct, SIGNAL(triggered()), m_userInterface, SLOT(redo()));
 }
 
 void ActionMaker::createViewAction() {
-  m_zoomInAct = new QAction(tr("Zoom &In"), this);
+  m_zoomInAct = new QAction(tr("Zoom &In"), m_userInterface);
   m_zoomInAct->setShortcut(tr("Ctrl++"));
   m_zoomInAct->setEnabled(false);
-  connect(m_zoomInAct, SIGNAL(triggered()), this, SLOT(zoomIn()));
+  connect(m_zoomInAct, SIGNAL(triggered()), m_userInterface, SLOT(zoomIn()));
   
-  m_zoomOutAct = new QAction(tr("Zoom &Out"), this);
+  m_zoomOutAct = new QAction(tr("Zoom &Out"), m_userInterface);
   m_zoomOutAct->setShortcut(tr("Ctrl+-"));
   m_zoomOutAct->setEnabled(false);
-  connect(m_zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomOut()));
+  connect(m_zoomOutAct, SIGNAL(triggered()), m_userInterface, SLOT(zoomOut()));
   
-  m_normalSizeAct = new QAction(tr("&Normal Size"), this);
+  m_normalSizeAct = new QAction(tr("&Normal Size"), m_userInterface);
   m_normalSizeAct->setEnabled(false);
-  connect(m_normalSizeAct, SIGNAL(triggered()), this, SLOT(normalSize()));
+  connect(m_normalSizeAct, SIGNAL(triggered()), m_userInterface, SLOT(normalSize()));
   
-  m_fitToWindowAct = new QAction(tr("&Fit to Window"), this);
+  m_fitToWindowAct = new QAction(tr("&Fit to Window"), m_userInterface);
   m_fitToWindowAct->setEnabled(false);
   m_fitToWindowAct->setCheckable(true);
-  connect(m_fitToWindowAct, SIGNAL(triggered()), this, SLOT(fitToWindow()));
+  connect(m_fitToWindowAct, SIGNAL(triggered()), m_userInterface, SLOT(fitToWindow()));
 }
 
 void ActionMaker::createOperationAction() {
-  m_blackAndWhiteAct = new QAction(tr("&Black and White"), this);
+  m_blackAndWhiteAct = new QAction(tr("&Black and White"), m_userInterface);
   m_blackAndWhiteAct->setEnabled(false);
   m_blackAndWhiteAct->setCheckable(true);
-  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
+  connect(m_blackAndWhiteAct, SIGNAL(triggered()), m_userInterface, SLOT(blackAndWhite()));
 
-  m_rescaleAct = new QAction(tr("&Rescale"), this);
+  m_rescaleAct = new QAction(tr("&Rescale"), m_userInterface);
   m_rescaleAct->setEnabled(false);
   m_rescaleAct->setCheckable(true);
-  connect(m_rescaleAct, SIGNAL(triggered()), this, SLOT(rescale()));
+  connect(m_rescaleAct, SIGNAL(triggered()), m_userInterface, SLOT(rescale()));
 }
 
 void ActionMaker::createHelpAction() {
-  m_aboutAct = new QAction(tr("&About"), this);
-  connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+  m_aboutAct = new QAction(tr("&About"), m_userInterface);
+  connect(m_aboutAct, SIGNAL(triggered()), m_userInterface, SLOT(about()));
   
-  m_aboutQtAct = new QAction(tr("About &Qt"), this);
-  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(QApplication::aboutQt()));
+  m_aboutQtAct = new QAction(tr("About &Qt"), m_userInterface);
+  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }

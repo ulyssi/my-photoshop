@@ -18,7 +18,30 @@ public:
 
   /** Accesseurs */
   ActionMaker* getActionMaker() const;
-                 
+          
+public slots:
+  
+  /** Slots */
+  void open();
+  void save();
+  void exit();
+
+  void undo();
+  void redo();
+
+  void zoomIn();
+  void zoomOut();
+  void normalSize();
+  void fitToWindow();
+
+  void blackAndWhite();
+  void rescale();
+
+  void about();
+
+
+
+       
 private:
 
   /** Attributs */

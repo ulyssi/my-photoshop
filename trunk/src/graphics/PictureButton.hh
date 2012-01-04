@@ -9,7 +9,12 @@ class PictureButton : public ImageViewer { Q_OBJECT
 public : 
   PictureButton(PictureModifier * ); 
   ~PictureButton(); 
+
+  // PictureButton& operator=(const PictureButton&);
+
 private: 
+
+  PictureModifier* m_pictureModifier;
   
 };
 

@@ -1,5 +1,7 @@
 #include "TracingManager.hh"
 
+#include "PictureModifier.hh"
+
 /** Constructeurs et destructeur */
 TracingManager::TracingManager(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier)
@@ -8,6 +10,6 @@ TracingManager::TracingManager(PictureModifier* pictureModifier) :
 TracingManager::~TracingManager() {}
 
 /** Accesseurs */
-PictureModifier* getPictureModifier() const {
+PictureModifier* TracingManager::getPictureModifier() const {
   return m_pictureModifier;
 }

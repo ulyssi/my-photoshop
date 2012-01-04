@@ -1,14 +1,18 @@
-#include <Qstring>
 #include "Picture.hh"
+
+#include <QString>
+
 #include "FileManager.hh"
+
 using namespace std;
 
-  Picture::Picture(Qstring &path){
-    m_path = path;
-    image=FileManager::loadQ(m_path);
-  }
+Picture::Picture(QString &path) :
+  m_path(path)
+{
+  image = FileManager::loadQ(m_path);
+}
 
-Qimage& Picture::getImage(){
+QImage& Picture::getImage() {
   return image;
 }
 

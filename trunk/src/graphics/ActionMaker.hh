@@ -2,16 +2,36 @@
 #define _ACTIONMAKER_HH_
 
 #include <QAction>
+#include <QObject>
 
-#include "UserInterface.hh"
+class UserInterface;
 
-class ActionMaker {
+class ActionMaker : public QObject {
 
 public:
   
   /** Constructeurs et destructeur */
   ActionMaker(UserInterface*);
   ~ActionMaker();
+
+  /** Accesseurs */
+  QAction* getOpenAction() const;
+  QAction* getSaveAction() const;
+  QAction* getExitAction() const;
+
+  QAction* getUndoAction() const;
+  QAction* getRedoAction() const;
+
+  QAction* getZoomInAction() const;
+  QAction* getZoomOutAction() const;
+  QAction* getNormalSizeAction() const;
+  QAction* getFitToWindowAction() const;
+
+  QAction* getBlackAndWhiteAction() const;
+  QAction* getRescaleAction() const;
+
+  QAction* getAboutAction() const;
+  QAction* getAboutQtAction() const;
 
   /** Methodes */
   void updateActions();

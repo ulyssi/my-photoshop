@@ -1,17 +1,20 @@
+#include <QGridLayout>
 #include <QMenuBar>
 #include <QMessageBox>
 
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
 #include "MenuMaker.hh"
+#include "ToolMaker.hh"
 #include "PictureManager.hh"
 
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface() :
   m_actionMaker(new ActionMaker(this)),
   m_menuMaker(new MenuMaker(m_actionMaker, this)),
+  m_toolMaker(new ToolMaker()),
   m_pictureManager(new PictureManager(this)),
-  m_tabWidget(new QTabWidget(this))
+  m_viewTabWidget(createTabWidget())
 {
   menuBar()->addMenu(m_menuMaker->getFileMenu());
   menuBar()->addMenu(m_menuMaker->getEditMenu());
@@ -19,9 +22,8 @@ UserInterface::UserInterface() :
   menuBar()->addMenu(m_menuMaker->getOperationMenu());
   menuBar()->addMenu(m_menuMaker->getHelpMenu());
 
-  m_tabWidget->addTab(m_pictureManager, m_pictureManager->getTabName());
-  setCentralWidget(m_tabWidget);
-
+  addDockWidget(Qt::LeftDockWidgetArea, (QDockWidget*)(m_toolMaker->getDefaultColorChooser()));
+  setCentralWidget(m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(500, 400);
   
@@ -54,3 +56,12 @@ void UserInterface::rescale() {}
 void UserInterface::about(){
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
 }
+
+
+/** Methodes internes */
+QTabWidget* UserInterface::createTabWidget() {
+  QTabWidget* tabWidget = new QTabWidget(this);
+  tabWidget->addTab(m_pictureManager, m_pictureManager->getTabName());
+  return tabWidget;
+}
+

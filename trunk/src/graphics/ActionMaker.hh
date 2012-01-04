@@ -1,12 +1,12 @@
-#ifndef _ACTIONMAKER_HH_
-#define _ACTIONMAKER_HH_
+#ifndef _ACTION_MAKER_HH_
+#define _ACTION_MAKER_HH_
 
 #include <QAction>
-#include <QObject>
 
 class UserInterface;
 
-class ActionMaker : public QObject {
+
+class ActionMaker {
 
 public:
   
@@ -36,38 +36,16 @@ public:
   /** Methodes */
   void updateActions();
 
-public slots:
-  
-  /** Slots */
-  void open();
-  void save();
-  void exit();
-
-  void undo();
-  void redo();
-
-  void zoomIn();
-  void zoomOut();
-  void normalSize();
-  void fitToWindow();
-
-  void blackAndWhite();
-  void rescale();
-
-  void about();
-
 private:
 
   /** Methodes internes */
-  void createFileAction();
-  void createEditAction();
-  void createViewAction();
-  void createOperationAction();
-  void createHelpAction();
+  void createFileAction(UserInterface*);
+  void createEditAction(UserInterface*);
+  void createViewAction(UserInterface*);
+  void createHelpAction(UserInterface*);
+  void createOperationAction(UserInterface*);
 
   /** Attributs */
-  UserInterface* m_userInterface;
-
   QAction* m_openAct;
   QAction* m_saveAct;
   QAction* m_exitAct;

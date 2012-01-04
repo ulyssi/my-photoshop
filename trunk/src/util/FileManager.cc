@@ -9,6 +9,8 @@ Public:
     return new QImage(path);
   }
   bool saveQ(Qstring & path, Qimage im){
+    //penser à completer le format si necessaire... surcharge
+    // de la methode saveQ
     return im.save(path);
     
   }

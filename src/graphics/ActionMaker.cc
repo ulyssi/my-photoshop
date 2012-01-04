@@ -5,18 +5,18 @@
 
 #include "UserInterface.hh"
 
+
 /** Constructeurs et destructeur */
-ActionMaker::ActionMaker(UserInterface* userInterface) :
-  m_userInterface(userInterface)
-{
-  createFileAction();
-  createEditAction();
-  createViewAction();
-  createOperationAction();
-  createHelpAction();
+ActionMaker::ActionMaker(UserInterface* userInterface) {
+  createFileAction(userInterface);
+  createEditAction(userInterface);
+  createViewAction(userInterface);
+  createOperationAction(userInterface);
+  createHelpAction(userInterface);
 }
 
 ActionMaker::~ActionMaker() {}
+
 
 /** Accesseurs */
 QAction* ActionMaker::getOpenAction() const { return m_openAct; }
@@ -36,6 +36,7 @@ QAction* ActionMaker::getRescaleAction() const { return m_rescaleAct; }
 
 QAction* ActionMaker::getAboutAction() const { return m_aboutAct; }
 QAction* ActionMaker::getAboutQtAction() const { return m_aboutQtAct; }
+
 
 /** Methodes */
 void ActionMaker::updateActions() {
@@ -59,70 +60,65 @@ void ActionMaker::updateActions() {
 }
 
 
-
-
 /** Methodes internes */
-void ActionMaker::createFileAction() {
-  m_openAct = new QAction(tr("&Open..."), m_userInterface);
-  m_openAct->setShortcut(tr("Ctrl+O"));
-  connect(m_openAct, SIGNAL(triggered()),m_userInterface, SLOT(open()));
+void ActionMaker::createFileAction(UserInterface* userInterface) {
+  m_openAct = new QAction(QObject::tr("&Open..."), userInterface);
+  m_openAct->setShortcut(QObject::tr("Ctrl+O"));
+  QObject::connect(m_openAct, SIGNAL(triggered()), userInterface, SLOT(open()));
 
-  m_saveAct = new QAction(tr("&Save..."), m_userInterface);
-  m_saveAct->setShortcut(tr("Ctrl+S"));
-  connect(m_saveAct, SIGNAL(triggered()), m_userInterface, SLOT(save()));
+  m_saveAct = new QAction(QObject::tr("&Save..."), userInterface);
+  m_saveAct->setShortcut(QObject::tr("Ctrl+S"));
+  QObject::connect(m_saveAct, SIGNAL(triggered()), userInterface, SLOT(save()));
 
-  m_exitAct = new QAction(tr("E&xit"), m_userInterface);
-  m_exitAct->setShortcut(tr("Ctrl+Q"));
-  connect(m_exitAct, SIGNAL(triggered()), m_userInterface, SLOT(exit()));
+  m_exitAct = new QAction(QObject::tr("E&xit"), userInterface);
+  m_exitAct->setShortcut(QObject::tr("Ctrl+Q"));
+  QObject::connect(m_exitAct, SIGNAL(triggered()), userInterface, SLOT(exit()));
 }
 
-void ActionMaker::createEditAction() {
-  m_undoAct = new QAction(tr("&Undo"), m_userInterface);
-  m_undoAct->setShortcut(tr("Ctrl+Z"));
-  connect(m_undoAct, SIGNAL(triggered()), m_userInterface, SLOT(undo()));
+void ActionMaker::createEditAction(UserInterface* userInterface) {
+  m_undoAct = new QAction(QObject::tr("&Undo"), userInterface);
+  m_undoAct->setShortcut(QObject::tr("Ctrl+Z"));
+  QObject::connect(m_undoAct, SIGNAL(triggered()), userInterface, SLOT(undo()));
   
-  m_redoAct = new QAction(tr("&Redo"), m_userInterface);
-  m_redoAct->setShortcut(tr("Ctrl+E"));
-  connect(m_redoAct, SIGNAL(triggered()), m_userInterface, SLOT(redo()));
+  m_redoAct = new QAction(QObject::tr("&Redo"), userInterface);
+  m_redoAct->setShortcut(QObject::tr("Ctrl+E"));
+  QObject::connect(m_redoAct, SIGNAL(triggered()), userInterface, SLOT(redo()));
 }
 
-void ActionMaker::createViewAction() {
-  m_zoomInAct = new QAction(tr("Zoom &In"), m_userInterface);
-  m_zoomInAct->setShortcut(tr("Ctrl++"));
+void ActionMaker::createViewAction(UserInterface* userInterface) {
+  m_zoomInAct = new QAction(QObject::tr("Zoom &In"), userInterface);
+  m_zoomInAct->setShortcut(QObject::tr("Ctrl++"));
   m_zoomInAct->setEnabled(false);
-  connect(m_zoomInAct, SIGNAL(triggered()), m_userInterface, SLOT(zoomIn()));
+  QObject::connect(m_zoomInAct, SIGNAL(triggered()), userInterface, SLOT(zoomIn()));
   
-  m_zoomOutAct = new QAction(tr("Zoom &Out"), m_userInterface);
-  m_zoomOutAct->setShortcut(tr("Ctrl+-"));
+  m_zoomOutAct = new QAction(QObject::tr("Zoom &Out"), userInterface);
+  m_zoomOutAct->setShortcut(QObject::tr("Ctrl+-"));
   m_zoomOutAct->setEnabled(false);
-  connect(m_zoomOutAct, SIGNAL(triggered()), m_userInterface, SLOT(zoomOut()));
+  QObject::connect(m_zoomOutAct, SIGNAL(triggered()), userInterface, SLOT(zoomOut()));
   
-  m_normalSizeAct = new QAction(tr("&Normal Size"), m_userInterface);
+  m_normalSizeAct = new QAction(QObject::tr("&Normal Size"), userInterface);
   m_normalSizeAct->setEnabled(false);
-  connect(m_normalSizeAct, SIGNAL(triggered()), m_userInterface, SLOT(normalSize()));
+  QObject::connect(m_normalSizeAct, SIGNAL(triggered()), userInterface, SLOT(normalSize()));
   
-  m_fitToWindowAct = new QAction(tr("&Fit to Window"), m_userInterface);
+  m_fitToWindowAct = new QAction(QObject::tr("&Fit to Window"), userInterface);
   m_fitToWindowAct->setEnabled(false);
-  m_fitToWindowAct->setCheckable(true);
-  connect(m_fitToWindowAct, SIGNAL(triggered()), m_userInterface, SLOT(fitToWindow()));
+  QObject::connect(m_fitToWindowAct, SIGNAL(triggered()), userInterface, SLOT(fitToWindow()));
 }
 
-void ActionMaker::createOperationAction() {
-  m_blackAndWhiteAct = new QAction(tr("&Black and White"), m_userInterface);
+void ActionMaker::createOperationAction(UserInterface* userInterface) {
+  m_blackAndWhiteAct = new QAction(QObject::tr("&Black and White"), userInterface);
   m_blackAndWhiteAct->setEnabled(false);
-  m_blackAndWhiteAct->setCheckable(true);
-  connect(m_blackAndWhiteAct, SIGNAL(triggered()), m_userInterface, SLOT(blackAndWhite()));
+  QObject::connect(m_blackAndWhiteAct, SIGNAL(triggered()), userInterface, SLOT(blackAndWhite()));
 
-  m_rescaleAct = new QAction(tr("&Rescale"), m_userInterface);
+  m_rescaleAct = new QAction(QObject::tr("&Rescale"), userInterface);
   m_rescaleAct->setEnabled(false);
-  m_rescaleAct->setCheckable(true);
-  connect(m_rescaleAct, SIGNAL(triggered()), m_userInterface, SLOT(rescale()));
+  QObject::connect(m_rescaleAct, SIGNAL(triggered()), userInterface, SLOT(rescale()));
 }
 
-void ActionMaker::createHelpAction() {
-  m_aboutAct = new QAction(tr("&About"), m_userInterface);
-  connect(m_aboutAct, SIGNAL(triggered()), m_userInterface, SLOT(about()));
+void ActionMaker::createHelpAction(UserInterface* userInterface) {
+  m_aboutAct = new QAction(QObject::tr("&About"), userInterface);
+  QObject::connect(m_aboutAct, SIGNAL(triggered()), userInterface, SLOT(about()));
   
-  m_aboutQtAct = new QAction(tr("About &Qt"), m_userInterface);
-  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+  m_aboutQtAct = new QAction(QObject::tr("About &Qt"), userInterface);
+  QObject::connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }

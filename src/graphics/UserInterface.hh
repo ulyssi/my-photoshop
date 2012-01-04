@@ -6,6 +6,7 @@
 
 class ActionMaker;
 class MenuMaker;
+class ToolMaker;
 class PictureManager;
 
 class UserInterface : public QMainWindow { Q_OBJECT
@@ -15,9 +16,6 @@ public:
   /** Constructeurs et destructeur */
   UserInterface();
   ~UserInterface();
-
-  /** Accesseurs */
-  ActionMaker* getActionMaker() const;
 
 public slots:
   
@@ -41,11 +39,15 @@ public slots:
       
 private:
 
+  /** Methodes internes */
+  QTabWidget* createTabWidget();
+
   /** Attributs */
   ActionMaker* m_actionMaker;
   MenuMaker* m_menuMaker;
+  ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
-  QTabWidget* m_tabWidget;
+  QTabWidget* m_viewTabWidget;
 
 };
 

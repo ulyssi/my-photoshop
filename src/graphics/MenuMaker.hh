@@ -1,5 +1,5 @@
-#ifndef _MENUMAKER_HH_
-#define _MENUMAKER_HH_
+#ifndef _MENU_MAKER_HH_
+#define _MENU_MAKER_HH_
 
 #include <QMenu>
 

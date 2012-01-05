@@ -69,7 +69,6 @@ private:
   void createOperationAction();
 
   /** Attributs */
-  ToolBarMaker* m_toolBarMaker;
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   QTabWidget* m_viewTabWidget;

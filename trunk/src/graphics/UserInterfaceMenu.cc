@@ -1,7 +1,7 @@
 #include "UserInterface.hh"
 
 #include <QMenuBar>
-#include "ActionMaker.hh"
+
 
 
 /** Methodes internes */

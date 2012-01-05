@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include <QListIterator>
 
-#include "ActionMaker.hh"
+
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
 #include "Picture.hh"
@@ -74,7 +74,7 @@ void UserInterface::updateActions() {
   m_aboutQtAct->setEnabled(true);
 }
 
-void userInterface::createActions() {
+void UserInterface::createActions() {
   createFileAction();
   createEditAction();
   createViewAction();
@@ -86,7 +86,7 @@ void UserInterface::createFileAction() {
   m_openAct = new QAction(tr("&Open..."), this);
   m_openAct->setShortcut(tr("Ctrl+O"));
   connect(m_openAct, SIGNAL(triggered()), this, SLOT(open()));
-
+  
   m_saveAct = new QAction(tr("&Save..."), this);
   m_saveAct->setShortcut(tr("Ctrl+S"));
   connect(m_saveAct, SIGNAL(triggered()), this, SLOT(save()));
@@ -141,6 +141,6 @@ void UserInterface::createHelpAction() {
   connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
   
   m_aboutQtAct = new QAction(tr("About &Qt"), this);
-  connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+  connect(m_aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
 }
 

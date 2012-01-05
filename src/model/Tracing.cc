@@ -1,11 +1,10 @@
 #include "Tracing.hh"
-
+#include <iostream>
 
   /*constructeur destructeur*/
 Tracing::Tracing(int width,int height){
   this->m_width=width;
   this->m_height=height;
-  
   m_data=new unsigned int*[m_width];
   for(int i=0;i<m_width;++i){
     m_data[i]=new unsigned int[m_height];
@@ -24,11 +23,12 @@ Tracing::Tracing(QImage source){
 
 
 Tracing::~Tracing(){
+  std::cout<<"destruction\n";
   for(int i=0;i<m_width;++i){
     delete m_data[i];
   }
   delete m_data;
-  
+  std::cout<<"destruction fini\n";
 }
 
   /*accesseurs*/

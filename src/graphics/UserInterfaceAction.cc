@@ -7,7 +7,7 @@
 
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-#include "Picture.hh"
+#include "../model/Picture.hh"
 
 
 

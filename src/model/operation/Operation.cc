@@ -1,6 +1,6 @@
 #include "Operation.hh"
 
-#include "Picture.hh"
+#include "../Picture.hh"
 
 
 /** Constructeurs et destructeur */

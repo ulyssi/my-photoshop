@@ -1,7 +1,7 @@
 #include "PictureViewer.hh"
 
 #include "Utils.hh"
-#include "Picture.hh"
+#include "../model/Picture.hh"
 
 
 PictureViewer::PictureViewer(Picture* picture) {

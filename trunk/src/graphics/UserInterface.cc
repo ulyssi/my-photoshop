@@ -1,4 +1,3 @@
-#include <QGridLayout>
 #include <QMenuBar>
 #include <QMessageBox>
 
@@ -7,6 +6,7 @@
 #include "MenuMaker.hh"
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
+
 
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface() :
@@ -22,7 +22,8 @@ UserInterface::UserInterface() :
   menuBar()->addMenu(m_menuMaker->getOperationMenu());
   menuBar()->addMenu(m_menuMaker->getHelpMenu());
 
-  addDockWidget(Qt::LeftDockWidgetArea, (QDockWidget*)(m_toolMaker->getDefaultColorChooser()));
+  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultColorChooser())));
+  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultOperationChooser())));
   setCentralWidget(m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(500, 400);
@@ -65,3 +66,8 @@ QTabWidget* UserInterface::createTabWidget() {
   return tabWidget;
 }
 
+QDockWidget* UserInterface::createDockWidget(QWidget* widget) {
+  QDockWidget* dockWidget = new QDockWidget();
+  dockWidget->setWidget(widget);
+  return dockWidget;
+}

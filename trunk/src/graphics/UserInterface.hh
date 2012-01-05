@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTabWidget>
+#include <QDockWidget>
 
 class ActionMaker;
 class MenuMaker;
@@ -41,6 +42,7 @@ private:
 
   /** Methodes internes */
   QTabWidget* createTabWidget();
+  QDockWidget* createDockWidget(QWidget* widget);
 
   /** Attributs */
   ActionMaker* m_actionMaker;

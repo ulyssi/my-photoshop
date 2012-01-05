@@ -1,5 +1,4 @@
 #include "PictureManager.hh"
-
 #include "UserInterface.hh"
 #include "PictureButton.hh"
 #include "PictureModifier.hh"

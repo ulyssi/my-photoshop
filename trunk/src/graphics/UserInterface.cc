@@ -1,10 +1,8 @@
 #include "UserInterface.hh"
 
-#include <QMenuBar>
 #include <QToolBar>
 
 #include "ActionMaker.hh"
-#include "MenuMaker.hh"
 #include "ToolBarMaker.hh"
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
@@ -14,18 +12,13 @@
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface() :
   m_actionMaker(new ActionMaker(this)),
-  m_menuMaker(new MenuMaker(m_actionMaker, this)),
   m_toolBarMaker(new ToolBarMaker(m_actionMaker, this)),
   m_toolMaker(new ToolMaker()),
   m_pictureManager(new PictureManager(this)),
   m_viewTabWidget(createTabWidget())
 {
-  menuBar()->addMenu(m_menuMaker->getFileMenu());
-  menuBar()->addMenu(m_menuMaker->getEditMenu());
-  menuBar()->addMenu(m_menuMaker->getViewMenu());
-  menuBar()->addMenu(m_menuMaker->getOperationMenu());
-  menuBar()->addMenu(m_menuMaker->getHelpMenu());
-
+  createMenuBar();
+  
   addToolBar(Qt::TopToolBarArea, m_toolBarMaker->getFileToolBar());
   addToolBar(Qt::TopToolBarArea, m_toolBarMaker->getEditToolBar());
   addToolBar(Qt::TopToolBarArea, m_toolBarMaker->getViewToolBar());
@@ -44,7 +37,6 @@ UserInterface::UserInterface() :
 
 UserInterface::~UserInterface() {
   delete m_pictureManager;
-  delete m_menuMaker;
   delete m_toolBarMaker;
   delete m_actionMaker;
 }

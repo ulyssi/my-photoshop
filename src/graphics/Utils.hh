@@ -6,7 +6,7 @@
 
 
 namespace Utils {
-  const QPixmap& QPixmapFrom(Picture*);
+  QPixmap QPixmapFrom(Picture*);
 };
 
 #endif

@@ -43,11 +43,17 @@ UserInterface::~UserInterface() {
 /** Slots */
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this,windowFlags());
-  QString t_fileName = t_fileDialog->getOpenFileName(this,
-						     tr("Open Image"),
-						     "", 
-						     tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
-  
+  t_fileDialog->setViewMode(QFileDialog::List);
+  t_fileDialog->setVisible(true);
+  // QString t_fileName = t_fileDialog->getOpenFileName(this,
+  // 						     tr("Open Image"),
+  // 						     "", 
+  // 						     tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
+
+  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
+  t_fileDialog->setNameFilterDetailsVisible(true);
+  QString t_fileName = "";
+
   PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
   // m_pictureManager->addPictureModifier(modifier);	
   m_viewTabWidget->addTab((QWidget*)(modifier->getImageViewer()), t_fileName);	       

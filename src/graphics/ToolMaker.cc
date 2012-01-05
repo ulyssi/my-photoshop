@@ -15,12 +15,12 @@
 /** Constructeurs et destructeur */
 ToolMaker::ToolMaker() :
   m_colorChooser(ToolMaker::createColorChooser()),
-  m_operationChooser(ToolMaker::createOperationChooser()),
   m_affineOperationChooser(ToolMaker::createAffineOperationChooser()),
   m_rescaleOperationChooser(ToolMaker::createRescaleOperationChooser()),
   m_convolveOperationChooser(ToolMaker::createConvolveOperationChooser()),
   m_algebricOperationChooser(ToolMaker::createAlgebricOperationChooser()),
-  m_colorConvertOperationChooser(ToolMaker::createColorConvertOperationChooser())
+  m_colorConvertOperationChooser(ToolMaker::createColorConvertOperationChooser()),
+  m_operationChooser(ToolMaker::createOperationChooser())
 {}
 
 ToolMaker::~ToolMaker() {}
@@ -33,10 +33,6 @@ ColorChooser* ToolMaker::getDefaultColorChooser() const {
 
 // BrushChooser* getDefaultBrushChooser() const;
 // HistogramModifier* getDefaultHistogramModifier() const;
-
-OperationChooser* ToolMaker::getDefaultOperationChooser() const { 
-  return m_operationChooser; 
-}
 
 AffineOperationChooser* ToolMaker::getDefaultAffineOperationChooser() const {
   return m_affineOperationChooser; 
@@ -58,16 +54,20 @@ ColorConvertOperationChooser* ToolMaker::getDefaultColorConvertOperationChooser(
   return m_colorConvertOperationChooser;
 }
 
+OperationChooser* ToolMaker::getDefaultOperationChooser() const { 
+  return m_operationChooser; 
+}
+
 
 /** Methodes */
 ColorChooser* ToolMaker::createColorChooser() { return new ColorChooser(); }
 // BrushChooser* createBrushChooser();
 // HistogramModifier* createHistogramModifier();
-OperationChooser* ToolMaker::createOperationChooser() { return new OperationChooser(); }
 AffineOperationChooser* ToolMaker::createAffineOperationChooser() { return new AffineOperationChooser(); }
 RescaleOperationChooser* ToolMaker::createRescaleOperationChooser() { return new RescaleOperationChooser(); }
 ConvolveOperationChooser* ToolMaker::createConvolveOperationChooser() { return new ConvolveOperationChooser(); }
 AlgebricOperationChooser* ToolMaker::createAlgebricOperationChooser() { return new AlgebricOperationChooser(); }
 ColorConvertOperationChooser* ToolMaker::createColorConvertOperationChooser() { return new ColorConvertOperationChooser(); }
+OperationChooser* ToolMaker::createOperationChooser() { return new OperationChooser(this); }
 
 

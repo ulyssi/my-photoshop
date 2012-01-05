@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QTabWidget>
 #include <QDockWidget>
+#include <QMenu>
 
 class ActionMaker;
-class MenuMaker;
 class ToolBarMaker;
 class ToolMaker;
 class PictureManager;
@@ -42,18 +42,30 @@ public slots:
 private:
 
   /** Methodes internes */
+  void createMenuBar();
   QTabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
 
+  QMenu* createFileMenu();
+  QMenu* createEditMenu();
+  QMenu* createViewMenu();
+  QMenu* createHelpMenu();
+  QMenu* createOperationMenu();
+
+
   /** Attributs */
   ActionMaker* m_actionMaker;
-  MenuMaker* m_menuMaker;
   ToolBarMaker* m_toolBarMaker;
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   QTabWidget* m_viewTabWidget;
-  
 
+  QMenu* m_fileMenu;
+  QMenu* m_editMenu;
+  QMenu* m_viewMenu;
+  QMenu* m_helpMenu;
+  QMenu* m_operationMenu;
+  
 };
 
 #endif

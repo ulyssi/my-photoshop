@@ -4,7 +4,7 @@
 
 /** Constructeurs et destructeur */
 ColorConvertOperationChooser::ColorConvertOperationChooser() :
-  m_tabName("ColorConvertOperation")
+  m_tabName("ColorConvert")
 {
   setText(m_tabName);
 }

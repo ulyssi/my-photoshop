@@ -4,7 +4,7 @@
 
 /** Constructeurs et destructeur */
 RescaleOperationChooser::RescaleOperationChooser() :
-  m_tabName("RescaleOperation")
+  m_tabName("Rescale")
 {
   setText(m_tabName);
 }

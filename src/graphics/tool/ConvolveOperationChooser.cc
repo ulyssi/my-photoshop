@@ -4,7 +4,7 @@
 
 /** Constructeurs et destructeur */
 ConvolveOperationChooser::ConvolveOperationChooser() :
-  m_tabName("ConvolveOperation")
+  m_tabName("Convolve")
 {
   setText(m_tabName);
 }

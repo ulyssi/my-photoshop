@@ -3,7 +3,7 @@
 
 /** Constructeurs et destructeur */
 AffineOperationChooser::AffineOperationChooser() :
-  m_tabName("AffineOperation")
+  m_tabName("Affine")
 {
   setText(m_tabName);
 }

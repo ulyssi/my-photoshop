@@ -1,13 +1,11 @@
 #ifndef _PICTURE_VIEWER_HH_
 #define _PICTURE_VIEWER_HH_
 
-#include <QScrollArea>
 #include <QLabel>
 
 class Picture;
 
-class PictureViewer : public QLabel // ScrollArea
-{ Q_OBJECT
+class PictureViewer : public QLabel { Q_OBJECT
 
 public:
   
@@ -22,8 +20,7 @@ private:
 
   /** Attributs */
   double m_scaleFactor;
-  QLabel* m_imageLabel;
-
+  
 };
 
 #endif

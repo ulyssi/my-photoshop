@@ -4,7 +4,7 @@
 
 
 ColorChooser::ColorChooser() {
-  setText(QString("ColorChooser"));
+  setText(QString("Color"));
 }
 
 ColorChooser::~ColorChooser() {}

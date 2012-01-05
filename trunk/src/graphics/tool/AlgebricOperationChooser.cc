@@ -4,7 +4,7 @@
 
 /** Constructeurs et destructeur */
 AlgebricOperationChooser::AlgebricOperationChooser() :
-  m_tabName("AlgebricOperation")
+  m_tabName("Algebric")
 {
   setText(m_tabName);
 }

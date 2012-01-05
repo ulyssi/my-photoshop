@@ -11,7 +11,7 @@
 
 /** Constructeurs et destructeur */
 OperationChooser::OperationChooser(ToolMaker* toolMaker) :
-  m_tabName("OperationChooser"),
+  m_tabName("Operations"),
   m_affineOperationChooser(toolMaker->getDefaultAffineOperationChooser()),
   m_rescaleOperationChooser(toolMaker->getDefaultRescaleOperationChooser()),
   m_convolveOperationChooser(toolMaker->getDefaultConvolveOperationChooser()),

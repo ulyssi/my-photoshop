@@ -7,7 +7,7 @@
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-#include "../model/Picture.hh"
+#include "Picture.hh"
 
 
 /** Constructeurs et Destructeurs */
@@ -42,9 +42,9 @@ UserInterface::~UserInterface() {
 
 /** Slots */
 void UserInterface::open() {
-  QFileDialog *t_fileDialog = new QFileDialog(this,windowFlags());
+  QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
-  t_fileDialog->setVisible(true);
+  // t_fileDialog->setVisible(true);
   // QString t_fileName = t_fileDialog->getOpenFileName(this,
   // 						     tr("Open Image"),
   // 						     "", 
@@ -52,11 +52,11 @@ void UserInterface::open() {
 
   t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
   t_fileDialog->setNameFilterDetailsVisible(true);
-  QString t_fileName = "";
+  QString t_fileName = t_fileDialog->getOpenFileName(this, tr("Open Image"));
 
   PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
-  // m_pictureManager->addPictureModifier(modifier);	
-  m_viewTabWidget->addTab((QWidget*)(modifier->getPictureViewer()), t_fileName);	       
+  m_pictureManager->addPictureModifier(modifier);	
+  m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()), t_fileName);	       
 }
 
 void UserInterface::save() {}

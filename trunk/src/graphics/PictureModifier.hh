@@ -3,7 +3,7 @@
 
 class Picture;
 class UserInterface;
-class PictureViewer;
+class PictureArea;
 class TracingManager;
 
 class PictureModifier {
@@ -16,7 +16,7 @@ public :
   
   /** Accesseurs */
   Picture* getPicture() const;
-  PictureViewer* getPictureViewer() const;
+  PictureArea* getPictureArea() const;
   TracingManager* getTracingManager() const;
 
 private :
@@ -24,7 +24,7 @@ private :
   /** Attributs */
   UserInterface* m_userInterface;
   Picture* m_picture;
-  PictureViewer* m_pictureViewer;
+  PictureArea* m_pictureArea;
   TracingManager* m_tracingManager;
 
 };

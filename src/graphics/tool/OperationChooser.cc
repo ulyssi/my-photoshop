@@ -23,6 +23,8 @@ OperationChooser::OperationChooser(ToolMaker* toolMaker) :
   addTab(m_convolveOperationChooser, m_convolveOperationChooser->getTabName());
   addTab(m_algebricOperationChooser, m_algebricOperationChooser->getTabName());
   addTab(m_colorConvertOperationChooser, m_colorConvertOperationChooser->getTabName());
+  setTabPosition(QTabWidget::South);
+  setMovable(true);
 }
 
 OperationChooser::~OperationChooser() {}

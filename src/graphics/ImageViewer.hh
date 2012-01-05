@@ -6,7 +6,8 @@
 
 class Picture;
 
-class ImageViewer : public QScrollArea { Q_OBJECT
+class ImageViewer : public QLabel // ScrollArea
+{ Q_OBJECT
 
 public:
   

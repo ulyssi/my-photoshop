@@ -3,8 +3,6 @@
 #include <QString>
 #include <QImage>
 
-using namespace std;
-
 /*todo changer qimage vers format interne */
 QImage FileManager::loadQ(QString& path){
   return QImage(path);

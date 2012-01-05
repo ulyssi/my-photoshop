@@ -1,12 +1,12 @@
-#include "ImageViewer.hh"
+#include "PictureViewer.hh"
 
 #include "Utils.hh"
-#include "../model/Picture.hh"
+#include "Picture.hh"
 
 
-ImageViewer::ImageViewer(Picture* picture) {
-   setPixmap(Utils::QPixmapFrom(picture));
-  // //     //    setPixmap(QPixmap::fromImage(QImage("image.jpg")));
+PictureViewer::PictureViewer(Picture* picture) {
+  // setPixmap(Utils::QPixmapFrom(picture));
+  setPixmap(QPixmap::fromImage(QImage("image.jpg")));
   // m_imageLabel = new QLabel;
   // m_imageLabel->setBackgroundRole(QPalette::Base);
   // m_imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -18,7 +18,7 @@ ImageViewer::ImageViewer(Picture* picture) {
  
 }
 
-ImageViewer::~ImageViewer() {}
+PictureViewer::~PictureViewer() {}
 
 /** Methodes internes */
-void ImageViewer::scaleImage(double factor) {}
+void PictureViewer::scaleImage(double factor) {}

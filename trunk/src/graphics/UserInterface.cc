@@ -56,7 +56,7 @@ void UserInterface::open() {
 
   PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
   // m_pictureManager->addPictureModifier(modifier);	
-  m_viewTabWidget->addTab((QWidget*)(modifier->getImageViewer()), t_fileName);	       
+  m_viewTabWidget->addTab((QWidget*)(modifier->getPictureViewer()), t_fileName);	       
 }
 
 void UserInterface::save() {}

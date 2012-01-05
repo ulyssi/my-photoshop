@@ -1,19 +1,22 @@
-#ifndef _PICTUREBUTTON_
-#define _PICTUREBUTTON_
+#ifndef _PICTURE_BUTTON_
+#define _PICTURE_BUTTON_
 
-#include "ImageViewer.hh" 
-#include "PictureModifier.hh"
+#include "PictureViewer.hh" 
 
-class PictureButton : public ImageViewer { Q_OBJECT
+class PictureModifier;
+
+
+class PictureButton : public PictureViewer {
 
 public : 
-  PictureButton(PictureModifier * ); 
-  ~PictureButton(); 
 
-  // PictureButton& operator=(const PictureButton&);
+  /** Constructeurs et destructeur */
+  PictureButton(PictureModifier*); 
+  ~PictureButton(); 
 
 private: 
 
+  /** Attributs */
   PictureModifier* m_pictureModifier;
   
 };

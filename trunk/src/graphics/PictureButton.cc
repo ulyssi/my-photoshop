@@ -1,11 +1,13 @@
 #include "PictureButton.hh"
 
+#include "PictureModifier.hh"
+
+
 /*Constructeur et destructeur */
 PictureButton::PictureButton(PictureModifier *pictureModifier) :
-  ImageViewer(pictureModifier->getPicture()),
+  PictureViewer(pictureModifier->getPicture()),
   m_pictureModifier(pictureModifier)
 {}
 
 PictureButton::~PictureButton() {}
 
-// PictureButton& PictureButton::operator=(const PictureButton&) {}

@@ -4,6 +4,7 @@
 #include <QTabWidget>
 #include <QString>
 
+class ToolMaker;
 class AffineOperationChooser;
 class RescaleOperationChooser;
 class ConvolveOperationChooser;
@@ -16,7 +17,7 @@ class OperationChooser : public QTabWidget { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  OperationChooser();
+  OperationChooser(ToolMaker*);
   ~OperationChooser();
 
   /** Accesseurs */

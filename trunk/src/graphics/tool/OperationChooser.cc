@@ -10,13 +10,13 @@
 
 
 /** Constructeurs et destructeur */
-OperationChooser::OperationChooser() :
+OperationChooser::OperationChooser(ToolMaker* toolMaker) :
   m_tabName("OperationChooser"),
-  m_affineOperationChooser(ToolMaker::createAffineOperationChooser()),
-  m_rescaleOperationChooser(ToolMaker::createRescaleOperationChooser()),
-  m_convolveOperationChooser(ToolMaker::createConvolveOperationChooser()),
-  m_algebricOperationChooser(ToolMaker::createAlgebricOperationChooser()),
-  m_colorConvertOperationChooser(ToolMaker::createColorConvertOperationChooser())
+  m_affineOperationChooser(toolMaker->getDefaultAffineOperationChooser()),
+  m_rescaleOperationChooser(toolMaker->getDefaultRescaleOperationChooser()),
+  m_convolveOperationChooser(toolMaker->getDefaultConvolveOperationChooser()),
+  m_algebricOperationChooser(toolMaker->getDefaultAlgebricOperationChooser()),
+  m_colorConvertOperationChooser(toolMaker->getDefaultColorConvertOperationChooser())
 {
   addTab(m_affineOperationChooser, m_affineOperationChooser->getTabName());
   addTab(m_rescaleOperationChooser, m_rescaleOperationChooser->getTabName());

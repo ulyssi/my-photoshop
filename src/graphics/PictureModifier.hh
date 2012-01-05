@@ -1,12 +1,12 @@
-#ifndef _PICTUREMODIFIER_HH_
-#define _PICTUREMODIFIER_HH_
+#ifndef _PICTURE_MODIFIER_HH_
+#define _PICTURE_MODIFIER_HH_
 
 class Picture;
 class UserInterface;
-class ImageViewer;
+class PictureViewer;
 class TracingManager;
 
-class PictureModifier  {
+class PictureModifier {
 
 public :
   
@@ -16,7 +16,7 @@ public :
   
   /** Accesseurs */
   Picture* getPicture() const;
-  ImageViewer* getImageViewer() const;
+  PictureViewer* getPictureViewer() const;
   TracingManager* getTracingManager() const;
 
 private :
@@ -24,8 +24,9 @@ private :
   /** Attributs */
   UserInterface* m_userInterface;
   Picture* m_picture;
-  ImageViewer* m_imageViewer;
+  PictureViewer* m_pictureViewer;
   TracingManager* m_tracingManager;
+
 };
 
 #endif

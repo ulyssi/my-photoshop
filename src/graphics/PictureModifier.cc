@@ -1,28 +1,28 @@
 #include "PictureModifier.hh"
 
 #include "UserInterface.hh"
-#include "ImageViewer.hh"
+#include "PictureViewer.hh"
 #include "TracingManager.hh"
 
-#include "../model/Picture.hh"
+#include "Picture.hh"
 
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
   m_userInterface(userInterface),
   m_picture(picture),
-  m_imageViewer(new ImageViewer(picture)),
+  m_pictureViewer(new PictureViewer(picture)),
   m_tracingManager(new TracingManager(this))
 {}
 
 PictureModifier::~PictureModifier() {
-  delete m_imageViewer;
+  delete m_pictureViewer;
   delete m_tracingManager;
 }
 
 /** Accesseurs */
 Picture* PictureModifier::getPicture() const { return m_picture; }
 
-ImageViewer* PictureModifier::getImageViewer() const { return m_imageViewer; }
+PictureViewer* PictureModifier::getPictureViewer() const { return m_pictureViewer; }
 
 TracingManager* PictureModifier::getTracingManager() const { return m_tracingManager; }
 

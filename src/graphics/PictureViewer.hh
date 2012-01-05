@@ -1,19 +1,19 @@
-#ifndef _IMAGE_VIEWER_HH_
-#define _IMAGE_VIEWER_HH_
+#ifndef _PICTURE_VIEWER_HH_
+#define _PICTURE_VIEWER_HH_
 
 #include <QScrollArea>
 #include <QLabel>
 
 class Picture;
 
-class ImageViewer : public QLabel // ScrollArea
+class PictureViewer : public QLabel // ScrollArea
 { Q_OBJECT
 
 public:
   
   /** Constructeurs et destructeurs */
-  ImageViewer(Picture*);
-  ~ImageViewer();
+  PictureViewer(Picture*);
+  ~PictureViewer();
                
 private:
 

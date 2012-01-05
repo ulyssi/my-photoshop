@@ -38,6 +38,10 @@ private:
   int m_width;
   int m_height;
   QImage m_image;
+  int m_ch_rectX_sup;
+  int m_ch_rectX_inf;
+  int m_ch_rectY_sup;
+  int m_ch_rectY_inf;
   
 };
 

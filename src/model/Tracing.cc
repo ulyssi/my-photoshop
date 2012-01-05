@@ -5,6 +5,7 @@
 Tracing::Tracing(int width,int height){
   this->m_width=width;
   this->m_height=height;
+  std::cout<<m_width<<" raba "<<m_height<<std::endl;
   m_data=new unsigned int*[m_width];
   for(int i=0;i<m_width;++i){
     m_data[i]=new unsigned int[m_height];
@@ -13,11 +14,20 @@ Tracing::Tracing(int width,int height){
 }
 
 Tracing::Tracing(QImage source){
-  Tracing(source.width(),source.height());
+  
+  this->m_width=source.width();
+  this->m_height=source.height();
+  m_data=new unsigned int*[m_width];
+  for(int i=0;i<m_width;++i){
+    m_data[i]=new unsigned int[m_height];
+  }
+  m_alpha=0;
   for(int i=0;i<m_width;i++)
     for(int j=0;j<m_height;j++){
       m_data[i][j]=(unsigned int)source.pixel(i,j);
     }
+ 
+
 }
 
 

@@ -5,8 +5,8 @@
 
 
 ImageViewer::ImageViewer(Picture* picture) {
-  // setPixmap(Utils::QPixmapFrom(picture));
-  setPixmap(QPixmap::fromImage(QImage("image.jpg")));
+   setPixmap(Utils::QPixmapFrom(picture));
+  // //     //    setPixmap(QPixmap::fromImage(QImage("image.jpg")));
   // m_imageLabel = new QLabel;
   // m_imageLabel->setBackgroundRole(QPalette::Base);
   // m_imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

@@ -1,6 +1,6 @@
 #include "Utils.hh"
 
-
-const QPixmap& Utils::QPixmapFrom(Picture* picture) {
+//atention lle retour du Qpixmap se fait par copie... 
+QPixmap Utils::QPixmapFrom(Picture* picture) {
   return QPixmap::fromImage(picture->getImage());
 }

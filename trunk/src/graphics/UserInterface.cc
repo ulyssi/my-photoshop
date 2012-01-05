@@ -1,11 +1,13 @@
 #include <QMenuBar>
 #include <QMessageBox>
-
+#include <QFileDialog>
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
 #include "MenuMaker.hh"
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
+#include "PictureModifier.hh"
+#include "../model/Picture.hh"
 
 
 /** Constructeurs et Destructeurs */
@@ -39,7 +41,13 @@ UserInterface::~UserInterface() {
 
 
 /** Slots */
-void UserInterface::open() {}
+void UserInterface::open() {
+  QString t_fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), "",tr("Images (*.jpg)"));
+  PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
+  m_pictureManager->addPictureModifier(modifier);	
+  m_viewTabWidget->addTab((QWidget*)(modifier->getImageViewer()), t_fileName);	       
+}
+
 void UserInterface::save() {}
 void UserInterface::exit() {}
 

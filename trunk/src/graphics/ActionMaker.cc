@@ -40,7 +40,7 @@ QAction* ActionMaker::getAboutQtAction() const { return m_aboutQtAct; }
 
 /** Methodes */
 void ActionMaker::updateActions() {
-  m_openAct->setEnabled(false);
+  m_openAct->setEnabled(true);
   m_saveAct->setEnabled(false);
   m_exitAct->setEnabled(false);
   

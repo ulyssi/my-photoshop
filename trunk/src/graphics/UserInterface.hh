@@ -50,6 +50,7 @@ private:
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   QTabWidget* m_viewTabWidget;
+  
 
 };
 

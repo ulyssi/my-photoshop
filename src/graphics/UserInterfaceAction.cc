@@ -2,6 +2,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QListIterator>
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
 #include "MenuMaker.hh"
@@ -17,14 +18,20 @@ void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
   t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
+  t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
+  QStringList fileNames;
+  if (t_fileDialog->exec())
+    fileNames = t_fileDialog->selectedFiles();
   t_fileDialog->setNameFilterDetailsVisible(true);
-  QString t_fileName = t_fileDialog->getOpenFileName(this, tr("Open Image"));
-
-
-
-  PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
-  m_pictureManager->addPictureModifier(modifier);	
-  m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()), t_fileName);	       
+  QListIterator <QString> t_listIterator (fileNames);
+  QString t_path ; 
+  while (t_listIterator.hasNext()){
+    t_path =t_listIterator.next();
+    PictureModifier* modifier = new PictureModifier(new Picture(t_path), this);
+    m_pictureManager->addPictureModifier(modifier);	
+    QString f_name =t_path.right(t_path.lastIndexOf("/"));
+    m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()),f_name);
+  }
 }
 
 void UserInterface::save() {}

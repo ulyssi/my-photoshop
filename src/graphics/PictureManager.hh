@@ -9,7 +9,7 @@ class UserInterface;
 class PictureButton;
 class PictureModifier;
 
-class PictureManager : public QScrollArea { Q_OBJECT 
+class PictureManager : public QWidget { Q_OBJECT 
 
 public : 
   
@@ -29,6 +29,6 @@ private :
   UserInterface* m_userInterface; 
   QString m_tabName;
   QList<PictureButton*> m_listPictureButton; 
-  
+  Q
 };
 #endif

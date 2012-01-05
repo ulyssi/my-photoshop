@@ -17,22 +17,19 @@ UserInterface::UserInterface() :
   createMenuBar();
   createToolBar();
 
-
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultColorChooser())));
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultOperationChooser())));
 
   setCentralWidget(m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
-  
 }
     
 UserInterface::~UserInterface() {
   delete m_pictureManager;
 }
-  
-  
-  
+
+
 /** Methodes internes */
 QTabWidget* UserInterface::createTabWidget() {
   QTabWidget* tabWidget = new QTabWidget(this);

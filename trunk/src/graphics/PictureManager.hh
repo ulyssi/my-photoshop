@@ -29,6 +29,6 @@ private :
   UserInterface* m_userInterface; 
   QString m_tabName;
   QList<PictureButton*> m_listPictureButton; 
-  Q
+  
 };
 #endif

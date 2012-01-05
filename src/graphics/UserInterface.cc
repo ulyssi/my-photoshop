@@ -38,47 +38,11 @@ UserInterface::UserInterface() :
 UserInterface::~UserInterface() {
   delete m_pictureManager;
   delete m_menuMaker;
-  delete m_toolBarMaker;
+  //delete m_toolBarMaker;
   delete m_actionMaker;
 }
 
 
-/** Slots */
-void UserInterface::open() {
-  QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
-  t_fileDialog->setViewMode(QFileDialog::List);
-  // t_fileDialog->setVisible(true);
-  // QString t_fileName = t_fileDialog->getOpenFileName(this,
-  // 						     tr("Open Image"),
-  // 						     "", 
-  // 						     tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
-
-  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
-  t_fileDialog->setNameFilterDetailsVisible(true);
-  QString t_fileName = t_fileDialog->getOpenFileName(this, tr("Open Image"));
-
-  PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
-  m_pictureManager->addPictureModifier(modifier);	
-  m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()), t_fileName);	       
-}
-
-void UserInterface::save() {}
-void UserInterface::exit() {}
-
-void UserInterface::undo() {}
-void UserInterface::redo() {}
-
-void UserInterface::zoomIn() {}
-void UserInterface::zoomOut() {}
-void UserInterface::normalSize() {}
-void UserInterface::fitToWindow() {}
-
-void UserInterface::blackAndWhite() {}
-void UserInterface::rescale() {}
-
-void UserInterface::about(){
-  QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
-}
 
 
 /** Methodes internes */

@@ -4,6 +4,7 @@
 #include "UserInterface.hh"
 #include "ActionMaker.hh"
 #include "MenuMaker.hh"
+#include "ToolBarMaker.hh"
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
@@ -14,6 +15,7 @@
 UserInterface::UserInterface() :
   m_actionMaker(new ActionMaker(this)),
   m_menuMaker(new MenuMaker(m_actionMaker, this)),
+  m_toolBarMaker(new ToolBarMaker(m_actionMaker, this)),
   m_toolMaker(new ToolMaker()),
   m_pictureManager(new PictureManager(this)),
   m_viewTabWidget(createTabWidget())
@@ -36,6 +38,7 @@ UserInterface::UserInterface() :
 UserInterface::~UserInterface() {
   delete m_pictureManager;
   delete m_menuMaker;
+  delete m_toolBarMaker;
   delete m_actionMaker;
 }
 

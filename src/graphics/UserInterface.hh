@@ -7,6 +7,7 @@
 
 class ActionMaker;
 class MenuMaker;
+class ToolBarMaker;
 class ToolMaker;
 class PictureManager;
 
@@ -47,6 +48,7 @@ private:
   /** Attributs */
   ActionMaker* m_actionMaker;
   MenuMaker* m_menuMaker;
+  ToolBarMaker* m_toolBarMaker;
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   QTabWidget* m_viewTabWidget;

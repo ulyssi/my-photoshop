@@ -42,7 +42,7 @@ UserInterface::~UserInterface() {
 
 /** Slots */
 void UserInterface::open() {
-  QString t_fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), "", tr("Images (*.jpg)"));
+  QString t_fileName= QFileDialog::getOpenFileName(this, tr("Open Image"), "", tr("Images (*.jpg)"));
   PictureModifier* modifier = new PictureModifier(new Picture(t_fileName), this);
   // m_pictureManager->addPictureModifier(modifier);	
   m_viewTabWidget->addTab((QWidget*)(modifier->getImageViewer()), t_fileName);	       

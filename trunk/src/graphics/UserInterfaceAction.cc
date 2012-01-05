@@ -29,7 +29,7 @@ void UserInterface::open() {
     t_path =t_listIterator.next();
     PictureModifier* modifier = new PictureModifier(new Picture(t_path), this);
     m_pictureManager->addPictureModifier(modifier);	
-    QString f_name =t_path.right(t_path.lastIndexOf("/"));
+    QString f_name =t_path.right(t_path.length()-1-t_path.lastIndexOf("/"));
     m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()),f_name);
   }
 }

@@ -3,19 +3,17 @@
 
 /** Methodes internes */
 void UserInterface::createToolBar() {
-  createFileToolBar();
-  createEditToolBar();
-  createViewToolBar();
-  createHelpToolBar();
-  createOperationToolBar();
+  addToolBar(Qt::TopToolBarArea, createFileToolBar());
+  addToolBar(Qt::TopToolBarArea, createEditToolBar());
+  addToolBar(Qt::TopToolBarArea, createViewToolBar());
+  // addToolBar(Qt::TopToolBarArea, createOperationToolBar());
+  // addToolBar(Qt::TopToolBarArea, createHelpToolBar());
 }
 
 QToolBar* UserInterface::createFileToolBar() {
   m_fileToolBar = new QToolBar(tr("&File"), this);
   m_fileToolBar->addAction(m_openAct);
   m_fileToolBar->addAction(m_saveAct);
-  m_fileToolBar->addSeparator();
-  m_fileToolBar->addAction(m_exitAct);
   return m_fileToolBar;
 }
 

@@ -3,7 +3,7 @@
 #include <QToolBar>
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
-#include "Picture.hh"
+#include "../model/Picture.hh"
 //#include "PtabWidget.hh"
 
 

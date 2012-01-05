@@ -1,6 +1,6 @@
 #include "OperationChooser.hh"
 
-#include "ToolMaker.hh"
+#include "../ToolMaker.hh"
 #include "AffineOperationChooser.hh"
 #include "RescaleOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"

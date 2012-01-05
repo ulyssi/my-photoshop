@@ -1,14 +1,14 @@
 #include "ToolMaker.hh"
 
-#include "ColorChooser.hh"
+#include "tool/ColorChooser.hh"
 // #include "BrushChooser.hh"
 // #include "HistogramModifier.hh"
-#include "OperationChooser.hh"
-#include "AffineOperationChooser.hh"
-#include "RescaleOperationChooser.hh"
-#include "ConvolveOperationChooser.hh"
-#include "AlgebricOperationChooser.hh"
-#include "ColorConvertOperationChooser.hh"
+#include "tool/OperationChooser.hh"
+#include "tool/AffineOperationChooser.hh"
+#include "tool/RescaleOperationChooser.hh"
+#include "tool/ConvolveOperationChooser.hh"
+#include "tool/AlgebricOperationChooser.hh"
+#include "tool/ColorConvertOperationChooser.hh"
 
 
 

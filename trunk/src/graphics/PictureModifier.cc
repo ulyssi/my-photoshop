@@ -4,7 +4,7 @@
 #include "PictureArea.hh"
 #include "TracingManager.hh"
 
-#include "Picture.hh"
+#include "../model/Picture.hh"
 
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :

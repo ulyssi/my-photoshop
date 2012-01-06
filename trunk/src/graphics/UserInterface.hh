@@ -10,7 +10,7 @@
 
 class ToolMaker;
 class PictureManager;
-
+class MTabWidget;
 
 class UserInterface : public QMainWindow { Q_OBJECT
 
@@ -46,7 +46,7 @@ private:
   void createActions();
   void createMenuBar();
   void createToolBar();
-  QTabWidget* createTabWidget();
+  MTabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
 
   QMenu* createFileMenu();
@@ -71,7 +71,7 @@ private:
   /** Attributs */
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
-  QTabWidget* m_viewTabWidget;
+  MTabWidget* m_viewTabWidget;
 
   QMenu* m_fileMenu;
   QMenu* m_editMenu;

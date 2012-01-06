@@ -4,7 +4,8 @@
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
 #include "../model/Picture.hh"
-//#include "PtabWidget.hh"
+#include "MTabWidget.hh"
+
 
 
 /** Constructeurs et Destructeurs */
@@ -20,7 +21,7 @@ UserInterface::UserInterface() :
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultColorChooser())));
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultOperationChooser())));
 
-  setCentralWidget(m_viewTabWidget);
+  setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
 }
@@ -31,8 +32,8 @@ UserInterface::~UserInterface() {
 
 
 /** Methodes internes */
-QTabWidget* UserInterface::createTabWidget() {
-  QTabWidget* tabWidget = new QTabWidget(this);
+MTabWidget* UserInterface::createTabWidget() {
+  MTabWidget* tabWidget = new MTabWidget(this);
   tabWidget->addTab(m_pictureManager, m_pictureManager->getTabName());
   return tabWidget;
 }

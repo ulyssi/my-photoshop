@@ -14,27 +14,27 @@ private:
   int m_index;
   int m_offX;
   int m_offY;
-  int m_alpha;
+  float m_alpha;
 
 
 public:
   /*constructeur destructeur*/
   Tracing(int, int, int offX = 0, int offY = 0);
-  Tracing(QImage, int offX = 0, int offY = 0);
+  Tracing(QImage, int offX = 0, int offY = 0,float alpha = 1);
   ~Tracing();
   
   /*accesseurs*/
   int getIndex();
   int getOffX();
   int getOffY();
-  int getAlpha(); 
+  float getAlpha(); 
   PixelMod::Type getType();
   
   /*mutateurs*/
   void setIndex(int);
   void setOffX(int);
   void setOffY(int);
-  void setAlpha(int);
+  void setAlpha(float);
 
 
 };

@@ -2,7 +2,6 @@
 // enum binaire, greyscale, color
 
 #include "Picture.hh"
-#include "util/FileManager.hh"
 
 using namespace std;
 

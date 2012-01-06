@@ -34,6 +34,16 @@ int Tracing::getOffY(){return m_offY;}
 
 int Tracing::getAlpha(){return m_alpha;}
 
+PixelMod::Type Tracing::getType(){
+  PixelMod::Type result = PixelMod::BINARY;
+  int i=0, j=0;
+  while (result != PixelMod::COLOR && j < getHeight()) {
+    result = PixelMod::max(result, PixelMod::getTypeFromRGB(getValue(i,j)));
+    if (++i >= getWidth()) { i = 0; j++; }
+  } 
+  return result;
+}
+
 
 /** mutateurs */
 
@@ -45,13 +55,3 @@ void Tracing::setOffY(int val){ m_offY = val;}
 
 void Tracing::setAlpha(int val){m_alpha = val;} 
 
-/** predicat */
-PixelMod::Type Tracing::getType(){
-  PixelMod::Type result = PixelMod::BINARY;
-  int i=0, j=0;
-  while (result != PixelMod::COLOR && j < getHeight()) {
-    result = PixelMod::max(result, PixelMod::getTypeFromRGB(getValue(i,j)));
-    if (++i > getWidth()) { i = 0; j++; }
-  } 
-  return result;
-}

@@ -40,7 +40,7 @@ QImage& Picture::getImage(){
 	  m_image.setPixel(i,j,(uint)46544);
 	}
 	else{
-	  m_image.setPixel(i,j,(uint)tmp->getPix(i,j));
+	  m_image.setPixel(i,j,(uint)tmp->getValue(i,j));
 	}
       }
     }    

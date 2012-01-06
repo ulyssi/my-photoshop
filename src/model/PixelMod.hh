@@ -9,6 +9,8 @@
 
 namespace PixelMod{
 
+  enum Type { BINARY, GREY_SCALE, COLOR };
+
   unsigned int combineAlpha(float,float);
   unsigned int combineRed(unsigned int,unsigned int,float);
   unsigned int combineBlue(unsigned int,unsigned int,float);
@@ -19,5 +21,12 @@ namespace PixelMod{
   int getRed(unsigned int);
   int getAlpha(unsigned int);
   unsigned int createARGB(int, int, int, int);
+
+  /** Gestion des types */
+  Type getTypeFromRGB(unsigned int);
+  Type max(Type, Type);
+  Type min(Type, Type);
+
 };
+
 #endif

@@ -39,7 +39,7 @@ int PixelMod::getGreen(unsigned int rgb){
   return ((GREEN_MSK & rgb)>>8);  
 }
 
-unsigned int PixelMod::createARGB(int red, int green, int blue, int alpha = 255){
+unsigned int PixelMod::createRGB(int red, int green, int blue, int alpha = 255){
     return((alpha << 24) | (red << 16) | (green << 8) | blue);
 }
 

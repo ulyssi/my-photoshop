@@ -20,7 +20,7 @@ namespace PixelMod{
   int getBlue(unsigned int);
   int getRed(unsigned int);
   int getAlpha(unsigned int);
-  unsigned int createARGB(int, int, int, int);
+  unsigned int createRGB(int, int, int, int);
 
   /** Gestion des types */
   Type getTypeFromRGB(unsigned int);

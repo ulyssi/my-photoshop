@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QListIterator>
-
+#include <QApplication>
 
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
@@ -34,7 +34,13 @@ void UserInterface::open() {
   }
 }
 
+
 void UserInterface::save() {}
+void UserInterface::close(int i){
+  // penser a detruire les objets
+  
+  m_viewTabWidget->fermerOnglet(i);
+}
 void UserInterface::exit() {}
 
 void UserInterface::undo() {}
@@ -141,6 +147,6 @@ void UserInterface::createHelpAction() {
   connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
   
   m_aboutQtAct = new QAction(tr("About &Qt"), this);
-  connect(m_aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
+  connect(m_aboutQtAct, SIGNAL(triggered()),m_QApplication, SLOT(aboutQt()));
 }
 

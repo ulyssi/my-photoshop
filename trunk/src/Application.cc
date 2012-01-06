@@ -3,9 +3,9 @@
 #include "graphics/UserInterface.hh"
 
 int main(int argc, char **argv) {
-  QApplication application(argc, argv);
-  application.setStyle("windows");
-  UserInterface userInterface;
+  QApplication *application = new QApplication(argc, argv);
+  application->setStyle("windows");
+  UserInterface userInterface(application);
   userInterface.show();
-  return application.exec();
+  return application->exec();
 }

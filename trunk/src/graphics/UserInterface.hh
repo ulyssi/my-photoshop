@@ -7,7 +7,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QToolBar>
-
+#include <QApplication>
 class ToolMaker;
 class PictureManager;
 class MTabWidget;
@@ -17,7 +17,7 @@ class UserInterface : public QMainWindow { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  UserInterface();
+  UserInterface(QApplication *);
   ~UserInterface();
 
 public slots:
@@ -25,6 +25,7 @@ public slots:
   /** Slots */
   void open();
   void save();
+  void close(int);
   void exit();
 
   void undo();
@@ -69,6 +70,7 @@ private:
   void createOperationAction();
 
   /** Attributs */
+  QApplication* m_QApplication;
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   MTabWidget* m_viewTabWidget;

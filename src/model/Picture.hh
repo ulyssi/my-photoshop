@@ -22,18 +22,18 @@ public:
   int getHeight();
   QImage& getImage();
   vector<Tracing*>& getListTracing();
-  
   void setName(string);
+  
   /** Methodes */
   void addTracing(Tracing*);
   void insertTracing(Tracing*, int);
   void removeTracing(int);
   void removeTracing(Tracing*);
+  
 private:
   /** Methodes Chargement et Sauvegarde des QImages */
   QImage loadQImage(QString&);
   bool saveQImage(QString&, QImage);
-  /** Methodes de conversion QImage/format interne */
   
   /** Attributs */
   QString m_path;

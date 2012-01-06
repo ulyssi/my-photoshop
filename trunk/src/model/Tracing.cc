@@ -10,12 +10,12 @@ Tracing::Tracing(int width,int height, int offX, int offY) :
   m_alpha(0)
 {}
 
-Tracing::Tracing(QImage source, int offX, int offY) :
+Tracing::Tracing(QImage source, int offX, int offY,float alpha) :
   Matrix<unsigned int>(source.width(), source.height()),
   m_index(0),
   m_offX(offX),
   m_offY(offY),
-  m_alpha(0)
+  m_alpha(alpha)
 {
   for(int i = 0; i < getWidth();i++)
     for(int j = 0; j < getHeight();j++)
@@ -32,7 +32,7 @@ int Tracing::getOffX(){return m_offX;}
 
 int Tracing::getOffY(){return m_offY;}
 
-int Tracing::getAlpha(){return m_alpha;}
+float Tracing::getAlpha(){return m_alpha;}
 
 PixelMod::Type Tracing::getType(){
   PixelMod::Type result = PixelMod::BINARY;
@@ -53,5 +53,5 @@ void Tracing::setOffX(int val){m_offX = val;}
 
 void Tracing::setOffY(int val){ m_offY = val;}
 
-void Tracing::setAlpha(int val){m_alpha = val;} 
+void Tracing::setAlpha(float val){m_alpha = val;} 
 

@@ -1,27 +1,34 @@
 #include "PixelMod.hh"
-
-
+#include <math.h>
 
 unsigned int PixelMod::combineAlpha(float a1,float a2)
 {
-  return ((unsigned int)((a1+a2-(a1*a2))*255))<<24;
+   
+  return ((unsigned int)(floor((a1+a2-(a1*a2))*255.0f+0.5f)))<<24;
 }
 
 unsigned int PixelMod::combineRed(unsigned int p1,unsigned int p2, float a2){
-  return ((unsigned int)((p1&RED_MSK>>16)*(1-a2)+(p2&RED_MSK>>16)*a2))<<16;
+  
+  return ((unsigned int)(floor(float((p1&RED_MSK)>>16)*(1.0f-a2)+float((p2&RED_MSK)>>16)*a2+0.5)))<<16;
 }
 
 unsigned int PixelMod::combineBlue(unsigned int p1,unsigned int p2, float a2){
-  return(unsigned int) ((p1&BLUE_MSK)*(1-a2)+(p2&BLUE_MSK)*a2);
+  
+  return(unsigned int) floor(float(p1&BLUE_MSK)*(1.0f-a2)+float(p2&BLUE_MSK)*a2+0.5f);
 }
 
 unsigned int PixelMod::combineGreen(unsigned int p1,unsigned int p2, float a2) {
-  return ((unsigned int)((p1&GREEN_MSK>>8)*(1-a2)+(p2&GREEN_MSK>>8)*a2)) <<8;
+  
+return ((unsigned int)floor(float((p1&GREEN_MSK)>>8)*(1.0f-a2)+float((p2&GREEN_MSK)>>8)*a2+0.5f))<<8;
 }
 
 float PixelMod::getAlpha(unsigned int p, float a){
-  return ((float)((p & ALPHA_MSK)>>24))*a;
+  return (float((p & ALPHA_MSK)>>24))*a/255.0f;
 }
+
+
+
+
 
 int PixelMod::getAlpha(unsigned int rgb){
   return ((ALPHA_MSK & rgb)>>24);  

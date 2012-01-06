@@ -5,7 +5,6 @@
 #include <QImage>
 #include "Matrix.hh"
 
-// ajouter un pointeur vers l'image parente
 class Tracing : public Matrix<unsigned int> {
 private:
   QString m_name;
@@ -14,7 +13,7 @@ private:
   int m_offY;
   int m_alpha;
 
-// ajouter l'index par défaut dans le constructeur de tracing
+
 public:
   /*constructeur destructeur*/
   Tracing(int, int, int offX = 0, int offY = 0);

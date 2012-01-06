@@ -20,6 +20,7 @@ public:
     for (int i = 0; i < m_width; i++) m_data[i] = new T[m_height];
   }
 
+// methode de copie
   Matrix(int width, int height, T** data) :
     m_width(width),
     m_height(height)
@@ -46,7 +47,8 @@ public:
   T** getData() { return m_data; }
   
   /** Mutateurs */
-  void setValue(T& value, int i, int j) { m_data[i][j] = value; }
+  void setValue(int i, int j, T value) { m_data[i][j] = value; }
+  void setValue(int i, int j, T& value) { m_data[i][j] = value; }
 
 
   /** Methodes */

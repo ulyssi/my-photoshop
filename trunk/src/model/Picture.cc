@@ -1,5 +1,5 @@
 // attention pas de destructeur... à voir
-
+// enum binaire, greyscale, color
 
 #include "Picture.hh"
 #include "util/FileManager.hh"
@@ -61,4 +61,49 @@ QImage Picture::loadQImage(QString& path){
 // sauvegarde une image à partir de son path, return true si succes
 bool Picture::saveQImage(QString& path, QImage image){
     return image.save(path);
+}
+//---------- NEW MODIF
+void Picture::addTracing(Tracing* tracing){
+    // recalcul d'offset???
+    tracing->setIndex(m_listTracing.size()); //size correspond à queue + 1
+    m_listTracing.push_back(tracing);
+}
+
+void Picture::insertTracing(Tracing* tracing, int index){
+  //insère un calque à la position indiquée par l'index
+  // si l'index est pertinent
+  int i(m_listTracing.size());
+  if(index >= 0 && index <= i){
+    m_listTracing.push_back(tracing); //après ajout, le i correspond plus à la taille mais à l'indice de queu donc pas de décrémentation
+    Tracing *temp;
+    temp = m_listTracing[i];
+    while(i > index){
+      m_listTracing[i] = m_listTracing[i-1];
+      m_listTracing[i]->setIndex(i);
+      i--;
+    }
+    m_listTracing[i] = temp;
+    m_listTracing[i]->setIndex(i);
+  } else cout << "index erroné, il doit être compris entre :" << "0 et " << i << endl;
+}
+
+void Picture::removeTracing(int index){
+  // écrasement par déplacement
+  int i(m_listTracing.size());
+  if(index >= 0 && index < i){
+    delete m_listTracing[index];
+    m_listTracing[index] = 0; // <=> pointeur null
+    int size = i;
+    i = index;
+    while (i < size-1){
+      m_listTracing[i] = m_listTracing[i+1];
+      m_listTracing[i]->setIndex(i);
+      i++;
+    }
+    m_listTracing.pop_back(); //supression de la case inutile en queue
+  } else cout << "index erroné, il doit être compris entre :" << "0 et " << i-1 << endl;
+}
+
+void Picture::removeTracing(Tracing *tracing){
+  removeTracing(tracing->getIndex());
 }

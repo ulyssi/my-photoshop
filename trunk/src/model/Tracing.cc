@@ -46,14 +46,17 @@ void Tracing::setOffY(int val){ m_offY = val;}
 void Tracing::setAlpha(int val){m_alpha = val;} 
 
 /** predicat */
-
+// using namespace PixelMod;
 // Tracing::Type Tracing::updateType(){
 //   Type result = BINARY;
 //   int i=0, j=0;
 //   while (result != COLOR && j < getHeight()){
 //     unsigned int rgb = getValue(i, j);
-//     if ()
-//     if (++i > getWidth()) { i = 0; j++; }
-//   } 
-//   
-// }
+//     if (getGreen(rgb) == getRed(rgb) == getBlue(rgb) != 255){
+//       
+//     }
+//       
+/*      
+    if (++i > getWidth()) { i = 0; j++; }
+  } 
+}*/

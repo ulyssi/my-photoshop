@@ -14,6 +14,10 @@ namespace PixelMod{
   unsigned int combineBlue(unsigned int,unsigned int,float);
   unsigned int combineGreen(unsigned int,unsigned int,float);
   float getAlpha(unsigned int, float);
-
+  int getGreen(unsigned int);
+  int getBlue(unsigned int);
+  int getRed(unsigned int);
+  int getAlpha(unsigned int);
+  unsigned int createARGB(int, int, int, int);
 };
 #endif

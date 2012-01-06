@@ -61,7 +61,7 @@ QImage Picture::loadQImage(QString& path){
 bool Picture::saveQImage(QString& path, QImage image){
     return image.save(path);
 }
-//---------- NEW MODIF
+
 void Picture::addTracing(Tracing* tracing){
     // recalcul d'offset???
     tracing->setIndex(m_listTracing.size()); //size correspond à queue + 1

@@ -1,7 +1,7 @@
 #include "Tracing.hh"
 #include <iostream>
 
-  /*constructeur destructeur*/
+/** constructeur destructeur */
 Tracing::Tracing(int width,int height, int offX, int offY) :
   Matrix<unsigned int>(width, height),
   m_index(0),
@@ -24,7 +24,8 @@ Tracing::Tracing(QImage source, int offX, int offY) :
 
 Tracing::~Tracing() {}
 
-  /*accesseurs*/
+
+/** accesseurs */
 int Tracing::getIndex(){return m_index;}
   
 int Tracing::getOffX(){return m_offX;}
@@ -34,7 +35,7 @@ int Tracing::getOffY(){return m_offY;}
 int Tracing::getAlpha(){return m_alpha;}
 
 
-/*mutateurs*/
+/** mutateurs */
 
 void Tracing::setIndex(int index){m_index = index;}
 
@@ -43,3 +44,16 @@ void Tracing::setOffX(int val){m_offX = val;}
 void Tracing::setOffY(int val){ m_offY = val;}
 
 void Tracing::setAlpha(int val){m_alpha = val;} 
+
+/** predicat */
+
+// Tracing::Type Tracing::updateType(){
+//   Type result = BINARY;
+//   int i=0, j=0;
+//   while (result != COLOR && j < getHeight()){
+//     unsigned int rgb = getValue(i, j);
+//     if ()
+//     if (++i > getWidth()) { i = 0; j++; }
+//   } 
+//   
+// }

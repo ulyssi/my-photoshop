@@ -23,3 +23,22 @@ float PixelMod::getAlpha(unsigned int p, float a){
   return ((float)((p & ALPHA_MSK)>>24))*a;
 }
 
+int PixelMod::getAlpha(unsigned int rgb){
+  return ((ALPHA_MSK & rgb)>>24);  
+}
+
+int PixelMod::getRed(unsigned int rgb){
+  return ((RED_MSK & rgb)>>16);  
+}
+
+int PixelMod::getBlue(unsigned int rgb){
+  return (BLUE_MSK & rgb);  
+}
+
+int PixelMod::getGreen(unsigned int rgb){
+  return ((GREEN_MSK & rgb)>>8);  
+}
+
+unsigned int PixelMod::createARGB(int red, int green, int blue, int alpha = 255){
+    return((alpha << 24) | (red << 16) | (green << 8) | blue);
+}

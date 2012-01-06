@@ -42,3 +42,23 @@ int PixelMod::getGreen(unsigned int rgb){
 unsigned int PixelMod::createARGB(int red, int green, int blue, int alpha = 255){
     return((alpha << 24) | (red << 16) | (green << 8) | blue);
 }
+
+PixelMod::Type PixelMod::getTypeFromRGB(unsigned int rgb) {
+  if (getRed(rgb) == getBlue(rgb) && getGreen(rgb) == getBlue(rgb)) {
+    if (getBlue(rgb) == 0 || getBlue(rgb) == 255) return BINARY;
+    return GREY_SCALE;
+  }
+  return COLOR;
+}
+
+PixelMod::Type PixelMod::max(Type t1, Type t2) {
+  if (t1 == COLOR || t2 == COLOR) return COLOR;
+  if (t1 == GREY_SCALE || t2 == GREY_SCALE) return GREY_SCALE;
+  return BINARY;
+}
+
+PixelMod::Type PixelMod::min(Type t1, Type t2) {
+  if (t1 == BINARY || t2 == BINARY) return BINARY;
+  if (t1 == GREY_SCALE || t2 == GREY_SCALE) return GREY_SCALE;
+  return COLOR;
+}

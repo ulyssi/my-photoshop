@@ -3,7 +3,10 @@
 
 #include <QString>
 #include <QImage>
+
 #include "Matrix.hh"
+#include "PixelMod.hh"
+
 
 class Tracing : public Matrix<unsigned int> {
 private:
@@ -25,12 +28,15 @@ public:
   int getOffX();
   int getOffY();
   int getAlpha(); 
+  PixelMod::Type getType();
   
   /*mutateurs*/
   void setIndex(int);
   void setOffX(int);
   void setOffY(int);
   void setAlpha(int);
+
+
 };
 
 #endif

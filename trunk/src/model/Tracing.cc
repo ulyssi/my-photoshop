@@ -1,5 +1,5 @@
 #include "Tracing.hh"
-#include <iostream>
+
 
 /** constructeur destructeur */
 Tracing::Tracing(int width,int height, int offX, int offY) :
@@ -46,17 +46,12 @@ void Tracing::setOffY(int val){ m_offY = val;}
 void Tracing::setAlpha(int val){m_alpha = val;} 
 
 /** predicat */
-// using namespace PixelMod;
-// Tracing::Type Tracing::updateType(){
-//   Type result = BINARY;
-//   int i=0, j=0;
-//   while (result != COLOR && j < getHeight()){
-//     unsigned int rgb = getValue(i, j);
-//     if (getGreen(rgb) == getRed(rgb) == getBlue(rgb) != 255){
-//       
-//     }
-//       
-/*      
+PixelMod::Type Tracing::getType(){
+  PixelMod::Type result = PixelMod::BINARY;
+  int i=0, j=0;
+  while (result != PixelMod::COLOR && j < getHeight()) {
+    result = PixelMod::max(result, PixelMod::getTypeFromRGB(getValue(i,j)));
     if (++i > getWidth()) { i = 0; j++; }
   } 
-}*/
+  return result;
+}

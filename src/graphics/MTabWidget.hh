@@ -13,12 +13,14 @@ public :
   ~MTabWidget ();
   //override private methode from QTabWidget
   QTabBar* tabBar();
-
+  void fermerOnglet(int);
 public slots :
 
   void myItemChangeSlot(int index);
 
 private :
+  
+  
 
 };
 #endif

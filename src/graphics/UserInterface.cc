@@ -9,7 +9,8 @@
 
 
 /** Constructeurs et Destructeurs */
-UserInterface::UserInterface() :
+UserInterface::UserInterface(QApplication* qapplication) :
+  m_QApplication(qapplication),
   m_toolMaker(new ToolMaker()),
   m_pictureManager(new PictureManager(this)),
   m_viewTabWidget(createTabWidget())

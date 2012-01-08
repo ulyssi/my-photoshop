@@ -2,17 +2,16 @@
 #define _CONVOLVE_OPERATION_HH_
 
 #include "Operation.hh"
+#include "Matrix.hh"
 
 class Tracing;
-class Kernel;
-
 
 class ConvolveOperation : public Operation {
 
 public:
 
   /** Constructeurs et destructeur */
-  ConvolveOperation(Kernel*);
+  ConvolveOperation(Matrix<double>*);
   ~ConvolveOperation();
 
   Tracing* doOperation(Tracing*);
@@ -20,7 +19,7 @@ public:
 
 private:
 
-  Kernel* m_kernel;
+  Matrix<double>* m_kernel;
 
 };
 

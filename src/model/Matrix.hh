@@ -1,8 +1,6 @@
 #ifndef _MATRIX_HH_
 #define _MATRIX_HH_
 
-
-
 template <class T> class Matrix {
   
   /** Attributs */
@@ -20,7 +18,18 @@ public:
     for (int i = 0; i < m_width; i++) m_data[i] = new T[m_height];
   }
 
-// methode de copie
+  Matrix(Matrix<T>* matrix) :
+    m_width(matrix->m_width),
+    m_height(matrix->m_height)
+  {
+    m_data = new T*[m_width];
+    for (int i = 0; i < m_width; i++) {
+      m_data[i] = new T[m_height];
+      for (int j = 0; j < m_height; j++)
+	m_data[i][j] = matrix->data[i][j];
+    }
+  }
+
   Matrix(int width, int height, T** data) :
     m_width(width),
     m_height(height)

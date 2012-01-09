@@ -2,12 +2,11 @@
 #define _USER_INTERFACE_HH_
 
 #include <QMainWindow>
-#include <QTabWidget>
+#include <QApplication>
 #include <QDockWidget>
 #include <QAction>
 #include <QMenu>
 #include <QToolBar>
-#include <QApplication>
 
 #include "Matrix.hh"
 
@@ -23,15 +22,12 @@ public:
   UserInterface(QApplication *);
   ~UserInterface();
 
-  /** Methodes */
-
-public :
-  void close(QWidget*);
 public slots:
   
   /** Slots */
   void open();
   void save();
+  void close(QWidget*);
  
   void exit();
 
@@ -60,7 +56,7 @@ private:
   void createToolBar();
   MTabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
-
+  
   QMenu* createFileMenu();
   QMenu* createEditMenu();
   QMenu* createViewMenu();

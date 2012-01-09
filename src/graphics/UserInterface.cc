@@ -1,11 +1,9 @@
 #include "UserInterface.hh"
 
-#include <QToolBar>
-#include "ToolMaker.hh"
-#include "PictureManager.hh"
-#include "Picture.hh"
 #include "MTabWidget.hh"
-#include <QTabWidget>
+#include "ToolMaker.hh"
+#include "Picture.hh"
+#include "PictureManager.hh"
 
 
 
@@ -17,7 +15,6 @@ UserInterface::UserInterface(QApplication* qapplication) :
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
 
-
   createActions();
   createMenuBar();
   createToolBar();
@@ -28,8 +25,6 @@ UserInterface::UserInterface(QApplication* qapplication) :
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
-  
-
 }
     
 UserInterface::~UserInterface() {

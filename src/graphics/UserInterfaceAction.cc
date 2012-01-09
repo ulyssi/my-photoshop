@@ -17,6 +17,7 @@ void UserInterface::open() {
   t_fileDialog->setViewMode(QFileDialog::List);
   t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
   t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
+
   QStringList fileNames;
   if (t_fileDialog->exec()) fileNames = t_fileDialog->selectedFiles();
   t_fileDialog->setNameFilterDetailsVisible(true);
@@ -28,12 +29,8 @@ void UserInterface::open() {
   }
 }
 
-
 void UserInterface::save() {}
-void UserInterface::close(QWidget* q) {
-  std::cout<<"fermeture onglet"<<std::endl;
-  // penser a detruire les objets
-}
+void UserInterface::close(QWidget* q) { std::cout << "fermeture onglet" << std::endl; }
 void UserInterface::exit() {}
 
 void UserInterface::undo() {}
@@ -59,7 +56,6 @@ void UserInterface::greyScale() {
 void UserInterface::rescale() {}
 
 void UserInterface::colorConvertOperation(Matrix<double>* application) {
-  
   // if (getCurrentTab()->isPicture()) {
   //   Picture* picture = getCurrentTab()->getPicture();
 
@@ -77,8 +73,7 @@ void UserInterface::colorConvertOperation(Matrix<double>* application) {
   // }
 }
 
-void UserInterface::convolveOperation(Matrix<double>* filter) {
-}
+void UserInterface::convolveOperation(Matrix<double>* filter) {}
 
 void UserInterface::about(){
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
@@ -175,4 +170,3 @@ void UserInterface::createHelpAction() {
   m_aboutQtAct = new QAction(tr("About &Qt"), this);
   connect(m_aboutQtAct, SIGNAL(triggered()),m_QApplication, SLOT(aboutQt()));
 }
-

@@ -1,13 +1,14 @@
 #include "UserInterface.hh"
 
 
+
 /** Methodes internes */
 void UserInterface::createToolBar() {
   addToolBar(Qt::TopToolBarArea, createFileToolBar());
   addToolBar(Qt::TopToolBarArea, createEditToolBar());
   addToolBar(Qt::TopToolBarArea, createViewToolBar());
-  // addToolBar(Qt::TopToolBarArea, createOperationToolBar());
-  // addToolBar(Qt::TopToolBarArea, createHelpToolBar());
+  //[TOOLBAR] addToolBar(Qt::TopToolBarArea, createOperationToolBar());
+  //[TOOLBAR] addToolBar(Qt::TopToolBarArea, createHelpToolBar());
 }
 
 QToolBar* UserInterface::createFileToolBar() {
@@ -46,5 +47,3 @@ QToolBar* UserInterface::createOperationToolBar() {
   m_operationToolBar->addAction(m_rescaleAct);
   return m_operationToolBar;
 }
-
-

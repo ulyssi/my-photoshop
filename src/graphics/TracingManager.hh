@@ -1,5 +1,5 @@
-#ifndef _TRACINGMANAGER_HH_
-#define _TRACINGMANAGER_HH_
+#ifndef _TRACING_MANAGER_HH_
+#define _TRACING_MANAGER_HH_
 
 #include <QListWidget>
 
@@ -14,7 +14,7 @@ public:
   ~TracingManager();
 
   /** Accesseurs */
-  PictureModifier* getPictureModifier() const;
+  PictureModifier* getPictureModifier();
   
 private:
 

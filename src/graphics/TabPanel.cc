@@ -19,4 +19,3 @@ UserInterface* TabPanel::getUserInterface() { return m_userInterface; }
 
 /** Mutateurs */
 void TabPanel::setTabName(QString tabName) { m_tabName = tabName; }
-

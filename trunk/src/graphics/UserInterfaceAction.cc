@@ -30,7 +30,7 @@ void UserInterface::open() {
     PictureModifier* modifier = new PictureModifier(new Picture(t_path), this);
     m_pictureManager->addPictureModifier(modifier);	
     QString f_name = t_path.right(t_path.length()-1-t_path.lastIndexOf("/"));
-    m_viewTabWidget->addTab((QWidget*)(modifier),f_name);
+    m_viewTabWidget->addTab((QWidget*)(modifier), (const QString&)(*modifier->getTabName()));
   }
 }
 
@@ -168,7 +168,7 @@ void UserInterface::createViewAction() {
 void UserInterface::createOperationAction() {
   m_blackAndWhiteAct = new QAction(tr("&Black and White"), this);
   m_blackAndWhiteAct->setEnabled(false);
-  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
+  //  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
 
   m_rescaleAct = new QAction(tr("&Rescale"), this);
   m_rescaleAct->setEnabled(false);

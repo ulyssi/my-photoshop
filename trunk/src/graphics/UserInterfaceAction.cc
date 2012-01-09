@@ -39,7 +39,7 @@ void UserInterface::save() {}
 void UserInterface::close(int i){
   // penser a detruire les objets
   
-  m_viewTabWidget->fermerOnglet(i);
+
 }
 void UserInterface::exit() {}
 

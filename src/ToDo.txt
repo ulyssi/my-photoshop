@@ -1,0 +1,36 @@
+
+
+
+[INTERFACE]
+
+save
+barre etat
+colorChooser
+pipette
+selection
+zoom (in, out, fit, normal)
+
+
+
+
+
+[MODEL]
+
+save
+
+selection d'une zone de l'image
+fusion de deux images
+
+espace vectoriel des couleurs
+histogramme
+normalisation des histogrammes
+
+grey scale
+filtre de convolution
+flou [gaussien, par moyennage]
+detection contour [laplacien]
+accentuation de contour
+selection intelligente
+
+redimensionnement
+redimensionnement intelligent

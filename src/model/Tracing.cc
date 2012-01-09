@@ -17,8 +17,8 @@ Tracing::Tracing(QImage source, int offX, int offY,float alpha) :
   m_offY(offY),
   m_alpha(alpha)
 {
-  for(int i = 0; i < getHeight();i++)
-    for(int j = 0; j < getWidth();j++)
+  for(int i = 0; i < getWidth();i++)
+    for(int j = 0; j < getHeight();j++)
       setValue(i, j, (unsigned int)source.pixel(i,j));
 }
 

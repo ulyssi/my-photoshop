@@ -1,11 +1,11 @@
 #include "PictureViewer.hh"
 
-#include "Utils.hh"
-#include "Picture.hh"
+#include <QPixmap>
+#include "PictureModifier.hh"
 
 
-PictureViewer::PictureViewer(Picture* picture) {
-  setPixmap(Utils::QPixmapFrom(picture));
+PictureViewer::PictureViewer(PictureModifier* pictureModifier) {
+  setPixmap(QPixmap::fromImage((const QImage&)(*(pictureModifier->getImage()))));
 }
 
 PictureViewer::~PictureViewer() {}

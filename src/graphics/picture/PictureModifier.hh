@@ -2,24 +2,25 @@
 #define _PICTURE_MODIFIER_HH_
 
 #include "TabPanel.hh"
-#include <QScrollArea>
+#include <QImage>
 
 class Picture;
 class PictureViewer;
 class UserInterface;
 class TracingManager;
 
-class PictureModifier : public TabPanel, public QScrollArea { Q_OBJECT
+class PictureModifier : public TabPanel, public QScrollArea   {
 
 public :
   
   /** Constructeurs et destructeur */
   PictureModifier(Picture*, UserInterface*); 
-  ~PictureModifier(); 
+  ~PictureModifier();
   
   /** Accesseurs */
-  Picture* getPicture() const;
-  TracingManager* getTracingManager() const;
+  QImage* getImage();
+  Picture* getPicture();
+  TracingManager* getTracingManager();
 
   /** Methodes */
   std::vector<Picture*> getSelectedPicture();
@@ -28,6 +29,7 @@ public :
 private :
 
   /** Attributs */
+  QImage* m_image;
   Picture* m_picture;
   PictureViewer* m_pictureViewer;
   TracingManager* m_tracingManager;

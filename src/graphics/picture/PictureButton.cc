@@ -5,7 +5,7 @@
 
 /*Constructeur et destructeur */
 PictureButton::PictureButton(PictureModifier *pictureModifier) :
-  PictureViewer(pictureModifier->getPicture()),
+  PictureViewer(pictureModifier),
   m_pictureModifier(pictureModifier)
 {}
 

@@ -20,7 +20,7 @@ private:
 public:
   /*constructeur destructeur*/
   Tracing(int, int, int offX = 0, int offY = 0);
-  Tracing(QImage, int offX = 0, int offY = 0,float alpha = 1);
+  Tracing(Matrix<unsigned int>*, int offX = 0, int offY = 0, float alpha = 1);
   ~Tracing();
   
   /*accesseurs*/

@@ -1,8 +1,8 @@
 #ifndef _TAB_PANEL_HH_
 #define _TAB_PANEL_HH_
 
-#include <QScrollArea>
 #include <QString>
+#include <vector>
 
 class UserInterface;
 class Picture;
@@ -12,7 +12,7 @@ class TabPanel {
 public : 
   
   /** Constructeurs et destructeur */
-  TabPanel(UserInterface* =NULL);
+  TabPanel(UserInterface*);
   ~TabPanel();
   
   /** Accesseurs */

@@ -6,10 +6,10 @@
 
 /** Constructeurs et destructeur */
 PictureManager::PictureManager(UserInterface* userInterface) :
-  TabPanel(userInterface),
-  m_listPictureButton()
+  TabPanel(userInterface)
 {
   setTabName(QString("Thumbnail"));
+  //  setWidget();
 }
 
 PictureManager::~PictureManager() {}

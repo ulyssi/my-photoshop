@@ -3,11 +3,14 @@
 #include "MTabWidget.hh"
 #include "MPushButton.hh"
 #include <iostream>
+#include <QListIterator>
 
-MTabWidget::MTabWidget ( QWidget * parent ){
+MTabWidget::MTabWidget ( QWidget * parent ):
+  m_listpushbutton(){
   setParent(parent);
   QObject::connect(this,SIGNAL(currentChanged(int)),this,SLOT(myItemChangeSlot(int)));
   createAddTab();
+ 
 }
 
 MTabWidget::~MTabWidget (){}
@@ -24,15 +27,17 @@ int MTabWidget::addTab ( QWidget * page, const QIcon & icon, const QString & lab
 }
 
 void MTabWidget::fermerOnglet(int i){
-  std::cout<<"fermer onglet "<< i<<std::endl;
-  setCurrentIndex(i-1);
-  removeTab(i-1);
+  if (i!=1&&i!=count()){ 
+    removeTab(i-1);
+  } 
+  for (int j = 0; j < m_listpushbutton.size(); ++j) {
+    if (m_listpushbutton.at(j)->getIndex()>i&&m_listpushbutton.at(j)->getIndex()<=count())
+      m_listpushbutton.at(j)->setIndex(m_listpushbutton.at(j)->getIndex()-1);
+  }
 }
-
 QTabBar* MTabWidget::tabBar(){
   return QTabWidget::tabBar();
 }
-
 
 void MTabWidget::createAddTab(){
   QPushButton* m_pushButton = new QPushButton(); 
@@ -60,6 +65,7 @@ QPushButton* MTabWidget::createCloseButton(){
   t_icon->setFixedWidth(20);
   t_icon->setFixedHeight(20);
   QObject::connect(t_icon,SIGNAL(clickedButton(int)),this,SLOT(fermerOnglet(int)));
+  m_listpushbutton.append(t_icon);
   return (QPushButton*)t_icon;
 }
 

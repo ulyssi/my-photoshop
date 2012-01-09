@@ -5,6 +5,7 @@
 #include <QTabBar>
 #include <QWidget>
 #include <QPushButton>
+#include <QList>
 class MPushButton;
 
 class MTabWidget : public QTabWidget {Q_OBJECT
@@ -23,5 +24,6 @@ public slots :
   void fermerOnglet(int);
 private :
   QPushButton* m_pushButton; 
+  QList <MPushButton*> m_listpushbutton;
 };
 #endif

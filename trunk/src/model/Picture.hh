@@ -5,7 +5,10 @@
 #include <vector>
 #include <iostream>
 #include "Tracing.hh"
+#include "MergeOperation.hh"
 using namespace std;
+
+
 
 class Picture {
   
@@ -46,7 +49,7 @@ private:
   int m_ch_rectX_inf;
   int m_ch_rectY_sup;
   int m_ch_rectY_inf;
-  
+  MergeOperation m_merge;
 };
 
 #endif

@@ -4,16 +4,19 @@
 #include "Picture.hh"
 #include "PixelMod.hh"
 
+
 using namespace std;
 
 Picture::Picture(QString path) :
   m_path(path),
   m_listTracing(3), 
-  m_ch_rectX_sup(1),
-  m_ch_rectX_inf(2),
-  m_ch_rectY_sup(3),
-  m_ch_rectY_inf(2)
+  m_ch_rectX_sup(0),
+  m_ch_rectX_inf(0),
+  m_ch_rectY_sup(0),
+  m_ch_rectY_inf(0)
+ 
 {
+  m_merge=MergeOperation();
   m_name = m_path.right(m_path.lastIndexOf("/"));
   m_image = loadQImage(m_path);
   m_width = m_image.width();
@@ -30,43 +33,22 @@ int Picture::getWidth() { return m_width; }
 int Picture::getHeight() { return m_height; }
 
 QImage& Picture::getImage() {
-  // if((m_ch_rectX_inf|m_ch_rectY_inf|m_ch_rectX_sup|m_ch_rectY_sup)!=0){
-  //   /*todo make it real*/
-  //   cout<<"make it real?\n";
-  //   unsigned int pix=0;
-  //   unsigned int tpix;
-  //   //unsigned int msk=0x50123452;
-  //   vector<Tracing*>::iterator it;
+ 
+  /*  Tracing * temp=m_merge.doOperation(m_listTracing);
+   cout<<"return from merge\n";
+  if(m_image.width()!=temp->getWidth() ||m_image.height()!=temp->getHeight()){
    
-  //   float a1,a2;
-  //   Tracing *t1;
-  //   Tracing *t2;
-  //   for(int i=m_ch_rectX_inf;i<m_ch_rectX_sup;i++){
-  //     for(int j=m_ch_rectY_inf;j<m_ch_rectY_sup;j++){
-  // 	it=m_listTracing.begin();
-  // 	while((*it)==NULL)
-  // 	  it++;
-	
-  // 	t1=(*it);
-  // 	pix=t1->getValue(i,j);
-  // 	it++;
-	
-  // 	while (it<m_listTracing.end()){    
-  // 	  if((*it)!=NULL){
-  // 	    t2=(*it);
-  // 	    tpix=t2->getValue(i,j);
-  // 	    a1=getAlpha(pix,t1->getAlpha());
-  // 	    a2=getAlpha(tpix,t2->getAlpha());
-  // 	    pix=combineAlpha(a1,a2)|combineRed(pix,tpix,a2)|combineGreen(pix,tpix,a2)|combineBlue(pix,tpix,a2);
-  // 	  }  it++;
-  // 	}
-  // 	m_image.setPixel(i,j,(uint)pix);
-	
-  //     }
-  //   }    
-  // }cout<<"reading\n" << endl;
+    m_image=QImage(temp->getWidth(),temp->getHeight(),QImage::Format_ARGB32);
+  }
+  cout<< temp->getWidth()<<" h  "<<temp->getHeight()<<"\n";
+  for(int i=0;i<temp->getWidth();i++)
+    for(int j=0;j<temp->getHeight();j++){
+      m_image.setPixel(i,j, (uint) temp->getValue(i,j));
+      }
+  cout<<"getting image\n";
+  delete temp;*/
   return m_image;
-
+ 
 }
 
 vector<Tracing*>& Picture::getListTracing(){return m_listTracing;}

@@ -22,8 +22,14 @@ Picture* MergeOperation::doOperation(Picture** pictureList, int nbPicture) {
 
 Tracing* MergeOperation::doOperation(Tracing* tracing) { return tracing; }
 
-Tracing* MergeOperation::doOperation(Tracing** tracingList, int nbTracing) {
-  return tracingList[0];
-}
+// Tracing* MergeOperation::doOperation(std::vector<Tracing*> tracingList) {
+//   return NULL;;
+// }
 
 Operation* MergeOperation::clone() { return NULL; }
+
+
+/** Methodes internes */
+Tracing* MergeOperation::doOperation(Tracing* t1, Tracing* t2) {
+  return t1;
+}

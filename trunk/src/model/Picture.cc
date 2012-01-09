@@ -5,7 +5,7 @@
 #include "PixelMod.hh"
 
 using namespace std;
-using namespace PixelMod;
+
 Picture::Picture(QString path) :
   m_path(path),
   m_listTracing(3), 
@@ -31,41 +31,41 @@ int Picture::getWidth(){return m_width;}
 int Picture::getHeight(){return m_height;}
 
 QImage& Picture::getImage(){
-  if((m_ch_rectX_inf|m_ch_rectY_inf|m_ch_rectX_sup|m_ch_rectY_sup)!=0){
-    /*todo make it real*/
-    cout<<"make it real?\n";
-    unsigned int pix=0;
-    unsigned int tpix;
-    //unsigned int msk=0x50123452;
-    vector<Tracing*>::iterator it;
+  // if((m_ch_rectX_inf|m_ch_rectY_inf|m_ch_rectX_sup|m_ch_rectY_sup)!=0){
+  //   /*todo make it real*/
+  //   cout<<"make it real?\n";
+  //   unsigned int pix=0;
+  //   unsigned int tpix;
+  //   //unsigned int msk=0x50123452;
+  //   vector<Tracing*>::iterator it;
    
-    float a1,a2;
-    Tracing *t1;
-    Tracing *t2;
-    for(int i=m_ch_rectX_inf;i<m_ch_rectX_sup;i++){
-      for(int j=m_ch_rectY_inf;j<m_ch_rectY_sup;j++){
-	it=m_listTracing.begin();
-	while((*it)==NULL)
-	  it++;
+  //   float a1,a2;
+  //   Tracing *t1;
+  //   Tracing *t2;
+  //   for(int i=m_ch_rectX_inf;i<m_ch_rectX_sup;i++){
+  //     for(int j=m_ch_rectY_inf;j<m_ch_rectY_sup;j++){
+  // 	it=m_listTracing.begin();
+  // 	while((*it)==NULL)
+  // 	  it++;
 	
-	t1=(*it);
-	pix=t1->getValue(i,j);
-	it++;
+  // 	t1=(*it);
+  // 	pix=t1->getValue(i,j);
+  // 	it++;
 	
-	while (it<m_listTracing.end()){    
-	  if((*it)!=NULL){
-	    t2=(*it);
-	    tpix=t2->getValue(i,j);
-	    a1=getAlpha(pix,t1->getAlpha());
-	    a2=getAlpha(tpix,t2->getAlpha());
-	    pix=combineAlpha(a1,a2)|combineRed(pix,tpix,a2)|combineGreen(pix,tpix,a2)|combineBlue(pix,tpix,a2);
-	  }  it++;
-	}
-	m_image.setPixel(i,j,(uint)pix);
+  // 	while (it<m_listTracing.end()){    
+  // 	  if((*it)!=NULL){
+  // 	    t2=(*it);
+  // 	    tpix=t2->getValue(i,j);
+  // 	    a1=getAlpha(pix,t1->getAlpha());
+  // 	    a2=getAlpha(tpix,t2->getAlpha());
+  // 	    pix=combineAlpha(a1,a2)|combineRed(pix,tpix,a2)|combineGreen(pix,tpix,a2)|combineBlue(pix,tpix,a2);
+  // 	  }  it++;
+  // 	}
+  // 	m_image.setPixel(i,j,(uint)pix);
 	
-      }
-    }    
-  }cout<<"reading\n" << endl;
+  //     }
+  //   }    
+  // }cout<<"reading\n" << endl;
   return m_image;
 
 }

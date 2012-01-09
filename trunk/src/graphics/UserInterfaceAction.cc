@@ -5,9 +5,9 @@
 #include <QListIterator>
 #include <QApplication>
 
+#include "Picture.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-#include "../model/Picture.hh"
 #include "MTabWidget.hh"
 
 
@@ -29,8 +29,8 @@ void UserInterface::open() {
     t_path =t_listIterator.next();
     PictureModifier* modifier = new PictureModifier(new Picture(t_path), this);
     m_pictureManager->addPictureModifier(modifier);	
-    QString f_name =t_path.right(t_path.length()-1-t_path.lastIndexOf("/"));
-    m_viewTabWidget->addTab((QWidget*)(modifier->getPictureArea()),f_name);
+    QString f_name = t_path.right(t_path.length()-1-t_path.lastIndexOf("/"));
+    m_viewTabWidget->addTab((QWidget*)(modifier),f_name);
   }
 }
 
@@ -52,7 +52,21 @@ void UserInterface::normalSize() {}
 void UserInterface::fitToWindow() {}
 
 void UserInterface::binary() {}
+
 void UserInterface::greyScale() {
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++) {
+    application->setValue(i, 0, 0.30);
+    application->setValue(i, 1, 0.59);
+    application->setValue(i, 2, 0.11);
+  }
+  colorConvertOperation(application);
+}
+
+void UserInterface::rescale() {}
+
+void UserInterface::colorConvertOperation(Matrix<double>* application) {
+  
   // if (getCurrentTab()->isPicture()) {
   //   Picture* picture = getCurrentTab()->getPicture();
 
@@ -69,7 +83,9 @@ void UserInterface::greyScale() {
   //   getCurrentTab()->refresh();
   // }
 }
-void UserInterface::rescale() {}
+
+void UserInterface::convolveOperation(Matrix<double>* filter) {
+}
 
 void UserInterface::about(){
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));

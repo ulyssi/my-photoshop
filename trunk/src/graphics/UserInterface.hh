@@ -8,6 +8,9 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QApplication>
+
+#include "Matrix.hh"
+
 class ToolMaker;
 class PictureManager;
 class MTabWidget;
@@ -19,6 +22,8 @@ public:
   /** Constructeurs et destructeur */
   UserInterface(QApplication *);
   ~UserInterface();
+
+  /** Methodes */
 
 public slots:
   
@@ -39,6 +44,9 @@ public slots:
   void binary();
   void greyScale();
   void rescale();
+
+  void colorConvertOperation(Matrix<double>* application = NULL);
+  void convolveOperation(Matrix<double>* filter = NULL);
 
   void about();
       

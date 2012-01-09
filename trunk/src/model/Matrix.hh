@@ -14,18 +14,18 @@ public:
     m_width(width),
     m_height(height)
   {
-    m_data = new T*[m_width];
-    for (int i = 0; i < m_width; i++) m_data[i] = new T[m_height];
+    m_data = new T*[m_height];
+    for (int i = 0; i < m_height; i++) m_data[i] = new T[m_width];
   }
 
   Matrix(Matrix<T>* matrix) :
     m_width(matrix->m_width),
     m_height(matrix->m_height)
   {
-    m_data = new T*[m_width];
-    for (int i = 0; i < m_width; i++) {
-      m_data[i] = new T[m_height];
-      for (int j = 0; j < m_height; j++)
+    m_data = new T*[m_height];
+    for (int i = 0; i < m_height; i++) {
+      m_data[i] = new T[m_width];
+      for (int j = 0; j < m_width; j++)
 	m_data[i][j] = matrix->data[i][j];
     }
   }
@@ -34,16 +34,16 @@ public:
     m_width(width),
     m_height(height)
   {
-    m_data = new T*[m_width];
-    for (int i = 0; i < m_width; i++) {
-      m_data[i] = new T[m_height];
-      for (int j = 0; j < m_height; j++)
+    m_data = new T*[m_height];
+    for (int i = 0; i < m_height; i++) {
+      m_data[i] = new T[m_width];
+      for (int j = 0; j < m_width; j++)
 	m_data[i][j] = data[i][j];
     }
   }
 
   ~Matrix() {
-    for (int i = 0; i < m_width; i++) delete m_data[i];
+    for (int i = 0; i < m_height; i++) delete m_data[i];
     delete m_data;
   }
 
@@ -62,8 +62,8 @@ public:
 
   /** Methodes */
   void initialize(T& value) {
-    for (int i = 0; i < m_width; i++) 
-      for (int j = 0; j < m_height; j++)
+    for (int i = 0; i < m_height; i++) 
+      for (int j = 0; j < m_width; j++)
 	m_data[i][j] = value;
   }
 

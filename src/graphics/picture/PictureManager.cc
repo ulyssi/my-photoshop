@@ -6,20 +6,20 @@
 
 /** Constructeurs et destructeur */
 PictureManager::PictureManager(UserInterface* userInterface) :
-  m_userInterface(userInterface),
-  m_tabName("Thumbnails"),
+  TabPanel(userInterface),
   m_listPictureButton()
-{}
+{
+  setTabName(new QString("Thumbnail"));
+}
 
 PictureManager::~PictureManager() {}
 
 
-/** Accesseurs */
-const QString& PictureManager::getTabName() const {
-  return m_tabName; 
-}
-
 /** Methodes */
+std::vector<Picture*> PictureManager::getSelectedPicture() {}
+
 void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
   m_listPictureButton.append(new PictureButton(pictureModifier));
 }
+
+void PictureManager::refresh() {}

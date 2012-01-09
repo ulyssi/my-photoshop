@@ -1,28 +1,35 @@
 #include "PictureModifier.hh"
 
 #include "UserInterface.hh"
-#include "PictureArea.hh"
 #include "TracingManager.hh"
+#include "PictureViewer.hh"
 
 #include "../model/Picture.hh"
 
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
-  m_userInterface(userInterface),
+  TabPanel(userInterface),
   m_picture(picture),
-  m_pictureArea(new PictureArea(this)),
+  m_pictureViewer(new PictureViewer(picture)),
   m_tracingManager(new TracingManager(this))
-{}
+{
+  setWidget(m_pictureViewer);
+}
 
 PictureModifier::~PictureModifier() {
-  delete m_pictureArea;
   delete m_tracingManager;
 }
+
 
 /** Accesseurs */
 Picture* PictureModifier::getPicture() const { return m_picture; }
 
-PictureArea* PictureModifier::getPictureArea() const { return m_pictureArea; }
-
 TracingManager* PictureModifier::getTracingManager() const { return m_tracingManager; }
 
+
+/** Methodes */
+std::vector<Picture*> PictureModifier::getSelectedPicture() {
+  return std::vector<Picture*>(3);
+}
+
+void PictureModifier::refresh() {}

@@ -1,15 +1,15 @@
 #ifndef _PICTUREMANAGER_HH_ 
 #define _PICTUREMANAGER_HH_
 
-#include <QScrollArea>
-#include <QString>
+#include "TabPanel.hh"
+
 #include <QList>
 
 class UserInterface;
 class PictureButton;
 class PictureModifier;
 
-class PictureManager : public QWidget { Q_OBJECT 
+class PictureManager : public TabPanel {
 
 public : 
   
@@ -17,18 +17,16 @@ public :
   PictureManager(UserInterface*);
   ~PictureManager(); 
   
-  /** Accesseurs */
-  const QString& getTabName() const;
-
   /** Methodes */
+  std::vector<Picture*> getSelectedPicture();
   void addPictureModifier(PictureModifier*);
-  
+  void refresh();
+ 
 private : 
   
   /** Attributs */
-  UserInterface* m_userInterface; 
-  QString m_tabName;
   QList<PictureButton*> m_listPictureButton; 
   
 };
+
 #endif

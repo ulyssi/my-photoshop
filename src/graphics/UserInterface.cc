@@ -3,7 +3,7 @@
 #include <QToolBar>
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
-#include "../model/Picture.hh"
+#include "Picture.hh"
 #include "MTabWidget.hh"
 
 
@@ -35,7 +35,7 @@ UserInterface::~UserInterface() {
 /** Methodes internes */
 MTabWidget* UserInterface::createTabWidget() {
   MTabWidget* tabWidget = new MTabWidget(this);
-  tabWidget->addTab(m_pictureManager, m_pictureManager->getTabName());
+  tabWidget->addTab(m_pictureManager, (const QString&)(*m_pictureManager->getTabName()));
   return tabWidget;
 }
   

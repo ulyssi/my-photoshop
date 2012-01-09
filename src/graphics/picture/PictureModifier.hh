@@ -1,12 +1,14 @@
 #ifndef _PICTURE_MODIFIER_HH_
 #define _PICTURE_MODIFIER_HH_
 
+#include "TabPanel.hh"
+
 class Picture;
+class PictureViewer;
 class UserInterface;
-class PictureArea;
 class TracingManager;
 
-class PictureModifier {
+class PictureModifier : public TabPanel {
 
 public :
   
@@ -16,15 +18,17 @@ public :
   
   /** Accesseurs */
   Picture* getPicture() const;
-  PictureArea* getPictureArea() const;
   TracingManager* getTracingManager() const;
+
+  /** Methodes */
+  std::vector<Picture*> getSelectedPicture();
+  void refresh();
 
 private :
 
   /** Attributs */
-  UserInterface* m_userInterface;
   Picture* m_picture;
-  PictureArea* m_pictureArea;
+  PictureViewer* m_pictureViewer;
   TracingManager* m_tracingManager;
 
 };

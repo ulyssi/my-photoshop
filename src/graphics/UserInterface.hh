@@ -36,7 +36,8 @@ public slots:
   void normalSize();
   void fitToWindow();
 
-  void blackAndWhite();
+  void binary();
+  void greyScale();
   void rescale();
 
   void about();

@@ -8,9 +8,7 @@
 #define GREEN_MSK 0x0000FF00
 #define BLUE_MSK 0x000000FF
 
-
-
-namespace PixelMod{
+namespace PixelMod {
 
   enum Type { BINARY, GREY_SCALE, COLOR };
 
@@ -18,26 +16,6 @@ namespace PixelMod{
   const int minValue = 0;
   const int maxValue = 0xFF;
   
-  inline  unsigned int combineAlpha(float a1,float a2){
-    return ((unsigned int)(floor((a1+a2-(a1*a2))*255.0f+0.5f)))<<24;
-  }
-
-  inline unsigned int combineRed(unsigned int p1,unsigned int p2, float a2){
-    return ((unsigned int)(floor(float((p1&RED_MSK)>>16)*(1.0f-a2)+float((p2&RED_MSK)>>16)*a2+0.5)))<<16;
-  }
-
-  inline unsigned int combineBlue(unsigned int p1,unsigned int p2, float a2){
-    return (unsigned int) floor(float(p1&BLUE_MSK)*(1.0f-a2)+float(p2&BLUE_MSK)*a2+0.5f);
-  }
-
-  inline unsigned int combineGreen(unsigned int p1,unsigned int p2, float a2) {
-    return ((unsigned int)floor(float((p1&GREEN_MSK)>>8)*(1.0f-a2)+float((p2&GREEN_MSK)>>8)*a2+0.5f))<<8;
-  }
-
-  inline float getAlpha(unsigned int p, float a){
-    return (float((p & ALPHA_MSK)>>24))*a/255.0f;
-  }
-
   inline int getAlpha(unsigned int rgb) { return ((ALPHA_MSK & rgb)>>24); }
   inline int getRed(unsigned int rgb) { return ((RED_MSK & rgb)>>16); }
   inline int getBlue(unsigned int rgb) { return (BLUE_MSK & rgb); }

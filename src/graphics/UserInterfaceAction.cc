@@ -8,7 +8,7 @@
 #include "Picture.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-//#include "MTabWidget.hh"
+#include "MTabWidget.hh"
 
 
 /** Slots */
@@ -30,7 +30,8 @@ void UserInterface::open() {
 
 
 void UserInterface::save() {}
-void UserInterface::close(int i) {
+void UserInterface::close(QWidget* q) {
+  std::cout<<"fermeture onglet"<<std::endl;
   // penser a detruire les objets
 }
 void UserInterface::exit() {}

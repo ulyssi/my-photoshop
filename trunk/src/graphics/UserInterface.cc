@@ -4,7 +4,8 @@
 #include "ToolMaker.hh"
 #include "PictureManager.hh"
 #include "Picture.hh"
-#include "MTabWidget.hh"
+// #include "MTabWidget.hh"
+#include <QTabWidget>
 
 
 
@@ -12,9 +13,10 @@
 UserInterface::UserInterface(QApplication* qapplication) :
   m_QApplication(qapplication),
   m_toolMaker(new ToolMaker()),
-  m_pictureManager(new PictureManager(this)),
   m_viewTabWidget(createTabWidget())
 {
+  m_pictureManager = new PictureManager(this);
+
   createActions();
   createMenuBar();
   createToolBar();
@@ -25,6 +27,8 @@ UserInterface::UserInterface(QApplication* qapplication) :
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
+
+  m_viewTabWidget->addTab((QWidget*)m_pictureManager, m_pictureManager->getTabName());
 }
     
 UserInterface::~UserInterface() {
@@ -33,9 +37,9 @@ UserInterface::~UserInterface() {
 
 
 /** Methodes internes */
-MTabWidget* UserInterface::createTabWidget() {
-  MTabWidget* tabWidget = new MTabWidget(this);
-  tabWidget->addTab((QWidget*)m_pictureManager, m_pictureManager->getTabName());
+QTabWidget* UserInterface::createTabWidget() {
+  QTabWidget* tabWidget = new QTabWidget(this);
+  // MTabWidget* tabWidget = new MTabWidget(this);
   return tabWidget;
 }
   

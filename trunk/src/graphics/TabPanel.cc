@@ -1,6 +1,6 @@
 #include "TabPanel.hh"
 
-#include "UserInterface.hh";
+#include "UserInterface.hh"
 
 
 /** Constructeurs et destructeur */

@@ -8,7 +8,7 @@
 #include "Picture.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-#include "MTabWidget.hh"
+//#include "MTabWidget.hh"
 
 
 /** Slots */

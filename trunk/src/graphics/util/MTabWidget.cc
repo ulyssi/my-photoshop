@@ -57,6 +57,9 @@ void MTabWidget::createAddTab(){
 }
   
 void MTabWidget::myItemChangeSlot(int index){
+  if (count()==currentIndex()+1){
+    setCurrentIndex(currentIndex()-1);
+  }
   this->tabBar()->setTabTextColor(index,Qt::blue);
   for(int i = 0;i<this->tabBar()->count();i++){  
     if(i != index)	

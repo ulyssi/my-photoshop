@@ -30,7 +30,8 @@ void UserInterface::open() {
 }
 
 void UserInterface::save() {}
-void UserInterface::close(QWidget* q) { std::cout << "fermeture onglet" << std::endl; }
+void UserInterface::close(QWidget* q) {
+}
 void UserInterface::exit() {}
 
 void UserInterface::undo() {}

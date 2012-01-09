@@ -20,16 +20,13 @@ void UserInterface::open() {
   t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
   t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
   QStringList fileNames;
-  if (t_fileDialog->exec())
-    fileNames = t_fileDialog->selectedFiles();
+  if (t_fileDialog->exec()) fileNames = t_fileDialog->selectedFiles();
   t_fileDialog->setNameFilterDetailsVisible(true);
   QListIterator <QString> t_listIterator (fileNames);
   QString t_path ; 
   while (t_listIterator.hasNext()){
-    t_path =t_listIterator.next();
-    PictureModifier* modifier = new PictureModifier(new Picture(t_path), this);
+    PictureModifier* modifier = new PictureModifier(new Picture(t_listIterator.next()), this);
     m_pictureManager->addPictureModifier(modifier);	
-    QString f_name = t_path.right(t_path.length()-1-t_path.lastIndexOf("/"));
     m_viewTabWidget->addTab((QWidget*)(modifier), (const QString&)(*modifier->getTabName()));
   }
 }

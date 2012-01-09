@@ -7,12 +7,12 @@
 class UserInterface;
 class Picture;
 
-class TabPanel : public QScrollArea { Q_OBJECT 
+class TabPanel {
 
 public : 
   
   /** Constructeurs et destructeur */
-  TabPanel(UserInterface*);
+  TabPanel(UserInterface* =NULL);
   ~TabPanel();
   
   /** Accesseurs */

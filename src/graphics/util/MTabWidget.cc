@@ -2,21 +2,23 @@
 #include <QWidget>
 #include "MTabWidget.hh"
 #include "MPushButton.hh"
-#include <iostream>
 #include <QListIterator>
+#include "../../model/Picture.hh"
 
-MTabWidget::MTabWidget ( QWidget * parent ):
+
+MTabWidget::MTabWidget ( UserInterface * parent ):
   m_listpushbutton(){
-  setParent(parent);
+  setParent((QWidget*)parent);
   QObject::connect(this,SIGNAL(currentChanged(int)),this,SLOT(myItemChangeSlot(int)));
   createAddTab();
- 
 }
 
 MTabWidget::~MTabWidget (){}
 
 int MTabWidget::addTab ( QWidget * page, const QString & label ){
    int i = insertTab(count()-1,page,label);
+   if (i==0) 
+     setCurrentIndex(i);
    if (i!=0)
      tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
    return i;
@@ -29,6 +31,7 @@ int MTabWidget::addTab ( QWidget * page, const QIcon & icon, const QString & lab
 void MTabWidget::fermerOnglet(int i){
   if (i!=1&&i!=count()){ 
     removeTab(i-1);
+    parentWidget()->close();
   } 
   for (int j = 0; j < m_listpushbutton.size(); ++j) {
     if (m_listpushbutton.at(j)->getIndex()>i&&m_listpushbutton.at(j)->getIndex()<=count())
@@ -43,11 +46,12 @@ void MTabWidget::createAddTab(){
   QPushButton* m_pushButton = new QPushButton(); 
   m_pushButton->setFixedWidth(20);
   m_pushButton->setFixedHeight(20);
-  m_pushButton->setIcon(QIcon::fromTheme("document-open"));
+  m_pushButton->setIcon(QIcon::fromTheme("window-new"));
   m_pushButton->setFlat(true);
   insertTab(0,new QWidget(),"");
   tabBar()->setTabButton(0, QTabBar::LeftSide,((QWidget*)(m_pushButton)));
   QObject::connect(m_pushButton,SIGNAL(clicked()),parentWidget(),SLOT(open()));
+
 }
   
 void MTabWidget::myItemChangeSlot(int index){
@@ -69,3 +73,11 @@ QPushButton* MTabWidget::createCloseButton(){
   return (QPushButton*)t_icon;
 }
 
+std::vector<Picture*> MTabWidget::getSelectedPicture(){ 
+  std::vector<Picture*> t_picture(1) ;
+  t_picture.push_back((Picture*)currentWidget());
+  return t_picture;
+}
+void MTabWidget::refresh(){
+
+}

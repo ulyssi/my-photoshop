@@ -9,7 +9,7 @@ PictureManager::PictureManager(UserInterface* userInterface) :
   TabPanel(userInterface),
   m_listPictureButton()
 {
-  setTabName(new QString("Thumbnail"));
+  setTabName(QString("Thumbnail"));
 }
 
 PictureManager::~PictureManager() {}

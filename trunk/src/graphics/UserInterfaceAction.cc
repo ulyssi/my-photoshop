@@ -23,11 +23,10 @@ void UserInterface::open() {
   if (t_fileDialog->exec()) fileNames = t_fileDialog->selectedFiles();
   t_fileDialog->setNameFilterDetailsVisible(true);
   QListIterator <QString> t_listIterator (fileNames);
-  QString t_path ; 
   while (t_listIterator.hasNext()){
     PictureModifier* modifier = new PictureModifier(new Picture(t_listIterator.next()), this);
-    m_pictureManager->addPictureModifier(modifier);	
-    m_viewTabWidget->addTab((QWidget*)(modifier), (const QString&)(*modifier->getTabName()));
+    m_pictureManager->addPictureModifier(modifier);
+    m_viewTabWidget->addTab((QWidget*)(modifier), modifier->getTabName());
   }
 }
 

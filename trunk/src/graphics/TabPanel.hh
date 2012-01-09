@@ -16,11 +16,11 @@ public :
   ~TabPanel();
   
   /** Accesseurs */
-  QString* getTabName();
+  QString getTabName();
   UserInterface* getUserInterface();
 
   /** Mutateurs */
-  void setTabName(QString*);
+  void setTabName(QString);
   
   /** Methodes */
   virtual std::vector<Picture*> getSelectedPicture() = 0;
@@ -30,7 +30,7 @@ private :
   
   /** Attributs */
   UserInterface* m_userInterface; 
-  QString* m_tabName;
+  QString m_tabName;
   
 };
 

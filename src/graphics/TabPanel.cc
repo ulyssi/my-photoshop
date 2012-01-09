@@ -12,11 +12,11 @@ TabPanel::~TabPanel() {}
   
 
 /** Accesseurs */
-QString* TabPanel::getTabName() { return m_tabName; }
+QString TabPanel::getTabName() { return m_tabName; }
 
 UserInterface* TabPanel::getUserInterface() { return m_userInterface; }
 
 
 /** Mutateurs */
-void TabPanel::setTabName(QString* tabName) { m_tabName = tabName; }
+void TabPanel::setTabName(QString tabName) { m_tabName = tabName; }
 

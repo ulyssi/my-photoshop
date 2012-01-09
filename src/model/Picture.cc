@@ -16,17 +16,19 @@ Picture::Picture(QString path) :
   m_ch_rectY_inf(0)
  
 {
-  m_merge=MergeOperation();
-  m_name = m_path.right(m_path.lastIndexOf("/"));
+  m_merge = MergeOperation();
+  m_name = m_path.right(m_path.length()-1-m_path.lastIndexOf("/"));
   m_image = loadQImage(m_path);
   m_width = m_image.width();
   m_height = m_image.height();
   m_listTracing.push_back(new Tracing(m_image));
 }
 
+Picture::~Picture() {}
+
 QString Picture::getPath() { return m_path;}
 
-QString Picture::getName() { return m_name;}
+QString Picture::getName() { return m_name; }
 
 int Picture::getWidth() { return m_width; }
 

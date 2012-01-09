@@ -9,7 +9,7 @@ class PictureViewer;
 class UserInterface;
 class TracingManager;
 
-class PictureModifier : public TabPanel, public QScrollArea   {
+class PictureModifier : public TabPanel {
 
 public :
   

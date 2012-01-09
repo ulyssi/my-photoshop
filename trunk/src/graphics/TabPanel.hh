@@ -1,13 +1,14 @@
 #ifndef _TAB_PANEL_HH_
 #define _TAB_PANEL_HH_
 
+#include <QScrollArea>
 #include <QString>
 #include <vector>
 
 class UserInterface;
 class Picture;
 
-class TabPanel {
+class TabPanel : public QScrollArea { Q_OBJECT
 
 public : 
   

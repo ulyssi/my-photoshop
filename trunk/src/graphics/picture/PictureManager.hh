@@ -2,7 +2,6 @@
 #define _PICTUREMANAGER_HH_
 
 #include "TabPanel.hh"
-#include <QScrollArea>
 
 #include <QList>
 
@@ -10,7 +9,7 @@ class UserInterface;
 class PictureButton;
 class PictureModifier;
 
-class PictureManager : public TabPanel, public QScrollArea { Q_OBJECT
+class PictureManager : public TabPanel {
 
 public : 
   

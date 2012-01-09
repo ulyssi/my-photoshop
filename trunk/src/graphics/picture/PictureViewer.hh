@@ -3,14 +3,14 @@
 
 #include <QLabel>
 
-class Picture;
+class PictureModifier;
 
 class PictureViewer : public QLabel { Q_OBJECT
 
 public:
   
   /** Constructeurs et destructeurs */
-  PictureViewer(Picture*);
+  PictureViewer(PictureModifier*);
   ~PictureViewer();
                
 private:

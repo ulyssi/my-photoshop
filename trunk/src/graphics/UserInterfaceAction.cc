@@ -13,8 +13,6 @@
 
 /** Slots */
 void UserInterface::open() {
-  
-  // ouverture QFileDialog
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
   t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
@@ -32,10 +30,8 @@ void UserInterface::open() {
 
 
 void UserInterface::save() {}
-void UserInterface::close(int i){
+void UserInterface::close(int i) {
   // penser a detruire les objets
-  
-
 }
 void UserInterface::exit() {}
 

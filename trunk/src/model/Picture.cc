@@ -3,25 +3,24 @@
 
 #include "Picture.hh"
 #include "PixelMod.hh"
-
+#include "Tracing.hh"
+#include "MergeOperation.hh"
 
 using namespace std;
 
 Picture::Picture(QString path) :
   m_path(path),
-  m_listTracing(3), 
-  m_ch_rectX_sup(0),
-  m_ch_rectX_inf(0),
-  m_ch_rectY_sup(0),
-  m_ch_rectY_inf(0)
- 
+  m_listTracing(3)
 {
-  m_merge = MergeOperation();
   m_name = m_path.right(m_path.length()-1-m_path.lastIndexOf("/"));
-  m_image = loadQImage(m_path);
-  m_width = m_image.width();
-  m_height = m_image.height();
-  m_listTracing.push_back(new Tracing(m_image));
+
+  QImage image = loadQImage(m_path);
+  m_data = new Matrix<unsigned int>(image.width(), image.height());
+  for (int i = 0; i < getWidth(); i++)
+    for (int j = 0; j < getHeight(); j++)
+      m_data->setValue(i, j, (unsigned int)image.pixel(i, j));
+
+  m_listTracing.push_back(new Tracing(m_data));
 }
 
 Picture::~Picture() {}
@@ -30,33 +29,22 @@ QString Picture::getPath() { return m_path;}
 
 QString Picture::getName() { return m_name; }
 
-int Picture::getWidth() { return m_width; }
+int Picture::getWidth() { return m_data->getWidth(); }
 
-int Picture::getHeight() { return m_height; }
+int Picture::getHeight() { return m_data->getHeight(); }
 
-QImage& Picture::getImage() {
- 
-  /*  Tracing * temp=m_merge.doOperation(m_listTracing);
-   cout<<"return from merge\n";
-  if(m_image.width()!=temp->getWidth() ||m_image.height()!=temp->getHeight()){
-   
-    m_image=QImage(temp->getWidth(),temp->getHeight(),QImage::Format_ARGB32);
-  }
-  cout<< temp->getWidth()<<" h  "<<temp->getHeight()<<"\n";
-  for(int i=0;i<temp->getWidth();i++)
-    for(int j=0;j<temp->getHeight();j++){
-      m_image.setPixel(i,j, (uint) temp->getValue(i,j));
-      }
-  cout<<"getting image\n";
-  delete temp;*/
-  return m_image;
- 
+Matrix<unsigned int>* Picture::getData() { return m_data; }
+
+vector<Tracing*>& Picture::getListTracing() { return m_listTracing; }
+
+void Picture::refresh() {
+  for (int i = 0; i < getWidth(); i++)
+    for (int j = 0; j < getHeight(); j++)
+      m_data->setValue(i, j, (unsigned int)m_listTracing[0]->getValue(i, j));
 }
 
-vector<Tracing*>& Picture::getListTracing(){return m_listTracing;}
-
 // Charge une image à partir de son path
-QImage Picture::loadQImage(QString& path){
+QImage Picture::loadQImage(QString& path) {
   QImage temp = QImage(path);
   if(temp.isNull()) cout << "Error image.format -> QImage" << endl;
   return temp;

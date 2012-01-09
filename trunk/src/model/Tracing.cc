@@ -2,7 +2,7 @@
 
 
 /** constructeur destructeur */
-Tracing::Tracing(int width,int height, int offX, int offY) :
+Tracing::Tracing(int width, int height, int offX, int offY) :
   Matrix<unsigned int>(width, height),
   m_index(0),
   m_offX(offX),
@@ -10,17 +10,13 @@ Tracing::Tracing(int width,int height, int offX, int offY) :
   m_alpha(0)
 {}
 
-Tracing::Tracing(QImage source, int offX, int offY,float alpha) :
-  Matrix<unsigned int>(source.width(), source.height()),
+Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) :
+  Matrix<unsigned int>(source),
   m_index(0),
   m_offX(offX),
   m_offY(offY),
   m_alpha(alpha)
-{
-  for(int i = 0; i < getWidth();i++)
-    for(int j = 0; j < getHeight();j++)
-      setValue(i, j, (unsigned int)source.pixel(i,j));
-}
+{}
 
 Tracing::~Tracing() {}
 

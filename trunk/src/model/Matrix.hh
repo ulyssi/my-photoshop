@@ -26,7 +26,7 @@ public:
     for (int i = 0; i < m_width; i++) {
       m_data[i] = new T[m_height];
       for (int j = 0; j < m_height; j++)
-	m_data[i][j] = matrix->data[i][j];
+	m_data[i][j] = matrix->m_data[i][j];
     }
   }
 

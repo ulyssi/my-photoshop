@@ -25,12 +25,14 @@ public:
 
   /** Methodes */
 
+public :
+  void close(int);
 public slots:
   
   /** Slots */
   void open();
   void save();
-  void close(int);
+ 
   void exit();
 
   void undo();

@@ -35,7 +35,7 @@ UserInterface::~UserInterface() {
 /** Methodes internes */
 MTabWidget* UserInterface::createTabWidget() {
   MTabWidget* tabWidget = new MTabWidget(this);
-  tabWidget->addTab(m_pictureManager, m_pictureManager->getTabName());
+  tabWidget->addTab((QWidget*)m_pictureManager, m_pictureManager->getTabName());
   return tabWidget;
 }
   

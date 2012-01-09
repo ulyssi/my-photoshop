@@ -29,7 +29,7 @@ int Picture::getWidth() { return m_width; }
 
 int Picture::getHeight() { return m_height; }
 
-QImage& Picture::getImage(){
+QImage& Picture::getImage() {
   // if((m_ch_rectX_inf|m_ch_rectY_inf|m_ch_rectX_sup|m_ch_rectY_sup)!=0){
   //   /*todo make it real*/
   //   cout<<"make it real?\n";

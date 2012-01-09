@@ -13,7 +13,7 @@
 
 class ToolMaker;
 class PictureManager;
-// class MTabWidget;
+class MTabWidget;
 
 class UserInterface : public QMainWindow { Q_OBJECT
 
@@ -26,7 +26,7 @@ public:
   /** Methodes */
 
 public :
-  void close(int);
+  void close(QWidget*);
 public slots:
   
   /** Slots */
@@ -58,7 +58,7 @@ private:
   void createActions();
   void createMenuBar();
   void createToolBar();
-  QTabWidget* createTabWidget();
+  MTabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
 
   QMenu* createFileMenu();
@@ -84,7 +84,7 @@ private:
   QApplication* m_QApplication;
   ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
-  QTabWidget* m_viewTabWidget;
+  MTabWidget* m_viewTabWidget;
 
   QMenu* m_fileMenu;
   QMenu* m_editMenu;

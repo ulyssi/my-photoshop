@@ -3,25 +3,27 @@
 #include "MTabWidget.hh"
 #include "MPushButton.hh"
 #include <QListIterator>
-#include "../../model/Picture.hh"
-#include "../picture/PictureManager.hh"
+#include "Picture.hh"
+#include "PictureManager.hh"
+#include "UserInterface.hh"
 
-MTabWidget::MTabWidget ( UserInterface * parent ):
-  m_listpushbutton(){
-  setParent((QWidget*)parent);
+MTabWidget::MTabWidget ( QWidget * parent ) :
+  QTabWidget(parent)
+{
+  m_userInterface=(UserInterface*)parent;
   QObject::connect(this,SIGNAL(currentChanged(int)),this,SLOT(myItemChangeSlot(int)));
-  //  createAddTab();
+  createAddTab();
 }
 
 MTabWidget::~MTabWidget (){}
 
 int MTabWidget::addTab ( QWidget * page, const QString & label ){
-   // int i = insertTab(count()-1,page,label);
-   // if (i==0) 
-   //   setCurrentIndex(i);
-   // if (i!=0)
-   //   tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
-   return 1;
+   int i = insertTab(count()-1,page,label);
+   if (i==0) 
+     setCurrentIndex(i);
+   else if (i!=0)
+     tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
+   return i;
 }
 
 int MTabWidget::addTab ( QWidget * page, const QIcon & icon, const QString & label ){
@@ -31,7 +33,7 @@ int MTabWidget::addTab ( QWidget * page, const QIcon & icon, const QString & lab
 void MTabWidget::fermerOnglet(int i){
   if (i!=1&&i!=count()){ 
     removeTab(i-1);
-    parentWidget()->close();
+    m_userInterface->close(widget(i-1));
   } 
   for (int j = 0; j < m_listpushbutton.size(); ++j) {
     if (m_listpushbutton.at(j)->getIndex()>i&&m_listpushbutton.at(j)->getIndex()<=count())
@@ -73,17 +75,3 @@ QPushButton* MTabWidget::createCloseButton(){
   return (QPushButton*)t_icon;
 }
 
-std::vector<Picture*> MTabWidget::getSelectedPicture(){ 
-   std::vector<Picture*> t_picture(1) ;
-  // if(currentIndex()==0){
-  //   t_picture.push_back((PictureManager*)currentWidget()->getSelectedPicture());
-  // }
-  // else if (currentIndex()!=count())
-  //   t_picture.push_back((Picture*)currentWidget());
-  
-   return t_picture;
-  
-}
-void MTabWidget::refresh(){
-
-}

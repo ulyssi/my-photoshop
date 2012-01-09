@@ -8,22 +8,21 @@
 #include <QList>
 #include "../TabPanel.hh"
 
+
 class Picture;
 class MPushButton;
+class UserInterface;
 
-class MTabWidget : public QTabWidget , public TabPanel {Q_OBJECT
+class MTabWidget : public QTabWidget {Q_OBJECT
 public :
-  MTabWidget (UserInterface * parent = 0 );
+  MTabWidget (QWidget* parent = NULL );
   ~MTabWidget ();
   
-  /**Methodes publiques**/
-  std::vector<Picture*> getSelectedPicture();
-  void refresh();
   
   /** Override public Methode */
   int addTab ( QWidget * page, const QString & label );
   int addTab ( QWidget * page, const QIcon & icon, const QString & label );
-  /**override private methode from QTabWidget */
+  // /**override private methode from QTabWidget */
   QTabBar* tabBar();
 		   
 		   
@@ -33,6 +32,7 @@ public slots :
   QPushButton* createCloseButton();
   void fermerOnglet(int);
 private :
+  UserInterface* m_userInterface;
   QPushButton* m_pushButton; 
   QList <MPushButton*> m_listpushbutton;
 };

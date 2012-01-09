@@ -13,6 +13,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_pictureViewer(new PictureViewer(picture)),
   m_tracingManager(new TracingManager(this))
 {
+  setTabName(&(m_picture->getName()));
   setWidget(m_pictureViewer);
 }
 

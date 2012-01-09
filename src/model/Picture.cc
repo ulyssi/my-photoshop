@@ -19,16 +19,15 @@ Picture::Picture(QString path) :
   m_width = m_image.width();
   m_height = m_image.height();
   m_listTracing.push_back(new Tracing(m_image));
- 
 }
 
-QString Picture::getPath(){return m_path;}
+QString Picture::getPath() { return m_path;}
 
-QString Picture::getName(){return m_name;}
+QString Picture::getName() { return m_name;}
 
-int Picture::getWidth(){return m_width;}
+int Picture::getWidth() { return m_width; }
 
-int Picture::getHeight(){return m_height;}
+int Picture::getHeight() { return m_height; }
 
 QImage& Picture::getImage(){
   // if((m_ch_rectX_inf|m_ch_rectY_inf|m_ch_rectX_sup|m_ch_rectY_sup)!=0){

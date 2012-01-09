@@ -4,24 +4,24 @@
 #include "MPushButton.hh"
 #include <QListIterator>
 #include "../../model/Picture.hh"
-
+#include "../picture/PictureManager.hh"
 
 MTabWidget::MTabWidget ( UserInterface * parent ):
   m_listpushbutton(){
   setParent((QWidget*)parent);
   QObject::connect(this,SIGNAL(currentChanged(int)),this,SLOT(myItemChangeSlot(int)));
-  createAddTab();
+  //  createAddTab();
 }
 
 MTabWidget::~MTabWidget (){}
 
 int MTabWidget::addTab ( QWidget * page, const QString & label ){
-   int i = insertTab(count()-1,page,label);
-   if (i==0) 
-     setCurrentIndex(i);
-   if (i!=0)
-     tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
-   return i;
+   // int i = insertTab(count()-1,page,label);
+   // if (i==0) 
+   //   setCurrentIndex(i);
+   // if (i!=0)
+   //   tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
+   return 1;
 }
 
 int MTabWidget::addTab ( QWidget * page, const QIcon & icon, const QString & label ){
@@ -74,9 +74,15 @@ QPushButton* MTabWidget::createCloseButton(){
 }
 
 std::vector<Picture*> MTabWidget::getSelectedPicture(){ 
-  std::vector<Picture*> t_picture(1) ;
-  t_picture.push_back((Picture*)currentWidget());
-  return t_picture;
+   std::vector<Picture*> t_picture(1) ;
+  // if(currentIndex()==0){
+  //   t_picture.push_back((PictureManager*)currentWidget()->getSelectedPicture());
+  // }
+  // else if (currentIndex()!=count())
+  //   t_picture.push_back((Picture*)currentWidget());
+  
+   return t_picture;
+  
 }
 void MTabWidget::refresh(){
 

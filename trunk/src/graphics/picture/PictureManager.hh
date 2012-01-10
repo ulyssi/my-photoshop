@@ -5,6 +5,7 @@
 #include <QList>
 #include <QButtonGroup>
 #include <QGridLayout>
+#include <QResizeEvent>
 
 class UserInterface;
 class PictureButton;
@@ -23,7 +24,7 @@ public :
   void addPictureModifier(PictureModifier*);
   void removePictureModifier(PictureModifier*);
   void refresh();
- 
+  
 private : 
   
   /** Attributs */
@@ -32,6 +33,10 @@ private :
   QGridLayout *m_layout;
   QList<PictureButton*> m_listPictureButton; 
   QButtonGroup *m_buttonGroup;
+
+  /** Override Methodes from QWidget**/
+  void 	resizeEvent ( QResizeEvent * event);
+  
 };
 
 #endif

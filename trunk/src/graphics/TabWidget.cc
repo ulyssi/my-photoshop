@@ -14,10 +14,9 @@ TabWidget::TabWidget(UserInterface* userInterface) :
   insertTab(0, new QWidget(), "");
   tabBar()->setTabButton(0, QTabBar::LeftSide, (QWidget*)createNewTabButton());
   QObject::connect(this, SIGNAL(currentChanged(int)), this, SLOT(selectTab(int)));
-}
+  }
 
 TabWidget::~TabWidget() {}
-
 /** Accesseurs */
 TabPanel* TabWidget::getTabPanel() { return (TabPanel*)widget(currentIndex()); }
 
@@ -32,9 +31,7 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
-  if (index==count()-1)
-    m_userInterface->open();
-  if (0 < index && index >= tabBar()->count()-1) setCurrentIndex(index-1);
+  if (index >0  && index >= tabBar()->count()-1) setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
     for(int i = 0; i < tabBar()->count(); i++) 
@@ -44,10 +41,10 @@ void TabWidget::selectTab(int index) {
 }
 
 void TabWidget::closeTab(int index) {
-  if (index != 1 && index != count()) { 
-    tabBar()->moveTab(index-1,0);
-    tabBar()->removeTab(0);
+    if (index != 1 && index != count()) { 
+    removeTab(index-1);
     setCurrentIndex(index-2);
+   
     m_userInterface->close(widget(index-1));
   }
   for (int j = 0; j < m_listpushbutton.size(); j++)
@@ -63,6 +60,7 @@ QPushButton* TabWidget::createNewTabButton() {
   newTabButton->setFixedHeight(16);
   newTabButton->setIcon(QIcon::fromTheme("window-new"));
   newTabButton->setFlat(true);
+  
   QObject::connect(newTabButton, SIGNAL(clicked()), m_userInterface, SLOT(open()));
   return newTabButton;
 }
@@ -73,6 +71,7 @@ QPushButton* TabWidget::createCloseButton() {
   t_icon->setFlat(true);
   t_icon->setFixedWidth(16);
   t_icon->setFixedHeight(16);
+
   QObject::connect(t_icon, SIGNAL(clickedButton(int)), this, SLOT(closeTab(int)));
   m_listpushbutton.append(t_icon);
   return (QPushButton*)t_icon;

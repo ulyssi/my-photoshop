@@ -10,7 +10,7 @@ PictureButton::PictureButton(PictureModifier *pictureModifier) :
 {
   setIcon(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
   setCheckable(true);
-  setFlat(true);
+  //setFlat(true);
   setIconSize(QSize(128,128));
   
 }

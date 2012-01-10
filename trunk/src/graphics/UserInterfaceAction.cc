@@ -17,7 +17,7 @@
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
-  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn);; All Files (*)"));
+  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn *.jpeg);; All Files (*)"));
   t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
 
   QStringList fileNames;

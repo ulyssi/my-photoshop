@@ -42,7 +42,6 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 void TabWidget::selectTab(int index) {
   if (0 < index && index >= tabBar()->count()-1) {
     setCurrentIndex(index-1);
-    m_userInterface->open();
   }
   this->tabBar()->setTabTextColor(index, Qt::blue);
   for(int i = 0; i < tabBar()->count(); i++) 

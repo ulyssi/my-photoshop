@@ -1,7 +1,7 @@
 #ifndef _PIXELMOD_HH_
 #define _PIXELMOD_HH_
 
-#include <math.h>
+#include <cmath>
 
 #define ALPHA_MSK 0xFF000000
 #define RED_MSK 0x00FF0000
@@ -21,6 +21,12 @@ namespace PixelMod {
   inline int getBlue(unsigned int rgb) { return (BLUE_MSK & rgb); }
   inline int getGreen(unsigned int rgb) { return ((GREEN_MSK & rgb)>>8); }
   
+  inline int threshold(unsigned int composante) {
+    if (composante < 0) return 0;
+    if (composante > 255) return 255;
+    return composante;
+  }
+
   inline unsigned int createRGB(int red, int green, int blue, int alpha = DefaultAlpha) {
     return((alpha << 24) | (red << 16) | (green << 8) | blue);
   }

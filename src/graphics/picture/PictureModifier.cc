@@ -2,6 +2,7 @@
 
 #include "UserInterface.hh"
 #include "TracingManager.hh"
+#include "HistogramModifier.hh"
 #include "PictureViewer.hh"
 #include "Picture.hh"
 #include "Matrix.hh"
@@ -15,6 +16,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   
   m_pictureViewer = new PictureViewer(this);
   m_tracingManager = new TracingManager(this);
+  m_histogramModifier = new HistogramModifier(this);
 
   setTabName(m_picture->getName());
   setWidget(m_pictureViewer);
@@ -34,6 +36,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 
 TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; }
 
+HistogramModifier* PictureModifier::getHistogramModifier() { return m_histogramModifier; }
 
 /** Methodes */
 Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
@@ -49,5 +52,6 @@ void PictureModifier::refresh() {
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
   m_pictureViewer->refresh();
+  m_histogramModifier->refresh();
   // m_tracingManager->refresh();
 }

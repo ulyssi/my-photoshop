@@ -26,7 +26,7 @@ TabWidget::~TabWidget() {}
 
 
 /** Accesseurs */
-TabPanel* TabWidget::getTabPanel() { return NULL; }
+TabPanel* TabWidget::getTabPanel() { return (TabPanel*)widget(currentIndex()); }
 
 
 /** Methodes */
@@ -44,9 +44,9 @@ void TabWidget::selectTab(int index) {
     setCurrentIndex(index-1);
     m_userInterface->open();
   }
-  // this->tabBar()->setTabTextColor(index, Qt::blue);
-  // for(int i = 0; i < tabBar()->count(); i++) 
-  //   if (i != index)	tabBar()->setTabTextColor(i, Qt::black);
+  this->tabBar()->setTabTextColor(index, Qt::blue);
+  for(int i = 0; i < tabBar()->count(); i++) 
+    if (i != index)	tabBar()->setTabTextColor(i, Qt::black);
 }
 
 void TabWidget::closeTab(int index) {
@@ -84,29 +84,6 @@ QPushButton* TabWidget::createCloseButton() {
   return (QPushButton*)t_icon;
 }
 
-// int TabWidget::addTab(QWidget* widget, const QString& label) {
-//   int i = insertTab(count()-1,page,label);
-//   if (i==0) 
-//     setCurrentIndex(i);
-//   else if (i!=0)
-//     tabBar()->setTabButton(i, QTabBar::RightSide,(QWidget*)createCloseButton());
-//   return i;
-// }
-
-// int TabWidget::addTab(QWidget* page, const QIcon& icon, const QString& label) {
-//   return insertTab(count()-1,page,icon,label);
-// }
-
-// void TabWidget::fermerOnglet(int i){
-//   if (i!=1&&i!=count()){ 
-//     removeTab(i-1);
-//     m_userInterface->close(widget(i-1));
-//   } 
-//   for (int j = 0; j < m_listpushbutton.size(); ++j) {
-//     if (m_listpushbutton.at(j)->getIndex()>i&&m_listpushbutton.at(j)->getIndex()<=count())
-//       m_listpushbutton.at(j)->setIndex(m_listpushbutton.at(j)->getIndex()-1);
-//   }
-// }
 
   
 

@@ -12,7 +12,9 @@ PictureManager::PictureManager(UserInterface* userInterface) :
   //  setWidget();
 }
 
-PictureManager::~PictureManager() {}
+PictureManager::~PictureManager() {
+
+}
 
 
 /** Methodes */

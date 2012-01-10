@@ -78,17 +78,17 @@ void UserInterface::colorConvert() {
 
 void UserInterface::convolve() {
   Matrix<double>* application = new Matrix<double>(3, 3);
-  application->setValue(0, 0, 0.0);
-  application->setValue(0, 1, 0.15);
-  application->setValue(0, 2, 0.0);
+  application->setValue(0, 0, 1.0/9.0);
+  application->setValue(0, 1, 1.0/9.0);
+  application->setValue(0, 2, 1.0/9.0);
   
-  application->setValue(1, 0, 0.15);
-  application->setValue(1, 1, 0.40);
-  application->setValue(1, 2, 0.15);
+  application->setValue(1, 0, 1.0/9.0);
+  application->setValue(1, 1, 1.0/9.0);
+  application->setValue(1, 2, 1.0/9.0);
 
-  application->setValue(2, 0, 0.0);
-  application->setValue(2, 1, 0.15);
-  application->setValue(2, 2, 0.0);
+  application->setValue(2, 0, 1.0/9.0);
+  application->setValue(2, 1, 1.0/9.0);
+  application->setValue(2, 2, 1.0/9.0);
   convolveOperation(application);
   delete application;
 }

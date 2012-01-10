@@ -33,9 +33,9 @@ void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
 
 void PictureManager::refresh() {
   
-  m_layout->addWidget(t_button);
-  m_QWidget->setLayout(m_layout);
-  setWidget(m_QWidget);
+  // m_layout->addWidget(t_button);
+  // m_QWidget->setLayout(m_layout);
+  // setWidget(m_QWidget);
 }
 
 

@@ -19,7 +19,7 @@ class UserInterface : public QMainWindow { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  UserInterface(QApplication *);
+  UserInterface(QApplication*);
   ~UserInterface();
 
 public slots:
@@ -50,8 +50,8 @@ public slots:
 private:
 
   /** Methodes internes */
-  void colorConvertOperation(Matrix<double>* application);
-  void convolveOperation(Matrix<double>* filter);
+  void colorConvertOperation(Matrix<double>*);
+  void convolveOperation(Matrix<double>*);
 
   void createActions();
   void createMenuBar();

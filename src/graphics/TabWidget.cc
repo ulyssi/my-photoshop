@@ -42,10 +42,14 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 void TabWidget::selectTab(int index) {
   if (0 < index && index >= tabBar()->count()-1) {
     setCurrentIndex(index-1);
+    m_userInterface->open();
   }
-  this->tabBar()->setTabTextColor(index, Qt::blue);
-  for(int i = 0; i < tabBar()->count(); i++) 
-    if (i != index)	tabBar()->setTabTextColor(i, Qt::black);
+  else {
+    this->tabBar()->setTabTextColor(index, Qt::blue);
+    for(int i = 0; i < tabBar()->count(); i++) 
+      if (i != index)
+	tabBar()->setTabTextColor(i, Qt::black);
+  }
 }
 
 void TabWidget::closeTab(int index) {
@@ -67,7 +71,6 @@ QPushButton* TabWidget::createNewTabButton() {
   newTabButton->setIcon(QIcon::fromTheme("window-new"));
   newTabButton->setFlat(true);
   
-  QObject::connect(newTabButton, SIGNAL(clicked()), m_userInterface, SLOT(open()));
   return newTabButton;
 }
 

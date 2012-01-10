@@ -14,3 +14,11 @@ TracingManager::~TracingManager() {}
 
 /** Accesseurs */
 PictureModifier* TracingManager::getPictureModifier() { return m_pictureModifier; }
+
+
+/** Mutateurs */
+void TracingManager::setPictureModifier(PictureModifier* pictureModifier) { m_pictureModifier = pictureModifier; }
+
+
+/** Methodes */
+void TracingManager::refresh() {}

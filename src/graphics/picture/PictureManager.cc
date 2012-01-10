@@ -18,7 +18,6 @@ PictureManager::PictureManager(UserInterface* userInterface) :
 }
 
 PictureManager::~PictureManager() {
-
 }
 
 
@@ -40,10 +39,8 @@ void PictureManager::removePictureModifier(PictureModifier* picturemodifier){
 void PictureManager::refresh() {
   for (int j =0 ; j<m_listPictureButton.size();j++)
     m_layout->removeWidget((QPushButton*)m_listPictureButton.at(j));
-  
   for (int j =0 ; j<m_listPictureButton.size();j++){
     m_layout->addWidget((QPushButton*)m_listPictureButton.at(j),j,j);
-    //std::cout<<j<<std::endl;
   }
   m_QWidget->setLayout(m_layout);
   setWidget(m_QWidget);

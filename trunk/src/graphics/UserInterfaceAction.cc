@@ -29,6 +29,7 @@ void UserInterface::open() {
     PictureModifier* modifier = new PictureModifier(new Picture(t_listIterator.next()), this);
     m_pictureManager->addPictureModifier(modifier);
     m_viewTabWidget->addTab((TabPanel*)modifier);
+    addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(modifier->getHistogramModifier())));
   }
 }
 

@@ -28,7 +28,6 @@ void UserInterface::open() {
   while (t_listIterator.hasNext()){
     PictureModifier* modifier = new PictureModifier(new Picture(t_listIterator.next()), this);
     m_pictureManager->addPictureModifier(modifier);
-    // m_viewTabWidget->addTab((QWidget*)(modifier), modifier->getTabName());
     m_viewTabWidget->addTab((TabPanel*)modifier);
   }
 }

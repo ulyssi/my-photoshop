@@ -23,6 +23,7 @@ public :
   
   /** Methode */
   int addTab(TabPanel*);
+		       
   		   
 public slots :
   

@@ -25,6 +25,8 @@ UserInterface::UserInterface(QApplication* qapplication) :
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
+
+  updateActions();
 }
     
 UserInterface::~UserInterface() {

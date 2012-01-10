@@ -9,7 +9,7 @@ TabPanel::TabPanel(UserInterface* userInterface) :
 {}
 
 TabPanel::~TabPanel() {}
-  
+
 
 /** Accesseurs */
 QString TabPanel::getTabName() { return m_tabName; }

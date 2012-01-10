@@ -18,7 +18,7 @@ public :
   ~PictureManager(); 
   
   /** Methodes */
-  std::vector<Picture*> getSelectedPicture();
+  Picture* getSelectedPicture();
   void addPictureModifier(PictureModifier*);
   void refresh();
  

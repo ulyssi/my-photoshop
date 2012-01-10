@@ -106,6 +106,7 @@ private:
   QAction* m_normalSizeAct;
   QAction* m_fitToWindowAct;
 
+  QAction* m_greyScaleAct;
   QAction* m_blackAndWhiteAct;
   QAction* m_rescaleAct;
 

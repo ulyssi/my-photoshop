@@ -18,7 +18,7 @@ PictureManager::~PictureManager() {
 
 
 /** Methodes */
-std::vector<Picture*> PictureManager::getSelectedPicture() {}
+Picture* PictureManager::getSelectedPicture() { return NULL; }
 
 void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
   m_listPictureButton.append(new PictureButton(pictureModifier));

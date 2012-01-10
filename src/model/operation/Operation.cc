@@ -3,9 +3,12 @@
 #include "Picture.hh"
 #include "Tracing.hh"
 
+#include <iostream>
 
 /** Constructeurs et destructeur */
-Operation::Operation() {}
+Operation::Operation() :
+  m_operation(NULL)
+{}
 
 Operation::Operation(Operation* operation) :
   m_operation(operation)
@@ -16,11 +19,8 @@ Operation::~Operation() {}
 
 /** Methodes */
 Picture* Operation::applyOn(Picture* picture) {
-  if (picture == NULL) std::cout << "NULL pointer" << std::endl;
-  else {
-    if (m_operation != NULL) picture = m_operation->applyOn(picture);
-    return doOperation(picture);
-  }
+  if (m_operation != NULL) picture = m_operation->applyOn(picture);
+  return doOperation(picture);
 }
 
 Tracing* Operation::applyOn(Tracing* tracing) {

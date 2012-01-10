@@ -105,6 +105,7 @@ void UserInterface::colorConvertOperation(Matrix<double>* application) {
   Picture* picture = panel->getSelectedPicture();
   ColorConvertOperation* op = new ColorConvertOperation(application);
   op->applyOn(picture);
+  delete op;
   picture->refresh();
   panel->refresh();
 }
@@ -114,6 +115,7 @@ void UserInterface::convolveOperation(Matrix<double>* application) {
   Picture* picture = panel->getSelectedPicture();
   ConvolveOperation* op = new ConvolveOperation(application);
   op->applyOn(picture);
+  delete op;
   picture->refresh();
   panel->refresh();
 }

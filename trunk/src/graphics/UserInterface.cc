@@ -1,6 +1,6 @@
 #include "UserInterface.hh"
 
-#include "MTabWidget.hh"
+#include "TabWidget.hh"
 #include "ToolMaker.hh"
 #include "Picture.hh"
 #include "PictureManager.hh"
@@ -33,9 +33,10 @@ UserInterface::~UserInterface() {
 
 
 /** Methodes internes */
-MTabWidget* UserInterface::createTabWidget() {
-  MTabWidget* tabWidget = new MTabWidget(this);
-  tabWidget->addTab((QWidget*)m_pictureManager,m_pictureManager->getTabName());
+TabWidget* UserInterface::createTabWidget() {
+  TabWidget* tabWidget = new TabWidget(this);
+  // tabWidget->addTab((QWidget*)m_pictureManager,m_pictureManager->getTabName());
+  tabWidget->addTab((TabPanel*)m_pictureManager);
   return tabWidget;
 }
   

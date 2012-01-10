@@ -8,7 +8,7 @@
 #include "Picture.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
-#include "MTabWidget.hh"
+#include "TabWidget.hh"
 
 
 /** Slots */
@@ -21,11 +21,13 @@ void UserInterface::open() {
   QStringList fileNames;
   if (t_fileDialog->exec()) fileNames = t_fileDialog->selectedFiles();
   t_fileDialog->setNameFilterDetailsVisible(true);
+
   QListIterator <QString> t_listIterator (fileNames);
   while (t_listIterator.hasNext()){
     PictureModifier* modifier = new PictureModifier(new Picture(t_listIterator.next()), this);
     m_pictureManager->addPictureModifier(modifier);
-    m_viewTabWidget->addTab((QWidget*)(modifier), modifier->getTabName());
+    // m_viewTabWidget->addTab((QWidget*)(modifier), modifier->getTabName());
+    m_viewTabWidget->addTab((TabPanel*)modifier);
   }
 }
 

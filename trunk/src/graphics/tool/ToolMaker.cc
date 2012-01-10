@@ -1,26 +1,27 @@
 #include "ToolMaker.hh"
 
-#include "tool/ColorChooser.hh"
+#include "ColorChooser.hh"
 // #include "BrushChooser.hh"
-// #include "HistogramModifier.hh"
-#include "tool/OperationChooser.hh"
-#include "tool/AffineOperationChooser.hh"
-#include "tool/RescaleOperationChooser.hh"
-#include "tool/ConvolveOperationChooser.hh"
-#include "tool/AlgebricOperationChooser.hh"
-#include "tool/ColorConvertOperationChooser.hh"
+#include "HistogramModifier.hh"
+#include "OperationChooser.hh"
+#include "AffineOperationChooser.hh"
+#include "RescaleOperationChooser.hh"
+#include "ConvolveOperationChooser.hh"
+#include "AlgebricOperationChooser.hh"
+#include "ColorConvertOperationChooser.hh"
 
 
 
 /** Constructeurs et destructeur */
 ToolMaker::ToolMaker() :
-  m_colorChooser(ToolMaker::createColorChooser()),
-  m_affineOperationChooser(ToolMaker::createAffineOperationChooser()),
-  m_rescaleOperationChooser(ToolMaker::createRescaleOperationChooser()),
-  m_convolveOperationChooser(ToolMaker::createConvolveOperationChooser()),
-  m_algebricOperationChooser(ToolMaker::createAlgebricOperationChooser()),
-  m_colorConvertOperationChooser(ToolMaker::createColorConvertOperationChooser()),
-  m_operationChooser(ToolMaker::createOperationChooser())
+  m_colorChooser(createColorChooser()),
+  m_histogramModifier(createHistogramModifier()),
+  m_affineOperationChooser(createAffineOperationChooser()),
+  m_rescaleOperationChooser(createRescaleOperationChooser()),
+  m_convolveOperationChooser(createConvolveOperationChooser()),
+  m_algebricOperationChooser(createAlgebricOperationChooser()),
+  m_colorConvertOperationChooser(createColorConvertOperationChooser()),
+  m_operationChooser(createOperationChooser())
 {}
 
 ToolMaker::~ToolMaker() {}
@@ -32,7 +33,10 @@ ColorChooser* ToolMaker::getDefaultColorChooser() const {
 }
 
 // BrushChooser* getDefaultBrushChooser() const;
-// HistogramModifier* getDefaultHistogramModifier() const;
+
+HistogramModifier* ToolMaker::getDefaultHistogramModifier() const {
+  return m_histogramModifier;
+}
 
 AffineOperationChooser* ToolMaker::getDefaultAffineOperationChooser() const {
   return m_affineOperationChooser; 
@@ -62,7 +66,7 @@ OperationChooser* ToolMaker::getDefaultOperationChooser() const {
 /** Methodes */
 ColorChooser* ToolMaker::createColorChooser() { return new ColorChooser(); }
 // BrushChooser* createBrushChooser();
-// HistogramModifier* createHistogramModifier();
+HistogramModifier* ToolMaker::createHistogramModifier() { return new HistogramModifier(); }
 AffineOperationChooser* ToolMaker::createAffineOperationChooser() { return new AffineOperationChooser(); }
 RescaleOperationChooser* ToolMaker::createRescaleOperationChooser() { return new RescaleOperationChooser(); }
 ConvolveOperationChooser* ToolMaker::createConvolveOperationChooser() { return new ConvolveOperationChooser(); }

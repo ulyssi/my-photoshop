@@ -71,6 +71,7 @@ QPushButton* TabWidget::createNewTabButton() {
   newTabButton->setIcon(QIcon::fromTheme("window-new"));
   newTabButton->setFlat(true);
   
+  QObject::connect(newTabButton, SIGNAL(clicked()), m_userInterface, SLOT(open()));
   return newTabButton;
 }
 

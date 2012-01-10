@@ -21,7 +21,7 @@ namespace PixelMod {
   inline int getBlue(unsigned int rgb) { return (BLUE_MSK & rgb); }
   inline int getGreen(unsigned int rgb) { return ((GREEN_MSK & rgb)>>8); }
   
-  inline int threshold(unsigned int composante) {
+  inline int threshold(int composante) {
     if (composante < 0) return 0;
     if (composante > 255) return 255;
     return composante;

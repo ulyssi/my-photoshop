@@ -25,12 +25,12 @@ espace vectoriel des couleurs
 histogramme
 normalisation des histogrammes
 
-grey scale
+grey scale [x]
 filtre de convolution
 flou [gaussien, par moyennage]
 detection contour [laplacien]
 accentuation de contour
-selection intelligente
+selection intelligente 
 
-redimensionnement
+redimensionnement [x]
 redimensionnement intelligent

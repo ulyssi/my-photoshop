@@ -38,6 +38,25 @@ TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; 
 
 HistogramModifier* PictureModifier::getHistogramModifier() { return m_histogramModifier; }
 
+
+/** Mutateurs */
+void PictureModifier::setTracingManager(TracingManager* tracingManager) {
+  m_tracingManager = tracingManager;
+  if (m_tracingManager != NULL) {
+    m_tracingManager->setPictureModifier(this);
+    m_tracingManager->refresh();
+  }
+}
+
+void PictureModifier::setHistogramModifier(HistogramModifier* histogramModifier) {
+  m_histogramModifier = histogramModifier;
+  if (m_histogramModifier != NULL) {
+    m_histogramModifier->setPictureModifier(this);
+    m_histogramModifier->refresh();
+  }
+}
+
+
 /** Methodes */
 Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 

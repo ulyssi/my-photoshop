@@ -15,6 +15,12 @@ public:
 
   /** Accesseurs */
   PictureModifier* getPictureModifier();
+
+  /** Mutateurs */
+  void setPictureModifier(PictureModifier*);
+  
+  /** Methodes */
+  void refresh();
   
 private:
 

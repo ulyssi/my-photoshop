@@ -11,9 +11,12 @@ class HistogramModifier : public QLabel { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  HistogramModifier(PictureModifier*);
+  HistogramModifier(PictureModifier* = NULL);
   ~HistogramModifier();
 
+  /** Mutateurs */
+  void setPictureModifier(PictureModifier*);
+  
   /** Methodes */
   void refresh();
   

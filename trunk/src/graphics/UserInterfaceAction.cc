@@ -9,6 +9,8 @@
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
 #include "TabWidget.hh"
+#include "ColorConvertOperation.hh"
+#include "ConvolveOperation.hh"
 
 
 /** Slots */
@@ -54,26 +56,22 @@ void UserInterface::greyScale() {
     application->setValue(i, 2, 0.11);
   }
   colorConvertOperation(application);
+  delete application;
 }
 
 void UserInterface::rescale() {}
 
 void UserInterface::colorConvertOperation(Matrix<double>* application) {
-  // if (getCurrentTab()->isPicture()) {
-  //   Picture* picture = getCurrentTab()->getPicture();
-
-  //   Matrix* greyScale = new Matrix(3, 3);
-  //   for (int i = 0; i < 3; i++) {
-  //     greyScale->setValue(i, 0) = 0.30;
-  //     greyScale->setValue(i, 1) = 0.59;
-  //     greyScale->setValue(i, 2) = 0.11;
-  //   }
-  
-  //   ColorConvertOperation* op = new ColorConvertOperation(greyScale);
-  //   op->applyOn(picture);
+  if (application != NULL) {
+    std::cout << "ColorConvertOp" << std::endl;
+    Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
     
-  //   getCurrentTab()->refresh();
-  // }
+    ColorConvertOperation* op = new ColorConvertOperation(application);
+    op->applyOn(picture);
+    picture->refresh();
+    
+    m_viewTabWidget->getTabPanel()->refresh();
+  }
 }
 
 void UserInterface::convolveOperation(Matrix<double>* filter) {}
@@ -97,6 +95,7 @@ void UserInterface::updateActions() {
   m_normalSizeAct->setEnabled(false);
   m_fitToWindowAct->setEnabled(false);
 
+  m_greyScaleAct->setEnabled(true);
   m_blackAndWhiteAct->setEnabled(false);
   m_rescaleAct->setEnabled(false);
 
@@ -157,9 +156,13 @@ void UserInterface::createViewAction() {
 }
 
 void UserInterface::createOperationAction() {
+  m_greyScaleAct = new QAction(tr("&Grey Scale"), this);
+  m_greyScaleAct->setEnabled(false);
+  connect(m_greyScaleAct, SIGNAL(triggered()), this, SLOT(greyScale()));
+
   m_blackAndWhiteAct = new QAction(tr("&Black and White"), this);
   m_blackAndWhiteAct->setEnabled(false);
-  //  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
+  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
 
   m_rescaleAct = new QAction(tr("&Rescale"), this);
   m_rescaleAct->setEnabled(false);

@@ -35,9 +35,7 @@ TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; 
 
 
 /** Methodes */
-std::vector<Picture*> PictureModifier::getSelectedPicture() {
-  return std::vector<Picture*>(3);
-}
+Picture* PictureModifier::getSelectedPicture() { getPicture(); }
 
 void PictureModifier::refresh() {
   // /!\ penser a gerer le redimensionnement possible de l'image (Segmentation Fault)

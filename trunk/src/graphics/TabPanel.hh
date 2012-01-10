@@ -3,7 +3,6 @@
 
 #include <QScrollArea>
 #include <QString>
-#include <vector>
 
 class UserInterface;
 class Picture;
@@ -24,7 +23,7 @@ public :
   void setTabName(QString);
   
   /** Methodes */
-  virtual std::vector<Picture*> getSelectedPicture() = 0;
+  virtual Picture* getSelectedPicture() = 0;
   virtual void refresh() = 0;
 
 private : 

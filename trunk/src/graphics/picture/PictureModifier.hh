@@ -23,7 +23,7 @@ public :
   TracingManager* getTracingManager();
 
   /** Methodes */
-  std::vector<Picture*> getSelectedPicture();
+  Picture* getSelectedPicture();
   void refresh();
 
 private :

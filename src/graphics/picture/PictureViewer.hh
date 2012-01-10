@@ -13,6 +13,9 @@ public:
   PictureViewer(PictureModifier*);
   ~PictureViewer();
                
+  /** Methodes */
+  void refresh();
+  
 private:
 
   /** Methodes internes */
@@ -20,6 +23,7 @@ private:
 
   /** Attributs */
   double m_scaleFactor;
+  PictureModifier* m_pictureModifier;
   
 };
 

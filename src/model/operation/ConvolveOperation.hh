@@ -14,6 +14,7 @@ public:
   ConvolveOperation(Matrix<double>*);
   ~ConvolveOperation();
 
+  /** Methodes */
   Tracing* doOperation(Tracing*);
   Operation* clone();
 

@@ -26,12 +26,8 @@ Tracing* Operation::applyOn(Tracing* tracing) {
 }
 
 Picture* Operation::doOperation(Picture* picture) {
-  std::vector<Tracing*> tracingPtrList = picture->getListTracing();
-  std::vector<Tracing*>::iterator tracingPtr = tracingPtrList.begin();
-  while (tracingPtr != tracingPtrList.end()) {
-    doOperation(*tracingPtr);
-    tracingPtr++;
-  }
+  Tracing* background = picture->getBackground();
+  doOperation(background);
   return picture;
 }
 

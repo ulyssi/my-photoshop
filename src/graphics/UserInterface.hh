@@ -41,16 +41,18 @@ public slots:
 
   void binary();
   void greyScale();
+  void colorConvert();
+  void convolve();
   void rescale();
-
-  void colorConvertOperation(Matrix<double>* application = NULL);
-  void convolveOperation(Matrix<double>* filter = NULL);
 
   void about();
       
 private:
 
   /** Methodes internes */
+  void colorConvertOperation(Matrix<double>* application);
+  void convolveOperation(Matrix<double>* filter);
+
   void createActions();
   void createMenuBar();
   void createToolBar();
@@ -107,6 +109,8 @@ private:
   QAction* m_fitToWindowAct;
 
   QAction* m_greyScaleAct;
+  QAction* m_colorConvertAct;
+  QAction* m_convolveAct;
   QAction* m_blackAndWhiteAct;
   QAction* m_rescaleAct;
 

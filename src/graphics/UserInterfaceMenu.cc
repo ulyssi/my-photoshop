@@ -48,6 +48,8 @@ QMenu* UserInterface::createHelpMenu() {
 QMenu* UserInterface::createOperationMenu() {
   m_operationMenu = new QMenu(tr("&Operation"), this);
   m_operationMenu->addAction(m_greyScaleAct);
+  m_operationMenu->addAction(m_colorConvertAct);
+  m_operationMenu->addAction(m_convolveAct);
   m_operationMenu->addAction(m_blackAndWhiteAct);
   m_operationMenu->addAction(m_rescaleAct);
   return m_operationMenu;

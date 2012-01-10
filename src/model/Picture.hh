@@ -23,8 +23,9 @@ public:
   QString getName();
   int getWidth();
   int getHeight();
-  std::vector<Tracing*>& getListTracing();
+  std::vector<Tracing*>& getTracingList();
   Matrix<unsigned int>* getData();
+  Tracing* getBackground();
  
   /** Methodes */
   void addTracing(Tracing*);
@@ -34,6 +35,7 @@ public:
   void refresh();
   
 private:
+
   /** Methodes Chargement et Sauvegarde des QImages */
   QImage loadQImage(QString&);
   bool saveQImage(QString&, QImage);
@@ -42,7 +44,8 @@ private:
   QString m_path;
   QString m_name;
   Matrix<unsigned int>* m_data;
-  std::vector<Tracing *> m_listTracing;
+  std::vector<Tracing*> m_tracingList;
+
 };
 
 #endif

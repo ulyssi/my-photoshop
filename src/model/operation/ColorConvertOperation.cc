@@ -3,6 +3,7 @@
 #include "Tracing.hh"
 #include "PixelMod.hh"
 
+#include <iostream>
 
 /** Constructeurs et destructeur */
 ColorConvertOperation::ColorConvertOperation(Matrix<double>* application) :
@@ -14,6 +15,7 @@ ColorConvertOperation::~ColorConvertOperation() {}
 
 /** Methodes */
 Tracing* ColorConvertOperation::doOperation(Tracing* tracing) {
+  std::cout << "Call : " <<  __func__ << " Tracing" << std::endl;
   unsigned int** data = tracing->getData();
   for (int i = 0; i < tracing->getWidth(); i++)
     for (int j = 0; j < tracing->getHeight(); j++) {
@@ -21,9 +23,9 @@ Tracing* ColorConvertOperation::doOperation(Tracing* tracing) {
       int green = PixelMod::getGreen(data[i][j]);
       int blue = PixelMod::getBlue(data[i][j]);
       data[i][j] = PixelMod::createRGB(m_application->getValue(0, 0) * red + m_application->getValue(0, 1) * green + m_application->getValue(0, 2) * blue,
-				       m_application->getValue(1, 0) * red + m_application->getValue(1, 1) * green + m_application->getValue(1, 2) * blue,
-				       m_application->getValue(2, 0) * red + m_application->getValue(2, 1) * green + m_application->getValue(2, 2) * blue,
-				       PixelMod::getAlpha(data[i][j]));
+  				       m_application->getValue(1, 0) * red + m_application->getValue(1, 1) * green + m_application->getValue(1, 2) * blue,
+  				       m_application->getValue(2, 0) * red + m_application->getValue(2, 1) * green + m_application->getValue(2, 2) * blue,
+  				       PixelMod::getAlpha(data[i][j]));
     }
   return tracing;
 }

@@ -4,8 +4,10 @@
 #include "PictureModifier.hh"
 
 
-PictureViewer::PictureViewer(PictureModifier* pictureModifier) {
-  setPixmap(QPixmap::fromImage((const QImage&)(*(pictureModifier->getImage()))));
+PictureViewer::PictureViewer(PictureModifier* pictureModifier) :
+  m_pictureModifier(pictureModifier)
+{
+  refresh();
 }
 
 PictureViewer::~PictureViewer() {}
@@ -33,6 +35,10 @@ PictureViewer::~PictureViewer() {}
 // void PictureViewer::fitSize() {
 //   scrollArea->setWidgetResizable(fitToWindow);
 // }
+
+void PictureViewer::refresh() {
+  setPixmap(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
+}
 
 
 /** Methodes internes */

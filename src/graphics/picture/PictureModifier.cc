@@ -12,13 +12,14 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_picture(picture)
 {
   m_image = new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32);
-  refresh();
   
   m_pictureViewer = new PictureViewer(this);
   m_tracingManager = new TracingManager(this);
 
   setTabName(m_picture->getName());
   setWidget(m_pictureViewer);
+
+  refresh();
 }
 
 PictureModifier::~PictureModifier() {
@@ -35,7 +36,7 @@ TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; 
 
 
 /** Methodes */
-Picture* PictureModifier::getSelectedPicture() { getPicture(); }
+Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 
 void PictureModifier::refresh() {
   // /!\ penser a gerer le redimensionnement possible de l'image (Segmentation Fault)
@@ -43,4 +44,6 @@ void PictureModifier::refresh() {
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
+  m_pictureViewer->refresh();
+  // m_tracingManager->refresh();
 }

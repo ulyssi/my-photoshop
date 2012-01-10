@@ -16,7 +16,7 @@ TabWidget::TabWidget(UserInterface* userInterface) :
   QTabWidget(userInterface),
   m_userInterface(userInterface)
 {
-  insertTab(0, new QWidget(), "Open");
+  insertTab(0, new QWidget(), "");
   tabBar()->setTabButton(0, QTabBar::LeftSide, (QWidget*)createNewTabButton());
 
   QObject::connect(this, SIGNAL(currentChanged(int)), this, SLOT(selectTab(int)));
@@ -40,10 +40,7 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
-  if (0 < index && index >= tabBar()->count()-1) {
-    setCurrentIndex(index-1);
-    m_userInterface->open();
-  }
+  if (0 < index && index >= tabBar()->count()-1) setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
     for(int i = 0; i < tabBar()->count(); i++) 

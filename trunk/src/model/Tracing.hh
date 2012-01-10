@@ -9,33 +9,35 @@
 
 
 class Tracing : public Matrix<unsigned int> {
-private:
-  QString m_name;
-  int m_index;
-  int m_offX;
-  int m_offY;
-  float m_alpha;
-
 
 public:
-  /*constructeur destructeur*/
+  
+  /* Constructeurs et destructeur */
   Tracing(int, int, int offX = 0, int offY = 0);
   Tracing(Matrix<unsigned int>*, int offX = 0, int offY = 0, float alpha = 1);
   ~Tracing();
   
-  /*accesseurs*/
+  /** Accesseurs */
   int getIndex();
   int getOffX();
   int getOffY();
   float getAlpha(); 
   PixelMod::Type getType();
   
-  /*mutateurs*/
+  /** Mutateurs */
   void setIndex(int);
   void setOffX(int);
   void setOffY(int);
   void setAlpha(float);
 
+private:
+
+  /** Attributs */
+  QString m_name;
+  int m_index;
+  int m_offX;
+  int m_offY;
+  float m_alpha;
 
 };
 

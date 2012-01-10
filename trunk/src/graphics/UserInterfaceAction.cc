@@ -59,29 +59,66 @@ void UserInterface::greyScale() {
   delete application;
 }
 
-void UserInterface::rescale() {}
+void UserInterface::colorConvert() {
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  application->setValue(0, 0, 0.0);
+  application->setValue(0, 1, 0.0);
+  application->setValue(0, 2, 1.0);
+  
+  application->setValue(1, 0, 1.0);
+  application->setValue(1, 1, 0.0);
+  application->setValue(1, 2, 0.0);
 
-void UserInterface::colorConvertOperation(Matrix<double>* application) {
-  if (application != NULL) {
-    std::cout << "ColorConvertOp" << std::endl;
-    Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
-    
-    ColorConvertOperation* op = new ColorConvertOperation(application);
-    op->applyOn(picture);
-    picture->refresh();
-    
-    m_viewTabWidget->getTabPanel()->refresh();
-  }
+  application->setValue(2, 0, 0.0);
+  application->setValue(2, 1, 1.0);
+  application->setValue(2, 2, 0.0);
+  colorConvertOperation(application);
+  delete application;
 }
 
-void UserInterface::convolveOperation(Matrix<double>* filter) {}
+void UserInterface::convolve() {
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  application->setValue(0, 0, 0.0);
+  application->setValue(0, 1, 0.25);
+  application->setValue(0, 2, 0.0);
+  
+  application->setValue(1, 0, 0.25);
+  application->setValue(1, 1, 0.0);
+  application->setValue(1, 2, 0.25);
 
-void UserInterface::about(){
+  application->setValue(2, 0, 0.0);
+  application->setValue(2, 1, 0.25);
+  application->setValue(2, 2, 0.0);
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::rescale() {}
+
+void UserInterface::about() {
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
 }
 
 
 /** Methodes internes */
+void UserInterface::colorConvertOperation(Matrix<double>* application) {
+  TabPanel* panel = m_viewTabWidget->getTabPanel();
+  Picture* picture = panel->getSelectedPicture();
+  ColorConvertOperation* op = new ColorConvertOperation(application);
+  op->applyOn(picture);
+  picture->refresh();
+  panel->refresh();
+}
+
+void UserInterface::convolveOperation(Matrix<double>* application) {
+  TabPanel* panel = m_viewTabWidget->getTabPanel();
+  Picture* picture = panel->getSelectedPicture();
+  ConvolveOperation* op = new ConvolveOperation(application);
+  op->applyOn(picture);
+  picture->refresh();
+  panel->refresh();
+}
+
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
   m_saveAct->setEnabled(false);
@@ -96,6 +133,9 @@ void UserInterface::updateActions() {
   m_fitToWindowAct->setEnabled(false);
 
   m_greyScaleAct->setEnabled(true);
+  m_colorConvertAct->setEnabled(true);
+  m_convolveAct->setEnabled(true);
+
   m_blackAndWhiteAct->setEnabled(false);
   m_rescaleAct->setEnabled(false);
 
@@ -159,6 +199,14 @@ void UserInterface::createOperationAction() {
   m_greyScaleAct = new QAction(tr("&Grey Scale"), this);
   m_greyScaleAct->setEnabled(false);
   connect(m_greyScaleAct, SIGNAL(triggered()), this, SLOT(greyScale()));
+
+  m_colorConvertAct = new QAction(tr("&ColorConvert"), this);
+  m_colorConvertAct->setEnabled(false);
+  connect(m_colorConvertAct, SIGNAL(triggered()), this, SLOT(colorConvert()));
+
+  m_convolveAct = new QAction(tr("&Convolve"), this);
+  m_convolveAct->setEnabled(false);
+  connect(m_convolveAct, SIGNAL(triggered()), this, SLOT(convolve()));
 
   m_blackAndWhiteAct = new QAction(tr("&Black and White"), this);
   m_blackAndWhiteAct->setEnabled(false);

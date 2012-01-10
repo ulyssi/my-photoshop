@@ -10,7 +10,7 @@ using namespace std;
 
 Picture::Picture(QString path) :
   m_path(path),
-  m_listTracing(3)
+  m_tracingList()
 {
   m_name = m_path.right(m_path.length()-1-m_path.lastIndexOf("/"));
 
@@ -20,7 +20,7 @@ Picture::Picture(QString path) :
     for (int j = 0; j < getHeight(); j++)
       m_data->setValue(i, j, (unsigned int)image.pixel(i, j));
 
-  m_listTracing.push_back(new Tracing(m_data));
+  m_tracingList.push_back(new Tracing(m_data));
 }
 
 Picture::~Picture() {}
@@ -35,12 +35,14 @@ int Picture::getHeight() { return m_data->getHeight(); }
 
 Matrix<unsigned int>* Picture::getData() { return m_data; }
 
-vector<Tracing*>& Picture::getListTracing() { return m_listTracing; }
+vector<Tracing*>& Picture::getTracingList() { return m_tracingList; }
+
+Tracing* Picture::getBackground() { return m_tracingList[0]; }
 
 void Picture::refresh() {
   for (int i = 0; i < getWidth(); i++)
     for (int j = 0; j < getHeight(); j++)
-      m_data->setValue(i, j, (unsigned int)m_listTracing[0]->getValue(i, j));
+      m_data->setValue(i, j, (unsigned int)m_tracingList[0]->getValue(i, j));
 }
 
 // Charge une image à partir de son path
@@ -57,42 +59,42 @@ bool Picture::saveQImage(QString& path, QImage image){
 
 void Picture::addTracing(Tracing* tracing){
     // recalcul d'offset???
-    tracing->setIndex(m_listTracing.size()); //size correspond à queue + 1
-    m_listTracing.push_back(tracing);
+    tracing->setIndex(m_tracingList.size()); //size correspond à queue + 1
+    m_tracingList.push_back(tracing);
 }
 
 void Picture::insertTracing(Tracing* tracing, int index){
   //insère un calque à la position indiquée par l'index
   // si l'index est pertinent
-  int i(m_listTracing.size());
+  int i(m_tracingList.size());
   if(index >= 0 && index <= i){
-    m_listTracing.push_back(tracing); //après ajout, le i correspond plus à la taille mais à l'indice de queu donc pas de décrémentation
+    m_tracingList.push_back(tracing); //après ajout, le i correspond plus à la taille mais à l'indice de queu donc pas de décrémentation
     Tracing *temp;
-    temp = m_listTracing[i];
+    temp = m_tracingList[i];
     while(i > index){
-      m_listTracing[i] = m_listTracing[i-1];
-      m_listTracing[i]->setIndex(i);
+      m_tracingList[i] = m_tracingList[i-1];
+      m_tracingList[i]->setIndex(i);
       i--;
     }
-    m_listTracing[i] = temp;
-    m_listTracing[i]->setIndex(i);
+    m_tracingList[i] = temp;
+    m_tracingList[i]->setIndex(i);
   } else cout << "index erroné, il doit être compris entre :" << "0 et " << i << endl;
 }
 
 void Picture::removeTracing(int index){
   // écrasement par déplacement
-  int i(m_listTracing.size());
+  int i(m_tracingList.size());
   if(index >= 0 && index < i){
-    delete m_listTracing[index];
-    m_listTracing[index] = 0; // <=> pointeur null
+    delete m_tracingList[index];
+    m_tracingList[index] = 0; // <=> pointeur null
     int size = i;
     i = index;
     while (i < size-1){
-      m_listTracing[i] = m_listTracing[i+1];
-      m_listTracing[i]->setIndex(i);
+      m_tracingList[i] = m_tracingList[i+1];
+      m_tracingList[i]->setIndex(i);
       i++;
     }
-    m_listTracing.pop_back(); //supression de la case inutile en queue
+    m_tracingList.pop_back(); //supression de la case inutile en queue
   } else cout << "index erroné, il doit être compris entre :" << "0 et " << i-1 << endl;
 }
 

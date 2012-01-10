@@ -1,12 +1,14 @@
 #ifndef _PICTURE_BUTTON_
 #define _PICTURE_BUTTON_
 
+#include <QPushButton>
+
 #include "PictureViewer.hh" 
 
 class PictureModifier;
 
 
-class PictureButton : public PictureViewer {
+class PictureButton : public PictureViewer, public QPushButton {
 
 public : 
 

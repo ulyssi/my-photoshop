@@ -54,11 +54,12 @@ void HistogramModifier::refresh(){
   int amplitudeGreen = (maxGreen - minGreen);
   int amplitudeBlue = (maxBlue - minBlue);
   
-  std::cout << "amplitudeRed = " << amplitudeRed
-            << " amplitudeGreen = " << amplitudeGreen
-            << " amplitudeBlue = " << amplitudeBlue
-            << std::endl;
+  // std::cout << "amplitudeRed = " << amplitudeRed
+  //           << " amplitudeGreen = " << amplitudeGreen
+  //           << " amplitudeBlue = " << amplitudeBlue
+  //           << std::endl;
 
+  int maxR = 0, maxG = 0, maxB = 0;
       
   for (int i = 0; i < 256; i++) {
     // std::cout << "Red[i] = " << m_histogramRedD[i]
@@ -66,30 +67,39 @@ void HistogramModifier::refresh(){
     //           << " Blue[i] = " << m_histogramBlueD[i]
     //           << std::endl;
 
-    int red = (m_histogramRedD[i] - minRed)  * 100 / amplitudeRed;
-    int green = (m_histogramGreenD[i] - minGreen) * 100 / amplitudeGreen;
-    int blue = (m_histogramBlueD[i] - minBlue) * 100 / amplitudeBlue;
+    int seuilRed = (m_histogramRedD[i] - minRed) * 100 / amplitudeRed;
+    int seuilGreen = (m_histogramGreenD[i] - minGreen) * 100 / amplitudeGreen;
+    int seuilBlue = (m_histogramBlueD[i] - minBlue) * 100 / amplitudeBlue;
 
-    // std::cout << "Red = " << red
-    //           << " Green = " << green 
-    //           << " Blue = " << blue
-    //           << std::endl;
+    if (maxR < seuilRed) maxR = seuilRed;
+    if (maxG < seuilGreen) maxG = seuilGreen;
+    if (maxB < seuilBlue) maxB = seuilBlue;
 
     for (int j = 0; j < 100; j++) {
-      if (j < red) red = 0;
-      if (j < green) green = 0;
-      if (j < blue) blue = 0;
-	
+      int red = 255, green = 255, blue = 255;
+      if (j <= 100 - seuilRed) red = 0;
+      if (j <= 100 - seuilGreen) green = 0; 
+      if (j <= 100 - seuilBlue) blue = 0; 
+
       red = PixelMod::threshold(red);
       green = PixelMod::threshold(green);
       blue = PixelMod::threshold(blue);
-      
-      m_histogramMulti->setPixel(i, j, PixelMod::createRGB(red,green,blue));
+
+      if (red == 0 && green == 0 && blue == 0) {
+        m_histogramMulti->setPixel(i, j, PixelMod::createRGB(red,green,blue, 50));
+      } else {
+        m_histogramMulti->setPixel(i, j, PixelMod::createRGB(red,green,blue, 255));
+      }
       m_histogramRed->setPixel(i, j, PixelMod::createRGB(red, 0, 0));
       m_histogramGreen->setPixel(i, j, PixelMod::createRGB(0, green, 0));
       m_histogramBlue->setPixel(i, j, PixelMod::createRGB(0, 0, blue));
     }
   }
-    
+
+  std::cout << "Red = " << maxR
+            << " Green = " << maxG 
+            << " Blue = " << maxB
+            << std::endl;
+      
   setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
 }

@@ -7,18 +7,24 @@
 #include "PictureManager.hh"
 #include "UserInterface.hh"
 
+
+
 /** Constructeurs et destructeur */
 TabWidget::TabWidget(UserInterface* userInterface) :
   QTabWidget(userInterface),
-  m_userInterface(userInterface){
+  m_userInterface(userInterface)
+{
   insertTab(0, new QWidget(), "");
   tabBar()->setTabButton(0, QTabBar::LeftSide, (QWidget*)createNewTabButton());
   QObject::connect(this, SIGNAL(currentChanged(int)), this, SLOT(selectTab(int)));
-  }
+}
 
 TabWidget::~TabWidget() {}
+
+
 /** Accesseurs */
 TabPanel* TabWidget::getTabPanel() { return (TabPanel*)widget(currentIndex()); }
+
 
 /** Methodes */
 int TabWidget::addTab(TabPanel* tabPanel) {
@@ -31,12 +37,12 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
-  if (index >0  && index >= tabBar()->count()-1) setCurrentIndex(index-1);
+  if (index > 0  && index >= tabBar()->count()-1) setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
     for(int i = 0; i < tabBar()->count(); i++) 
       if (i != index)
-	tabBar()->setTabTextColor(i, Qt::black);
+        tabBar()->setTabTextColor(i, Qt::black);
   }
 }
 
@@ -76,6 +82,3 @@ QPushButton* TabWidget::createCloseButton() {
   m_listpushbutton.append(t_icon);
   return (QPushButton*)t_icon;
 }
-
-
- 

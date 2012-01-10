@@ -21,6 +21,7 @@ UserInterface::UserInterface(QApplication* qapplication) :
 
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultColorChooser())));
   addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultOperationChooser())));
+  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultHistogramModifier())));
 
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));

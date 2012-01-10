@@ -3,7 +3,7 @@
 
 class ColorChooser;
 // class BrushChooser;
-/*class HistogramModifier;*/
+class HistogramModifier;
 class AffineOperationChooser;
 class RescaleOperationChooser;
 class ConvolveOperationChooser;
@@ -22,7 +22,7 @@ public:
   /** Accesseurs */
   ColorChooser* getDefaultColorChooser() const;
   // BrushChooser* getDefaultBrushChooser() const;
-/*  HistogramModifier* getDefaultHistogramModifier() const;*/
+  HistogramModifier* getDefaultHistogramModifier() const;
   AffineOperationChooser* getDefaultAffineOperationChooser() const;
   RescaleOperationChooser* getDefaultRescaleOperationChooser() const;
   ConvolveOperationChooser* getDefaultConvolveOperationChooser() const;
@@ -33,7 +33,7 @@ public:
   /** Methodes */
   ColorChooser* createColorChooser();
   // BrushChooser* createBrushChooser();
-/*  HistogramModifier* createHistogramModifier();*/
+  HistogramModifier* createHistogramModifier();
   AffineOperationChooser* createAffineOperationChooser();
   RescaleOperationChooser* createRescaleOperationChooser();
   ConvolveOperationChooser* createConvolveOperationChooser();
@@ -46,7 +46,7 @@ private:
   /** Attributs */
   ColorChooser* m_colorChooser;
   // BrushChooser* m_brushChooser;
-/*  HistogramModifier* m_histogramModifier;*/
+  HistogramModifier* m_histogramModifier;
   AffineOperationChooser* m_affineOperationChooser;
   RescaleOperationChooser* m_rescaleOperationChooser;
   ConvolveOperationChooser* m_convolveOperationChooser;

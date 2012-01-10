@@ -12,9 +12,9 @@ namespace PixelMod {
 
   enum Type { BINARY, GREY_SCALE, COLOR };
 
-  const int DefaultAlpha = 0;
   const int minValue = 0;
   const int maxValue = 0xFF;
+  const int DefaultAlpha = maxValue;
   
   inline int getAlpha(unsigned int rgb) { return ((ALPHA_MSK & rgb)>>24); }
   inline int getRed(unsigned int rgb) { return ((RED_MSK & rgb)>>16); }

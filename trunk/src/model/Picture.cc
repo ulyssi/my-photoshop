@@ -21,6 +21,7 @@ Picture::Picture(QString path) :
       m_data->setValue(i, j, (unsigned int)image.pixel(i, j));
 
   m_tracingList.push_back(new Tracing(m_data));
+ 
 }
 
 Picture::~Picture() {}

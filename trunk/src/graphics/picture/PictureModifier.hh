@@ -8,6 +8,7 @@ class Picture;
 class PictureViewer;
 class UserInterface;
 class TracingManager;
+class HistogramModifier;
 
 class PictureModifier : public TabPanel {
 
@@ -21,7 +22,8 @@ public :
   QImage* getImage();
   Picture* getPicture();
   TracingManager* getTracingManager();
-
+  HistogramModifier* getHistogramModifier();
+  
   /** Methodes */
   Picture* getSelectedPicture();
   void refresh();
@@ -33,7 +35,8 @@ private :
   Picture* m_picture;
   PictureViewer* m_pictureViewer;
   TracingManager* m_tracingManager;
-
+  HistogramModifier* m_histogramModifier;
+  
 };
 
 #endif

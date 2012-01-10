@@ -40,9 +40,17 @@ vector<Tracing*>& Picture::getTracingList() { return m_tracingList; }
 Tracing* Picture::getBackground() { return m_tracingList[0]; }
 
 void Picture::refresh() {
-  for (int i = 0; i < getWidth(); i++)
+  std::cout<<"refreshing"<<std::endl;
+
+  if(m_tracingList[0]->getWidth()!=getWidth()||m_tracingList[0]->getHeight()!=getHeight()){
+    delete m_data;
+    m_data = new Matrix<unsigned int>(m_tracingList[0]->getWidth(),m_tracingList[0]->getHeight());
+  }
+  for (int i = 0; i<getWidth(); i++)
     for (int j = 0; j < getHeight(); j++)
       m_data->setValue(i, j, (unsigned int)m_tracingList[0]->getValue(i, j));
+
+  std::cout<<"done refreshing   "<< getWidth()<<"x"<<getHeight() <<std::endl;
 }
 
 // Charge une image à partir de son path
@@ -85,7 +93,7 @@ void Picture::removeTracing(int index){
   // écrasement par déplacement
   int i(m_tracingList.size());
   if(index >= 0 && index < i){
-    delete m_tracingList[index];
+    //delete m_tracingList[index];
     m_tracingList[index] = 0; // <=> pointeur null
     int size = i;
     i = index;

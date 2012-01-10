@@ -16,8 +16,11 @@ Operation::~Operation() {}
 
 /** Methodes */
 Picture* Operation::applyOn(Picture* picture) {
-  if (m_operation != NULL) picture = m_operation->applyOn(picture);
-  return doOperation(picture);
+  if (picture == NULL) std::cout << "NULL pointer" << std::endl;
+  else {
+    if (m_operation != NULL) picture = m_operation->applyOn(picture);
+    return doOperation(picture);
+  }
 }
 
 Tracing* Operation::applyOn(Tracing* tracing) {

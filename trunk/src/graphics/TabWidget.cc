@@ -45,7 +45,6 @@ void TabWidget::selectTab(int index) {
 
 void TabWidget::closeTab(int index) {
   if (index != 1 && index != count()) { 
-    int t_index=index;
     tabBar()->moveTab(index-1,0);
     tabBar()->removeTab(0);
     setCurrentIndex(index-2);

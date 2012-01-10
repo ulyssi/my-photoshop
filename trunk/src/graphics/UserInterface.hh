@@ -13,7 +13,6 @@
 class ToolMaker;
 class PictureManager;
 class TabWidget;
-
 class UserInterface : public QMainWindow { Q_OBJECT
 
 public:

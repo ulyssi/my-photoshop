@@ -1,5 +1,5 @@
 #include "MergeOperation.hh"
-
+#include <iostream>
 #include "Picture.hh"
 #include "Tracing.hh"
 
@@ -26,17 +26,19 @@ Tracing* MergeOperation::doOperation(Tracing* tracing) { return tracing; }
    vector<Tracing*>::iterator it;
    Tracing * t1;
    Tracing * t2;
-    Tracing * tmp=NULL;
+   Tracing * tmp=NULL;
    it=tracingList.begin();
    while((*it)==NULL)
      it++;
    t1=(*it);
    it++;
    while (it<tracingList.end()){   
+     cout<<"how many tracings do we fucking have??\n\n";
      t2=(*it);
-     tmp=t1;
      t1=doOperation(t1,t2);
-     delete tmp;
+     if(tmp!=NULL)
+       delete tmp;
+     tmp=t1;
    }
    return t1;
  }
@@ -46,8 +48,9 @@ Operation* MergeOperation::clone() { return NULL; }
 
 /** Methodes internes */
 Tracing* MergeOperation::doOperation(Tracing* t1, Tracing* t2) {
+  cout<<"going brown town\n\n";
   Tracing *rslt=new Tracing((t1->getWidth()>t2->getWidth())?(t1->getWidth()) : (t2->getWidth()),(t1->getHeight()>t2->getHeight())?(t1->getHeight()) : (t2->getHeight()));
-
+  
 unsigned int val=0;
 //:TODO prendre en compte les offsets 
   for(int i=0;i<rslt->getWidth();i++)

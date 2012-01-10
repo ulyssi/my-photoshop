@@ -11,7 +11,7 @@
 #include "TabWidget.hh"
 #include "ColorConvertOperation.hh"
 #include "ConvolveOperation.hh"
-
+#include "RescaleOperation.hh"
 
 /** Slots */
 void UserInterface::open() {
@@ -92,7 +92,14 @@ void UserInterface::convolve() {
   delete application;
 }
 
-void UserInterface::rescale() {}
+void UserInterface::rescale() {
+  TabPanel* panel = m_viewTabWidget->getTabPanel();
+  Picture* picture = panel->getSelectedPicture();
+  RescaleOperation* op = new RescaleOperation(50,50);
+  op->applyOn(picture);
+  picture->refresh();
+  panel->refresh();
+}
 
 void UserInterface::about() {
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
@@ -102,7 +109,7 @@ void UserInterface::about() {
 /** Methodes internes */
 void UserInterface::colorConvertOperation(Matrix<double>* application) {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
-  Picture* picture = panel->getSelectedPicture();
+  Picture* picture = panel->getSelectedPicture();  
   ColorConvertOperation* op = new ColorConvertOperation(application);
   op->applyOn(picture);
   delete op;
@@ -119,6 +126,8 @@ void UserInterface::convolveOperation(Matrix<double>* application) {
   picture->refresh();
   panel->refresh();
 }
+
+
 
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
@@ -138,7 +147,7 @@ void UserInterface::updateActions() {
   m_convolveAct->setEnabled(true);
 
   m_blackAndWhiteAct->setEnabled(false);
-  m_rescaleAct->setEnabled(false);
+  m_rescaleAct->setEnabled(true);
 
   m_aboutAct->setEnabled(false);
   m_aboutQtAct->setEnabled(true);

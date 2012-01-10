@@ -41,6 +41,10 @@ Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 void PictureModifier::refresh() {
   // /!\ penser a gerer le redimensionnement possible de l'image (Segmentation Fault)
   Matrix<unsigned int>* pictureData = m_picture->getData();
+  if(pictureData->getWidth()!=m_image->width()||pictureData->getHeight()!=m_image->height()){
+    delete m_image;
+    m_image=new QImage(pictureData->getWidth(),pictureData->getHeight(),QImage::Format_ARGB32);
+  }
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));

@@ -21,6 +21,7 @@ public :
   /** Methodes */
   Picture* getSelectedPicture();
   void addPictureModifier(PictureModifier*);
+  void removePictureModifier(PictureModifier*);
   void refresh();
  
 private : 

@@ -9,7 +9,7 @@
 #include "Picture.hh"
 #include "PictureManager.hh"
 #include "UserInterface.hh"
-
+#include <iostream>
 
 /** Constructeurs et destructeur */
 TabWidget::TabWidget(UserInterface* userInterface) :
@@ -40,6 +40,8 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
+  if (index==count()-1)
+    m_userInterface->open();
   if (0 < index && index >= tabBar()->count()-1) setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
@@ -47,11 +49,16 @@ void TabWidget::selectTab(int index) {
       if (i != index)
 	tabBar()->setTabTextColor(i, Qt::black);
   }
+  
 }
 
 void TabWidget::closeTab(int index) {
   if (index != 1 && index != count()) { 
-    removeTab(index-1);
+    int t_index=index;
+    tabBar()->moveTab(index-1,0);
+    tabBar()->removeTab(0);
+    setCurrentIndex(index-2);
+   
     m_userInterface->close(widget(index-1));
   }
   for (int j = 0; j < m_listpushbutton.size(); j++)
@@ -85,6 +92,4 @@ QPushButton* TabWidget::createCloseButton() {
 }
 
 
-  
-
-
+ 

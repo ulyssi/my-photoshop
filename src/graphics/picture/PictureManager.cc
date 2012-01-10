@@ -1,3 +1,4 @@
+
 #include "PictureManager.hh"
 #include "UserInterface.hh"
 #include "PictureButton.hh"
@@ -11,6 +12,7 @@ PictureManager::PictureManager(UserInterface* userInterface) :
   m_buttonGroup=new QButtonGroup();
   m_QWidget =new QWidget();
   m_layout= new QGridLayout();
+  m_QWidget->resize(800,800);
   m_nbCol=4;
   
 }
@@ -31,11 +33,20 @@ void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
   refresh();
 }
 
+void PictureManager::removePictureModifier(PictureModifier* picturemodifier){
+}
+
+
 void PictureManager::refresh() {
+  for (int j =0 ; j<m_listPictureButton.size();j++)
+    m_layout->removeWidget((QPushButton*)m_listPictureButton.at(j));
   
-  // m_layout->addWidget(t_button);
-  // m_QWidget->setLayout(m_layout);
-  // setWidget(m_QWidget);
+  for (int j =0 ; j<m_listPictureButton.size();j++){
+    m_layout->addWidget((QPushButton*)m_listPictureButton.at(j),j,j);
+    //std::cout<<j<<std::endl;
+  }
+  m_QWidget->setLayout(m_layout);
+  setWidget(m_QWidget);
 }
 
 

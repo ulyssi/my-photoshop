@@ -8,7 +8,10 @@ PictureButton::PictureButton(PictureModifier *pictureModifier) :
   PictureViewer(pictureModifier),
   m_pictureModifier(pictureModifier)
 {
-  setIcon(QIcon::fromTheme("window-close"));
+  setIcon(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
+  setCheckable(true);
+  setFlat(true);
+  setIconSize(QSize(128,128));
   
 }
 

@@ -32,7 +32,7 @@ Tracing* ConvolveOperation::doOperation(Tracing* tracing) {
       	  blue += PixelMod::getBlue(pictureData[x][y]) * filterData[i2][j2];
       	  alpha += PixelMod::getAlpha(pictureData[x][y]) * filterData[i2][j2];
       	}
-      pictureData[i][j] = PixelMod::createRGB(red, green, blue, alpha);
+      pictureData[i][j] = PixelMod::createRGB(PixelMod::threshold(red), PixelMod::threshold(green), PixelMod::threshold(blue), PixelMod::threshold(alpha));
     }
   return tracing;
 }

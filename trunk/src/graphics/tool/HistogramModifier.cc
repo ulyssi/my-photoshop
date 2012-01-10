@@ -37,7 +37,7 @@ void HistogramModifier::refresh(){
   }
   
   int nbPixel = tracing->getWidth() * tracing->getHeight();
-  int minRed = 255, minGreen = 255, minBlue = 255;
+  int minRed = nbPixel, minGreen = nbPixel, minBlue = nbPixel;
   int maxRed = 0, maxGreen = 0, maxBlue = 0;
   
   for (int i = 0; i < 256; i++) {
@@ -53,16 +53,32 @@ void HistogramModifier::refresh(){
   int amplitudeRed = (maxRed - minRed);
   int amplitudeGreen = (maxGreen - minGreen);
   int amplitudeBlue = (maxBlue - minBlue);
+  
+  std::cout << "amplitudeRed = " << amplitudeRed
+            << " amplitudeGreen = " << amplitudeGreen
+            << " amplitudeBlue = " << amplitudeBlue
+            << std::endl;
+
       
   for (int i = 0; i < 256; i++) {
-    int red = m_histogramRedD[i] * amplitudeRed / 100;
-    int green = m_histogramGreenD[i] * amplitudeGreen / 100;
-    int blue = m_histogramBlueD[i] * amplitudeBlue / 100;
+    // std::cout << "Red[i] = " << m_histogramRedD[i]
+    //           << " Green[i] = " << m_histogramGreenD[i]
+    //           << " Blue[i] = " << m_histogramBlueD[i]
+    //           << std::endl;
+
+    int red = (m_histogramRedD[i] - minRed)  * 100 / amplitudeRed;
+    int green = (m_histogramGreenD[i] - minGreen) * 100 / amplitudeGreen;
+    int blue = (m_histogramBlueD[i] - minBlue) * 100 / amplitudeBlue;
+
+    // std::cout << "Red = " << red
+    //           << " Green = " << green 
+    //           << " Blue = " << blue
+    //           << std::endl;
 
     for (int j = 0; j < 100; j++) {
-      if (j * amplitudeRed / 100 < red) red = 0;
-      if (j * amplitudeGreen / 100 < green) green = 0;
-      if (j * amplitudeBlue / 100 < blue) blue = 0;
+      if (j < red) red = 0;
+      if (j < green) green = 0;
+      if (j < blue) blue = 0;
 	
       red = PixelMod::threshold(red);
       green = PixelMod::threshold(green);
@@ -75,5 +91,5 @@ void HistogramModifier::refresh(){
     }
   }
     
-  setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramRed)));
+  setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
 }

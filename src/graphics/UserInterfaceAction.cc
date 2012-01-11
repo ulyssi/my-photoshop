@@ -77,6 +77,90 @@ void UserInterface::colorConvert() {
   delete application;
 }
 
+void UserInterface::increaseContrast() {
+  double data[3][3] = {{ 0.00 , -1.00 , 0.00 },
+                       { -1.00 , 5.00 , -1.00 },
+                       { 0.00 , -1.00 , 0.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::blur() {
+  double data[3][3] = {{ 1.00 , 1.00 , 1.00 },
+                       { 1.00 , 1.00 , 1.00 },
+                       { 1.00 , 1.00 , 1.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::gaussianBlur() {
+  double data[3][3] = {{ 1.00 , 2.00 , 1.00 },
+                       { 2.00 , 4.00 , 2.00 },
+                       { 1.00 , 2.00 , 1.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::leftEdgeStrengthening() {
+  double data[3][3] = {{ 0.00 , 0.00 , 0.00 },
+                       { -1.00 , 1.00 , 0.00 },
+                       { 0.00 , 0.00 , 0.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::edgeDetection() {
+  double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
+                       { 1.00 , -4.00 , 1.00 },
+                       { 0.00 , 1.00 , 0.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
+void UserInterface::repulsing() {
+  double data[3][3] = {{ -2.00 , -1.00 , 0.00 },
+                       { -1.00 , 1.00 , 1.00 },
+                       { 0.00 , 1.00 , 2.00 }};
+  
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
+  convolveOperation(application);
+  delete application;
+}
+
 void UserInterface::convolve() {
   double data[3][3] = {{ 0.00 , 1.0 , 0.00 },
                        { 1.0 , -4. , 1.0},

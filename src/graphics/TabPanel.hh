@@ -24,6 +24,7 @@ public :
   
   /** Methodes */
   virtual Picture* getSelectedPicture() = 0;
+  virtual void notifyCurrent();
   virtual void refresh() = 0;
 
 private : 

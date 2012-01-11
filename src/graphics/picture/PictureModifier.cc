@@ -40,20 +40,10 @@ Histogram* PictureModifier::getHistogram() { return m_histogram; }
 
 
 /** Mutateurs */
-void PictureModifier::setTracingManager(TracingManager* tracingManager) {
-  m_tracingManager = tracingManager;
-  if (m_tracingManager != NULL) {
-    m_tracingManager->setPictureModifier(this);
-    m_tracingManager->refresh();
-  }
-}
-
-void PictureModifier::setHistogram(Histogram* histogram) {
-  m_histogram = histogram;
-  if (m_histogram != NULL) {
-    m_histogram->setPictureModifier(this);
-    m_histogram->refresh();
-  }
+void PictureModifier::notifyCurrent() {
+  getUserInterface()->getHistogram()->setPictureModifier(this);
+  getUserInterface()->update();
+  std::cout << "OK PictureModifier" << std::endl;
 }
 
 

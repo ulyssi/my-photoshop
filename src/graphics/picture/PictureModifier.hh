@@ -24,12 +24,9 @@ public :
   Histogram* getHistogram();
   TracingManager* getTracingManager();
   
-  /** Mutateurs */
-  void setHistogram(Histogram*);
-  void setTracingManager(TracingManager*);
-
   /** Methodes */
   Picture* getSelectedPicture();
+  void notifyCurrent();
   void refresh();
 
 private :

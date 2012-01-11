@@ -44,6 +44,7 @@ void TabWidget::selectTab(int index) {
       if (i != index)
         tabBar()->setTabTextColor(i, Qt::black);
   }
+  if (tabBar()->count() > 2) { getTabPanel()->notifyCurrent(); }
 }
 
 void TabWidget::closeTab(int index) {

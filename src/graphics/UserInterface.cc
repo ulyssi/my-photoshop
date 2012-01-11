@@ -22,12 +22,18 @@ UserInterface::UserInterface(QApplication* qapplication) :
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
 
-  updateActions();
-  updateToolBoxDocks();
+  update();
 }
     
 UserInterface::~UserInterface() {
   delete m_pictureManager;
+}
+
+
+/** Methodes */
+void UserInterface::update() {
+  updateActions();
+  updateToolBoxDocks();
 }
 
 

@@ -15,6 +15,7 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   m_histogramGreen(new QImage(256, 100, QImage::Format_ARGB32)),
   m_histogramBlue(new QImage(256, 100, QImage::Format_ARGB32))
 {
+  setAccessibleName(QString("Histogram"));
   refresh();
 }
 

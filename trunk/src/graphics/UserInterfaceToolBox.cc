@@ -38,6 +38,12 @@ void UserInterface::createToolBoxDocks() {
   addDockWidget(Qt::LeftDockWidgetArea, m_convolveOperationChooserDock = createConvolveOperationChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_algebricOperationChooserDock = createAlgebricOperationChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_colorConvertOperationChooserDock = createColorConvertOperationChooserDock());
+  
+  tabifyDockWidget(m_affineOperationChooserDock, m_rescaleOperationChooserDock);
+  tabifyDockWidget(m_affineOperationChooserDock, m_convolveOperationChooserDock);
+  tabifyDockWidget(m_affineOperationChooserDock, m_algebricOperationChooserDock);
+  tabifyDockWidget(m_affineOperationChooserDock, m_convolveOperationChooserDock);
+  tabifyDockWidget(m_affineOperationChooserDock, m_colorConvertOperationChooserDock);
 }
 
 void UserInterface::updateToolBoxDocks() {

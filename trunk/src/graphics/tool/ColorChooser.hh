@@ -12,8 +12,6 @@ public:
   ColorChooser();
   ~ColorChooser();
 
-private:
-
 };
 
 #endif

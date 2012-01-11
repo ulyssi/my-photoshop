@@ -3,14 +3,8 @@
 
 
 /** Constructeurs et destructeur */
-ConvolveOperationChooser::ConvolveOperationChooser() :
-  m_tabName("Convolve")
-{
-  setText(m_tabName);
+ConvolveOperationChooser::ConvolveOperationChooser() {
+  setAccessibleName(QString("ConvolveOp"));
 }
 
 ConvolveOperationChooser::~ConvolveOperationChooser() {}
-
-
-/** Accesseurs */
-const QString& ConvolveOperationChooser::getTabName() const { return m_tabName; }

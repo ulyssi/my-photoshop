@@ -13,14 +13,6 @@ public:
   ConvolveOperationChooser();
   ~ConvolveOperationChooser();
 
-  /** Accesseurs */
-  const QString& getTabName() const;
-
-private:
-
-  /** Attributs */
-  QString m_tabName;
-
 };
 
 #endif

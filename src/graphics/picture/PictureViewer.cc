@@ -6,9 +6,7 @@
 
 PictureViewer::PictureViewer(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier)
-{
-  refresh();
-}
+{}
 
 PictureViewer::~PictureViewer() {}
 

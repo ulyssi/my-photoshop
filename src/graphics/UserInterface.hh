@@ -18,6 +18,7 @@ class ConvolveOperationChooser;
 class AlgebricOperationChooser;
 class ColorConvertOperationChooser;
 
+class TracingManager;
 class PictureManager;
 class TabWidget;
 
@@ -33,6 +34,7 @@ public:
   /** Accesseurs */
   Histogram* getHistogram();
   ColorChooser* getColorChooser();
+  TracingManager* getTracingManager();
   AffineOperationChooser* getAffineOperationChooser();
   RescaleOperationChooser* getRescaleOperationChooser();
   ConvolveOperationChooser* getConvolveOperationChooser();
@@ -44,6 +46,7 @@ public:
 
   Histogram* createHistogram();
   ColorChooser* createColorChooser();
+  TracingManager* createTracingManager();
   AffineOperationChooser* createAffineOperationChooser();
   RescaleOperationChooser* createRescaleOperationChooser();
   ConvolveOperationChooser* createConvolveOperationChooser();
@@ -119,6 +122,7 @@ private:
 
   QDockWidget* createHistogramDock();
   QDockWidget* createColorChooserDock();
+  QDockWidget* createTracingManagerDock();
   QDockWidget* createAffineOperationChooserDock();
   QDockWidget* createRescaleOperationChooserDock();
   QDockWidget* createConvolveOperationChooserDock();
@@ -132,6 +136,7 @@ private:
 
   Histogram* m_histogram;
   ColorChooser* m_colorChooser;
+  TracingManager* m_tracingManager;
   AffineOperationChooser* m_affineOperationChooser;
   RescaleOperationChooser* m_rescaleOperationChooser;
   ConvolveOperationChooser* m_convolveOperationChooser;
@@ -152,6 +157,7 @@ private:
 
   QDockWidget* m_histogramDock;
   QDockWidget* m_colorChooserDock;
+  QDockWidget* m_tracingManagerDock;
   QDockWidget* m_affineOperationChooserDock;
   QDockWidget* m_rescaleOperationChooserDock;
   QDockWidget* m_convolveOperationChooserDock;

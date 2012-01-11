@@ -10,14 +10,14 @@ class TracingManager : public QListWidget { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  TracingManager(PictureModifier*);
+  TracingManager(PictureModifier* = NULL);
   ~TracingManager();
-
-  /** Accesseurs */
-  PictureModifier* getPictureModifier();
 
   /** Mutateurs */
   void setPictureModifier(PictureModifier*);
+
+  /** Predicats */
+  bool isEnabled();
   
   /** Methodes */
   void refresh();

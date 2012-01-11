@@ -7,43 +7,32 @@
 #include "Picture.hh"
 #include "Matrix.hh"
 
+
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
   TabPanel(userInterface),
-  m_picture(picture)
+  m_picture(picture),
+  m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
-  m_image = new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32);
-  
   m_pictureViewer = new PictureViewer(this);
-  m_tracingManager = new TracingManager(this);
-  m_histogram = new Histogram(this);
 
   setTabName(m_picture->getName());
-  setWidget(m_pictureViewer);
-
   refresh();
 }
 
-PictureModifier::~PictureModifier() {
-  delete m_tracingManager;
-}
+PictureModifier::~PictureModifier() {}
 
 
 /** Accesseurs */
 QImage* PictureModifier::getImage() { return m_image; }
-
 Picture* PictureModifier::getPicture() { return m_picture; }
-
-TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; }
-
-Histogram* PictureModifier::getHistogram() { return m_histogram; }
 
 
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {
   getUserInterface()->getHistogram()->setPictureModifier(this);
+  getUserInterface()->getTracingManager()->setPictureModifier(this);
   getUserInterface()->update();
-  std::cout << "OK PictureModifier" << std::endl;
 }
 
 
@@ -60,7 +49,9 @@ void PictureModifier::refresh() {
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
-  m_histogram->refresh();
   m_pictureViewer->refresh();
-  // m_tracingManager->refresh();
+  setWidget(m_pictureViewer);
+  
+  getUserInterface()->getHistogram()->refresh();
+  getUserInterface()->getTracingManager()->refresh();
 }

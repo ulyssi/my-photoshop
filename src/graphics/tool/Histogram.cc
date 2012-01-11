@@ -22,15 +22,15 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
 Histogram::~Histogram() {}
 
 
-/** Predicats */
-bool Histogram::isEnabled() { return QLabel::isEnabled() && m_pictureModifier != NULL; }
-
-
 /** Mutateurs */
 void Histogram::setPictureModifier(PictureModifier* pictureModifier) { 
   m_pictureModifier = pictureModifier; 
   refresh();
 }
+
+
+/** Predicats */
+bool Histogram::isEnabled() { return QLabel::isEnabled() && m_pictureModifier != NULL; }
 
 
 /** Methodes */
@@ -89,12 +89,6 @@ void Histogram::refresh() {
         m_histogramBlue->setPixel(i, j, PixelMod::createRGB(0, 0, blue));
       }
     }
+    setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
   }
-  else {
-      for (int i = 0; i < 256; i++) 
-        for (int j = 0; j < 100; j++)
-          m_histogramMulti->setPixel(i, j, PixelMod::createRGB(0, 0, 0, 50));
-  }
-  setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
-  
 }

@@ -40,6 +40,8 @@ public:
   ColorConvertOperationChooser* getColorConvertOperationChooser();
 
   /** Methodes */
+  void update();
+
   Histogram* createHistogram();
   ColorChooser* createColorChooser();
   AffineOperationChooser* createAffineOperationChooser();

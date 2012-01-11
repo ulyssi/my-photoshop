@@ -54,46 +54,43 @@ void UserInterface::fitToWindow() {}
 void UserInterface::binary() {}
 
 void UserInterface::greyScale() {
+  double data[3][3] = {{ 0.30 , 0.59 , 0.11 },
+                       { 0.30 , 0.59 , 0.11 },
+                       { 0.30 , 0.59 , 0.11 }};
+
   Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++) {
-    application->setValue(i, 0, 0.30);
-    application->setValue(i, 1, 0.59);
-    application->setValue(i, 2, 0.11);
-  }
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+
   colorConvertOperation(application);
   delete application;
 }
 
 void UserInterface::colorConvert() {
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  application->setValue(0, 0, 0.0);
-  application->setValue(0, 1, 0.0);
-  application->setValue(0, 2, 1.0);
-  
-  application->setValue(1, 0, 1.0);
-  application->setValue(1, 1, 0.0);
-  application->setValue(1, 2, 0.0);
+  double data[3][3] = {{ 2.00 , 1.00 , -1.00 },
+                       { -1.00 , 0.00 , 1.00 },
+                       { 1.00 , -1.00 , 2.00 }};
 
-  application->setValue(2, 0, 0.0);
-  application->setValue(2, 1, 1.0);
-  application->setValue(2, 2, 0.0);
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+
   colorConvertOperation(application);
   delete application;
 }
 
 void UserInterface::convolve() {
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  application->setValue(0, 0, 1.0/9.0);
-  application->setValue(0, 1, 1.0/9.0);
-  application->setValue(0, 2, 1.0/9.0);
+  double data[3][3] = {{ 0.00 , -1.00 , 0.00 },
+                       { -1.00 , 4.00 , -1.00 },
+                       { 0.00 , -1.00 , 0.00 }};
   
-  application->setValue(1, 0, 1.0/9.0);
-  application->setValue(1, 1, 1.0/9.0);
-  application->setValue(1, 2, 1.0/9.0);
-
-  application->setValue(2, 0, 1.0/9.0);
-  application->setValue(2, 1, 1.0/9.0);
-  application->setValue(2, 2, 1.0/9.0);
+  Matrix<double>* application = new Matrix<double>(3, 3);
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      application->setValue(i, j, (double)data[i][j]);
+  
   convolveOperation(application);
   delete application;
 }

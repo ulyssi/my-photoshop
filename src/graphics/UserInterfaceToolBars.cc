@@ -3,7 +3,7 @@
 
 
 /** Methodes internes */
-void UserInterface::createToolBar() {
+void UserInterface::createToolBars() {
   addToolBar(Qt::TopToolBarArea, createFileToolBar());
   addToolBar(Qt::TopToolBarArea, createEditToolBar());
   addToolBar(Qt::TopToolBarArea, createViewToolBar());

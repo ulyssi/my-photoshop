@@ -9,8 +9,7 @@
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
 #include "TabWidget.hh"
-#include "ToolMaker.hh"
-#include "HistogramModifier.hh"
+#include "Histogram.hh"
 #include "ColorConvertOperation.hh"
 #include "ConvolveOperation.hh"
 #include "RescaleOperation.hh"
@@ -33,7 +32,7 @@ void UserInterface::open() {
     m_pictureManager->addPictureModifier(modifier);
     m_viewTabWidget->addTab((TabPanel*)modifier);
 
-    modifier->setHistogramModifier(m_toolMaker->getDefaultHistogramModifier());
+    modifier->setHistogram(m_histogram);
     //    addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(modifier->getHistogramModifier())));
   }
 }

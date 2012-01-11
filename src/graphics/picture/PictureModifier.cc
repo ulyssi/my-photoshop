@@ -2,8 +2,8 @@
 
 #include "UserInterface.hh"
 #include "TracingManager.hh"
-#include "HistogramModifier.hh"
 #include "PictureViewer.hh"
+#include "Histogram.hh"
 #include "Picture.hh"
 #include "Matrix.hh"
 
@@ -16,7 +16,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   
   m_pictureViewer = new PictureViewer(this);
   m_tracingManager = new TracingManager(this);
-  m_histogramModifier = new HistogramModifier(this);
+  m_histogram = new Histogram(this);
 
   setTabName(m_picture->getName());
   setWidget(m_pictureViewer);
@@ -36,7 +36,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 
 TracingManager* PictureModifier::getTracingManager() { return m_tracingManager; }
 
-HistogramModifier* PictureModifier::getHistogramModifier() { return m_histogramModifier; }
+Histogram* PictureModifier::getHistogram() { return m_histogram; }
 
 
 /** Mutateurs */
@@ -48,11 +48,11 @@ void PictureModifier::setTracingManager(TracingManager* tracingManager) {
   }
 }
 
-void PictureModifier::setHistogramModifier(HistogramModifier* histogramModifier) {
-  m_histogramModifier = histogramModifier;
-  if (m_histogramModifier != NULL) {
-    m_histogramModifier->setPictureModifier(this);
-    m_histogramModifier->refresh();
+void PictureModifier::setHistogram(Histogram* histogram) {
+  m_histogram = histogram;
+  if (m_histogram != NULL) {
+    m_histogram->setPictureModifier(this);
+    m_histogram->refresh();
   }
 }
 
@@ -63,14 +63,14 @@ Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 void PictureModifier::refresh() {
   // /!\ penser a gerer le redimensionnement possible de l'image (Segmentation Fault)
   Matrix<unsigned int>* pictureData = m_picture->getData();
-  if(pictureData->getWidth()!=m_image->width()||pictureData->getHeight()!=m_image->height()){
+  if (pictureData->getWidth() != m_image->width() || pictureData->getHeight() != m_image->height()) {
     delete m_image;
-    m_image=new QImage(pictureData->getWidth(),pictureData->getHeight(),QImage::Format_ARGB32);
+    m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
   }
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
+  m_histogram->refresh();
   m_pictureViewer->refresh();
-  m_histogramModifier->refresh();
   // m_tracingManager->refresh();
 }

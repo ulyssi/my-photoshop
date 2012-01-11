@@ -1,4 +1,4 @@
-#include "HistogramModifier.hh"
+#include "Histogram.hh"
 
 #include <QString>
 #include "PictureModifier.hh"
@@ -8,7 +8,7 @@
 
 
 /** Constructeurs et destructeurs */
-HistogramModifier::HistogramModifier(PictureModifier* pictureModifier) :
+Histogram::Histogram(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier),
   m_histogramMulti(new QImage(256, 100, QImage::Format_ARGB32)),
   m_histogramRed(new QImage(256, 100, QImage::Format_ARGB32)),
@@ -18,22 +18,22 @@ HistogramModifier::HistogramModifier(PictureModifier* pictureModifier) :
   refresh();
 }
 
-HistogramModifier::~HistogramModifier() {}
+Histogram::~Histogram() {}
 
 
 /** Predicats */
-// bool HistogramModifier::isAvailable() { return m_pictureModifier != NULL; }
+// bool Histogram::isAvailable() { return m_pictureModifier != NULL; }
 
 
 /** Mutateurs */
-void HistogramModifier::setPictureModifier(PictureModifier* pictureModifier) { 
+void Histogram::setPictureModifier(PictureModifier* pictureModifier) { 
   m_pictureModifier = pictureModifier; 
   refresh();
 }
 
 
 /** Methodes */
-void HistogramModifier::refresh() {
+void Histogram::refresh() {
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();  
     for (int i = 0; i < 256; i++) {

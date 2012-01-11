@@ -17,6 +17,9 @@ public:
   /** Mutateurs */
   void setPictureModifier(PictureModifier*);
   
+  /** Predicats */
+  bool isEnabled();
+
   /** Methodes */
   void refresh();
   

@@ -286,6 +286,41 @@ void UserInterface::createViewAction() {
   m_fitToWindowAct = new QAction(tr("&Fit to Window"), this);
   m_fitToWindowAct->setEnabled(false);
   connect(m_fitToWindowAct, SIGNAL(triggered()), this, SLOT(fitToWindow()));
+
+  m_histogramAct = new QAction(tr("Histogram"), this);
+  m_histogramAct->setCheckable(true);
+  m_histogramAct->setChecked(true);
+  connect(m_histogramAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_colorChooserAct = new QAction(tr("ColorChooser"), this);
+  m_colorChooserAct->setCheckable(true);
+  m_colorChooserAct->setChecked(true);
+  connect(m_colorChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_tracingManagerAct = new QAction(tr("TracingManager"), this);
+  m_tracingManagerAct->setCheckable(true);
+  m_tracingManagerAct->setChecked(true);
+  connect(m_tracingManagerAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_affineOperationAct = new QAction(tr("AffineOperation"), this);
+  m_affineOperationAct->setCheckable(true);
+  m_affineOperationAct->setChecked(true);
+  connect(m_affineOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_convolveOperationAct = new QAction(tr("ConvolveOperation"), this);
+  m_convolveOperationAct->setCheckable(true);
+  m_convolveOperationAct->setChecked(true);
+  connect(m_convolveOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_algebricOperationAct = new QAction(tr("AlgebricOperation"), this);
+  m_algebricOperationAct->setCheckable(true);
+  m_algebricOperationAct->setChecked(true);
+  connect(m_algebricOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
+  m_colorConvertOperationAct = new QAction(tr("ColorConvertOperation"), this);
+  m_colorConvertOperationAct->setCheckable(true);
+  m_colorConvertOperationAct->setChecked(true);
+  connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 }
 
 void UserInterface::createOperationAction() {

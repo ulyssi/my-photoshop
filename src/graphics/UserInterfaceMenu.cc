@@ -35,6 +35,14 @@ QMenu* UserInterface::createViewMenu() {
   m_viewMenu->addAction(m_zoomOutAct);
   m_viewMenu->addAction(m_normalSizeAct);
   m_viewMenu->addAction(m_fitToWindowAct);
+  m_viewMenu->addSeparator();
+  m_viewMenu->addAction(m_histogramAct);
+  m_viewMenu->addAction(m_colorChooserAct);
+  m_viewMenu->addAction(m_tracingManagerAct);
+  m_viewMenu->addAction(m_affineOperationAct);
+  m_viewMenu->addAction(m_convolveOperationAct);
+  m_viewMenu->addAction(m_algebricOperationAct);
+  m_viewMenu->addAction(m_colorConvertOperationAct);
   return m_viewMenu;
 }
 

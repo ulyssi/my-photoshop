@@ -69,6 +69,7 @@ public slots:
   void zoomOut();
   void normalSize();
   void fitToWindow();
+  void updateToolBoxDocks();
 
   void binary();
   void greyScale();
@@ -98,7 +99,6 @@ private:
   void createMenuBar();
   void createToolBars();
   void createToolBoxDocks();
-  void updateToolBoxDocks();
   TabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
   
@@ -175,6 +175,15 @@ private:
   QAction* m_zoomOutAct;
   QAction* m_normalSizeAct;
   QAction* m_fitToWindowAct;
+
+  QAction* m_histogramAct;
+  QAction* m_colorChooserAct;
+  QAction* m_tracingManagerAct;
+  QAction* m_affineOperationAct;
+  QAction* m_rescaleOperationAct;
+  QAction* m_convolveOperationAct;
+  QAction* m_algebricOperationAct;
+  QAction* m_colorConvertOperationAct;
 
   QAction* m_greyScaleAct;
   QAction* m_colorConvertAct;

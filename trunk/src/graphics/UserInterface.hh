@@ -70,6 +70,15 @@ public slots:
   void binary();
   void greyScale();
   void colorConvert();
+
+  void increaseContrast();
+
+  void blur();
+  void gaussianBlur();
+  void leftEdgeStrengthening();
+  void edgeDetection();
+  void repulsing();
+
   void convolve();
   void rescale();
 

@@ -22,7 +22,7 @@ Histogram::~Histogram() {}
 
 
 /** Predicats */
-// bool Histogram::isAvailable() { return m_pictureModifier != NULL; }
+bool Histogram::isEnabled() { return QLabel::isEnabled() && m_pictureModifier != NULL; }
 
 
 /** Mutateurs */

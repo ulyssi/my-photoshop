@@ -2,7 +2,6 @@
 
 #include "Histogram.hh"
 #include "ColorChooser.hh"
-#include "OperationChooser.hh"
 #include "AffineOperationChooser.hh"
 #include "RescaleOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"

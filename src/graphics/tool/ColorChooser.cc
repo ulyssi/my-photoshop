@@ -4,7 +4,7 @@
 
 
 ColorChooser::ColorChooser() {
-  setText(QString("Color"));
+  setAccessibleName(QString("Color"));
 }
 
 ColorChooser::~ColorChooser() {}

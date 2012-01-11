@@ -23,6 +23,7 @@ UserInterface::UserInterface(QApplication* qapplication) :
   resize(1024, 768);
 
   updateActions();
+  updateToolBoxDocks();
 }
     
 UserInterface::~UserInterface() {
@@ -38,7 +39,7 @@ TabWidget* UserInterface::createTabWidget() {
 }
   
 QDockWidget* UserInterface::createDockWidget(QWidget* widget) {
-  QDockWidget* dockWidget = new QDockWidget();
+  QDockWidget* dockWidget = new QDockWidget(widget->accessibleName());
   dockWidget->setWidget(widget);
   return dockWidget;
 }

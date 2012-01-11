@@ -1,18 +1,18 @@
-#ifndef _HISTOGRAM_MODIFIER_HH_
-#define _HISTOGRAM_MODIFIER_HH_
+#ifndef _HISTOGRAM_HH_
+#define _HISTOGRAM_HH_
 
 #include <QLabel>
 #include <QImage>
 
 class PictureModifier;
 
-class HistogramModifier : public QLabel { Q_OBJECT
+class Histogram : public QLabel { Q_OBJECT
 
 public:
 
   /** Constructeurs et destructeur */
-  HistogramModifier(PictureModifier* = NULL);
-  ~HistogramModifier();
+  Histogram(PictureModifier* = NULL);
+  ~Histogram();
 
   /** Mutateurs */
   void setPictureModifier(PictureModifier*);

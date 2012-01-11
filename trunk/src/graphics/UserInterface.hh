@@ -10,9 +10,18 @@
 
 #include "Matrix.hh"
 
-class ToolMaker;
+class Histogram;
+class ColorChooser;
+class AffineOperationChooser;
+class RescaleOperationChooser;
+class ConvolveOperationChooser;
+class AlgebricOperationChooser;
+class ColorConvertOperationChooser;
+
 class PictureManager;
 class TabWidget;
+
+
 class UserInterface : public QMainWindow { Q_OBJECT
 
 public:
@@ -21,8 +30,26 @@ public:
   UserInterface(QApplication*);
   ~UserInterface();
 
+  /** Accesseurs */
+  Histogram* getHistogram();
+  ColorChooser* getColorChooser();
+  AffineOperationChooser* getAffineOperationChooser();
+  RescaleOperationChooser* getRescaleOperationChooser();
+  ConvolveOperationChooser* getConvolveOperationChooser();
+  AlgebricOperationChooser* getAlgebricOperationChooser();
+  ColorConvertOperationChooser* getColorConvertOperationChooser();
+
+  /** Methodes */
+  Histogram* createHistogram();
+  ColorChooser* createColorChooser();
+  AffineOperationChooser* createAffineOperationChooser();
+  RescaleOperationChooser* createRescaleOperationChooser();
+  ConvolveOperationChooser* createConvolveOperationChooser();
+  AlgebricOperationChooser* createAlgebricOperationChooser();
+  ColorConvertOperationChooser* createColorConvertOperationChooser();
+
 public slots:
-  
+
   /** Slots */
   void open();
   void save();
@@ -53,11 +80,20 @@ private:
   void convolveOperation(Matrix<double>*);
 
   void createActions();
+  void updateActions();
   void createMenuBar();
-  void createToolBar();
+  void createToolBars();
+  void createToolBoxDocks();
+  void updateToolBoxDocks();
   TabWidget* createTabWidget();
   QDockWidget* createDockWidget(QWidget* widget);
   
+  void createFileAction();
+  void createEditAction();
+  void createViewAction();
+  void createHelpAction();
+  void createOperationAction();
+
   QMenu* createFileMenu();
   QMenu* createEditMenu();
   QMenu* createViewMenu();
@@ -70,18 +106,26 @@ private:
   QToolBar* createHelpToolBar();
   QToolBar* createOperationToolBar();
 
-  void updateActions();
-  void createFileAction();
-  void createEditAction();
-  void createViewAction();
-  void createHelpAction();
-  void createOperationAction();
+  QDockWidget* createHistogramDock();
+  QDockWidget* createColorChooserDock();
+  QDockWidget* createAffineOperationChooserDock();
+  QDockWidget* createRescaleOperationChooserDock();
+  QDockWidget* createConvolveOperationChooserDock();
+  QDockWidget* createAlgebricOperationChooserDock();
+  QDockWidget* createColorConvertOperationChooserDock();
 
   /** Attributs */
   QApplication* m_QApplication;
-  ToolMaker* m_toolMaker;
   PictureManager* m_pictureManager;
   TabWidget* m_viewTabWidget;
+
+  Histogram* m_histogram;
+  ColorChooser* m_colorChooser;
+  AffineOperationChooser* m_affineOperationChooser;
+  RescaleOperationChooser* m_rescaleOperationChooser;
+  ConvolveOperationChooser* m_convolveOperationChooser;
+  AlgebricOperationChooser* m_algebricOperationChooser;
+  ColorConvertOperationChooser* m_colorConvertOperationChooser;
 
   QMenu* m_fileMenu;
   QMenu* m_editMenu;
@@ -94,6 +138,14 @@ private:
   QToolBar* m_viewToolBar;
   QToolBar* m_helpToolBar;
   QToolBar* m_operationToolBar;
+
+  QDockWidget* m_histogramDock;
+  QDockWidget* m_colorChooserDock;
+  QDockWidget* m_affineOperationChooserDock;
+  QDockWidget* m_rescaleOperationChooserDock;
+  QDockWidget* m_convolveOperationChooserDock;
+  QDockWidget* m_algebricOperationChooserDock;
+  QDockWidget* m_colorConvertOperationChooserDock;
 
   QAction* m_openAct;
   QAction* m_saveAct;

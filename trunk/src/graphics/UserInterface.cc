@@ -1,7 +1,6 @@
 #include "UserInterface.hh"
 
 #include "TabWidget.hh"
-#include "ToolMaker.hh"
 #include "Picture.hh"
 #include "PictureManager.hh"
 
@@ -9,19 +8,15 @@
 
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface(QApplication* qapplication) :
-  m_QApplication(qapplication),
-  m_toolMaker(new ToolMaker())
+  m_QApplication(qapplication)
 {
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
 
   createActions();
   createMenuBar();
-  createToolBar();
-
-  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultColorChooser())));
-  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultOperationChooser())));
-  addDockWidget(Qt::LeftDockWidgetArea, createDockWidget((QWidget*)(m_toolMaker->getDefaultHistogramModifier())));
+  createToolBars();
+  createToolBoxDocks();
 
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
@@ -38,7 +33,6 @@ UserInterface::~UserInterface() {
 /** Methodes internes */
 TabWidget* UserInterface::createTabWidget() {
   TabWidget* tabWidget = new TabWidget(this);
-  // tabWidget->addTab((QWidget*)m_pictureManager,m_pictureManager->getTabName());
   tabWidget->addTab((TabPanel*)m_pictureManager);
   return tabWidget;
 }

@@ -64,9 +64,9 @@ void UserInterface::greyScale() {
 }
 
 void UserInterface::colorConvert() {
-  double data[3][3] = {{ 2.00 , 1.00 , -1.00 },
-                       { -1.00 , 0.00 , 1.00 },
-                       { 1.00 , -1.00 , 2.00 }};
+  double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
+                       { 0.00 , 0.00 , 1.00 },
+                       { 1.00 , 0.00 , 0.00 }};
 
   Matrix<double>* application = new Matrix<double>(3, 3);
   for (int i = 0; i < 3; i++)
@@ -78,9 +78,9 @@ void UserInterface::colorConvert() {
 }
 
 void UserInterface::convolve() {
-  double data[3][3] = {{ 0.00 , -1.00 , 0.00 },
-                       { -1.00 , 4.00 , -1.00 },
-                       { 0.00 , -1.00 , 0.00 }};
+  double data[3][3] = {{ 0.00 , 1.0 , 0.00 },
+                       { 1.0 , -4. , 1.0},
+                       { 0.00 , 1.0 , 0.0 }};
   
   Matrix<double>* application = new Matrix<double>(3, 3);
   for (int i = 0; i < 3; i++)

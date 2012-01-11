@@ -27,13 +27,14 @@ Tracing* ConvolveOperation::doOperation(Tracing* tracing) {
       	for (int j2 = 0; j2 < m_kernel->getHeight(); j2++) {
 	  int x = i + i2 - filterOffsetX;
 	  int y = j + j2 - filterOffsetY;
-	  red += PixelMod::getRed(pictureData[x][y]) * filterData[i2][j2];
-      	  green += PixelMod::getGreen(pictureData[x][y]) * filterData[i2][j2];
-      	  blue += PixelMod::getBlue(pictureData[x][y]) * filterData[i2][j2];
-      	  alpha += PixelMod::getAlpha(pictureData[x][y]) * filterData[i2][j2];
+	  unsigned int color = source.getValue(x, y);
+	  red += PixelMod::getRed(color) * filterData[i2][j2];
+      	  green += PixelMod::getGreen(color) * filterData[i2][j2];
+      	  blue += PixelMod::getBlue(color) * filterData[i2][j2];
+      	  alpha += PixelMod::getAlpha(color) * filterData[i2][j2];
       	}
       pictureData[i][j] = PixelMod::createRGB(PixelMod::threshold(red), PixelMod::threshold(green), PixelMod::threshold(blue), PixelMod::getAlpha(pictureData[i][j]));
-      //PixelMod::threshold(alpha));
+      //threshold(alpha));
     }
   return tracing;
 }

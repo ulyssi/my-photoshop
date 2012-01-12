@@ -13,6 +13,7 @@
 #include "ColorConvertOperation.hh"
 #include "ConvolveOperation.hh"
 #include "RescaleOperation.hh"
+#include <iostream>
 
 
 /** Slots */
@@ -203,8 +204,9 @@ void UserInterface::colorConvertOperation(Matrix<double>* application) {
 void UserInterface::convolveOperation(Matrix<double>* application) {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();
+  std::cout<<picture->getName().toStdString()<<std::endl;
   ConvolveOperation* op = new ConvolveOperation(application);
-  op->applyOn(picture);
+    op->applyOn(picture);
   delete op;
   picture->refresh();
   panel->refresh();

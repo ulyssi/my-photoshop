@@ -28,7 +28,7 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   QRadioButton* radioButtonRGB = new QRadioButton(tr("RGB"));
   QRadioButton* radioButtonYUV = new QRadioButton(tr("YUV"));
   QComboBox* comboBoxLayer = new QComboBox;
-  comboBoxLayer->addItem(tr("Red"));
+  comboBoxLayer->insertItem(0, tr("Red"));
   comboBoxLayer->addItem(tr("Green"));
   comboBoxLayer->addItem(tr("Blue"));
   comboBoxLayer->addItem(tr("Red Green Blue"));

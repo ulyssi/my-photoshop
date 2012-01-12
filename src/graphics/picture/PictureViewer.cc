@@ -35,6 +35,7 @@ PictureViewer::~PictureViewer() {}
 // }
 
 void PictureViewer::refresh() {
+  resize(m_pictureModifier->getImage()->width(), m_pictureModifier->getImage()->height());
   setPixmap(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
 }
 

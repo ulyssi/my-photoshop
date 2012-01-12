@@ -37,7 +37,7 @@ private:
   Matrix<unsigned int>* m_previewData;
   Matrix<double>* m_mapping;
   Matrix<double>* m_mappingInv;
-  int m_centerX, m_centerY;
+  int m_centerX, m_centerY, m_minX, m_minY;
 
   unsigned int m_defaultColor;
 

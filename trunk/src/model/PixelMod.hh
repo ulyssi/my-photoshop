@@ -6,9 +6,11 @@
 namespace PixelMod {
 
   /** Constantes */
-  const int size = 8;
+  const int nbLayers = 4;
+  const int size = 32 / nbLayers;
+  const int nbValue = 0x1 << size;
   const int minValue = 0x0;
-  const int maxValue = (0x1 << size) - 1;
+  const int maxValue = nbValue - 1;
   
   /** Types internes */
   enum RGB { ALPHA = 3, RED = 2, GREEN = 1, BLUE = 0 };
@@ -29,7 +31,7 @@ namespace PixelMod {
 
   enum Alpha { TRANSLUCID = minValue, OPAQUE = maxValue };
   
-  enum YUV { LUMA, CHROMINANCE_U, CHROMINANCE_V };
+  enum YUV { LUMA = 2, CHROMINANCE_U = 1, CHROMINANCE_V = 0 };
 
   enum Type { BINARY = 0, GREY_SCALE = 1, COLOR = 2 };
 
@@ -66,13 +68,13 @@ namespace PixelMod {
   }
   
   inline unsigned int createBinary(bool color, int alpha = OPAQUE) {
-    if (color) return createGrayScale(255, alpha);
-    return createGrayScale(0, alpha);
+    if (color) return createGrayScale(maxValue, alpha);
+    return createGrayScale(minValue, alpha);
   }
 
   inline Type getTypeFromRGB(unsigned int rgb) {
     if (getRed(rgb) == getBlue(rgb) && getGreen(rgb) == getBlue(rgb)) {
-      if (getBlue(rgb) == 0 || getBlue(rgb) == 255) return BINARY;
+      if (getBlue(rgb) == minValue || getBlue(rgb) == maxValue) return BINARY;
       return GREY_SCALE;
     }
     return COLOR;

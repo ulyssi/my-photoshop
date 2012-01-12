@@ -4,8 +4,11 @@
 #include <QWidget>
 #include <QLabel>
 #include <QImage>
+#include <QRadioButton>
+#include <QComboBox>
 
 class PictureModifier;
+
 
 class Histogram : public QWidget { Q_OBJECT
 
@@ -23,22 +26,25 @@ public:
 
   /** Methodes */
   void refresh();
+  void refreshData(bool = true);
+
+public slots:
+  
+  /** Slots */
+  void refreshComboBoxLayer();
+  void refreshImage();
   
 private:
   
   /** Attributs */
   PictureModifier* m_pictureModifier;
+  QRadioButton* m_radioButtonRGB;
+  QRadioButton* m_radioButtonYUV;
+  QComboBox* m_comboBoxLayer;
   QLabel* m_histogramLabel;
+  QImage* m_histogramImage;
+  int m_histogramData[3][256];
 
-  QImage* m_histogramMulti;
-  QImage* m_histogramRed;
-  QImage* m_histogramGreen;
-  QImage* m_histogramBlue;
-  
-  int m_histogramRedD[256];
-  int m_histogramGreenD[256];
-  int m_histogramBlueD[256];
-  
 };
 
 #endif

@@ -12,9 +12,9 @@
 #include "Histogram.hh"
 #include "ColorConvertOperation.hh"
 #include "ConvolveOperation.hh"
-#include "RescaleOperation.hh"
+#include "AffineTransformationOperation.hh"
+#include "Tracing.hh"
 #include <iostream>
-
 
 /** Slots */
 void UserInterface::open() {
@@ -179,8 +179,11 @@ void UserInterface::convolve() {
 void UserInterface::rescale() {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();
-  RescaleOperation* op = new RescaleOperation(50,50);
-  op->applyOn(picture);
+  AffineTransformationOperation* op = new AffineTransformationOperation(picture);
+
+  // RescaleOperation* op = new RescaleOperation(50,50);
+  // op->applyOn(picture);
+  picture->getBackground()->setData(op->preview(1.0, 1.0, 3.14/5.0, picture->getWidth()/2, picture->getHeight()/2));
   picture->refresh();
   panel->refresh();
 }

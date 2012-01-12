@@ -3,8 +3,6 @@
 #include <QString>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QRadioButton>
-#include <QComboBox>
 
 #include "PictureModifier.hh"
 #include "Tracing.hh"
@@ -15,36 +13,35 @@
 /** Constructeurs et destructeurs */
 Histogram::Histogram(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier),
-  m_histogramMulti(new QImage(256, 100, QImage::Format_ARGB32)),
-  m_histogramRed(new QImage(256, 100, QImage::Format_ARGB32)),
-  m_histogramGreen(new QImage(256, 100, QImage::Format_ARGB32)),
-  m_histogramBlue(new QImage(256, 100, QImage::Format_ARGB32))
+  m_radioButtonRGB(new QRadioButton(tr("RGB"))),
+  m_radioButtonYUV(new QRadioButton(tr("YUV"))),
+  m_comboBoxLayer(new QComboBox),
+  m_histogramLabel(new QLabel),
+  m_histogramImage(new QImage(PixelMod::nbValue, 100, QImage::Format_ARGB32))
 {
   setAccessibleName(tr("Histogram"));
   
-  m_histogramLabel = new QLabel();
-  m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
+  m_radioButtonRGB->setChecked(true);
+  m_radioButtonYUV->setEnabled(false);
+  refreshComboBoxLayer();
+  refresh();
 
-  QRadioButton* radioButtonRGB = new QRadioButton(tr("RGB"));
-  QRadioButton* radioButtonYUV = new QRadioButton(tr("YUV"));
-  QComboBox* comboBoxLayer = new QComboBox;
-  comboBoxLayer->insertItem(0, tr("Red"));
-  comboBoxLayer->addItem(tr("Green"));
-  comboBoxLayer->addItem(tr("Blue"));
-  comboBoxLayer->addItem(tr("Red Green Blue"));
-  
+  connect(m_radioButtonRGB, SIGNAL(clicked()), this, SLOT(refreshComboBoxLayer()));
+  connect(m_radioButtonYUV, SIGNAL(clicked()), this, SLOT(refreshComboBoxLayer()));
+  connect(m_comboBoxLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(refreshImage()));
+
+  m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramImage)));
+
   QHBoxLayout* selectLayout = new QHBoxLayout;
-  selectLayout->addWidget(radioButtonRGB);
-  selectLayout->addWidget(radioButtonYUV);
-  selectLayout->addWidget(comboBoxLayer);
+  selectLayout->addWidget(m_radioButtonRGB);
+  selectLayout->addWidget(m_radioButtonYUV);
+  selectLayout->addWidget(m_comboBoxLayer);
   
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addLayout(selectLayout);
   layout->addWidget(m_histogramLabel);
 
   setLayout(layout);
-
-  refresh();
 }
 
 Histogram::~Histogram() {}
@@ -63,60 +60,86 @@ bool Histogram::isEnabled() { return QWidget::isEnabled() && m_pictureModifier !
 
 /** Methodes */
 void Histogram::refresh() {
+  bool rgb = m_radioButtonRGB->isChecked();
+  refreshData(rgb);
+
   if (m_pictureModifier != NULL) {
-    Tracing* tracing = m_pictureModifier->getPicture()->getBackground();  
-    for (int i = 0; i < 256; i++) {
-      m_histogramRedD[i] = 0;
-      m_histogramGreenD[i] = 0;
-      m_histogramBlueD[i] = 0;
+    Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
+
+    int nbPixel = tracing->getWidth() * tracing->getHeight();
+    int min[3] = { nbPixel };
+    int max[3] = { 0 };
+    int amplitude[3];
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 256; j++) {
+	if (max[i] < m_histogramData[i][j]) max[i] = m_histogramData[i][j];
+	if (min[i] > m_histogramData[i][j]) min[i] = m_histogramData[i][j];
+      }
+      amplitude[i] = max[i] - min[i];
     }
-    
+  
+    if (m_pictureModifier != NULL) {
+      int seuil[3];
+      for (int i = 0; i < 256; i++) {
+	for (int j = 0; j < 3; j++) seuil[j] = (m_histogramData[j][i] - min[j]) * 100 / amplitude[j];
+	for (int j = 0; j < 100; j++) {
+	  int color[3] = { 255, 255, 255 };
+	  for (int k = 0; k < 3; k++)
+	    if ((m_comboBoxLayer->currentIndex() != k && m_comboBoxLayer->currentIndex() < 3) || j < 100 - seuil[k]) color[k] = 0;
+	  
+	  if (color[0] + color[1] + color[2] == 0) m_histogramImage->setPixel(i, j, PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID));
+	  else m_histogramImage->setPixel(i, j, PixelMod::createRGB(color[0], color[1], color[2]));
+	}
+      }
+      m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramImage)));
+    }
+  }
+}
+
+void Histogram::refreshData(bool rgb) {
+  for (int i = 0; i < 3; i++)
+      for (int j = 0; j < 256; j++)
+	m_histogramData[i][j] = 0;
+
+  if (m_pictureModifier != NULL) {
+    Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
+
     for(int i = 0; i < tracing->getWidth(); i++) {
       for(int j = 0; j < tracing->getHeight(); j++) {
-        unsigned int rgb = tracing->getValue(i,j); 
-        m_histogramRedD[PixelMod::getRed(rgb)]++;
-        m_histogramBlueD[PixelMod::getBlue(rgb)]++;
-        m_histogramGreenD[PixelMod::getGreen(rgb)]++;
+	unsigned int color = tracing->getValue(i,j);
+	if (rgb) {
+	  m_histogramData[PixelMod::RED][PixelMod::getRed(color)]++;
+	  m_histogramData[PixelMod::GREEN][PixelMod::getGreen(color)]++;
+	  m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;
+	}
+	else {
+	  m_histogramData[PixelMod::LUMA][PixelMod::getLuma(color)]++;
+	  m_histogramData[PixelMod::CHROMINANCE_U][PixelMod::getChrominanceU(color)]++;
+	  m_histogramData[PixelMod::CHROMINANCE_V][PixelMod::getChrominanceV(color)]++;
+	}
       }
     }
-  
-    int nbPixel = tracing->getWidth() * tracing->getHeight();
-    int minRed = nbPixel, minGreen = nbPixel, minBlue = nbPixel;
-    int maxRed = 0, maxGreen = 0, maxBlue = 0;
-    for (int i = 0; i < 256; i++) {
-      if (maxRed < m_histogramRedD[i]) maxRed = m_histogramRedD[i]; 
-      if (maxGreen < m_histogramGreenD[i]) maxGreen = m_histogramGreenD[i]; 
-      if (maxBlue < m_histogramBlueD[i]) maxBlue = m_histogramBlueD[i]; 
-    
-      if (minRed > m_histogramRedD[i]) minRed = m_histogramRedD[i]; 
-      if (minGreen > m_histogramGreenD[i]) minGreen = m_histogramGreenD[i]; 
-      if (minBlue > m_histogramBlueD[i]) minBlue = m_histogramBlueD[i]; 
-    }
-  
-    int amplitudeRed = (maxRed - minRed);
-    int amplitudeGreen = (maxGreen - minGreen);
-    int amplitudeBlue = (maxBlue - minBlue);
-  
-    for (int i = 0; i < 256; i++) {
-      int seuilRed = (m_histogramRedD[i] - minRed) * 100 / amplitudeRed;
-      int seuilGreen = (m_histogramGreenD[i] - minGreen) * 100 / amplitudeGreen;
-      int seuilBlue = (m_histogramBlueD[i] - minBlue) * 100 / amplitudeBlue;
-
-      for (int j = 0; j < 100; j++) {
-        int red = 255, green = 255, blue = 255;
-        if (j < 100 - seuilRed) red = 0;
-        if (j < 100 - seuilGreen) green = 0; 
-        if (j < 100 - seuilBlue) blue = 0; 
-
-        if (red == 0 && green == 0 && blue == 0) 
-          m_histogramMulti->setPixel(i, j, PixelMod::createRGB(red, green, blue, 50));
-        else 
-          m_histogramMulti->setPixel(i, j, PixelMod::createRGB(red, green, blue, 255));
-        m_histogramRed->setPixel(i, j, PixelMod::createRGB(red, 0, 0));
-        m_histogramGreen->setPixel(i, j, PixelMod::createRGB(0, green, 0));
-        m_histogramBlue->setPixel(i, j, PixelMod::createRGB(0, 0, blue));
-      }
-    }
-    m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
   }
+}
+
+
+/** Slots */
+void Histogram::refreshComboBoxLayer() {
+  m_comboBoxLayer->clear();
+  if (m_radioButtonRGB->isChecked()) {
+    m_comboBoxLayer->addItem(tr("Red"));
+    m_comboBoxLayer->addItem(tr("Green"));
+    m_comboBoxLayer->addItem(tr("Blue"));
+    m_comboBoxLayer->addItem(tr("Red Green Blue"));
+  }
+  else {
+    m_comboBoxLayer->addItem(tr("Luma"));
+    m_comboBoxLayer->addItem(tr("Chrominance U"));
+    m_comboBoxLayer->addItem(tr("Chrominance V"));
+  }
+  refresh();
+}
+
+void Histogram::refreshImage() {
+  refresh();
 }

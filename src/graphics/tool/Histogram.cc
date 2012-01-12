@@ -1,6 +1,11 @@
 #include "Histogram.hh"
 
 #include <QString>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QRadioButton>
+#include <QComboBox>
+
 #include "PictureModifier.hh"
 #include "Tracing.hh"
 #include "Picture.hh"
@@ -15,7 +20,30 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   m_histogramGreen(new QImage(256, 100, QImage::Format_ARGB32)),
   m_histogramBlue(new QImage(256, 100, QImage::Format_ARGB32))
 {
-  setAccessibleName(QString("Histogram"));
+  setAccessibleName(tr("Histogram"));
+  
+  m_histogramLabel = new QLabel();
+  m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
+
+  QRadioButton* radioButtonRGB = new QRadioButton(tr("RGB"));
+  QRadioButton* radioButtonYUV = new QRadioButton(tr("YUV"));
+  QComboBox* comboBoxLayer = new QComboBox;
+  comboBoxLayer->addItem(tr("Red"));
+  comboBoxLayer->addItem(tr("Green"));
+  comboBoxLayer->addItem(tr("Blue"));
+  comboBoxLayer->addItem(tr("Red Green Blue"));
+  
+  QHBoxLayout* selectLayout = new QHBoxLayout;
+  selectLayout->addWidget(radioButtonRGB);
+  selectLayout->addWidget(radioButtonYUV);
+  selectLayout->addWidget(comboBoxLayer);
+  
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addLayout(selectLayout);
+  layout->addWidget(m_histogramLabel);
+
+  setLayout(layout);
+
   refresh();
 }
 
@@ -30,7 +58,7 @@ void Histogram::setPictureModifier(PictureModifier* pictureModifier) {
 
 
 /** Predicats */
-bool Histogram::isEnabled() { return QLabel::isEnabled() && m_pictureModifier != NULL; }
+bool Histogram::isEnabled() { return QWidget::isEnabled() && m_pictureModifier != NULL; }
 
 
 /** Methodes */
@@ -89,6 +117,6 @@ void Histogram::refresh() {
         m_histogramBlue->setPixel(i, j, PixelMod::createRGB(0, 0, blue));
       }
     }
-    setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
+    m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramMulti)));
   }
 }

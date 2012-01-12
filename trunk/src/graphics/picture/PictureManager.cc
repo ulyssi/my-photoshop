@@ -42,11 +42,11 @@ void PictureManager::refresh() {
     
     int t_width =parentWidget()->size().width();
     QSize* b_size =((PictureButton*)m_buttonGroup->buttons().first())->geticonSize();
-    m_nbCol=floor(t_width/(b_size->width()+m_layout->spacing()*2));    
-    m_nbLig=ceil(m_buttonGroup->buttons().size()/m_nbCol);
+    m_nbCol=floor((t_width-m_layout->spacing())/(b_size->width()+m_layout->spacing())+0.5);    
+    m_nbLig=ceil(float(m_buttonGroup->buttons().size())/float(m_nbCol));
     if (m_nbCol==0) m_nbCol=1;
     if (m_nbLig==0) m_nbLig=1;
-    m_QWidget->resize(m_nbCol*b_size->width()+m_layout->spacing()*(m_nbCol+10),m_nbLig*b_size->height()+m_layout->spacing()*(m_nbCol+5));
+    m_QWidget->resize(t_width-20,m_nbLig*b_size->height()+m_layout->spacing()*(m_nbLig*2));
     for (int i =0 ; i<m_buttonGroup->buttons().size();i++)
       m_layout->removeWidget((QPushButton*)m_buttonGroup->buttons().at(i));
     int l=0,c=0;

@@ -29,14 +29,13 @@ private :
   
   /** Attributs */
   int m_nbCol;
+  int m_nbLig;
   QWidget *m_QWidget;
   QGridLayout *m_layout;
   QList<PictureButton*> m_listPictureButton; 
   QButtonGroup *m_buttonGroup;
-
   /** Override Methodes from QWidget**/
   void 	resizeEvent ( QResizeEvent * event);
-  
 };
 
 #endif

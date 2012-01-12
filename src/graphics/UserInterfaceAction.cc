@@ -37,6 +37,7 @@ void UserInterface::open() {
 
 void UserInterface::save() {}
 void UserInterface::close(QWidget* q) {
+  m_pictureManager->removePictureModifier((PictureModifier*) q);
 }
 void UserInterface::exit() {}
 

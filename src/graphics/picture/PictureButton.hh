@@ -9,7 +9,6 @@ class PictureModifier;
 class Picture;
 class PictureButton : public PictureViewer, public QPushButton {
 public : 
-
   /** Constructeurs et destructeur */
   PictureButton(PictureModifier*); 
   ~PictureButton(); 

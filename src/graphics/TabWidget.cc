@@ -48,15 +48,21 @@ void TabWidget::selectTab(int index) {
 }
 
 void TabWidget::closeTab(int index) {
-    if (index != 1 && index != count()) { 
-    removeTab(index-1);
-    setCurrentIndex(index-2);
-   
-    m_userInterface->close(widget(index-1));
-  }
-  for (int j = 0; j < m_listpushbutton.size(); j++)
-    if (m_listpushbutton.at(j)->getIndex() > index && m_listpushbutton.at(j)->getIndex() <= count())
+  int r=0;
+  for (int j = 0; j < m_listpushbutton.size(); j++){
+    if (m_listpushbutton.at(j)->getIndex() > index ){//&& m_listpushbutton.at(j)->getIndex() <=count()){
       m_listpushbutton.at(j)->setIndex(m_listpushbutton.at(j)->getIndex() - 1);
+    }
+    if(m_listpushbutton.at(j)->getIndex()==index)
+      r=j;
+  }
+  m_listpushbutton.removeAt(r);
+  if (index != 0 && index != count()) { 
+    m_userInterface->close(widget(index-1));
+    removeTab(index-1);
+    setCurrentIndex(0);
+  }  
+  
 }
 
 
@@ -78,7 +84,6 @@ QPushButton* TabWidget::createCloseButton() {
   t_icon->setFlat(true);
   t_icon->setFixedWidth(16);
   t_icon->setFixedHeight(16);
-
   QObject::connect(t_icon, SIGNAL(clickedButton(int)), this, SLOT(closeTab(int)));
   m_listpushbutton.append(t_icon);
   return (QPushButton*)t_icon;

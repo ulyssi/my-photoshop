@@ -25,6 +25,7 @@ public :
   void removePictureModifier(PictureModifier*);
   void refresh();
   
+  
 private : 
   
   /** Attributs */

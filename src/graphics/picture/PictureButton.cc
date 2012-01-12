@@ -24,3 +24,4 @@ void PictureButton::seticonSize(int width , int height){
 Picture* PictureButton::getPicture(){
   return m_pictureModifier->getPicture();
 }
+

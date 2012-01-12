@@ -21,6 +21,10 @@ namespace PixelMod {
   inline int getBlue(unsigned int rgb) { return (BLUE_MSK & rgb); }
   inline int getGreen(unsigned int rgb) { return ((GREEN_MSK & rgb)>>8); }
   
+  inline int getLuma(unsigned int rgb) { return 0.299 * getRed(rgb) + 0.587 * getGreen(rgb) + 0.114 * getBlue(rgb); }
+  inline int getChrominanceU(unsigned int rgb) { return -0.14713 * getRed(rgb) - 0.28886 * getGreen(rgb) + 0.436 * getBlue(rgb); }
+  inline int getChrominanceV(unsigned int rgb) { return 0.615 * getRed(rgb) - 0.51499 * getGreen(rgb) - 0.10001 * getBlue(rgb); }
+  
   inline int threshold(int composante) {
     if (composante < 0) return 0;
     if (composante > 255) return 255;
@@ -28,7 +32,14 @@ namespace PixelMod {
   }
 
   inline unsigned int createRGB(int red, int green, int blue, int alpha = DefaultAlpha) {
-    return((alpha << 24) | (red << 16) | (green << 8) | blue);
+    return (alpha << 24) | (red << 16) | (green << 8) | blue;
+  }
+
+  inline unsigned int createYUV(int luma, int chrominanceU, int chrominanceV, int alpha = DefaultAlpha) {
+    return createRGB(luma + 1.13983 * chrominanceV,
+		     luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV,
+		     luma + 2.03211 * chrominanceU,
+		     alpha);
   }
 
   inline unsigned int createGrayScale(int grey, int alpha = DefaultAlpha) {

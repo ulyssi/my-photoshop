@@ -211,7 +211,6 @@ void UserInterface::convolveOperation(Matrix<double>* application) {
 }
 
 
-
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
   m_saveAct->setEnabled(false);

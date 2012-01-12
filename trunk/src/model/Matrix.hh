@@ -80,7 +80,6 @@ public:
       for (int j = 0; j < m_height; j++)
 	m_data[i][j] = value;
   }
-
 };
 
 #endif

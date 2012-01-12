@@ -23,12 +23,22 @@ AffineOperationChooser::AffineOperationChooser() {
   QGroupBox* scaleBox = new QGroupBox(QString("Scale"));
   scaleBox->setLayout(scaleLayout);
 
-  QSlider* rotationSlider = new QSlider(Qt::Horizontal);
-  rotationSlider->setTickInterval(100);
-  rotationSlider->setSingleStep(1);
+  QSlider* rotationSliderX = new QSlider(Qt::Horizontal);
+  rotationSliderX->setTickInterval(100);
+  rotationSliderX->setSingleStep(1);
+
+  QSlider* rotationSliderY = new QSlider(Qt::Horizontal);
+  rotationSliderY->setTickInterval(100);
+  rotationSliderY->setSingleStep(1);
+
+  QSlider* rotationSliderZ = new QSlider(Qt::Horizontal);
+  rotationSliderZ->setTickInterval(100);
+  rotationSliderZ->setSingleStep(1);
 
   QVBoxLayout *rotationLayout = new QVBoxLayout;
-  rotationLayout->addWidget(rotationSlider);
+  rotationLayout->addWidget(rotationSliderX);
+  rotationLayout->addWidget(rotationSliderY);
+  rotationLayout->addWidget(rotationSliderZ);
 
   QGroupBox* rotationBox = new QGroupBox(QString("Rotation"));
   rotationBox->setLayout(rotationLayout);

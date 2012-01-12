@@ -198,6 +198,7 @@ void UserInterface::about() {
 void UserInterface::colorConvertOperation(Matrix<double>* application) {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();  
+  std::cout<<picture->getName().toStdString();
   ColorConvertOperation* op = new ColorConvertOperation(application);
   op->applyOn(picture);
   delete op;

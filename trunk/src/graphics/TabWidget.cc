@@ -23,7 +23,10 @@ TabWidget::~TabWidget() {}
 
 
 /** Accesseurs */
-TabPanel* TabWidget::getTabPanel() { return (TabPanel*)widget(currentIndex()); }
+TabPanel* TabWidget::getTabPanel() { 
+    return (TabPanel*)widget(currentIndex());
+
+}
 
 
 /** Methodes */
@@ -37,7 +40,8 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
-  if (index > 0  && index >= tabBar()->count()-1) setCurrentIndex(index-1);
+  if (index > 0  && index >= tabBar()->count()-1) 
+    setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
     for(int i = 0; i < tabBar()->count(); i++) 

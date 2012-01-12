@@ -3,6 +3,7 @@
 #include "UserInterface.hh"
 #include "TracingManager.hh"
 #include "Histogram.hh"
+#include "AffineOperationChooser.hh"
 
 
 /** Constructeurs et destructeur */
@@ -21,6 +22,7 @@ UserInterface* TabPanel::getUserInterface() { return m_userInterface; }
 
 /** Mutateurs */
 void TabPanel::notifyCurrent() {
+  m_userInterface->getAffineOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getTracingManager()->setPictureModifier(NULL);
   m_userInterface->getHistogram()->setPictureModifier(NULL);
   m_userInterface->update();

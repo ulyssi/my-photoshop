@@ -57,11 +57,12 @@ public:
   
   /** Mutateurs */
   void setValue(int i, int j, T value) { m_data[i][j] = value; }
-  void setValue(int i, int j, T& value) { m_data[i][j] = value; }
+  //  void setValue(int i, int j, T& value) { m_data[i][j] = value; }
   
   void setData(Matrix<T>* matrix) {
     setData(matrix->m_width, matrix->m_height, matrix->m_data);
   }
+
   void setData(int width, int height, T** data) {
     delete m_data;
     m_width = width;

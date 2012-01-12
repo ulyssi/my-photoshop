@@ -225,6 +225,12 @@ void UserInterface::updateActions() {
   m_normalSizeAct->setEnabled(false);
   m_fitToWindowAct->setEnabled(false);
 
+  m_increaseContrastAct->setEnabled(true);
+  m_blurAct->setEnabled(true);
+  m_gaussianBlurAct->setEnabled(true);
+  m_leftEdgeStrengtheningAct->setEnabled(true);
+  m_edgeDetectionAct->setEnabled(true);
+  m_repulsingAct->setEnabled(true);
   m_greyScaleAct->setEnabled(true);
   m_colorConvertAct->setEnabled(true);
   m_convolveAct->setEnabled(true);
@@ -324,25 +330,49 @@ void UserInterface::createViewAction() {
 }
 
 void UserInterface::createOperationAction() {
-  m_greyScaleAct = new QAction(tr("&Grey Scale"), this);
+  m_greyScaleAct = new QAction(tr("Grey Scale"), this);
   m_greyScaleAct->setEnabled(false);
   connect(m_greyScaleAct, SIGNAL(triggered()), this, SLOT(greyScale()));
 
-  m_colorConvertAct = new QAction(tr("&ColorConvert"), this);
+  m_colorConvertAct = new QAction(tr("ColorConvert"), this);
   m_colorConvertAct->setEnabled(false);
   connect(m_colorConvertAct, SIGNAL(triggered()), this, SLOT(colorConvert()));
 
-  m_convolveAct = new QAction(tr("&Convolve"), this);
+  m_convolveAct = new QAction(tr("Convolve"), this);
   m_convolveAct->setEnabled(false);
   connect(m_convolveAct, SIGNAL(triggered()), this, SLOT(convolve()));
 
-  m_blackAndWhiteAct = new QAction(tr("&Black and White"), this);
+  m_blackAndWhiteAct = new QAction(tr("Black and White"), this);
   m_blackAndWhiteAct->setEnabled(false);
   connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
 
-  m_rescaleAct = new QAction(tr("&Rescale"), this);
+  m_rescaleAct = new QAction(tr("Rescale"), this);
   m_rescaleAct->setEnabled(false);
   connect(m_rescaleAct, SIGNAL(triggered()), this, SLOT(rescale()));
+
+  m_increaseContrastAct = new QAction(tr("Increase Contrast"), this);
+  m_increaseContrastAct->setEnabled(false);
+  connect(m_increaseContrastAct, SIGNAL(triggered()), this, SLOT(increaseContrast()));
+
+  m_blurAct = new QAction(tr("Blur"), this);
+  m_blurAct->setEnabled(false);
+  connect(m_blurAct, SIGNAL(triggered()), this, SLOT(blur()));
+
+  m_gaussianBlurAct = new QAction(tr("Gaussian Blur"), this);
+  m_gaussianBlurAct->setEnabled(false);
+  connect(m_gaussianBlurAct, SIGNAL(triggered()), this, SLOT(gaussianBlur()));
+
+  m_leftEdgeStrengtheningAct = new QAction(tr("Left Edge Strenghtening"), this);
+  m_leftEdgeStrengtheningAct->setEnabled(false);
+  connect(m_leftEdgeStrengtheningAct, SIGNAL(triggered()), this, SLOT(leftEdgeStrengthening()));
+
+  m_edgeDetectionAct = new QAction(tr("Edge Detection"), this);
+  m_edgeDetectionAct->setEnabled(false);
+  connect(m_edgeDetectionAct, SIGNAL(triggered()), this, SLOT(edgeDetection()));
+
+  m_repulsingAct = new QAction(tr("Repulsing"), this);
+  m_repulsingAct->setEnabled(false);
+  connect(m_repulsingAct, SIGNAL(triggered()), this, SLOT(repulsing()));
 }
 
 void UserInterface::createHelpAction() {

@@ -55,6 +55,12 @@ QMenu* UserInterface::createHelpMenu() {
 
 QMenu* UserInterface::createOperationMenu() {
   m_operationMenu = new QMenu(tr("&Operation"), this);
+  m_operationMenu->addAction(m_increaseContrastAct);
+  m_operationMenu->addAction(m_blurAct);
+  m_operationMenu->addAction(m_gaussianBlurAct);
+  m_operationMenu->addAction(m_leftEdgeStrengtheningAct);
+  m_operationMenu->addAction(m_edgeDetectionAct);
+  m_operationMenu->addAction(m_repulsingAct);
   m_operationMenu->addAction(m_greyScaleAct);
   m_operationMenu->addAction(m_colorConvertAct);
   m_operationMenu->addAction(m_convolveAct);

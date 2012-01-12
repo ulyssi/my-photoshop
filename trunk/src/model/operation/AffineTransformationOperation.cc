@@ -45,14 +45,16 @@ Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, doub
  
   double cosAlpha = cos(alpha), sinAlpha = sin(alpha);
   double transX = -centerX * scaleX, transY = -centerY * scaleY;
-  double mappingData[3][3] = {{ scaleX * cosAlpha, -scaleY * sinAlpha, 
-                                -transX * scaleX * cosAlpha + transY * scaleY * sinAlpha + transX },
-                              { scaleX * sinAlpha, scaleY * cosAlpha,
-                                -transX * scaleX * sinAlpha - transY * scaleY * cosAlpha + transY },
+  double mappingData[3][3] = {{ scaleX * cosAlpha, -scaleY * sinAlpha, 0 },
+                              // -transX * scaleX * cosAlpha + transY * scaleY * sinAlpha + transX },
+                              { scaleX * sinAlpha, scaleY * cosAlpha, 0 },
+                              // -transX * scaleX * sinAlpha - transY * scaleY * cosAlpha + transY },
                               { 0, 0, 1 }};
 
-  double mappingDataInv[3][3] = {{ cosAlpha / scaleX, sinAlpha / scaleY, -transX * cosAlpha - transY * sinAlpha + transX },
-                                 { -sinAlpha / scaleX, cosAlpha / scaleY, transX * sinAlpha - transY * cosAlpha + transY },
+  double mappingDataInv[3][3] = {{ cosAlpha / scaleX, sinAlpha / scaleY, 0 },
+                                   // -transX * cosAlpha - transY * sinAlpha + transX },
+                                 { -sinAlpha / scaleX, cosAlpha / scaleY, 0 },
+                                   // transX * sinAlpha - transY * cosAlpha + transY },
                                  { 0, 0, 1 }};
 
   // double mappingData[3][3] = {{ cosAlpha, -sinAlpha, 0 },

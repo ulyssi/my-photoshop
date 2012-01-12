@@ -184,7 +184,7 @@ void UserInterface::rescale() {
 
   // RescaleOperation* op = new RescaleOperation(50,50);
   // op->applyOn(picture);
-  picture->getBackground()->setData(op->preview(2.0, 2.0, 0.0, picture->getWidth()/2, picture->getHeight()/2));
+  picture->getBackground()->setData(op->preview(2.0, 2.0, 3.14159 / 5.0, picture->getWidth()/2, picture->getHeight()/2));
   picture->refresh();
   panel->refresh();
 }

@@ -185,6 +185,13 @@ private:
   QAction* m_algebricOperationAct;
   QAction* m_colorConvertOperationAct;
 
+  QAction* m_increaseContrastAct;
+  QAction* m_blurAct;
+  QAction* m_gaussianBlurAct;
+  QAction* m_leftEdgeStrengtheningAct;
+  QAction* m_edgeDetectionAct;
+  QAction* m_repulsingAct;
+
   QAction* m_greyScaleAct;
   QAction* m_colorConvertAct;
   QAction* m_convolveAct;

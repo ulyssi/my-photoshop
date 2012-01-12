@@ -6,6 +6,7 @@
 #include "Histogram.hh"
 #include "Picture.hh"
 #include "Matrix.hh"
+#include "AffineOperationChooser.hh"
 
 
 /** Constructeurs et destructeur */
@@ -30,6 +31,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {
+  getUserInterface()->getAffineOperationChooser()->setPictureModifier(this);
   getUserInterface()->getHistogram()->setPictureModifier(this);
   getUserInterface()->getTracingManager()->setPictureModifier(this);
   getUserInterface()->update();

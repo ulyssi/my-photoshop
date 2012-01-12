@@ -1,12 +1,13 @@
 #ifndef _HISTOGRAM_HH_
 #define _HISTOGRAM_HH_
 
+#include <QWidget>
 #include <QLabel>
 #include <QImage>
 
 class PictureModifier;
 
-class Histogram : public QLabel { Q_OBJECT
+class Histogram : public QWidget { Q_OBJECT
 
 public:
 
@@ -27,7 +28,8 @@ private:
   
   /** Attributs */
   PictureModifier* m_pictureModifier;
-    
+  QLabel* m_histogramLabel;
+
   QImage* m_histogramMulti;
   QImage* m_histogramRed;
   QImage* m_histogramGreen;

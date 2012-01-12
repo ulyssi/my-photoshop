@@ -16,8 +16,6 @@ AffineOperationChooser::AffineOperationChooser() {
   scaleSlider->setRange(-100, 100);
   scaleSlider->setTickInterval(100);
   scaleSlider->setSingleStep(1);
-  // scaleSlider->setInvertedAppearance(true);
-  // scaleSlider->setTracking(true);
 
   QVBoxLayout *scaleLayout = new QVBoxLayout;
   scaleLayout->addWidget(scaleSlider);

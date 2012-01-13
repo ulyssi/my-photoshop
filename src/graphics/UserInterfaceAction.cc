@@ -181,10 +181,8 @@ void UserInterface::rescale() {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();
   AffineTransformationOperation* op = new AffineTransformationOperation(picture);
-
-  // RescaleOperation* op = new RescaleOperation(50,50);
-  // op->applyOn(picture);
-  picture->getBackground()->setData(op->preview(1.0, 2.0, 3.14159 / 5.0, picture->getWidth()/3, picture->getHeight()/5));
+  op->setRescale(0.5, 0.5);
+  picture->getBackground()->setData(op->updatePreview());
   picture->refresh();
   panel->refresh();
 }

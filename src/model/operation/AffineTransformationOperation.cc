@@ -1,6 +1,7 @@
 #include "AffineTransformationOperation.hh"
 
 #include "Picture.hh"
+#include "Tracing.hh"
 #include "PixelMod.hh"
 #include <cmath>
 #include <iostream>
@@ -19,6 +20,7 @@ AffineTransformationOperation::AffineTransformationOperation(Picture* picture, O
   m_sinAlpha(0.0),
   m_symetrieX(1),
   m_symetrieY(1),
+  m_interpolation(BILINEAR_INTERPOLATION),
   m_pictureData(NULL),
   m_previewData(NULL),
   m_mapping(new Matrix<double>(3, 3)),
@@ -48,47 +50,45 @@ PixelMod::Type AffineTransformationOperation::getOutputType() {
 
 
 /** Mutateurs */
-void setRotationDegree(double alpha) { setRotation((alpha * 3.14159) / 180.0); }
-void setRotation(double alpha) {
+void AffineTransformationOperation::setRotationDegree(double alpha) { setRotation((alpha * 3.14159) / 180.0); }
+void AffineTransformationOperation::setRotation(double alpha) {
   m_alpha = alpha; 
   m_cosAlpha = cos(m_alpha);
   m_sinAlpha = sin(m_alpha);
 }
-void setRescale(double scaleX, double scaleY) {
+void AffineTransformationOperation::setRescale(double scaleX, double scaleY) {
   setRescaleX(scaleX);
   setRescaleY(scaleY);
 }
-void setRescaleX(double scaleX) { m_scaleX = scaleX; }
-void setRescaleY(double scaleY) { m_scaleY = scaleY; }
-void setCenter(double x0, double y0) {
+void AffineTransformationOperation::setRescaleX(double scaleX) { m_scaleX = scaleX; }
+void AffineTransformationOperation::setRescaleY(double scaleY) { m_scaleY = scaleY; }
+void AffineTransformationOperation::setCenter(double x0, double y0) {
   setCenterX(x0);
   setCenterY(y0);
 }
-void setCenterX(double x0) { m_x0 = x0; }
-void setCenterY(double y0) { m_y0 = y0; }
-void setSymetrie(bool symetrie) {
+void AffineTransformationOperation::setCenterX(double x0) { m_x0 = x0; }
+void AffineTransformationOperation::setCenterY(double y0) { m_y0 = y0; }
+void AffineTransformationOperation::setSymetrie(bool symetrie) {
   setSymetrieX(symetrie);
   setSymetrieY(symetrie);
 }
-void setSymetrieX(bool symetrieX) {
+void AffineTransformationOperation::setSymetrieX(bool symetrieX) {
   if (symetrieX) m_symetrieX = -1;
   else m_symetrieX = 1;
 }
-void setSymetrieY(bool symetrieY) {
+void AffineTransformationOperation::setSymetrieY(bool symetrieY) {
   if (symetrieY) m_symetrieY = -1;
   else m_symetrieY = 1;
 }
+void AffineTransformationOperation::setInterpolation(Interpolation interpolation) {
+  m_interpolation = interpolation;
+}
+
 
 /** Methodes */
-Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, double scaleY, double alpha, int centerX, int centerY) {
-  // if (m_operation != NULL) m_pictureData = m_operation->preview();
- 
-  m_scaleX = scaleX;
-  m_scaleY = scaleY;
-  m_alpha = alpha;
-  m_x0 = (double)centerX;
-  m_y0 = (double)centerY;
-  
+Matrix<unsigned int>* AffineTransformationOperation::updatePreview() {
+  // if (m_operation != NULL) m_pictureData = m_operation->updatePreview();
+
   double mappingData[3][3] = {
     { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
     { m_scaleX * m_sinAlpha, m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
@@ -97,7 +97,7 @@ Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, doub
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
       m_mapping->setValue(i, j, mappingData[i][j]);
-
+  
   createPreview();
   
   for (int i = 0; i < m_previewData->getWidth(); i++)
@@ -111,11 +111,36 @@ Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, doub
       m_previewData->setValue(i, j, bilinearInterpolation(x, y));
     }
   
-  return m_previewData; 
+  return m_previewData;
 }
 
-Picture* AffineTransformationOperation::apply(double, double, double , int, int, Interpolation) { 
-  return m_picture; 
+
+Picture* AffineTransformationOperation::applyOperation() { 
+  // if (m_operation != NULL) m_picture = m_operation->doOperation();
+  double mappingData[3][3] = {
+    { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
+    { m_scaleX * m_sinAlpha, m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
+    { 0, 0, 1 }
+  };
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      m_mapping->setValue(i, j, mappingData[i][j]);
+  
+  createPreview();
+  
+  for (int i = 0; i < m_previewData->getWidth(); i++)
+    for (int j = 0; j < m_previewData->getHeight(); j++) {
+      double x = 0, y = 0;
+      double vector[3] = { (double)i, (double)j, 1.0 };
+      for (int c = 0; c < 3; c++) {
+	x += m_mappingInv->getValue(0, c) * vector[c];
+        y += m_mappingInv->getValue(1, c) * vector[c];
+      }
+      m_previewData->setValue(i, j, bilinearInterpolation(x, y));
+    }
+  
+  m_picture->getBackground()->setData(m_previewData);
+  return m_picture;
 }
 
 

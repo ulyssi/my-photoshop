@@ -23,9 +23,23 @@ public:
   PixelMod::Type getInputType();
   PixelMod::Type getOutputType();
 
+  /** Mutateurs */
+  void setRotationDegree(double);
+  void setRotation(double);
+  void setRescale(double, double);
+  void setRescaleX(double);
+  void setRescaleY(double);
+  void setCenter(double, double);
+  void setCenterX(double);
+  void setCenterY(double);
+  void setSymetrie(bool);
+  void setSymetrieX(bool);
+  void setSymetrieY(bool);
+  void setInterpolation(Interpolation);
+
   /** Methodes */
-  Matrix<unsigned int>* preview(double, double, double, int, int);
-  Picture* apply(double, double, double , int, int, Interpolation = BILINEAR_INTERPOLATION);
+  Matrix<unsigned int>* updatePreview();
+  Picture* applyOperation();
   
 private:
 
@@ -40,6 +54,7 @@ private:
   double m_x0, m_y0;
   double m_cosAlpha, m_sinAlpha;
   int m_symetrieX, m_symetrieY;
+  Interpolation m_interpolation;
   
   Matrix<unsigned int>* m_pictureData;
   Matrix<unsigned int>* m_previewData;

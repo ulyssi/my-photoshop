@@ -15,10 +15,10 @@ PictureManager::PictureManager(UserInterface* userInterface) :
   m_buttonGroup->setExclusive(false);
   m_QWidget =new QWidget();
   m_layout= new QGridLayout();
-  m_layout->setAlignment(Qt::AlignCenter);
   m_layout->setSpacing(10);
   m_QWidget->setLayout(m_layout);
   setWidget(m_QWidget);
+  
 }
 
 PictureManager::~PictureManager() {
@@ -35,21 +35,20 @@ void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
 }
 
 void PictureManager::removePictureModifier(PictureModifier* picturemodifier){ 
-  int r;
+  m_mutex.lock();
   for (int i =0 ; i<m_buttonGroup->buttons().size();i++){
     if(((PictureButton*)m_buttonGroup->buttons().at(i))->getPicture()==picturemodifier->getPicture()){
-      r=i;
+      m_layout->removeWidget(m_buttonGroup->buttons().at(i));
+      m_buttonGroup->buttons().at(i)->hide();
+      m_buttonGroup->removeButton(m_buttonGroup->buttons().at(i));
     }
   }
-  m_layout->removeWidget(m_buttonGroup->buttons().at(r));
-  m_buttonGroup->buttons().at(r)->hide();
-  m_QWidget->repaint(0,0,-1,-1);
-  m_buttonGroup->removeButton(m_buttonGroup->buttons().at(r));
+  m_mutex.unlock();
   refresh();
 }
 
-
 void PictureManager::refresh() {
+  m_mutex.lock();
   if (parentWidget()!=NULL&&m_buttonGroup->buttons().size()!=0){
     int t_width =parentWidget()->size().width();
     QSize* b_size =((PictureButton*)m_buttonGroup->buttons().first())->geticonSize();
@@ -69,14 +68,11 @@ void PictureManager::refresh() {
      	l++;
       }
     }
-   
-   
   }
-  
+  m_mutex.unlock();
 }
 
 /** Override public method from QWidget **/
 void PictureManager::resizeEvent(QResizeEvent* event){
-  
   refresh();
 }

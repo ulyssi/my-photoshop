@@ -19,6 +19,9 @@
 /** Constructeurs et destructeur */
 AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   m_userInterface(userInterface),
+  m_scaleSliderX(new QSlider(Qt::Horizontal)),
+  m_scaleSliderY(new QSlider(Qt::Horizontal)),
+  m_rotationSlider(new QSlider(Qt::Horizontal)),
   m_scaleX(100), 
   m_scaleY(100), 
   m_alpha(0),
@@ -27,38 +30,32 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
 {
   setAccessibleName(tr("AffineOp"));
 
-  QSlider* scaleSliderX = new QSlider(Qt::Horizontal);
-  scaleSliderX->setFocusPolicy(Qt::StrongFocus);
-  scaleSliderX->setRange(0, 200);
-  scaleSliderX->setTickInterval(200);
-  scaleSliderX->setSingleStep(1);
-  scaleSliderX->setValue(100);
-  connect(scaleSliderX, SIGNAL(valueChanged(int)), this, SLOT(setValueScaleX(int)));
+  m_scaleSliderX->setFocusPolicy(Qt::StrongFocus);
+  m_scaleSliderX->setRange(0, 200);
+  m_scaleSliderX->setTickInterval(200);
+  m_scaleSliderX->setSingleStep(1);
+  connect(m_scaleSliderX, SIGNAL(valueChanged(int)), this, SLOT(setValueScaleX(int)));
 
-  QSlider* scaleSliderY = new QSlider(Qt::Horizontal);
-  scaleSliderY->setFocusPolicy(Qt::StrongFocus);
-  scaleSliderY->setRange(0, 200);
-  scaleSliderY->setTickInterval(200);
-  scaleSliderY->setSingleStep(1);
-  scaleSliderY->setValue(100);
-  connect(scaleSliderY, SIGNAL(valueChanged(int)), this, SLOT(setValueScaleY(int)));
+  m_scaleSliderY->setFocusPolicy(Qt::StrongFocus);
+  m_scaleSliderY->setRange(0, 200);
+  m_scaleSliderY->setTickInterval(200);
+  m_scaleSliderY->setSingleStep(1);
+  connect(m_scaleSliderY, SIGNAL(valueChanged(int)), this, SLOT(setValueScaleY(int)));
 
   QVBoxLayout *scaleLayout = new QVBoxLayout;
-  scaleLayout->addWidget(scaleSliderX);
-  scaleLayout->addWidget(scaleSliderY);
+  scaleLayout->addWidget(m_scaleSliderX);
+  scaleLayout->addWidget(m_scaleSliderY);
 
   QGroupBox* scaleBox = new QGroupBox(QString("Scale"));
   scaleBox->setLayout(scaleLayout);
 
-  QSlider* rotationSlider = new QSlider(Qt::Horizontal);
-  rotationSlider->setRange(-360, 360);
-  rotationSlider->setTickInterval(720);
-  rotationSlider->setSingleStep(1);
-  rotationSlider->setValue(0);
-  connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setValueRotation(int)));
+  m_rotationSlider->setRange(-360, 360);
+  m_rotationSlider->setTickInterval(720);
+  m_rotationSlider->setSingleStep(1);
+  connect(m_rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setValueRotation(int)));
 
   QVBoxLayout *rotationLayout = new QVBoxLayout;
-  rotationLayout->addWidget(rotationSlider);
+  rotationLayout->addWidget(m_rotationSlider);
   
   QGroupBox* rotationBox = new QGroupBox(tr("Rotation"));
   rotationBox->setLayout(rotationLayout);
@@ -71,7 +68,8 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   layout->addWidget(rotationBox);
   layout->addWidget(pushButtonApply);
   layout->addStretch();
-
+  
+  initialize();
   setLayout(layout);
 }
 
@@ -86,6 +84,12 @@ void AffineOperationChooser::setPictureModifier(PictureModifier* pictureModifier
 
 
 /** Methodes */
+void AffineOperationChooser::initialize() {
+  m_scaleSliderX->setValue(100);
+  m_scaleSliderY->setValue(100);
+  m_rotationSlider->setValue(0);
+}
+
 void AffineOperationChooser::refresh() { 
   affinePreview();
 }
@@ -119,4 +123,5 @@ void AffineOperationChooser::applyOperation() {
   p = op->applyOperation();
   p->refresh();
   m_pictureModifier->refresh();
+  initialize();
 }

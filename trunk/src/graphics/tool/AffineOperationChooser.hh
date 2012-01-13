@@ -30,12 +30,13 @@ public slots:
   void setValueScaleX(int);
   void setValueScaleY(int);
   void setValueRotation(int);
-  
+  void applyOperation();
+
 private:
 
   /** Attributs */
   UserInterface* m_userInterface;
-  int m_scaleX, m_scaleY, m_alpha;
+  double m_scaleX, m_scaleY, m_alpha;
   PictureModifier* m_pictureModifier;
   Previewer* m_previewer;
   QMutex* m_running;

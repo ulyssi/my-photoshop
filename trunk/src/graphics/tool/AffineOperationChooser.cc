@@ -51,8 +51,8 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   scaleBox->setLayout(scaleLayout);
 
   QSlider* rotationSlider = new QSlider(Qt::Horizontal);
-  rotationSlider->setRange(-180, 180);
-  rotationSlider->setTickInterval(360);
+  rotationSlider->setRange(-360, 360);
+  rotationSlider->setTickInterval(720);
   rotationSlider->setSingleStep(1);
   rotationSlider->setValue(0);
   connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setValueRotation(int)));
@@ -62,10 +62,14 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   
   QGroupBox* rotationBox = new QGroupBox(tr("Rotation"));
   rotationBox->setLayout(rotationLayout);
+
+  QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
+  connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
   
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(scaleBox);
   layout->addWidget(rotationBox);
+  layout->addWidget(pushButtonApply);
   layout->addStretch();
 
   setLayout(layout);
@@ -91,7 +95,10 @@ void AffineOperationChooser::affinePreview() {
   if (m_pictureModifier != NULL) {
     Picture* p = m_pictureModifier->getPicture();
     AffineTransformationOperation* op = new AffineTransformationOperation(p);
-    previewer->setData(op->preview(m_scaleX / 100.0, m_scaleY / 100.0, m_alpha * 3.14159 / 180.0, p->getWidth()/2, p->getHeight()/2));
+    op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
+    op->setRotationDegree(m_alpha);
+    op->setCenter(p->getWidth()/2, p->getHeight()/2);
+    previewer->setData(op->updatePreview());
   }
 }
 
@@ -101,4 +108,15 @@ void AffineOperationChooser::setValueScaleX(int scaleX) { m_scaleX = scaleX; ref
 
 void AffineOperationChooser::setValueScaleY(int scaleY) { m_scaleY = scaleY; refresh(); }
 
-void AffineOperationChooser::setValueRotation(int alpha) { m_alpha = alpha; refresh(); }
+void AffineOperationChooser::setValueRotation(int alpha) { m_alpha = alpha/2.0; refresh(); }
+
+void AffineOperationChooser::applyOperation() {
+  Picture* p = m_pictureModifier->getPicture();
+  AffineTransformationOperation* op = new AffineTransformationOperation(p);
+  op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
+  op->setRotationDegree(m_alpha);
+  op->setCenter(p->getWidth()/2, p->getHeight()/2);
+  p = op->applyOperation();
+  p->refresh();
+  m_pictureModifier->refresh();
+}

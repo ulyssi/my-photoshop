@@ -4,7 +4,7 @@
 #include "PictureModifier.hh"
 #include "Picture.hh"
 #include "math.h"
-#include <iostream>
+#include <QEvent>
 /** Constructeurs et destructeur */
 
 
@@ -74,5 +74,6 @@ void PictureManager::refresh() {
 
 /** Override public method from QWidget **/
 void PictureManager::resizeEvent(QResizeEvent* event){
+  
   refresh();
 }

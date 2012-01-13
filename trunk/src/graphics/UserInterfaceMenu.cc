@@ -36,6 +36,7 @@ QMenu* UserInterface::createViewMenu() {
   m_viewMenu->addAction(m_normalSizeAct);
   m_viewMenu->addAction(m_fitToWindowAct);
   m_viewMenu->addSeparator();
+  m_viewMenu->addAction(m_previewerAct);
   m_viewMenu->addAction(m_histogramAct);
   m_viewMenu->addAction(m_colorChooserAct);
   m_viewMenu->addAction(m_tracingManagerAct);

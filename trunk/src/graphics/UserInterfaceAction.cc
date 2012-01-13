@@ -299,6 +299,11 @@ void UserInterface::createViewAction() {
   m_fitToWindowAct->setEnabled(false);
   connect(m_fitToWindowAct, SIGNAL(triggered()), this, SLOT(fitToWindow()));
 
+  m_previewerAct = new QAction(tr("Previewer"), this);
+  m_previewerAct->setCheckable(true);
+  m_previewerAct->setChecked(true);
+  connect(m_previewerAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+  
   m_histogramAct = new QAction(tr("Histogram"), this);
   m_histogramAct->setCheckable(true);
   m_histogramAct->setChecked(true);

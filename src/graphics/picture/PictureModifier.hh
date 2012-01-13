@@ -7,6 +7,7 @@
 class Picture;
 class PictureViewer;
 class UserInterface;
+class PictureArea;
 
 class PictureModifier : public TabPanel {
 
@@ -30,7 +31,7 @@ private :
   /** Attributs */
   Picture* m_picture;
   QImage* m_image;
-  PictureViewer* m_pictureViewer;
+  PictureArea* m_pictureArea;
   
 };
 

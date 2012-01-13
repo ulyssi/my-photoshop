@@ -7,7 +7,7 @@
 #include "Picture.hh"
 #include "Matrix.hh"
 #include "AffineOperationChooser.hh"
-
+#include "PictureArea.hh"
 
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
@@ -15,7 +15,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_picture(picture),
   m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
-  m_pictureViewer = new PictureViewer(this);
+  m_pictureArea = new PictureArea(this);
 
   setTabName(m_picture->getName());
   refresh();
@@ -51,8 +51,8 @@ void PictureModifier::refresh() {
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
-  m_pictureViewer->refresh();
-  setWidget(m_pictureViewer);
+  m_pictureArea->refresh();
+  setWidget(m_pictureArea);
   
   getUserInterface()->getHistogram()->refresh();
   getUserInterface()->getTracingManager()->refresh();

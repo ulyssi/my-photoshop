@@ -9,11 +9,18 @@
 AffineTransformationOperation::AffineTransformationOperation(Picture* picture, Operation* operation) :
   m_operation(operation),
   m_picture(picture),
+  m_scaleX(1.0),
+  m_scaleY(1.0),
+  m_alpha(0.0),
+  m_x0(0.0),
+  m_y0(0.0),
+  m_cosAlpha(1.0),
+  m_sinAlpha(0.0),
   m_pictureData(NULL),
   m_previewData(NULL),
   m_mapping(new Matrix<double>(3, 3)),
   m_mappingInv(new Matrix<double>(3, 3)),
-  m_defaultColor(0xff556633)
+  m_defaultColor(0xffffffff)
 {
   m_pictureData = m_picture->getData();
 }
@@ -43,45 +50,31 @@ PixelMod::Type AffineTransformationOperation::getOutputType() {
 Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, double scaleY, double alpha, int centerX, int centerY) {
   // if (m_operation != NULL) m_pictureData = m_operation->preview();
  
-  double cosAlpha = cos(alpha), sinAlpha = sin(alpha);
-  double transX = -centerX * scaleX, transY = -centerY * scaleY;
-  double mappingData[3][3] = {{ scaleX * cosAlpha, -scaleY * sinAlpha, 0 },
-                              // -transX * scaleX * cosAlpha + transY * scaleY * sinAlpha + transX },
-                              { scaleX * sinAlpha, scaleY * cosAlpha, 0 },
-                              // -transX * scaleX * sinAlpha - transY * scaleY * cosAlpha + transY },
-                              { 0, 0, 1 }};
-
-  double mappingDataInv[3][3] = {{ cosAlpha / scaleX, sinAlpha / scaleY, 0 },
-                                   // -transX * cosAlpha - transY * sinAlpha + transX },
-                                 { -sinAlpha / scaleX, cosAlpha / scaleY, 0 },
-                                   // transX * sinAlpha - transY * cosAlpha + transY },
-                                 { 0, 0, 1 }};
-
-  // double mappingData[3][3] = {{ cosAlpha, -sinAlpha, 0 },
-  //                             { sinAlpha, cosAlpha, 0 },
-  //                             { 0, 0, 1 }};
-
-  // double mappingDataInv[3][3] = {{ cosAlpha, sinAlpha, 0 },
-  //                                { -sinAlpha, cosAlpha, 0 },
-  //                                { 0, 0, 1 }};
-
-  for (int i = 0; i < 3; i++) { 
-    for (int j = 0; j < 3; j++) {
-      m_mapping->setValue(i, j, (double)mappingData[i][j]);
-      m_mappingInv->setValue(i, j, (double)mappingDataInv[i][j]);
-      std::cout << m_mapping->getValue(i,j) << " ";
-    }
-    std::cout<<std::endl;
-  }
+  m_scaleX = scaleX;
+  m_scaleY = scaleY;
+  m_alpha = alpha;
+  m_x0 = (double)centerX;
+  m_y0 = (double)centerY;
+  m_cosAlpha = cos(m_alpha);
+  m_sinAlpha = sin(m_alpha);
+  
+  double mappingData[3][3] = {
+    { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
+    { m_scaleX * m_sinAlpha, m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
+    { 0, 0, 1 }
+  };
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      m_mapping->setValue(i, j, mappingData[i][j]);
 
   createPreview();
   
-  for(int i = 0; i < m_previewData->getWidth(); i++)
-    for(int j = 0; j < m_previewData->getHeight(); j++) {
+  for (int i = 0; i < m_previewData->getWidth(); i++)
+    for (int j = 0; j < m_previewData->getHeight(); j++) {
       double x = 0, y = 0;
-      double vector[3] = { (double)(i + m_minX), (double)(j + m_minY), 1.0 };
+      double vector[3] = { (double)i, (double)j, 1.0 };
       for (int c = 0; c < 3; c++) {
-        x += m_mappingInv->getValue(0, c) * vector[c];
+	x += m_mappingInv->getValue(0, c) * vector[c];
         y += m_mappingInv->getValue(1, c) * vector[c];
       }
       m_previewData->setValue(i, j, bilinearInterpolation(x, y));
@@ -90,7 +83,9 @@ Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, doub
   return m_previewData; 
 }
 
-Picture* AffineTransformationOperation::apply(double, double) { return m_picture; }
+Picture* AffineTransformationOperation::apply(double, double, double , int, int, Interpolation) { 
+  return m_picture; 
+}
 
 
 /**Methodes internes */
@@ -151,26 +146,17 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
 
 
 void AffineTransformationOperation::createPreview() {
-  int minX, minY, maxX, maxY;
   int limits[4][3] = {{ 0, 0, 1 },
                       { m_pictureData->getWidth(), 0, 1 },
                       { m_pictureData->getWidth(), m_pictureData->getHeight(), 1 },
                       { 0, m_pictureData->getHeight(), 1 }};
-
-  for (int i = 0; i < 3; i++) { 
-    for (int j = 0; j < 3; j++) {
-      std::cout << m_mapping->getValue(i,j) << " ";
-    }
-    std::cout<<std::endl;
-  }
-
+  int minX, minY, maxX, maxY;
   for (int p = 0; p < 4; p++) {
     double x = 0, y = 0;
     for (int i = 0; i < 3; i++) {
       x += m_mapping->getValue(0, i) * (double)limits[p][i];
       y += m_mapping->getValue(1, i) * (double)limits[p][i];
     }
-    std::cout << "Point " << p << " : " << x << " " << y << std::endl;
     if (p == 0) {
       minX = maxX = x;
       minY = maxY = y;
@@ -181,12 +167,18 @@ void AffineTransformationOperation::createPreview() {
     }
   }
 
-  std::cout << "bornes " << minX << " " << minY << " " << maxX << " " << maxY << std::endl;
-
   if (m_previewData != NULL) delete m_previewData;
   m_previewData = new Matrix<unsigned int>(maxX - minX, maxY - minY);
-  m_minX = minX;
-  m_minY = minY;
+
+  double mappingDataInv[3][3] = {
+    { m_cosAlpha / m_scaleX, m_sinAlpha / m_scaleX, (m_cosAlpha * (minX - m_x0) + m_sinAlpha * (minY - m_y0) + m_x0) / m_scaleX },
+    { -m_sinAlpha / m_scaleY, m_cosAlpha / m_scaleY, (m_sinAlpha * (m_x0 - minX) + m_cosAlpha * (minY - m_y0) + m_y0) / m_scaleY },
+    { 0, 0, 1 }
+  };
+
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      m_mappingInv->setValue(i, j, mappingDataInv[i][j]);
 }
 
 

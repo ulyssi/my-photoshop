@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QMutex>
 
 class PictureModifier;
 
@@ -35,6 +36,7 @@ private:
   int m_scaleX, m_scaleY, m_alpha;
   PictureModifier* m_pictureModifier;
   QLabel* m_labelPreview;
+  QMutex* m_running;
 
 };
 

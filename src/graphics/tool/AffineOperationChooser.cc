@@ -83,7 +83,7 @@ void AffineOperationChooser::setPictureModifier(PictureModifier* pictureModifier
 
 /** Methodes */
 void AffineOperationChooser::refresh() { 
-  affinePreview(); 
+  affinePreview();
 }
 
 void AffineOperationChooser::affinePreview() {
@@ -92,11 +92,6 @@ void AffineOperationChooser::affinePreview() {
     Picture* p = m_pictureModifier->getPicture();
     AffineTransformationOperation* op = new AffineTransformationOperation(p);
     previewer->setData(op->preview(m_scaleX / 100.0, m_scaleY / 100.0, m_alpha * 3.14159 / 180.0, p->getWidth()/2, p->getHeight()/2));
-    // QImage image(preview->getWidth(), preview->getHeight(), QImage::Format_ARGB32);
-    // for (int i = 0; i < image.width(); i++)
-    //   for (int j = 0; j < image.height(); j++)
-    // 	image.setPixel(i, j, preview->getValue(i,j));
-    // m_labelPreview->setPixmap(QPixmap::fromImage(image));
   }
 }
 

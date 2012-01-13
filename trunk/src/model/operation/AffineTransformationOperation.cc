@@ -17,6 +17,8 @@ AffineTransformationOperation::AffineTransformationOperation(Picture* picture, O
   m_y0(0.0),
   m_cosAlpha(1.0),
   m_sinAlpha(0.0),
+  m_symetrieX(1),
+  m_symetrieY(1),
   m_pictureData(NULL),
   m_previewData(NULL),
   m_mapping(new Matrix<double>(3, 3)),
@@ -45,7 +47,37 @@ PixelMod::Type AffineTransformationOperation::getOutputType() {
 }
 
 
-
+/** Mutateurs */
+void setRotationDegree(double alpha) { setRotation((alpha * 3.14159) / 180.0); }
+void setRotation(double alpha) {
+  m_alpha = alpha; 
+  m_cosAlpha = cos(m_alpha);
+  m_sinAlpha = sin(m_alpha);
+}
+void setRescale(double scaleX, double scaleY) {
+  setRescaleX(scaleX);
+  setRescaleY(scaleY);
+}
+void setRescaleX(double scaleX) { m_scaleX = scaleX; }
+void setRescaleY(double scaleY) { m_scaleY = scaleY; }
+void setCenter(double x0, double y0) {
+  setCenterX(x0);
+  setCenterY(y0);
+}
+void setCenterX(double x0) { m_x0 = x0; }
+void setCenterY(double y0) { m_y0 = y0; }
+void setSymetrie(bool symetrie) {
+  setSymetrieX(symetrie);
+  setSymetrieY(symetrie);
+}
+void setSymetrieX(bool symetrieX) {
+  if (symetrieX) m_symetrieX = -1;
+  else m_symetrieX = 1;
+}
+void setSymetrieY(bool symetrieY) {
+  if (symetrieY) m_symetrieY = -1;
+  else m_symetrieY = 1;
+}
 
 /** Methodes */
 Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, double scaleY, double alpha, int centerX, int centerY) {
@@ -56,8 +88,6 @@ Matrix<unsigned int>* AffineTransformationOperation::preview(double scaleX, doub
   m_alpha = alpha;
   m_x0 = (double)centerX;
   m_y0 = (double)centerY;
-  m_cosAlpha = cos(m_alpha);
-  m_sinAlpha = sin(m_alpha);
   
   double mappingData[3][3] = {
     { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },

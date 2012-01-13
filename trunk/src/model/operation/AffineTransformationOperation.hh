@@ -39,6 +39,7 @@ private:
   double m_scaleX, m_scaleY, m_alpha;
   double m_x0, m_y0;
   double m_cosAlpha, m_sinAlpha;
+  int m_symetrieX, m_symetrieY;
   
   Matrix<unsigned int>* m_pictureData;
   Matrix<unsigned int>* m_previewData;

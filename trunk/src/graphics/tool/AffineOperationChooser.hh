@@ -36,6 +36,9 @@ private:
 
   /** Attributs */
   UserInterface* m_userInterface;
+  QSlider* m_scaleSliderX;
+  QSlider* m_scaleSliderY;
+  QSlider* m_rotationSlider;
   double m_scaleX, m_scaleY, m_alpha;
   PictureModifier* m_pictureModifier;
   Previewer* m_previewer;

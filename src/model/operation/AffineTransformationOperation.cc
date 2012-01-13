@@ -1,6 +1,7 @@
 #include "AffineTransformationOperation.hh"
 
 #include "Picture.hh"
+#include "PixelMod.hh"
 #include <cmath>
 #include <iostream>
 
@@ -20,7 +21,7 @@ AffineTransformationOperation::AffineTransformationOperation(Picture* picture, O
   m_previewData(NULL),
   m_mapping(new Matrix<double>(3, 3)),
   m_mappingInv(new Matrix<double>(3, 3)),
-  m_defaultColor(0xffffffff)
+  m_defaultColor(PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID))
 {
   m_pictureData = m_picture->getData();
 }
@@ -147,9 +148,9 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
 
 void AffineTransformationOperation::createPreview() {
   int limits[4][3] = {{ 0, 0, 1 },
-                      { m_pictureData->getWidth(), 0, 1 },
-                      { m_pictureData->getWidth(), m_pictureData->getHeight(), 1 },
-                      { 0, m_pictureData->getHeight(), 1 }};
+                      { m_pictureData->getWidth()-1, 0, 1 },
+                      { m_pictureData->getWidth()-1, m_pictureData->getHeight()-1, 1 },
+                      { 0, m_pictureData->getHeight()-1, 1 }};
   int minX, minY, maxX, maxY;
   for (int p = 0; p < 4; p++) {
     double x = 0, y = 0;

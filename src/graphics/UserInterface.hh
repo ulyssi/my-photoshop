@@ -10,6 +10,7 @@
 
 #include "Matrix.hh"
 
+class Previewer;
 class Histogram;
 class ColorChooser;
 class AffineOperationChooser;
@@ -32,6 +33,7 @@ public:
   ~UserInterface();
 
   /** Accesseurs */
+  Previewer* getPreviewer();
   Histogram* getHistogram();
   ColorChooser* getColorChooser();
   TracingManager* getTracingManager();
@@ -44,6 +46,7 @@ public:
   /** Methodes */
   void update();
 
+  Previewer* createPreviewer();
   Histogram* createHistogram();
   ColorChooser* createColorChooser();
   TracingManager* createTracingManager();
@@ -120,6 +123,7 @@ private:
   QToolBar* createHelpToolBar();
   QToolBar* createOperationToolBar();
 
+  QDockWidget* createPreviewerDock();
   QDockWidget* createHistogramDock();
   QDockWidget* createColorChooserDock();
   QDockWidget* createTracingManagerDock();
@@ -134,6 +138,7 @@ private:
   PictureManager* m_pictureManager;
   TabWidget* m_viewTabWidget;
 
+  Previewer* m_previewer;
   Histogram* m_histogram;
   ColorChooser* m_colorChooser;
   TracingManager* m_tracingManager;
@@ -155,6 +160,7 @@ private:
   QToolBar* m_helpToolBar;
   QToolBar* m_operationToolBar;
 
+  QDockWidget* m_previewerDock;
   QDockWidget* m_histogramDock;
   QDockWidget* m_colorChooserDock;
   QDockWidget* m_tracingManagerDock;
@@ -176,6 +182,7 @@ private:
   QAction* m_normalSizeAct;
   QAction* m_fitToWindowAct;
 
+  QAction* m_previewerAct;
   QAction* m_histogramAct;
   QAction* m_colorChooserAct;
   QAction* m_tracingManagerAct;

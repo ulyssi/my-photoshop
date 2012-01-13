@@ -1,6 +1,7 @@
 #include "UserInterface.hh"
 
 #include "Histogram.hh"
+#include "Previewer.hh"
 #include "ColorChooser.hh"
 #include "TracingManager.hh"
 #include "AffineOperationChooser.hh"
@@ -11,6 +12,7 @@
 
 
 /** Accesseurs */
+Previewer* UserInterface::getPreviewer() { return m_previewer; }
 Histogram* UserInterface::getHistogram() { return m_histogram; }
 ColorChooser* UserInterface::getColorChooser() { return m_colorChooser; }
 TracingManager* UserInterface::getTracingManager() { return m_tracingManager; }
@@ -22,10 +24,11 @@ ColorConvertOperationChooser* UserInterface::getColorConvertOperationChooser() {
 
 
 /** Methodes */
+Previewer* UserInterface::createPreviewer() { return new Previewer(); }
 Histogram* UserInterface::createHistogram() { return new Histogram(); }
 ColorChooser* UserInterface::createColorChooser() { return new ColorChooser(); }
 TracingManager* UserInterface::createTracingManager() { return new TracingManager(); }
-AffineOperationChooser* UserInterface::createAffineOperationChooser() { return new AffineOperationChooser(); }
+AffineOperationChooser* UserInterface::createAffineOperationChooser() { return new AffineOperationChooser(this); }
 RescaleOperationChooser* UserInterface::createRescaleOperationChooser() { return new RescaleOperationChooser(); }
 ConvolveOperationChooser* UserInterface::createConvolveOperationChooser() { return new ConvolveOperationChooser(); }
 AlgebricOperationChooser* UserInterface::createAlgebricOperationChooser() { return new AlgebricOperationChooser(); }
@@ -49,9 +52,14 @@ void UserInterface::createToolBoxDocks() {
   addDockWidget(Qt::LeftDockWidgetArea, m_colorChooserDock = createColorChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_histogramDock = createHistogramDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_tracingManagerDock = createTracingManagerDock());
+  addDockWidget(Qt::LeftDockWidgetArea, m_previewerDock = createPreviewerDock());
 }
 
 void UserInterface::updateToolBoxDocks() {
+  if (m_previewerAct->isChecked() && m_previewer->isEnabled())
+    m_previewerDock->show();
+  else m_previewerDock->hide();
+
   if (m_histogramAct->isChecked() && m_histogram->isEnabled())
     m_histogramDock->show();
   else m_histogramDock->hide();
@@ -83,6 +91,10 @@ void UserInterface::updateToolBoxDocks() {
   if (m_colorConvertOperationAct->isChecked() && m_colorConvertOperationChooser->isEnabled())
     m_colorConvertOperationChooserDock->show();
   else m_colorConvertOperationChooserDock->hide();
+}
+
+QDockWidget* UserInterface::createPreviewerDock() {
+  return createDockWidget(m_previewer = createPreviewer()); 
 }
 
 QDockWidget* UserInterface::createHistogramDock() {

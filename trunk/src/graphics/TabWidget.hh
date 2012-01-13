@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QList>
+#include <QMutex>
 
 class MPushButton;
 class UserInterface;
@@ -40,7 +41,7 @@ private :
   /** Attributs */
   UserInterface* m_userInterface;
   QList<MPushButton*> m_listpushbutton;
-
+  QMutex m_mutex;
 };
 
 #endif

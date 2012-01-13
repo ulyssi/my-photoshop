@@ -6,6 +6,7 @@
 #include <QButtonGroup>
 #include <QGridLayout>
 #include <QResizeEvent>
+#include <QMutex>
 
 class UserInterface;
 class PictureButton;
@@ -37,6 +38,8 @@ private :
   QButtonGroup *m_buttonGroup;
   /** Override Methodes from QWidget**/
   void 	resizeEvent ( QResizeEvent * event);
+  QMutex m_mutex;
+
 };
 
 #endif

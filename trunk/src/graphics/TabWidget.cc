@@ -24,16 +24,21 @@ TabWidget::~TabWidget() {}
 
 /** Accesseurs */
 TabPanel* TabWidget::getTabPanel() { 
-    return (TabPanel*)widget(currentIndex());
-
+  m_mutex.lock();
+  QWidget* t_widget=widget(currentIndex());
+  m_mutex.unlock();
+  return (TabPanel*)t_widget;
 }
 
 
 /** Methodes */
 int TabWidget::addTab(TabPanel* tabPanel) {
   int index = insertTab(count()-1, tabPanel, tabPanel->getTabName());
-  if (index == 0) setCurrentIndex(index);
+  if (index == 0){ 
+    setCurrentIndex(index);
+  }
   else tabBar()->setTabButton(index, QTabBar::RightSide, (QWidget*)createCloseButton());
+  
   return index;
 }
 
@@ -52,21 +57,24 @@ void TabWidget::selectTab(int index) {
 }
 
 void TabWidget::closeTab(int index) {
-  int r=0;
+  int t_index=0;
+  int r=-1;
+  m_mutex.lock();
   for (int j = 0; j < m_listpushbutton.size(); j++){
-    if (m_listpushbutton.at(j)->getIndex() > index ){//&& m_listpushbutton.at(j)->getIndex() <=count()){
-      m_listpushbutton.at(j)->setIndex(m_listpushbutton.at(j)->getIndex() - 1);
+    t_index=m_listpushbutton.at(j)->getIndex();
+    if (t_index > index ){
+      m_listpushbutton.at(j)->setIndex(t_index-1);
     }
-    if(m_listpushbutton.at(j)->getIndex()==index)
+    if(t_index==index)
       r=j;
   }
-  m_listpushbutton.removeAt(r);
+  if (r!=-1) m_listpushbutton.removeAt(r);
+  m_mutex.unlock();
   if (index != 0 && index != count()) { 
     m_userInterface->close(widget(index-1));
     removeTab(index-1);
     setCurrentIndex(0);
   }  
-  
 }
 
 
@@ -77,12 +85,12 @@ QPushButton* TabWidget::createNewTabButton() {
   newTabButton->setFixedHeight(16);
   newTabButton->setIcon(QIcon::fromTheme("window-new"));
   newTabButton->setFlat(true);
-  
   QObject::connect(newTabButton, SIGNAL(clicked()), m_userInterface, SLOT(open()));
   return newTabButton;
 }
 
 QPushButton* TabWidget::createCloseButton() {
+  m_mutex.lock();
   MPushButton* t_icon = new MPushButton(count()-1);
   t_icon->setIcon(QIcon::fromTheme("window-close"));
   t_icon->setFlat(true);
@@ -90,5 +98,6 @@ QPushButton* TabWidget::createCloseButton() {
   t_icon->setFixedHeight(16);
   QObject::connect(t_icon, SIGNAL(clickedButton(int)), this, SLOT(closeTab(int)));
   m_listpushbutton.append(t_icon);
+  m_mutex.unlock();
   return (QPushButton*)t_icon;
 }

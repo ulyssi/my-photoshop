@@ -5,7 +5,6 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QSpacerItem>
-#include <QSlider>
 #include <QImage>
 #include "Matrix.hh"
 

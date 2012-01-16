@@ -9,6 +9,9 @@ PictureArea::PictureArea(PictureModifier* p){
   setScene(m_Scene);
   m_pictureViewer = new PictureViewer(p) ;
   m_proxy = m_Scene->addWidget(m_pictureViewer);
+  setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
+    
   show();
 }
 

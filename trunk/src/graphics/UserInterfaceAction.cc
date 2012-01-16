@@ -165,7 +165,7 @@ void UserInterface::repulsing() {
 
 void UserInterface::convolve() {
   double data[3][3] = {{ 0.00 , 1.0 , 0.00 },
-                       { 1.0 , -4. , 1.0},
+                       { 1.0 , -4, 1.0},
                        { 0.00 , 1.0 , 0.0 }};
   
   Matrix<double>* application = new Matrix<double>(3, 3);

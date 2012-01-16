@@ -2,7 +2,7 @@
 #define _AFFINE_OPERATION_CHOOSER_HH_
 
 #include <QWidget>
-#include <QMutex>
+#include <QSlider>
 #include <QSlider>
 
 class UserInterface;
@@ -22,7 +22,8 @@ public:
   void setPictureModifier(PictureModifier*);
 
   /** Methodes */
-  void affinePreview();
+  void initialize();
+  void refreshPreview();
 					   
 public slots:
 
@@ -32,18 +33,17 @@ public slots:
   void setValueScaleY(int);
   void setValueRotation(int);
   void applyOperation();
-  void initialize();
+  
 private:
 
   /** Attributs */
   UserInterface* m_userInterface;
-  QSlider * m_scaleSliderX;
-  QSlider * m_scaleSliderY;
-  QSlider * m_rotationSlider;
+  QSlider* m_scaleSliderX;
+  QSlider* m_scaleSliderY;
+  QSlider* m_rotationSlider;
   double m_scaleX, m_scaleY, m_alpha;
   PictureModifier* m_pictureModifier;
   Previewer* m_previewer;
-  QMutex* m_running;
 
 };
 

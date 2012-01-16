@@ -18,7 +18,7 @@ Previewer::Previewer() :
 Previewer::~Previewer() {}
 
 
-/** Methodes */
+/** Mutateurs */
 void Previewer::setPictureModifier(PictureModifier* pictureModifier) {
   setPicture(NULL);
   m_pictureModifier = pictureModifier; 
@@ -36,6 +36,14 @@ void Previewer::setData(Matrix<unsigned int>* data) {
   if (m_data != NULL) refresh();
 }
 
+
+/** Predicats */
+bool Previewer::isEnabled() { 
+  return (m_pictureModifier != NULL || m_picture != NULL || m_data != NULL);
+}
+
+
+/** Methodes */
 void Previewer::refresh() {
   Matrix<unsigned int>* data = NULL;
   if (m_pictureModifier != NULL) data = m_pictureModifier->getPicture()->getData();
@@ -50,7 +58,5 @@ void Previewer::refresh() {
     	image.setPixel(i, j, data->getValue(i,j));
     m_imageLabel->setPixmap(QPixmap::fromImage(image));
     m_imageLabel->resize(width, height);
-    resize(width, height);
-    ((QWidget*)parent())->resize(width, height);
   }
 }

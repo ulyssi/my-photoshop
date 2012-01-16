@@ -46,7 +46,6 @@ void PictureModifier::notifyCurrent() {
 Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 
 void PictureModifier::refresh() {
-  // /!\ penser a gerer le redimensionnement possible de l'image (Segmentation Fault)
   Matrix<unsigned int>* pictureData = m_picture->getData();
   if (pictureData->getWidth() != m_image->width() || pictureData->getHeight() != m_image->height()) {
     delete m_image;

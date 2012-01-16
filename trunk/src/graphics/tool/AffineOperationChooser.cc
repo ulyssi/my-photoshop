@@ -21,6 +21,14 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   m_scaleSliderX(new QSlider(Qt::Horizontal)),
   m_scaleSliderY(new QSlider(Qt::Horizontal)),
   m_rotationSlider(new QSlider(Qt::Horizontal)),
+  m_buttonSymetrieNormal(new QRadioButton(tr("Normal"))),
+  m_buttonSymetrieX(new QRadioButton(tr("Horizontal Symetrie"))),
+  m_buttonSymetrieY(new QRadioButton(tr("Vertical Symetrie"))),
+  m_buttonSymetrie(new QRadioButton(tr("Central Symetrie"))),
+  m_symetrieNormal(true),
+  m_symetrieX(false),
+  m_symetrieY(false),
+  m_symetrie(false),
   m_scaleX(100), 
   m_scaleY(100), 
   m_alpha(0),
@@ -47,8 +55,8 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   QGroupBox* scaleBox = new QGroupBox(QString("Scale"));
   scaleBox->setLayout(scaleLayout);
 
-  m_rotationSlider->setRange(-360, 360);
-  m_rotationSlider->setTickInterval(720);
+  m_rotationSlider->setRange(-180, 180);
+  m_rotationSlider->setTickInterval(360);
   m_rotationSlider->setSingleStep(1);
   connect(m_rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setValueRotation(int)));
 
@@ -57,6 +65,23 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   
   QGroupBox* rotationBox = new QGroupBox(tr("Rotation"));
   rotationBox->setLayout(rotationLayout);
+  
+  connect(m_buttonSymetrieNormal, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrieNormal(bool)));
+  connect(m_buttonSymetrieX, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrieX(bool)));
+  connect(m_buttonSymetrieY, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrieY(bool)));
+  connect(m_buttonSymetrie, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrie(bool)));
+  
+  QVBoxLayout *symetrieLayout = new QVBoxLayout;
+  symetrieLayout->addWidget(m_buttonSymetrieNormal);
+  symetrieLayout->addWidget(m_buttonSymetrieX);
+  symetrieLayout->addWidget(m_buttonSymetrieY);
+  symetrieLayout->addWidget(m_buttonSymetrie);
+
+  QGroupBox* symetrieBox = new QGroupBox(tr("Symetrie"));
+  symetrieBox->setLayout(symetrieLayout);
+
+  QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
+  connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(initialize()));
 
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
@@ -64,6 +89,8 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(scaleBox);
   layout->addWidget(rotationBox);
+  layout->addWidget(symetrieBox);
+  layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonApply);
   layout->addStretch();
   
@@ -86,6 +113,7 @@ void AffineOperationChooser::initialize() {
   m_scaleSliderX->setValue(100);
   m_scaleSliderY->setValue(100);
   m_rotationSlider->setValue(0);
+  m_buttonSymetrieNormal->setChecked(true);
 }
 
 void AffineOperationChooser::refresh() { 
@@ -99,6 +127,10 @@ void AffineOperationChooser::refreshPreview() {
     AffineTransformationOperation* op = new AffineTransformationOperation(p);
     op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
     op->setRotationDegree(m_alpha);
+    if (m_symetrieNormal) op->setSymetrie(false);
+    else if (m_symetrieX) op->setSymetrieX(m_symetrieX);
+    else if (m_symetrieY) op->setSymetrieY(m_symetrieY);
+    else if (m_symetrie) op->setSymetrie(m_symetrie);
     op->setCenter(p->getWidth() / 2.0, p->getHeight() / 2.0);
     previewer->setData(op->updatePreview());
   }
@@ -117,7 +149,27 @@ void AffineOperationChooser::setValueScaleY(int scaleY) {
 }
 
 void AffineOperationChooser::setValueRotation(int alpha) {
-  m_alpha = alpha/2.0;
+  m_alpha = alpha;
+  refresh(); 
+}
+
+void AffineOperationChooser::setValueSymetrieNormal(bool symetrieNormal) {
+  m_symetrieNormal = symetrieNormal;
+  refresh(); 
+}
+
+void AffineOperationChooser::setValueSymetrieX(bool symetrieX) {
+  m_symetrieX = symetrieX;
+  refresh(); 
+}
+
+void AffineOperationChooser::setValueSymetrieY(bool symetrieY) {
+  m_symetrieY = symetrieY;
+  refresh(); 
+}
+
+void AffineOperationChooser::setValueSymetrie(bool symetrie) {
+  m_symetrie = symetrie;
   refresh(); 
 }
 
@@ -126,6 +178,10 @@ void AffineOperationChooser::applyOperation() {
   AffineTransformationOperation* op = new AffineTransformationOperation(p);
   op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
   op->setRotationDegree(m_alpha);
+  if (m_symetrieNormal) op->setSymetrie(false);
+  else if (m_symetrieX) op->setSymetrieX(m_symetrieX);
+  else if (m_symetrieY) op->setSymetrieY(m_symetrieY);
+  else if (m_symetrie) op->setSymetrie(m_symetrie);
   op->setCenter(p->getWidth()/2, p->getHeight()/2);
   p = op->applyOperation();
   p->refresh();

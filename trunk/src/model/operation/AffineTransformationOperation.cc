@@ -73,11 +73,11 @@ void AffineTransformationOperation::setSymetrie(bool symetrie) {
   setSymetrieY(symetrie);
 }
 void AffineTransformationOperation::setSymetrieX(bool symetrieX) {
-  if (symetrieX) m_symetrieX = -1;
+  if (symetrieX) m_symetrieX = -1.0;
   else m_symetrieX = 1;
 }
 void AffineTransformationOperation::setSymetrieY(bool symetrieY) {
-  if (symetrieY) m_symetrieY = -1;
+  if (symetrieY) m_symetrieY = -1.0;
   else m_symetrieY = 1;
 }
 void AffineTransformationOperation::setInterpolation(Interpolation interpolation) {
@@ -90,8 +90,8 @@ Matrix<unsigned int>* AffineTransformationOperation::updatePreview() {
   // if (m_operation != NULL) m_pictureData = m_operation->updatePreview();
 
   double mappingData[3][3] = {
-    { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
-    { m_scaleX * m_sinAlpha, m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
+    { m_symetrieX * m_scaleX * m_cosAlpha, m_symetrieY * m_scaleY * -m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
+    { m_symetrieX * m_scaleX * m_sinAlpha, m_symetrieY * m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
     { 0, 0, 1 }
   };
   for (int i = 0; i < 3; i++)
@@ -118,8 +118,8 @@ Matrix<unsigned int>* AffineTransformationOperation::updatePreview() {
 Picture* AffineTransformationOperation::applyOperation() { 
   // if (m_operation != NULL) m_picture = m_operation->doOperation();
   double mappingData[3][3] = {
-    { m_scaleX * m_cosAlpha, -m_scaleY * m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
-    { m_scaleX * m_sinAlpha, m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
+    { m_symetrieX * m_scaleX * m_cosAlpha, m_symetrieY * m_scaleY * -m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
+    { m_symetrieX * m_scaleX * m_sinAlpha, m_symetrieY * m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
     { 0, 0, 1 }
   };
   for (int i = 0; i < 3; i++)
@@ -155,9 +155,7 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
   xfl=(int)floor(px);
   yfl=(int)floor(py);
   //condition a verifier
-  if(xfl>=m_pictureData->getWidth()||yfl>=m_pictureData->getHeight()||xfl<0||yfl<0){
-    return m_defaultColor;
-  }
+  if(xfl >= m_pictureData->getWidth() || yfl >= m_pictureData->getHeight() || xfl < 0 || yfl < 0) return m_defaultColor;
 
   xcl=xfl+1;
   ycl=yfl+1;
@@ -203,9 +201,9 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
 
 void AffineTransformationOperation::createPreview() {
   int limits[4][3] = {{ 0, 0, 1 },
-                      { m_pictureData->getWidth()-1, 0, 1 },
-                      { m_pictureData->getWidth()-1, m_pictureData->getHeight()-1, 1 },
-                      { 0, m_pictureData->getHeight()-1, 1 }};
+                      { m_pictureData->getWidth(), 0, 1 },
+                      { m_pictureData->getWidth(), m_pictureData->getHeight(), 1 },
+                      { 0, m_pictureData->getHeight(), 1 }};
   int minX, minY, maxX, maxY;
   for (int p = 0; p < 4; p++) {
     double x = 0, y = 0;
@@ -227,8 +225,12 @@ void AffineTransformationOperation::createPreview() {
   m_previewData = new Matrix<unsigned int>(maxX - minX, maxY - minY);
 
   double mappingDataInv[3][3] = {
-    { m_cosAlpha / m_scaleX, m_sinAlpha / m_scaleX, (m_cosAlpha * (minX - m_x0) + m_sinAlpha * (minY - m_y0) + m_x0) / m_scaleX },
-    { -m_sinAlpha / m_scaleY, m_cosAlpha / m_scaleY, (m_sinAlpha * (m_x0 - minX) + m_cosAlpha * (minY - m_y0) + m_y0) / m_scaleY },
+    { m_cosAlpha / (m_symetrieX * m_scaleX),
+      m_sinAlpha / (m_symetrieX * m_scaleX),
+      (m_cosAlpha * (minX - m_x0) + m_sinAlpha * (minY - m_y0) + m_x0) / (m_symetrieX * m_scaleX) },
+    { -m_sinAlpha / (m_symetrieY * m_scaleY),
+      m_cosAlpha / (m_symetrieY * m_scaleY),
+      (m_sinAlpha * (m_x0 - minX) + m_cosAlpha * (minY - m_y0) + m_y0) / (m_symetrieY * m_scaleY) },
     { 0, 0, 1 }
   };
 

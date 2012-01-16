@@ -20,6 +20,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_pictureArea = new PictureArea(this);
 
   setTabName(m_picture->getName());
+  setWidget(m_pictureArea);
   refresh();
 }
 
@@ -55,8 +56,8 @@ void PictureModifier::refresh() {
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
   m_pictureArea->refresh();
-  setWidget(m_pictureArea);
   
   getUserInterface()->getHistogram()->refresh();
+  getUserInterface()->getPreviewer()->refresh();
   getUserInterface()->getTracingManager()->refresh();
 }

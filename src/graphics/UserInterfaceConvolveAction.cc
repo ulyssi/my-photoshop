@@ -140,7 +140,7 @@ void UserInterface::convolveOperation(Matrix<double>* application) {
   Picture* picture = panel->getSelectedPicture();
   ConvolveOperation* op = new ConvolveOperation(picture);
   op->setKernel(application);
-  op->applyOperation();
+  picture = op->applyOperation();
   delete op;
   picture->refresh();
   panel->refresh();

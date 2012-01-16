@@ -110,12 +110,20 @@ private:
   void createViewAction();
   void createHelpAction();
   void createOperationAction();
+  void createAffineTransformationOperationAction();
+  void createColorConvertOperationAction();
+  void createConvolveOperationAction();
+  void createAlgebricOperationAction();
 
   QMenu* createFileMenu();
   QMenu* createEditMenu();
   QMenu* createViewMenu();
   QMenu* createHelpMenu();
   QMenu* createOperationMenu();
+  QMenu* createAffineTransformationOperationMenu();
+  QMenu* createColorConvertOperationMenu();
+  QMenu* createConvolveOperationMenu();
+  QMenu* createAlgebricOperationMenu();
   
   QToolBar* createFileToolBar();
   QToolBar* createEditToolBar();
@@ -202,7 +210,6 @@ private:
   QAction* m_greyScaleAct;
   QAction* m_colorConvertAct;
   QAction* m_convolveAct;
-  QAction* m_blackAndWhiteAct;
   QAction* m_rescaleAct;
 
   QAction* m_aboutAct;

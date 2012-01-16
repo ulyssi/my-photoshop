@@ -239,7 +239,6 @@ void UserInterface::updateActions() {
   m_colorConvertAct->setEnabled(true);
   m_convolveAct->setEnabled(true);
 
-  m_blackAndWhiteAct->setEnabled(false);
   m_rescaleAct->setEnabled(true);
 
   m_aboutAct->setEnabled(false);
@@ -339,6 +338,19 @@ void UserInterface::createViewAction() {
 }
 
 void UserInterface::createOperationAction() {
+  createAffineTransformationOperationAction();
+  createColorConvertOperationAction();
+  createConvolveOperationAction();
+  createAlgebricOperationAction();
+}
+
+void UserInterface::createAffineTransformationOperationAction() {
+  m_rescaleAct = new QAction(tr("Rescale"), this);
+  m_rescaleAct->setEnabled(false);
+  connect(m_rescaleAct, SIGNAL(triggered()), this, SLOT(rescale()));
+}
+
+void UserInterface::createColorConvertOperationAction() {
   m_greyScaleAct = new QAction(tr("Grey Scale"), this);
   m_greyScaleAct->setEnabled(false);
   connect(m_greyScaleAct, SIGNAL(triggered()), this, SLOT(greyScale()));
@@ -346,19 +358,9 @@ void UserInterface::createOperationAction() {
   m_colorConvertAct = new QAction(tr("ColorConvert"), this);
   m_colorConvertAct->setEnabled(false);
   connect(m_colorConvertAct, SIGNAL(triggered()), this, SLOT(colorConvert()));
+}
 
-  m_convolveAct = new QAction(tr("Convolve"), this);
-  m_convolveAct->setEnabled(false);
-  connect(m_convolveAct, SIGNAL(triggered()), this, SLOT(convolve()));
-
-  m_blackAndWhiteAct = new QAction(tr("Black and White"), this);
-  m_blackAndWhiteAct->setEnabled(false);
-  connect(m_blackAndWhiteAct, SIGNAL(triggered()), this, SLOT(blackAndWhite()));
-
-  m_rescaleAct = new QAction(tr("Rescale"), this);
-  m_rescaleAct->setEnabled(false);
-  connect(m_rescaleAct, SIGNAL(triggered()), this, SLOT(rescale()));
-
+void UserInterface::createConvolveOperationAction() {
   m_increaseContrastAct = new QAction(tr("Increase Contrast"), this);
   m_increaseContrastAct->setEnabled(false);
   connect(m_increaseContrastAct, SIGNAL(triggered()), this, SLOT(increaseContrast()));
@@ -382,7 +384,13 @@ void UserInterface::createOperationAction() {
   m_repulsingAct = new QAction(tr("Repulsing"), this);
   m_repulsingAct->setEnabled(false);
   connect(m_repulsingAct, SIGNAL(triggered()), this, SLOT(repulsing()));
+
+  m_convolveAct = new QAction(tr("Convolve"), this);
+  m_convolveAct->setEnabled(false);
+  connect(m_convolveAct, SIGNAL(triggered()), this, SLOT(convolve()));
 }
+
+void UserInterface::createAlgebricOperationAction() {}
 
 void UserInterface::createHelpAction() {
   m_aboutAct = new QAction(tr("&About"), this);

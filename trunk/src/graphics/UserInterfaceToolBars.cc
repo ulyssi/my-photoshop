@@ -43,7 +43,6 @@ QToolBar* UserInterface::createHelpToolBar() {
 
 QToolBar* UserInterface::createOperationToolBar() {
   m_operationToolBar = new QToolBar(tr("&Operation"), this);
-  m_operationToolBar->addAction(m_blackAndWhiteAct);
   m_operationToolBar->addAction(m_rescaleAct);
   return m_operationToolBar;
 }

@@ -1,7 +1,5 @@
 #include "Previewer.hh"
 
-#include <QVBoxLayout>
-
 #include "PictureModifier.hh"
 #include "Picture.hh"
 
@@ -14,9 +12,7 @@ Previewer::Previewer() :
   m_imageLabel(new QLabel())
 {
   setAccessibleName(tr("Preview"));
-  QVBoxLayout* layout = new QVBoxLayout();
-  layout->addWidget(m_imageLabel);
-  setLayout(layout);
+  setWidget(m_imageLabel);
 }
 
 Previewer::~Previewer() {}

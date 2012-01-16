@@ -46,10 +46,10 @@ bool Previewer::isEnabled() {
 /** Methodes */
 void Previewer::refresh() {
   Matrix<unsigned int>* data = NULL;
-  if (m_pictureModifier != NULL) data = m_pictureModifier->getPicture()->getData();
+  if (m_data != NULL) data = m_data;
   else if (m_picture != NULL) data = m_picture->getData();
-  else data = m_data;
-
+  else if (m_pictureModifier != NULL) data = m_pictureModifier->getPicture()->getData();
+  
   if (data != NULL) {
     int width = data->getWidth(), height = data->getHeight();
     QImage image(width, height, QImage::Format_ARGB32);

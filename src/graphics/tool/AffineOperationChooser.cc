@@ -101,7 +101,6 @@ void AffineOperationChooser::refreshPreview() {
     op->setRotationDegree(m_alpha);
     op->setCenter(p->getWidth() / 2.0, p->getHeight() / 2.0);
     previewer->setData(op->updatePreview());
-    previewer->refresh();
   }
 }
 

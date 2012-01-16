@@ -81,13 +81,13 @@ Matrix<unsigned int>* ConvolveOperation::updatePreview() {
       if (!m_alpha) alpha = PixelMod::getAlpha(m_pictureData->getValue(i, j));
       for (int i2 = 0; i2 < m_kernel->getWidth(); i2++)
       	for (int j2 = 0; j2 < m_kernel->getHeight(); j2++) {
-	  unsigned int color = m_pictureData->getValue(i + i2 - filterOffsetX, j + j2 - filterOffsetY);
-	  if (m_red) red += PixelMod::getRed(color) * filterData[i2][j2] / convolutionCoef;
+          unsigned int color = m_pictureData->getValue(i + i2 - filterOffsetX, j + j2 - filterOffsetY);
+          if (m_red) red += PixelMod::getRed(color) * filterData[i2][j2] / convolutionCoef;
       	  if (m_green) green += PixelMod::getGreen(color) * filterData[i2][j2] / convolutionCoef;
       	  if (m_blue) blue += PixelMod::getBlue(color) * filterData[i2][j2] / convolutionCoef;
       	  if (m_alpha) alpha += PixelMod::getAlpha(color) * filterData[i2][j2] / convolutionCoef;
       	}
-      m_previewData->setValue(i, j, PixelMod::createRGB(PixelMod::threshold(red), PixelMod::threshold(green), PixelMod::threshold(blue), PixelMod::getAlpha(alpha)));
+      m_previewData->setValue(i, j, PixelMod::createRGB(PixelMod::threshold(red), PixelMod::threshold(green), PixelMod::threshold(blue), PixelMod::threshold(alpha)));
     }
   return m_previewData;
 }

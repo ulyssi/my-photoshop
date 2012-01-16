@@ -130,6 +130,5 @@ void AffineOperationChooser::applyOperation() {
   p = op->applyOperation();
   p->refresh();
   m_pictureModifier->refresh();
-  refresh();
   initialize();
 }

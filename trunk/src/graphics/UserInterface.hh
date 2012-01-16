@@ -14,7 +14,6 @@ class Previewer;
 class Histogram;
 class ColorChooser;
 class AffineOperationChooser;
-class RescaleOperationChooser;
 class ConvolveOperationChooser;
 class AlgebricOperationChooser;
 class ColorConvertOperationChooser;
@@ -38,7 +37,6 @@ public:
   ColorChooser* getColorChooser();
   TracingManager* getTracingManager();
   AffineOperationChooser* getAffineOperationChooser();
-  RescaleOperationChooser* getRescaleOperationChooser();
   ConvolveOperationChooser* getConvolveOperationChooser();
   AlgebricOperationChooser* getAlgebricOperationChooser();
   ColorConvertOperationChooser* getColorConvertOperationChooser();
@@ -51,7 +49,6 @@ public:
   ColorChooser* createColorChooser();
   TracingManager* createTracingManager();
   AffineOperationChooser* createAffineOperationChooser();
-  RescaleOperationChooser* createRescaleOperationChooser();
   ConvolveOperationChooser* createConvolveOperationChooser();
   AlgebricOperationChooser* createAlgebricOperationChooser();
   ColorConvertOperationChooser* createColorConvertOperationChooser();
@@ -136,7 +133,6 @@ private:
   QDockWidget* createColorChooserDock();
   QDockWidget* createTracingManagerDock();
   QDockWidget* createAffineOperationChooserDock();
-  QDockWidget* createRescaleOperationChooserDock();
   QDockWidget* createConvolveOperationChooserDock();
   QDockWidget* createAlgebricOperationChooserDock();
   QDockWidget* createColorConvertOperationChooserDock();
@@ -151,7 +147,6 @@ private:
   ColorChooser* m_colorChooser;
   TracingManager* m_tracingManager;
   AffineOperationChooser* m_affineOperationChooser;
-  RescaleOperationChooser* m_rescaleOperationChooser;
   ConvolveOperationChooser* m_convolveOperationChooser;
   AlgebricOperationChooser* m_algebricOperationChooser;
   ColorConvertOperationChooser* m_colorConvertOperationChooser;
@@ -173,7 +168,6 @@ private:
   QDockWidget* m_colorChooserDock;
   QDockWidget* m_tracingManagerDock;
   QDockWidget* m_affineOperationChooserDock;
-  QDockWidget* m_rescaleOperationChooserDock;
   QDockWidget* m_convolveOperationChooserDock;
   QDockWidget* m_algebricOperationChooserDock;
   QDockWidget* m_colorConvertOperationChooserDock;

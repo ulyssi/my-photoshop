@@ -4,10 +4,12 @@
 #include "TracingManager.hh"
 #include "PictureViewer.hh"
 #include "Histogram.hh"
+#include "Previewer.hh"
 #include "Picture.hh"
 #include "Matrix.hh"
 #include "AffineOperationChooser.hh"
 #include "PictureArea.hh"
+
 
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
@@ -31,6 +33,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {
+  getUserInterface()->getPreviewer()->setPictureModifier(this);
   getUserInterface()->getAffineOperationChooser()->setPictureModifier(this);
   getUserInterface()->getHistogram()->setPictureModifier(this);
   getUserInterface()->getTracingManager()->setPictureModifier(this);

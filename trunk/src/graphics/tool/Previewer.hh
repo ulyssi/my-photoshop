@@ -23,6 +23,9 @@ public:
   void setPicture(Picture*);
   void setData(Matrix<unsigned int>*);
   
+  /** Predicats */
+  bool isEnabled();
+
   /** Methodes */
   void refresh();
 

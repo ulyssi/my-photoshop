@@ -1,6 +1,8 @@
 #ifndef _OPERATION_HH_
 #define _OPERATION_HH_
 
+#include "Matrix.hh"
+
 class Picture;
 class Tracing;
 
@@ -14,7 +16,15 @@ public:
   Operation(Operation*);
   ~Operation();
 
+  /** Accesseurs */
+  // Operation* getPreviousOperation();
+  // Matrix<unsigned int>* getPictureData();
+  // Matrix<unsigned int>* getPreviewData();
+
   /** Methodes */
+  // Matrix<unsigned int>* updatePreview();
+  // Picture* applyOperation();
+
   Picture* applyOn(Picture*);
   Tracing* applyOn(Tracing*);
 
@@ -24,7 +34,10 @@ public:
 
 private:
 
+  /** Attributs */
   Operation* m_operation;
+  Matrix<unsigned int>* m_pictureData;
+  Matrix<unsigned int>* m_previewData;
 
 };
 

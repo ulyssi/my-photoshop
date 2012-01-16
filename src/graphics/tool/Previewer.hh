@@ -1,7 +1,7 @@
 #ifndef _PREVIEW_HH_
 #define _PREVIEW_HH_
 
-#include <QWidget>
+#include <QScrollArea>
 #include <QLabel>
 
 #include "Matrix.hh"
@@ -10,7 +10,7 @@ class PictureModifier;
 class Picture;
 
 
-class Previewer : public QWidget { Q_OBJECT
+class Previewer : public QScrollArea { Q_OBJECT
 
 public:
 

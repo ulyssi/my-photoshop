@@ -138,8 +138,9 @@ void UserInterface::convolve() {
 void UserInterface::convolveOperation(Matrix<double>* application) {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();
-  ConvolveOperation* op = new ConvolveOperation(application);
-  op->applyOn(picture);
+  ConvolveOperation* op = new ConvolveOperation(picture);
+  op->setKernel(application);
+  op->applyOperation();
   delete op;
   picture->refresh();
   panel->refresh();

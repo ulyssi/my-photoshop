@@ -6,7 +6,10 @@
 
 PictureViewer::PictureViewer(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier)
-{}
+{
+  
+  refresh();
+}
 
 PictureViewer::~PictureViewer() {}
 
@@ -34,11 +37,12 @@ PictureViewer::~PictureViewer() {}
 //   scrollArea->setWidgetResizable(fitToWindow);
 // }
 
+#include <iostream>
 void PictureViewer::refresh() {
-  resize(m_pictureModifier->getImage()->width(), m_pictureModifier->getImage()->height());
+   resize(m_pictureModifier->getImage()->width(), m_pictureModifier->getImage()->height());
   setPixmap(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
-}
 
+}
 
 /** Methodes internes */
 // void PictureViewer::scaleImage(double scaleFactor) {

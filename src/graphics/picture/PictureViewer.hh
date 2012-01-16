@@ -5,10 +5,9 @@
 
 class PictureModifier;
 
-class PictureViewer : public QLabel { Q_OBJECT
+class PictureViewer : public QLabel{ Q_OBJECT
 
 public:
-  
   /** Constructeurs et destructeurs */
   PictureViewer(PictureModifier*);
   ~PictureViewer();
@@ -24,7 +23,7 @@ private:
   /** Attributs */
   double m_scaleFactor;
   PictureModifier* m_pictureModifier;
-  
+ 
 };
 
 #endif

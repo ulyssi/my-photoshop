@@ -7,7 +7,6 @@
 
 class UserInterface;
 class PictureModifier;
-class Previewer;
 
 
 class AffineOperationChooser : public QWidget { Q_OBJECT
@@ -47,8 +46,7 @@ private:
   bool m_symetrieNormal, m_symetrieX, m_symetrieY, m_symetrie;
   double m_scaleX, m_scaleY, m_alpha;
   PictureModifier* m_pictureModifier;
-  Previewer* m_previewer;
-
+  
 };
 
 #endif

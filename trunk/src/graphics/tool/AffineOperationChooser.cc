@@ -52,7 +52,7 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   scaleLayout->addWidget(m_scaleSliderX);
   scaleLayout->addWidget(m_scaleSliderY);
 
-  QGroupBox* scaleBox = new QGroupBox(QString("Scale"));
+  QGroupBox* scaleBox = new QGroupBox(tr("Scale"));
   scaleBox->setLayout(scaleLayout);
 
   m_rotationSlider->setRange(-180, 180);

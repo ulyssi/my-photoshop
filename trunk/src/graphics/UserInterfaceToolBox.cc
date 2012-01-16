@@ -6,8 +6,8 @@
 #include "TracingManager.hh"
 #include "AffineOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"
-#include "AlgebricOperationChooser.hh"
 #include "ColorConvertOperationChooser.hh"
+#include "AlgebricOperationChooser.hh"
 
 
 /** Accesseurs */
@@ -27,7 +27,7 @@ Histogram* UserInterface::createHistogram() { return new Histogram(); }
 ColorChooser* UserInterface::createColorChooser() { return new ColorChooser(); }
 TracingManager* UserInterface::createTracingManager() { return new TracingManager(); }
 AffineOperationChooser* UserInterface::createAffineOperationChooser() { return new AffineOperationChooser(this); }
-ConvolveOperationChooser* UserInterface::createConvolveOperationChooser() { return new ConvolveOperationChooser(); }
+ConvolveOperationChooser* UserInterface::createConvolveOperationChooser() { return new ConvolveOperationChooser(this); }
 AlgebricOperationChooser* UserInterface::createAlgebricOperationChooser() { return new AlgebricOperationChooser(); }
 ColorConvertOperationChooser* UserInterface::createColorConvertOperationChooser() { return new ColorConvertOperationChooser(); }
 
@@ -40,9 +40,8 @@ void UserInterface::createToolBoxDocks() {
   addDockWidget(Qt::LeftDockWidgetArea, m_colorConvertOperationChooserDock = createColorConvertOperationChooserDock());
   
   tabifyDockWidget(m_affineOperationChooserDock, m_convolveOperationChooserDock);
-  tabifyDockWidget(m_affineOperationChooserDock, m_algebricOperationChooserDock);
-  tabifyDockWidget(m_affineOperationChooserDock, m_convolveOperationChooserDock);
   tabifyDockWidget(m_affineOperationChooserDock, m_colorConvertOperationChooserDock);
+  tabifyDockWidget(m_affineOperationChooserDock, m_algebricOperationChooserDock);
 
   addDockWidget(Qt::LeftDockWidgetArea, m_colorChooserDock = createColorChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_histogramDock = createHistogramDock());

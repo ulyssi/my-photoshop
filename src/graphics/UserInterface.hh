@@ -77,7 +77,9 @@ public slots:
 
   void increaseContrast();
 
-  void blur();
+  void sobelX();
+  void sobelY();
+  void averageBlur();
   void gaussianBlur();
   void leftEdgeStrengthening();
   void edgeDetection();
@@ -195,7 +197,7 @@ private:
   QAction* m_colorConvertOperationAct;
 
   QAction* m_increaseContrastAct;
-  QAction* m_blurAct;
+  QAction* m_averageBlurAct;
   QAction* m_gaussianBlurAct;
   QAction* m_leftEdgeStrengtheningAct;
   QAction* m_edgeDetectionAct;

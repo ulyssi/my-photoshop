@@ -11,10 +11,8 @@
 #include "TabWidget.hh"
 #include "Histogram.hh"
 #include "ColorConvertOperation.hh"
-#include "ConvolveOperation.hh"
 #include "AffineTransformationOperation.hh"
 #include "Tracing.hh"
-#include <iostream>
 
 /** Slots */
 void UserInterface::open() {
@@ -79,104 +77,6 @@ void UserInterface::colorConvert() {
   delete application;
 }
 
-void UserInterface::increaseContrast() {
-  double data[3][3] = {{ 0.00 , -1.00 , 0.00 },
-                       { -1.00 , 5.00 , -1.00 },
-                       { 0.00 , -1.00 , 0.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::blur() {
-  double data[3][3] = {{ 1.00 , 1.00 , 1.00 },
-                       { 1.00 , 1.00 , 1.00 },
-                       { 1.00 , 1.00 , 1.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::gaussianBlur() {
-  double data[3][3] = {{ 1.00 , 2.00 , 1.00 },
-                       { 2.00 , 4.00 , 2.00 },
-                       { 1.00 , 2.00 , 1.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::leftEdgeStrengthening() {
-  double data[3][3] = {{ 0.00 , 0.00 , 0.00 },
-                       { -1.00 , 1.00 , 0.00 },
-                       { 0.00 , 0.00 , 0.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::edgeDetection() {
-  double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
-                       { 1.00 , -4.00 , 1.00 },
-                       { 0.00 , 1.00 , 0.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::repulsing() {
-  double data[3][3] = {{ -2.00 , -1.00 , 0.00 },
-                       { -1.00 , 1.00 , 1.00 },
-                       { 0.00 , 1.00 , 2.00 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
-void UserInterface::convolve() {
-  double data[3][3] = {{ 0.00 , 1.0 , 0.00 },
-                       { 1.0 , -4, 1.0},
-                       { 0.00 , 1.0 , 0.0 }};
-  
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-  
-  convolveOperation(application);
-  delete application;
-}
-
 void UserInterface::rescale() {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
   Picture* picture = panel->getSelectedPicture();
@@ -204,18 +104,6 @@ void UserInterface::colorConvertOperation(Matrix<double>* application) {
   panel->refresh();
 }
 
-void UserInterface::convolveOperation(Matrix<double>* application) {
-  TabPanel* panel = m_viewTabWidget->getTabPanel();
-  Picture* picture = panel->getSelectedPicture();
-  std::cout<<picture->getName().toStdString()<<std::endl;
-  ConvolveOperation* op = new ConvolveOperation(application);
-    op->applyOn(picture);
-  delete op;
-  picture->refresh();
-  panel->refresh();
-}
-
-
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
   m_saveAct->setEnabled(false);
@@ -230,7 +118,7 @@ void UserInterface::updateActions() {
   m_fitToWindowAct->setEnabled(false);
 
   m_increaseContrastAct->setEnabled(true);
-  m_blurAct->setEnabled(true);
+  m_averageBlurAct->setEnabled(true);
   m_gaussianBlurAct->setEnabled(true);
   m_leftEdgeStrengtheningAct->setEnabled(true);
   m_edgeDetectionAct->setEnabled(true);
@@ -365,9 +253,9 @@ void UserInterface::createConvolveOperationAction() {
   m_increaseContrastAct->setEnabled(false);
   connect(m_increaseContrastAct, SIGNAL(triggered()), this, SLOT(increaseContrast()));
 
-  m_blurAct = new QAction(tr("Blur"), this);
-  m_blurAct->setEnabled(false);
-  connect(m_blurAct, SIGNAL(triggered()), this, SLOT(blur()));
+  m_averageBlurAct = new QAction(tr("Blur"), this);
+  m_averageBlurAct->setEnabled(false);
+  connect(m_averageBlurAct, SIGNAL(triggered()), this, SLOT(averageBlur()));
 
   m_gaussianBlurAct = new QAction(tr("Gaussian Blur"), this);
   m_gaussianBlurAct->setEnabled(false);

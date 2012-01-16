@@ -79,7 +79,7 @@ QMenu* UserInterface::createColorConvertOperationMenu() {
 QMenu* UserInterface::createConvolveOperationMenu() {
   QMenu* menu = new QMenu(tr("Convolve"), this);
   menu->addAction(m_increaseContrastAct);
-  menu->addAction(m_blurAct);
+  menu->addAction(m_averageBlurAct);
   menu->addAction(m_gaussianBlurAct);
   menu->addAction(m_leftEdgeStrengtheningAct);
   menu->addAction(m_edgeDetectionAct);

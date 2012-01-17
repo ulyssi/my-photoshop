@@ -22,17 +22,18 @@ private:
   SelectionTool* m_selectionTool;
   QGraphicsProxyWidget* m_proxy;
   QPoint *up,*down;
-  bool cliked;		       
+  bool cliked;	
+  bool ctrl;
 
 private slots:
   /** SLOTS**/
- void 	keyPressEvent ( QKeyEvent * event );
- void 	keyReleaseEvent ( QKeyEvent * event );
- void 	mouseDoubleClickEvent ( QMouseEvent * event );
- void 	mouseMoveEvent ( QMouseEvent * event );
- void 	mousePressEvent ( QMouseEvent * event );
- void 	mouseReleaseEvent ( QMouseEvent * event );    
-
+  void 	keyPressEvent ( QKeyEvent * event );
+  void 	keyReleaseEvent ( QKeyEvent * event );
+  void 	mouseDoubleClickEvent ( QMouseEvent * event );
+  void 	mouseMoveEvent ( QMouseEvent * event );
+  void 	mousePressEvent ( QMouseEvent * event );
+  void 	mouseReleaseEvent ( QMouseEvent * event );    
+  void 	wheelEvent ( QWheelEvent * event );
 
 };
 

@@ -1,10 +1,10 @@
 #ifndef _PICTURE_AREA_HH
 #define _PICTURE_AREA_HH
-
-
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
+#include <QPoint>
+
 class PictureModifier;
 class PictureViewer;
 class SelectionTool;
@@ -19,8 +19,21 @@ private:
   PictureModifier* m_pictureModifier;
   QGraphicsScene *m_Scene;
   PictureViewer* m_pictureViewer;
-  QGraphicsRectItem* m_selectionTool;
+  SelectionTool* m_selectionTool;
   QGraphicsProxyWidget* m_proxy;
+  QPoint *up,*down;
+  bool cliked;		       
+
+private slots:
+  /** SLOTS**/
+ void 	keyPressEvent ( QKeyEvent * event );
+ void 	keyReleaseEvent ( QKeyEvent * event );
+ void 	mouseDoubleClickEvent ( QMouseEvent * event );
+ void 	mouseMoveEvent ( QMouseEvent * event );
+ void 	mousePressEvent ( QMouseEvent * event );
+ void 	mouseReleaseEvent ( QMouseEvent * event );    
+
+
 };
 
 #endif

@@ -14,7 +14,8 @@ public:
   
   /* Constructeurs et destructeur */
   Tracing(int, int, int offX = 0, int offY = 0);
-  Tracing(Matrix<unsigned int>*, int offX = 0, int offY = 0, float alpha = 1);
+  Tracing(Matrix<unsigned int>*, int offX = 0, int offY = 0,float alpha = 1.0);
+  Tracing(QString ,int offX=0,int offY=0,float alpha =1.0);
   ~Tracing();
   
   /** Accesseurs */

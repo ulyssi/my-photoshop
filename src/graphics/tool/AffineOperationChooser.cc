@@ -61,22 +61,6 @@ void AffineOperationChooser::refresh() {
   refreshPreview();
 }
 
-void AffineOperationChooser::refreshPreview() {
-  Previewer* previewer = m_userInterface->getPreviewer();
-  if (m_pictureModifier != NULL) {
-    Picture* p = m_pictureModifier->getPicture();
-    AffineTransformationOperation* op = new AffineTransformationOperation(p);
-    op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
-    op->setRotationDegree(m_alpha);
-    if (m_symetrieNormal) op->setSymetrie(false);
-    else if (m_symetrieX) op->setSymetrieX(m_symetrieX);
-    else if (m_symetrieY) op->setSymetrieY(m_symetrieY);
-    else if (m_symetrie) op->setSymetrie(m_symetrie);
-    op->setCenter(p->getWidth() / 2.0, p->getHeight() / 2.0);
-    previewer->setData(op->updatePreview());
-  }
-}
-
 
 /** Slots */
 void AffineOperationChooser::setValueScaleX(int scaleX) {
@@ -119,6 +103,22 @@ void AffineOperationChooser::resetOperation() {
   m_scaleSliderY->setValue(100);
   m_rotationSlider->setValue(0);
   m_buttonSymetrieNormal->setChecked(true);
+}
+
+void AffineOperationChooser::refreshPreview() {
+  Previewer* previewer = m_userInterface->getPreviewer();
+  if (m_pictureModifier != NULL) {
+    Picture* p = m_pictureModifier->getPicture();
+    AffineTransformationOperation* op = new AffineTransformationOperation(p);
+    op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
+    op->setRotationDegree(m_alpha);
+    if (m_symetrieNormal) op->setSymetrie(false);
+    else if (m_symetrieX) op->setSymetrieX(m_symetrieX);
+    else if (m_symetrieY) op->setSymetrieY(m_symetrieY);
+    else if (m_symetrie) op->setSymetrie(m_symetrie);
+    op->setCenter(p->getWidth() / 2.0, p->getHeight() / 2.0);
+    previewer->setData(op->updatePreview());
+  }
 }
 
 void AffineOperationChooser::applyOperation() {
@@ -208,15 +208,18 @@ QGroupBox* AffineOperationChooser::createSymetrieGroupBox() {
 QHBoxLayout* AffineOperationChooser::createControlsLayout() {
   QHBoxLayout* layout = new QHBoxLayout();
   
+  QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
-  connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
-
   QPushButton* pushButtonCustomized = new QPushButton(tr("Customized"));
-  pushButtonCustomized->setEnabled(false);
-
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
+
+  pushButtonCustomized->setEnabled(false);
+  
+  connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
+  connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
 
+  layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonCustomized);
   layout->addWidget(pushButtonApply);

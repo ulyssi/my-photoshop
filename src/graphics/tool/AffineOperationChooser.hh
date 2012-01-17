@@ -2,6 +2,8 @@
 #define _AFFINE_OPERATION_CHOOSER_HH_
 
 #include <QWidget>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <QSlider>
 #include <QRadioButton>
 
@@ -21,12 +23,12 @@ public:
   void setPictureModifier(PictureModifier*);
 
   /** Methodes */
+  void refresh();
   void refreshPreview();
 					   
 public slots:
 
   /** Slots */
-  void refresh();
   void setValueScaleX(int);
   void setValueScaleY(int);
   void setValueRotation(int);
@@ -34,10 +36,16 @@ public slots:
   void setValueSymetrieX(bool);
   void setValueSymetrieY(bool);
   void setValueSymetrie(bool);
-  void initialize();
+  void resetOperation();
   void applyOperation();
   
 private:
+
+  /** Methodes interne */
+  QGroupBox* createScaleGroupBox();
+  QGroupBox* createRotationGroupBox();
+  QGroupBox* createSymetrieGroupBox();
+  QHBoxLayout* createControlsLayout();
 
   /** Attributs */
   UserInterface* m_userInterface;

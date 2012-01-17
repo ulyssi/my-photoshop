@@ -24,7 +24,6 @@ public:
 
   /** Methodes */
   void refresh();
-  void refreshPreview();
 					   
 public slots:
 
@@ -37,6 +36,7 @@ public slots:
   void setValueSymetrieY(bool);
   void setValueSymetrie(bool);
   void resetOperation();
+  void refreshPreview();
   void applyOperation();
   
 private:

@@ -34,6 +34,18 @@ public:
   Matrix<unsigned int>* updatePreview();
   Picture* applyOperation();
 
+  /** Methodes de classe */
+  static Matrix<double>* createAverageBlurKernel(int = 1, int = 1);
+  static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1);
+
+  static Matrix<double>* createEdgeDetectionKernel(int = 1, int = 1);
+  static Matrix<double>* createLeftEdgeStrengtheningKernel(int = 1, int = 1);
+  static Matrix<double>* createRepulsingKernel(int = 1, int = 1);
+  static Matrix<double>* createIncreaseContrastKernel(int = 1, int = 1);
+
+  static Matrix<double>* createSobelXKernel(int = 1, int = 1);
+  static Matrix<double>* createSobelYKernel(int = 1, int = 1);
+
 private:
 
   /** Attributs */

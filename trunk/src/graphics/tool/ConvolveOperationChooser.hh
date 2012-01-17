@@ -34,6 +34,7 @@ public slots:
   /** Slots */
   void modifyBlur();
   void modifyDetection();
+  void customize();
   void resetOperation();
   void refreshPreview();
   void applyOperation();

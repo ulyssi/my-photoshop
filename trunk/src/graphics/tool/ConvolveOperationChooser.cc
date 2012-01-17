@@ -8,6 +8,7 @@
 #include "PictureModifier.hh"
 #include "Previewer.hh"
 #include "Picture.hh"
+#include "MatrixGenerator.hh"
 
 
 /** Constructeurs et destructeur */
@@ -38,12 +39,9 @@ void ConvolveOperationChooser::setPictureModifier(PictureModifier* pictureModifi
 
 
 /** Methodes */
-
 void ConvolveOperationChooser::refresh() { 
   refreshPreview();
 }
-
-
 
 
 /** Slots */
@@ -115,6 +113,14 @@ void ConvolveOperationChooser::modifyDetection() {
 	m_kernel->setValue(i, j, (double)data[i][j]);
   }
 
+  refreshPreview();
+}
+
+void ConvolveOperationChooser::customize() {
+  MatrixGenerator* matrixGenerator = new MatrixGenerator();
+  matrixGenerator->modify(m_kernel);
+
+  resetBlurOperation();
   refreshPreview();
 }
 
@@ -229,16 +235,19 @@ QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
 }
 
 QHBoxLayout* ConvolveOperationChooser::createControlsLayout() {
+  QHBoxLayout* layout = new QHBoxLayout();
+
+  QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
-  connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
-
   QPushButton* pushButtonCustomized = new QPushButton(tr("Customize"));
-  pushButtonCustomized->setEnabled(false);
-
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
+  
+  connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
+  connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
+  connect(pushButtonCustomized, SIGNAL(clicked()), this, SLOT(customize()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
 
-  QHBoxLayout* layout = new QHBoxLayout();
+  layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonCustomized);
   layout->addWidget(pushButtonApply);

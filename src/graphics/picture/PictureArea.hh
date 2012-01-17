@@ -7,7 +7,7 @@
 #include <QGraphicsProxyWidget>
 class PictureModifier;
 class PictureViewer;
-
+class SelectionTool;
 
 class PictureArea: public QGraphicsView { Q_OBJECT
 public: 
@@ -16,6 +16,7 @@ public:
   void refresh();
 private:
   /**Attributes**/
+  PictureModifier* m_pictureModifier;
   QGraphicsScene *m_Scene;
   PictureViewer* m_pictureViewer;
   QGraphicsRectItem* m_selectionTool;

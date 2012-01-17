@@ -118,9 +118,10 @@ void ConvolveOperationChooser::modifyDetection() {
 
 void ConvolveOperationChooser::customize() {
   MatrixGenerator* matrixGenerator = new MatrixGenerator();
-  matrixGenerator->modify(m_kernel);
+  m_kernel = matrixGenerator->modify(m_kernel);
 
-  resetBlurOperation();
+  // resetBlurOperation();
+  // resetDetectionOperation();
   refreshPreview();
 }
 

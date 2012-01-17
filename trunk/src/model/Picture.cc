@@ -53,7 +53,7 @@ void Picture::refresh() {
   for (int i = 0; i<getWidth(); i++)
     for (int j = 0; j < getHeight(); j++)
       m_data->setValue(i, j, (unsigned int)cTracing->getValue(i, j));
-  delete cTracing;
+  delete m;
  
 }
 

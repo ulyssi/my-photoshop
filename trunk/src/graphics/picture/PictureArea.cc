@@ -18,6 +18,7 @@ PictureArea::PictureArea(PictureModifier* p){
   up = new QPoint(0,0);
   down = new QPoint(0,0);
   cliked=false;
+  ctrl=false;
   show();
 }
 
@@ -32,13 +33,19 @@ void PictureArea::refresh(){
 } 
 
 
-
-void PictureArea::keyPressEvent ( QKeyEvent * event ){}
+#include <iostream>
+void PictureArea::keyPressEvent ( QKeyEvent * event ){
+  if (event->modifiers()==Qt::ControlModifier)
+   ctrl= true;
+   
+}
 void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
- 
+
+  if (event->modifiers()==Qt::ControlModifier)
+    ctrl= false;
 }
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){}
-#include <iostream>
+
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   if(cliked){
     //std::cout<<"mousemoved clicked"<<std::endl;
@@ -68,4 +75,14 @@ void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
    cliked=false;
    //std::cout<<"mouserealsed"<<std::endl;
  
+}
+
+void PictureArea::wheelEvent ( QWheelEvent * event ){
+  if(ctrl)
+    {
+        QSize size= m_pictureViewer->sizeHint();
+	setSceneRect ( (qreal) 0, (qreal) 0, (qreal) size.width()*0.5, (qreal) size.height()*0.5 );
+	resize(size.width(),size.height());
+	//std::cout<<"ctrl+wheel"<<std::endl;
+    }
 }

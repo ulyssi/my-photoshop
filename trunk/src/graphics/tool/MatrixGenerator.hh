@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QGroupBox>
 #include <QHBoxLayout>
+#include <QGridLayout>
+#include <QSpinBox>
 
 #include "Matrix.hh"
 
@@ -18,7 +20,11 @@ public:
 
   /** Methodes */
   Matrix<double>* modify(Matrix<double>* matrix);
-  Matrix<double>* run();
+
+public slots:
+
+  /** Slots */
+  void resizeMatrix();
   
 private:
 
@@ -29,6 +35,8 @@ private:
   
   /** Attributs */
   Matrix<double>* m_matrix;
+  QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
+  QGridLayout* m_matrixLayout;
 
 };
 

@@ -20,7 +20,6 @@ Matrix<double>* MatrixGenerator::modify(Matrix<double>* matrix) {
     m_matrix = new Matrix<double>(1, 1);
     matrix->setValue(0, 0, 1.0);
   }
-  show();
   
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(createMatrixBox());
@@ -30,14 +29,46 @@ Matrix<double>* MatrixGenerator::modify(Matrix<double>* matrix) {
   resize(0, 0);
 
   setLayout(layout);
-  return m_matrix;
+  if (QDialog::Accepted == exec()) return m_matrix;
+  else return matrix;
 }
 
-Matrix<double>* MatrixGenerator::run() {
-  show();
-  Matrix<double>* matrix = new Matrix<double>(1, 1);
-  matrix->setValue(0, 0, 1.0);
-  return matrix;
+
+/** Slots */
+void MatrixGenerator::resizeMatrix() {
+  int width = m_matrix->getWidth(), height = m_matrix->getHeight();
+
+  for (int i = 0; i < width; i++)
+    for (int j = 0; j < height; j++) {
+      QWidget* widget = m_matrixLayout->itemAtPosition(i, j)->widget();
+      m_matrixLayout->removeItem(m_matrixLayout->itemAtPosition(i, j));
+      delete m_matrixLayout->itemAtPosition(i, j);
+      delete widget;
+    }
+  
+  if (width != m_spinBoxWidth->value()) width = m_spinBoxWidth->value();
+  if (height != m_spinBoxHeight->value()) height = m_spinBoxHeight->value();
+      
+  Matrix<double>* tmp = new Matrix<double>(width, height);
+  for (int i = 0; i < width; i++)
+    for (int j = 0; j < height; j++) {
+      int i2 = i - (width + m_matrix->getWidth())/2 - 1;
+      int j2 = j - (height + m_matrix->getHeight())/2 - 1;
+      if (0 <= i2 && i2 < m_matrix->getWidth() && 0 <= j2 && j2 < m_matrix->getHeight())
+        tmp->setValue(i, j, m_matrix->getValue(i2, j2));
+      else tmp->setValue(i, j, 0);
+    }
+  delete m_matrix;
+  m_matrix = tmp;
+
+  for (int i = 0; i < m_matrix->getWidth(); i++)
+    for (int j = 0; j < m_matrix->getHeight(); j++) {
+      QSpinBox* spinBox = new QSpinBox();
+      spinBox->setValue(m_matrix->getValue(i, j));
+      m_matrixLayout->addWidget(spinBox, i, j);
+    }
+
+  resize(0, 0);
 }
 
 
@@ -49,22 +80,26 @@ QGroupBox* MatrixGenerator::createDimensionBox() {
   layout->addStretch();
   {
     QLabel* label = new QLabel("Width");
-    QSpinBox* spinBox = new QSpinBox();
-    spinBox->setMinimum(1);
-    spinBox->setValue(m_matrix->getWidth());
-    spinBox->setSingleStep(2);
+    m_spinBoxWidth = new QSpinBox();
+    m_spinBoxWidth->setMinimum(1);
+    m_spinBoxWidth->setValue(m_matrix->getWidth());
+    m_spinBoxWidth->setSingleStep(2);
+    connect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(resizeMatrix()));
+    
     layout->addWidget(label);
-    layout->addWidget(spinBox);
+    layout->addWidget(m_spinBoxWidth);
   }
 
   {
     QLabel* label = new QLabel("Height");
-    QSpinBox* spinBox = new QSpinBox();
-    spinBox->setMinimum(1);
-    spinBox->setValue(m_matrix->getHeight());
-    spinBox->setSingleStep(2);
+    m_spinBoxHeight = new QSpinBox();
+    m_spinBoxHeight->setMinimum(1);
+    m_spinBoxHeight->setValue(m_matrix->getHeight());
+    m_spinBoxHeight->setSingleStep(2);
+    connect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(resizeMatrix()));
+
     layout->addWidget(label);
-    layout->addWidget(spinBox);
+    layout->addWidget(m_spinBoxHeight);
   }
   layout->addStretch();
 
@@ -73,19 +108,17 @@ QGroupBox* MatrixGenerator::createDimensionBox() {
 }
 
 QGroupBox* MatrixGenerator::createMatrixBox() {
-  QGroupBox* groupBox = new QGroupBox(tr("Matrix"));  
-  QGridLayout* matrixLayout = new QGridLayout;
-  
-  {
-    for (int i = 0; i < m_matrix->getWidth(); i++)
-      for (int j = 0; j < m_matrix->getHeight(); j++) {
-	QSpinBox* spinBox = new QSpinBox();
-	spinBox->setValue(m_matrix->getValue(i, j));
-	matrixLayout->addWidget(spinBox, i, j);
-      }
-  }
+  QGroupBox*  groupBox = new QGroupBox(tr("Matrix"));  
+  m_matrixLayout = new QGridLayout;
 
-  groupBox->setLayout(matrixLayout);
+  for (int i = 0; i < m_matrix->getWidth(); i++)
+    for (int j = 0; j < m_matrix->getHeight(); j++) {
+      QSpinBox* spinBox = new QSpinBox();
+      spinBox->setValue(m_matrix->getValue(i, j));
+      m_matrixLayout->addWidget(spinBox, i, j);
+    }
+
+  groupBox->setLayout(m_matrixLayout);
   return groupBox;
 }
 
@@ -94,6 +127,9 @@ QHBoxLayout* MatrixGenerator::createControlsLayout() {
   
   QPushButton* pushButtonCancel = new QPushButton(tr("Cancel"));
   QPushButton* pushButtonAccept = new QPushButton(tr("Accept"));
+
+  connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+  connect(pushButtonAccept, SIGNAL(clicked()), this, SLOT(accept()));
 
   layout->addStretch();
   layout->addWidget(pushButtonCancel);

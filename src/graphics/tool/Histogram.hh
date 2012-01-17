@@ -29,6 +29,7 @@ public:
   /** Methodes */
   void refresh();
   void crop(int,int);
+  void equalization();
   void refreshData(bool = true);
 
 public slots:
@@ -38,7 +39,8 @@ public slots:
   void refreshImage();
   void sliderInfChanged(int);
   void sliderSupChanged(int);
-  void refreshAfterCrop();
+  void applyHistogramCrop();
+  void applyHistogramEqualization();
   
 private:
   
@@ -52,10 +54,11 @@ private:
   QSlider* m_sliderInf;
   QSlider* m_sliderSup;
   QPushButton* m_applyRescale;
+  QPushButton* m_applyEqualization;
   QLabel* m_histogramLabel;
   QImage* m_histogramImage;
   int m_histogramData[3][256];
-  int m_histogramDataRescaled[3][256];
+  int m_cumulativeHistogram[3][256];
 
 };
 

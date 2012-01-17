@@ -22,6 +22,7 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   m_sliderInf(new QSlider(Qt::Horizontal)),
   m_sliderSup(new QSlider(Qt::Horizontal)),
   m_applyRescale(new QPushButton(QString("Apply Rescale"))),
+  m_applyEqualization(new QPushButton(QString("Apply Equalization"))),
   m_histogramLabel(new QLabel),
   m_histogramImage(new QImage(PixelMod::nbValue, 100, QImage::Format_ARGB32))
 {
@@ -41,8 +42,8 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   connect(m_comboBoxLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(refreshImage()));
   connect(m_sliderInf, SIGNAL(valueChanged(int)), this, SLOT(sliderInfChanged(int)));
   connect(m_sliderSup, SIGNAL(valueChanged(int)), this, SLOT(sliderSupChanged(int)));
-  connect(m_applyRescale, SIGNAL(clicked()), this, SLOT(refreshAfterCrop()));
-  
+  connect(m_applyRescale, SIGNAL(clicked()), this, SLOT(applyHistogramCrop()));
+  connect(m_applyEqualization, SIGNAL(clicked()), this, SLOT(applyHistogramEqualization()));
 
   m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramImage)));
 
@@ -54,12 +55,17 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   QVBoxLayout *slider = new QVBoxLayout;
   slider->addWidget(m_sliderInf);
   slider->addWidget(m_sliderSup);
-  slider->addWidget(m_applyRescale);
+  
+  QHBoxLayout* button = new QHBoxLayout;
+  button->addWidget(m_applyRescale);
+  button->addWidget(m_applyEqualization);
+  
   
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addLayout(selectLayout);
   layout->addWidget(m_histogramLabel);
   layout->addLayout(slider);
+  layout->addLayout(button);
   
   setLayout(layout);
 }
@@ -116,47 +122,64 @@ void Histogram::refresh() {
 }
 
 
-// void Histogram::recadrage(int bInf, int bSup) {
-//   //bool rgb = m_radioButtonRGB->isChecked();
-//   //refreshData(rgb);
-//   double L = bSup - bInf;
-//   std::cout << "L init : " << L << std::endl;
-//   if (m_pictureModifier != NULL) {
-//     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
-//     float nbPixel = tracing->getWidth() * tracing->getHeight();
-//     for(int i=0; i<256 ; i++){
-//       m_histogramDataRescaled[PixelMod::RED][i] =  floor((255.0*L) / (m_histogramData[PixelMod::RED][i] - bInf));
-//       m_histogramDataRescaled[PixelMod::GREEN][i] = floor((255.*L) / (m_histogramData[PixelMod::GREEN][i] - bInf));
-//       m_histogramDataRescaled[PixelMod::BLUE][i] =  floor((255.*L) / (m_histogramData[PixelMod::BLUE][i] - bInf));
-//     }
-//     for(int i=0; i<256; i++){
-//       m_histogramData[PixelMod::BLUE][i] = m_histogramDataRescaled[PixelMod::BLUE][i];
-//       m_histogramData[PixelMod::GREEN][i] = m_histogramDataRescaled[PixelMod::GREEN][i];
-//       m_histogramData[PixelMod::RED][i] = m_histogramDataRescaled[PixelMod::RED][i];
-//     } 
-//   }
-// }
+void Histogram::equalization() {
+  if (m_pictureModifier != NULL) {
+    for (int i = 0; i < 3; i++)
+      for (int j = 0; j < 256; j++)
+	m_cumulativeHistogram[i][j] = 0;
+      
+    //calcul de l'histogramme cumulé
+    int kRed, kGreen, kBlue;
+    for(int i=0; i<256; i++){
+      kRed = 0;
+      kGreen = 0;
+      kBlue = 0;
+      for(int j=0; j <= i ; j++){
+	kRed += m_histogramData[PixelMod::RED][j];
+	kGreen += m_histogramData[PixelMod::GREEN][j];
+	kBlue += m_histogramData[PixelMod::BLUE][j];
+      }
+      m_cumulativeHistogram[PixelMod::RED][i] = kRed;
+      m_cumulativeHistogram[PixelMod::GREEN][i] = kGreen;
+      m_cumulativeHistogram[PixelMod::BLUE][i] = kBlue;
+    } 
+    
+    //egalisation de l'image
+    Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
+    float nbPixel = tracing->getWidth() * tracing->getHeight();
+    unsigned int couleur;
+    for(int i=0; i < tracing->getHeight(); i++){
+      for(int j=0; j < tracing->getWidth(); j++){
+	couleur = tracing->getValue(j,i);
+	tracing->setValue(j,
+			  i,
+			  PixelMod::createRGB(PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::RED][PixelMod::getRed(couleur)]))/ nbPixel)),
+					      PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::GREEN][PixelMod::getGreen(couleur)]))/ nbPixel)),
+					      PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::BLUE][PixelMod::getBlue(couleur)]))/ nbPixel)),
+					      PixelMod::getAlpha(couleur)));
+					    
+      }
+    }
+    //refresh de l'image et de l'histogramme
+    m_pictureModifier->getPicture()->refresh();
+    m_pictureModifier->refresh();
+  }
+}
 
 
 
 void Histogram::crop(int bInf, int bSup) {
   double L = bSup - bInf;
   unsigned int couleur;
-  std::cout << "L init : " << L << std::endl;
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
     for(int i=0; i < tracing->getHeight(); i++){
       for(int j=0; j < tracing->getWidth(); j++){
 	couleur = tracing->getValue(j,i);
-// 	tracing->setValue(j,i, PixelMod::createRGB(floor((255.0*L) / (PixelMod::getRed(couleur) - bInf)),
-// 						   floor((255.0*L) / (PixelMod::getGreen(couleur) - bInf)),
-// 						   floor((255.0*L) / (PixelMod::getBlue(couleur) - bInf)),
-// 						   PixelMod::getAlpha(couleur)));
 	tracing->setValue(j,i, PixelMod::createRGB(PixelMod::threshold(floor((255.0*(PixelMod::getRed(couleur) - bInf))/ L)),
 						   PixelMod::threshold(floor((255.0*(PixelMod::getGreen(couleur) - bInf))/ L)),
 						   PixelMod::threshold(floor((255.0*(PixelMod::getBlue(couleur) - bInf))/ L)),
 						   PixelMod::getAlpha(couleur)));
-					    
       }
     }
     m_pictureModifier->getPicture()->refresh();
@@ -174,7 +197,6 @@ void Histogram::refreshData(bool rgb) {
 
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
-
     for(int i = 0; i < tracing->getWidth(); i++) {
       for(int j = 0; j < tracing->getHeight(); j++) {
 	unsigned int color = tracing->getValue(i,j);
@@ -233,8 +255,10 @@ void Histogram::sliderSupChanged(int i){
   }
 }
 
-void Histogram::refreshAfterCrop(){
-  std::cout << "(" << m_bInf << "," << m_bSup << ")" << std::endl;
+void Histogram::applyHistogramCrop(){
     crop(m_bInf,m_bSup);
-    std::cout << "(" << m_bInf << "," << m_bSup << ")" << std::endl;
+}
+
+void Histogram::applyHistogramEqualization(){
+    equalization();
 }

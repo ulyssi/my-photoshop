@@ -18,7 +18,7 @@
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
-  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.png *.pnn *.jpeg);; All Files (*)"));
+  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.jpeg *.png *.ppm *.tiff* .xbm *.xpm);; All Files (*)"));
   t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
 
   QStringList fileNames;
@@ -33,7 +33,21 @@ void UserInterface::open() {
   }
 }
 
-void UserInterface::save() {}
+void UserInterface::save() {
+  Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
+  QString path = QFileDialog::getSaveFileName(this, 
+						"Enregistrer le fichier", 
+						picture->getPath() , 
+						"Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
+  
+  Matrix<unsigned int>* pictureData = picture->getData();
+  QImage *m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
+  for (int i = 0; i < pictureData->getWidth(); i++)
+    for (int j = 0; j < pictureData->getHeight(); j++)
+      m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
+  picture->saveQImage(path, *m_image);
+}
+
 void UserInterface::close(QWidget* q) {
   m_pictureManager->removePictureModifier((PictureModifier*) q);
 }
@@ -106,7 +120,7 @@ void UserInterface::colorConvertOperation(Matrix<double>* application) {
 
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
-  m_saveAct->setEnabled(false);
+  m_saveAct->setEnabled(true);
   m_exitAct->setEnabled(false);
   
   m_undoAct->setEnabled(false);

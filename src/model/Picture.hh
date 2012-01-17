@@ -33,12 +33,12 @@ public:
   void removeTracing(int);
   void removeTracing(Tracing*);
   void refresh();
+  bool saveQImage(QString&, QImage);
   
 private:
 
   /** Methodes Chargement et Sauvegarde des QImages */
   QImage loadQImage(QString&);
-  bool saveQImage(QString&, QImage);
   
   /** Attributs */
   QString m_path;

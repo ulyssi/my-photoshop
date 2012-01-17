@@ -5,6 +5,7 @@
 #include "Histogram.hh"
 #include "Previewer.hh"
 #include "AffineOperationChooser.hh"
+#include "ConvolveOperationChooser.hh"
 
 
 /** Constructeurs et destructeur */
@@ -25,6 +26,7 @@ UserInterface* TabPanel::getUserInterface() { return m_userInterface; }
 void TabPanel::notifyCurrent() {
   m_userInterface->getPreviewer()->setPictureModifier(NULL);
   m_userInterface->getAffineOperationChooser()->setPictureModifier(NULL);
+  m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getTracingManager()->setPictureModifier(NULL);
   m_userInterface->getHistogram()->setPictureModifier(NULL);
   m_userInterface->update();

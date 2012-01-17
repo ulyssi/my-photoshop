@@ -8,6 +8,7 @@
 #include "Picture.hh"
 #include "Matrix.hh"
 #include "AffineOperationChooser.hh"
+#include "ConvolveOperationChooser.hh"
 #include "PictureArea.hh"
 
 
@@ -38,6 +39,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 void PictureModifier::notifyCurrent() {
   getUserInterface()->getPreviewer()->setPictureModifier(this);
   getUserInterface()->getAffineOperationChooser()->setPictureModifier(this);
+  getUserInterface()->getConvolveOperationChooser()->setPictureModifier(this);
   getUserInterface()->getHistogram()->setPictureModifier(this);
   getUserInterface()->getTracingManager()->setPictureModifier(this);
   getUserInterface()->update();

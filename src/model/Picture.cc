@@ -42,16 +42,19 @@ Tracing* Picture::getBackground() { return m_tracingList[0]; }
 
 void Picture::refresh() {
   std::cout<<"refreshing"<<std::endl;
+  MergeOperation* m=new MergeOperation();
+  Tracing *cTracing=m->doOperation(m_tracingList);
+ 
 
-  if(m_tracingList[0]->getWidth()!=getWidth()||m_tracingList[0]->getHeight()!=getHeight()){
+  if(cTracing->getWidth()!=getWidth()||cTracing->getHeight()!=getHeight()){
     delete m_data;
-    m_data = new Matrix<unsigned int>(m_tracingList[0]->getWidth(),m_tracingList[0]->getHeight());
+    m_data = new Matrix<unsigned int>(cTracing->getWidth(),cTracing->getHeight());
   }
   for (int i = 0; i<getWidth(); i++)
     for (int j = 0; j < getHeight(); j++)
-      m_data->setValue(i, j, (unsigned int)m_tracingList[0]->getValue(i, j));
-
-  std::cout<<"done refreshing   "<< getWidth()<<"x"<<getHeight() <<std::endl;
+      m_data->setValue(i, j, (unsigned int)cTracing->getValue(i, j));
+  delete cTracing;
+ 
 }
 
 // Charge une image à partir de son path

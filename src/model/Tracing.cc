@@ -7,7 +7,7 @@ Tracing::Tracing(int width, int height, int offX, int offY) :
   m_index(0),
   m_offX(offX),
   m_offY(offY),
-  m_alpha(0)
+  m_alpha(1.0)
 {}
 
 Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) :
@@ -17,6 +17,8 @@ Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) 
   m_offY(offY),
   m_alpha(alpha)
 {}
+
+
 
 Tracing::~Tracing() {}
 

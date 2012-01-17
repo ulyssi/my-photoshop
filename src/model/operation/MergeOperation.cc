@@ -23,19 +23,12 @@ Picture* MergeOperation::doOperation(Picture** pictureList, int nbPicture) {
 Tracing* MergeOperation::doOperation(Tracing* tracing) { return tracing; }
 
  Tracing* MergeOperation::doOperation(std::vector<Tracing*> tracingList) {
-   vector<Tracing*>::iterator it;
-   Tracing * t1;
-   Tracing * t2;
+   
+   Tracing * t1=tracingList[0];
+   
    Tracing * tmp=NULL;
-   it=tracingList.begin();
-   while((*it)==NULL)
-     it++;
-   t1=(*it);
-   it++;
-   while (it<tracingList.end()){   
-     cout<<"how many tracings do we fucking have??\n\n";
-     t2=(*it);
-     t1=doOperation(t1,t2);
+   for(int id=1;id<tracingList.size();id++){ 
+     t1=doOperation(t1,tracingList[id]);
      if(tmp!=NULL)
        delete tmp;
      tmp=t1;
@@ -48,7 +41,7 @@ Operation* MergeOperation::clone() { return NULL; }
 
 /** Methodes internes */
 Tracing* MergeOperation::doOperation(Tracing* t1, Tracing* t2) {
-  cout<<"going brown town\n\n";
+ 
   Tracing *rslt=new Tracing((t1->getWidth()>t2->getWidth())?(t1->getWidth()) : (t2->getWidth()),(t1->getHeight()>t2->getHeight())?(t1->getHeight()) : (t2->getHeight()));
   
 unsigned int val=0;
@@ -60,8 +53,8 @@ unsigned int val=0;
 	  /**merge here*/
 	  int p1=t1->getValue(i,j);
 	  int p2=t2->getValue(i,j);
-	  int a1=getAlpha(p1,t1->getAlpha());
-	  int a2=getAlpha(p2,t2->getAlpha());
+	  float a1=getAlpha(p1,t1->getAlpha());
+	  float a2=getAlpha(p2,t2->getAlpha());
 	  val=combineAlpha(a1,a2)|combineRed(p1,p2,a2)|combineGreen(p1,p2,a2)|combineBlue(p1,p2,a2);
 
 	}

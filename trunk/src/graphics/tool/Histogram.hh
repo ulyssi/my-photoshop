@@ -6,6 +6,8 @@
 #include <QImage>
 #include <QRadioButton>
 #include <QComboBox>
+#include <QSlider>
+#include <QPushButton>
 
 class PictureModifier;
 
@@ -26,6 +28,7 @@ public:
 
   /** Methodes */
   void refresh();
+  void crop(int,int);
   void refreshData(bool = true);
 
 public slots:
@@ -33,17 +36,26 @@ public slots:
   /** Slots */
   void refreshComboBoxLayer();
   void refreshImage();
+  void sliderInfChanged(int);
+  void sliderSupChanged(int);
+  void refreshAfterCrop();
   
 private:
   
   /** Attributs */
+  int m_bInf;
+  int m_bSup;
   PictureModifier* m_pictureModifier;
   QRadioButton* m_radioButtonRGB;
   QRadioButton* m_radioButtonYUV;
   QComboBox* m_comboBoxLayer;
+  QSlider* m_sliderInf;
+  QSlider* m_sliderSup;
+  QPushButton* m_applyRescale;
   QLabel* m_histogramLabel;
   QImage* m_histogramImage;
   int m_histogramData[3][256];
+  int m_histogramDataRescaled[3][256];
 
 };
 

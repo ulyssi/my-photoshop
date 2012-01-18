@@ -108,15 +108,15 @@ void AffineOperationChooser::resetOperation() {
 void AffineOperationChooser::refreshPreview() {
   Previewer* previewer = m_userInterface->getPreviewer();
   if (m_pictureModifier != NULL) {
-    Picture* p = m_pictureModifier->getPicture();
-    AffineTransformationOperation* op = new AffineTransformationOperation(p);
+    Picture* picture = m_pictureModifier->getPicture();
+    AffineTransformationOperation* op = new AffineTransformationOperation(picture);
     op->setRescale(m_scaleX / 100.0, m_scaleY / 100.0);
     op->setRotationDegree(m_alpha);
     if (m_symetrieNormal) op->setSymetrie(false);
-    else if (m_symetrieX) op->setSymetrieX(m_symetrieX);
-    else if (m_symetrieY) op->setSymetrieY(m_symetrieY);
-    else if (m_symetrie) op->setSymetrie(m_symetrie);
-    op->setCenter(p->getWidth() / 2.0, p->getHeight() / 2.0);
+    if (m_symetrieX) op->setSymetrieX(m_symetrieX);
+    if (m_symetrieY) op->setSymetrieY(m_symetrieY);
+    if (m_symetrie) op->setSymetrie(m_symetrie);
+    op->setCenter(picture->getWidth() / 2.0, picture->getHeight() / 2.0);
     previewer->setData(op->updatePreview());
   }
 }

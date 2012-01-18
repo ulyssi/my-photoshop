@@ -39,6 +39,7 @@ QMenu* UserInterface::createViewMenu() {
   m_viewMenu->addAction(m_previewerAct);
   m_viewMenu->addAction(m_histogramAct);
   m_viewMenu->addAction(m_colorChooserAct);
+  m_viewMenu->addAction(m_toolBoxChooserAct);
   m_viewMenu->addAction(m_tracingManagerAct);
   m_viewMenu->addAction(m_affineOperationAct);
   m_viewMenu->addAction(m_convolveOperationAct);

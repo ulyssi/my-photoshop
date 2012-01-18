@@ -13,6 +13,7 @@
 class Previewer;
 class Histogram;
 class ColorChooser;
+class ToolBoxChooser;
 class AffineOperationChooser;
 class ConvolveOperationChooser;
 class AlgebricOperationChooser;
@@ -35,6 +36,7 @@ public:
   Previewer* getPreviewer();
   Histogram* getHistogram();
   ColorChooser* getColorChooser();
+  ToolBoxChooser* getToolBoxChooser();
   TracingManager* getTracingManager();
   AffineOperationChooser* getAffineOperationChooser();
   ConvolveOperationChooser* getConvolveOperationChooser();
@@ -47,6 +49,7 @@ public:
   Previewer* createPreviewer();
   Histogram* createHistogram();
   ColorChooser* createColorChooser();
+  ToolBoxChooser* createToolBoxChooser();
   TracingManager* createTracingManager();
   AffineOperationChooser* createAffineOperationChooser();
   ConvolveOperationChooser* createConvolveOperationChooser();
@@ -113,7 +116,7 @@ private:
   void createColorConvertOperationAction();
   void createConvolveOperationAction();
   void createAlgebricOperationAction();
-
+  
   QMenu* createFileMenu();
   QMenu* createEditMenu();
   QMenu* createViewMenu();
@@ -133,6 +136,7 @@ private:
   QDockWidget* createPreviewerDock();
   QDockWidget* createHistogramDock();
   QDockWidget* createColorChooserDock();
+  QDockWidget* createToolBoxChooserDock();
   QDockWidget* createTracingManagerDock();
   QDockWidget* createAffineOperationChooserDock();
   QDockWidget* createConvolveOperationChooserDock();
@@ -147,6 +151,7 @@ private:
   Previewer* m_previewer;
   Histogram* m_histogram;
   ColorChooser* m_colorChooser;
+  ToolBoxChooser* m_toolBoxChooser;
   TracingManager* m_tracingManager;
   AffineOperationChooser* m_affineOperationChooser;
   ConvolveOperationChooser* m_convolveOperationChooser;
@@ -168,6 +173,7 @@ private:
   QDockWidget* m_previewerDock;
   QDockWidget* m_histogramDock;
   QDockWidget* m_colorChooserDock;
+  QDockWidget* m_toolBoxChooserDock;
   QDockWidget* m_tracingManagerDock;
   QDockWidget* m_affineOperationChooserDock;
   QDockWidget* m_convolveOperationChooserDock;
@@ -189,6 +195,7 @@ private:
   QAction* m_previewerAct;
   QAction* m_histogramAct;
   QAction* m_colorChooserAct;
+  QAction* m_toolBoxChooserAct;
   QAction* m_tracingManagerAct;
   QAction* m_affineOperationAct;
   QAction* m_rescaleOperationAct;

@@ -7,7 +7,10 @@
 
 
 /** Constructeurs et destructeur */
-MatrixGenerator::MatrixGenerator(Matrix<double>* matrix, bool sizeUnlocked) {
+MatrixGenerator::MatrixGenerator(Matrix<double>* matrix, int min, int max, bool sizeUnlocked) :
+  m_min(min),
+  m_max(max)
+{
   if (matrix != NULL) {
     m_matrix = new Matrix<double>(matrix);
   } else {
@@ -29,6 +32,15 @@ MatrixGenerator::MatrixGenerator(Matrix<double>* matrix, bool sizeUnlocked) {
 }
 
 MatrixGenerator::~MatrixGenerator() {}
+
+
+/** Mutateur */
+void MatrixGenerator::setMinimum(int min) { m_min = min; }
+void MatrixGenerator::setMaximum(int max) { m_max = max; }
+void MatrixGenerator::setRange(int min, int max) {
+  setMinimum(min);
+  setMaximum(max);
+}
 
 
 /** Methodes */
@@ -77,6 +89,7 @@ void MatrixGenerator::resizeMatrix() {
     for (int j = 0; j < m_matrix->getHeight(); j++) {
       QSpinBox* spinBox = new QSpinBox();
       spinBox->setValue(m_matrix->getValue(i, j));
+      spinBox->setRange(m_min, m_max);
       connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(modifyMatrix()));
       m_matrixLayout->addWidget(spinBox, i, j);
     }
@@ -128,6 +141,7 @@ QGroupBox* MatrixGenerator::createMatrixBox() {
     for (int j = 0; j < m_matrix->getHeight(); j++) {
       QSpinBox* spinBox = new QSpinBox();
       spinBox->setValue(m_matrix->getValue(i, j));
+      spinBox->setRange(m_min, m_max);
       connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(modifyMatrix()));
       m_matrixLayout->addWidget(spinBox, i, j);
     }

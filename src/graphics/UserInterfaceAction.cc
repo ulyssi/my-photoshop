@@ -213,6 +213,11 @@ void UserInterface::createViewAction() {
   m_colorChooserAct->setChecked(true);
   connect(m_colorChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
+  m_toolBoxChooserAct = new QAction(tr("ToolBoxChooser"), this);
+  m_toolBoxChooserAct->setCheckable(true);
+  m_toolBoxChooserAct->setChecked(true);
+  connect(m_toolBoxChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+
   m_tracingManagerAct = new QAction(tr("TracingManager"), this);
   m_tracingManagerAct->setCheckable(true);
   m_tracingManagerAct->setChecked(true);

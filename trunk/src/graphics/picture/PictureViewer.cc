@@ -22,15 +22,18 @@ void PictureViewer::scaleImage(double scaleFactor){
 
 void PictureViewer::zoomIn() { 
   int scaleFactor=m_scaleFactor+0.25;
-  if(m_qImage.width()*scaleFactor>30&&m_qImage.width()*scaleFactor<4000&&m_qImage.height()*scaleFactor<4000&&m_qImage.height()*scaleFactor>30)
-     m_scaleFactor=scaleFactor;
+  if(m_qImage.width()*scaleFactor>30 && 
+     m_qImage.width()*scaleFactor<4000 && 
+     m_qImage.height()*scaleFactor<4000 && m_qImage.height()*scaleFactor>30)
+    m_scaleFactor=scaleFactor+0.25;
 }
 
 void PictureViewer::zoomOut() { 
   int scaleFactor=m_scaleFactor-0.25;
-  if(m_qImage.width()*scaleFactor>30 && m_qImage.width()*scaleFactor<4000
-     &&m_qImage.height()*scaleFactor<4000 && m_qImage.height()*scaleFactor>30)
-    m_scaleFactor=scaleFactor;
+  if(m_qImage.width()*scaleFactor>30 && 
+     m_qImage.width()*scaleFactor<4000 && 
+     m_qImage.height()*scaleFactor<4000 && m_qImage.height()*scaleFactor>30)
+    m_scaleFactor=scaleFactor-0.25;
 }
 
 

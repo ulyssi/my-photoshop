@@ -15,15 +15,16 @@ class MatrixGenerator : public QDialog { Q_OBJECT
 public:
   
   /** Constructeurs et destructeur */
-  MatrixGenerator();
+  MatrixGenerator(Matrix<double>*, bool = true);
   ~MatrixGenerator();
 
   /** Methodes */
-  Matrix<double>* modify(Matrix<double>* matrix);
+  Matrix<double>* createMatrix();
 
 public slots:
 
   /** Slots */
+  void modifyMatrix();
   void resizeMatrix();
   
 private:

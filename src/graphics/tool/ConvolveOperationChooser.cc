@@ -101,7 +101,7 @@ void ConvolveOperationChooser::modifyDetection() {
 			 { 0.00 , 0.00 , 0.00 }};
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 3; j++)
-	m_kernel->setValue(i, j, (double)data[i][j]);
+        m_kernel->setValue(i, j, (double)data[i][j]);
   }
   else if (m_buttonRepulsing->isChecked()) {
     m_kernel = new Matrix<double>(3, 3);
@@ -110,19 +110,21 @@ void ConvolveOperationChooser::modifyDetection() {
 			 { 0.00 , 1.00 , 2.00 }};
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 3; j++)
-	m_kernel->setValue(i, j, (double)data[i][j]);
+        m_kernel->setValue(i, j, (double)data[i][j]);
   }
 
   refreshPreview();
 }
 
 void ConvolveOperationChooser::customize() {
-  MatrixGenerator* matrixGenerator = new MatrixGenerator();
-  m_kernel = matrixGenerator->modify(m_kernel);
-
-  // resetBlurOperation();
-  // resetDetectionOperation();
-  refreshPreview();
+  MatrixGenerator* matrixGenerator = new MatrixGenerator(m_kernel);
+  Matrix<double>* result = matrixGenerator->createMatrix();
+  if (result != NULL) {
+    resetBlurOperation();
+    resetDetectionOperation();
+    m_kernel = result;
+    refreshPreview();
+  }
 }
 
 void ConvolveOperationChooser::resetOperation() {

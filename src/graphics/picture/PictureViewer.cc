@@ -16,15 +16,21 @@ void PictureViewer::scaleImage(double scaleFactor){
   m_qImage=m_qImage.scaled((int)m_qImage.width()*scaleFactor,(int)m_qImage.height()*scaleFactor);
   resize(m_qImage.width(), m_qImage.height());
   setPixmap(QPixmap::fromImage((const QImage&)(m_qImage)));
+    
 }
 
 
 void PictureViewer::zoomIn() { 
-  m_scaleFactor=m_scaleFactor+0.25;
+  int scaleFactor=m_scaleFactor+0.25;
+  if(m_qImage.width()*scaleFactor>30&&m_qImage.width()*scaleFactor<4000&&m_qImage.height()*scaleFactor<4000&&m_qImage.height()*scaleFactor>30)
+     m_scaleFactor=scaleFactor;
 }
 
 void PictureViewer::zoomOut() { 
-  m_scaleFactor=m_scaleFactor-0.25;
+  int scaleFactor=m_scaleFactor-0.25;
+  if(m_qImage.width()*scaleFactor>30 && m_qImage.width()*scaleFactor<4000
+     &&m_qImage.height()*scaleFactor<4000 && m_qImage.height()*scaleFactor>30)
+    m_scaleFactor=scaleFactor;
 }
 
 
@@ -39,29 +45,3 @@ void PictureViewer::refreshData(){
   resize(m_pictureModifier->getImage()->width(),m_pictureModifier->getImage()->height());
 }
 
-/** Methodes internes */
-// void PictureViewer::scaleImage(double scaleFactor) {
-//   m_scaleFactor *= scaleFactor;
-//   imageLabel->resize(m_scaleFactor * pixmap()->size());
-
-//   adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
-//   adjustScrollBar(scrollArea->verticalScrollBar(), factor);
-// }
-
-/** Predicats */
-// bool PictureViewer::isZoomInEnabled() { return scaleFactor < 3.0; }
-
-// bool PictureViewer::isZoomOutEnabled() { return scaleFactor > 0.333; }
-
-
-/** Accesseurs */
-// void PictureViewer::zoomOut() { m_pictureModifier.scaleImage(0.8); }
-
-// void PictureViewer::normalSize() {
-//   adjustSize();
-//   m_scaleFactor = 1.0;
-// }
-
-// void PictureViewer::fitSize() {
-//   scrollArea->setWidgetResizable(fitToWindow);
-// }

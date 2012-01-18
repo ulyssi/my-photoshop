@@ -30,7 +30,7 @@ private:
   /**Methodes **/
   void setDownCoordinate(QMouseEvent*);
   void setSelection();
-private slots:
+public slots:
   /** SLOTS**/
   void 	keyPressEvent ( QKeyEvent * event );
   void 	keyReleaseEvent ( QKeyEvent * event );

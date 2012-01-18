@@ -35,6 +35,10 @@ private :
   QImage* m_image;
   PictureArea* m_pictureArea;
   
+private slots:
+  /** SLOTS**/
+  void 	keyPressEvent ( QKeyEvent * event );
+  void 	keyReleaseEvent ( QKeyEvent * event );
 };
 
 #endif

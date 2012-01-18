@@ -19,7 +19,6 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
   refreshData();
-
   m_pictureArea = new PictureArea(this);
   // setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
   // setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
@@ -68,4 +67,12 @@ void PictureModifier::refresh() {
   getUserInterface()->getHistogram()->refresh();
   getUserInterface()->getPreviewer()->refresh();
   getUserInterface()->getTracingManager()->refresh();
+}
+
+void PictureModifier::keyPressEvent(QKeyEvent* event){
+  m_pictureArea->keyPressEvent(event);
+} 
+
+void PictureModifier::keyReleaseEvent ( QKeyEvent * event ) {
+  m_pictureArea->keyReleaseEvent(event);
 }

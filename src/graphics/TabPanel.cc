@@ -4,6 +4,7 @@
 #include "TracingManager.hh"
 #include "Histogram.hh"
 #include "Previewer.hh"
+#include "ToolBoxChooser.hh"
 #include "AffineOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"
 
@@ -25,6 +26,7 @@ UserInterface* TabPanel::getUserInterface() { return m_userInterface; }
 /** Mutateurs */
 void TabPanel::notifyCurrent() {
   m_userInterface->getPreviewer()->setPictureModifier(NULL);
+  m_userInterface->getToolBoxChooser()->setPictureModifier(NULL);
   m_userInterface->getAffineOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getTracingManager()->setPictureModifier(NULL);

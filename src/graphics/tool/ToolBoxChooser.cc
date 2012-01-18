@@ -3,6 +3,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
+#include "Picture.hh"
 #include "Previewer.hh"
 #include "UserInterface.hh"
 #include "PictureModifier.hh"
@@ -29,7 +30,18 @@ ToolBoxChooser::~ToolBoxChooser() {}
 
 
 /** Mutateurs */
-void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) { m_pictureModifier = pictureModifier; }
+void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) { 
+  m_pictureModifier = pictureModifier; 
+  if (m_pictureModifier != NULL) {
+    int width = m_pictureModifier->getPicture()->getWidth();
+    m_sliderSeamCarvingWidth->setRange(width / 2, 2 * width);
+    m_sliderSeamCarvingWidth->setValue(width);
+
+    int height = m_pictureModifier->getPicture()->getHeight();
+    m_sliderSeamCarvingHeight->setRange(height / 2, 2 * height);
+    m_sliderSeamCarvingHeight->setValue(height);
+  }
+}
 
 
 /** Methodes */
@@ -51,6 +63,8 @@ void ToolBoxChooser::refreshPreview() {
   Previewer* previewer = m_userInterface->getPreviewer();
   if (m_pictureModifier != NULL) {
     SeamCarvingOperation* op = new SeamCarvingOperation(m_pictureModifier->getPicture());
+    op->setTargetWidth(m_sliderSeamCarvingWidth->value());
+    op->setTargetHeight(m_sliderSeamCarvingHeight->value());
     previewer->setData(op->updatePreview());
   }
 }

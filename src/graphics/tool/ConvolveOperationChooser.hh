@@ -48,7 +48,7 @@ private:
   QHBoxLayout* createControlsLayout();
   void resetBlurOperation();
   void resetDetectionOperation();
-
+  
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;

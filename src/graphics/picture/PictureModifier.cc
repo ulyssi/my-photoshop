@@ -7,6 +7,7 @@
 #include "Previewer.hh"
 #include "Picture.hh"
 #include "Matrix.hh"
+#include "ToolBoxChooser.hh"
 #include "AffineOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"
 #include "PictureArea.hh"
@@ -38,6 +39,7 @@ Picture* PictureModifier::getPicture() { return m_picture; }
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {
   getUserInterface()->getPreviewer()->setPictureModifier(this);
+  getUserInterface()->getToolBoxChooser()->setPictureModifier(this);
   getUserInterface()->getAffineOperationChooser()->setPictureModifier(this);
   getUserInterface()->getConvolveOperationChooser()->setPictureModifier(this);
   getUserInterface()->getHistogram()->setPictureModifier(this);

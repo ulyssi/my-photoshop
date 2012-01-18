@@ -61,12 +61,15 @@ void PictureArea::setSelection(){
 /** Private Slots **/
 void PictureArea::keyPressEvent ( QKeyEvent * event ){
   if (event->modifiers()==Qt::ControlModifier)
-    ctrl= true;
-   
+    { ctrl= true;
+      //std::cout<<"touche ctrl pressed"<<std::endl;
+    }
 }
 void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
-  if (event->modifiers()==Qt::ControlModifier)
+  if (event->modifiers()==Qt::ControlModifier){
     ctrl= false;
+    //std::cout<<"touche ctrl realesed"<<std::endl;
+  }
 }
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){}
 #include <iostream>
@@ -91,10 +94,12 @@ void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {
   QGraphicsView::wheelEvent(event); 
-  if(ctrl)
-    {    std::cout<<"ctrl+wheel"<<std::endl;
-      m_pictureViewer->zoomIn();
-      refresh();
-    
-    }
+  int numDegrees = event->delta() / 8;
+  if(ctrl){  
+    if (numDegrees>0)
+	m_pictureViewer->zoomIn();
+      else
+	m_pictureViewer->zoomOut();
+       refresh();
+  }
 }

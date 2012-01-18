@@ -18,7 +18,8 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_picture(picture),
   m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
-  
+  refreshData();
+
   m_pictureArea = new PictureArea(this);
   // setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
   // setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
@@ -49,7 +50,7 @@ void PictureModifier::notifyCurrent() {
 /** Methodes */
 Picture* PictureModifier::getSelectedPicture() { return getPicture(); }
 
-void PictureModifier::refresh() {
+void PictureModifier::refreshData() {
   Matrix<unsigned int>* pictureData = m_picture->getData();
   if (pictureData->getWidth() != m_image->width() || pictureData->getHeight() != m_image->height()) {
     delete m_image;
@@ -58,8 +59,12 @@ void PictureModifier::refresh() {
   for (int i = 0; i < pictureData->getWidth(); i++)
     for (int j = 0; j < pictureData->getHeight(); j++)
       m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
+
+}
+
+void PictureModifier::refresh() {
+  refreshData();
   m_pictureArea->refresh();
-  
   getUserInterface()->getHistogram()->refresh();
   getUserInterface()->getPreviewer()->refresh();
   getUserInterface()->getTracingManager()->refresh();

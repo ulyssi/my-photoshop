@@ -24,7 +24,9 @@ public :
   /** Methodes */
   Picture* getSelectedPicture();
   void notifyCurrent();
+  void refreshData();
   void refresh();
+  
 
 private :
 

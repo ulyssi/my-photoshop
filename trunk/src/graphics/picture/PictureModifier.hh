@@ -26,7 +26,10 @@ public :
   void notifyCurrent();
   void refreshData();
   void refresh();
-  
+  void zoomIn();
+  void zoomOut();  
+  void normalSize();
+  void fitToWindow();
 
 private :
 

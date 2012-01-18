@@ -35,3 +35,8 @@ void TabPanel::notifyCurrent() {
 }
 
 void TabPanel::setTabName(QString tabName) { m_tabName = tabName; }
+
+void TabPanel:: zoomIn() {}
+void TabPanel:: zoomOut(){}
+void TabPanel:: normalSize(){}
+void TabPanel:: fitToWindow(){}

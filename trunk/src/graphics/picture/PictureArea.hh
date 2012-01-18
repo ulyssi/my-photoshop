@@ -15,6 +15,9 @@ public:
   PictureArea(PictureModifier*);
   ~PictureArea();
   void refresh();
+  /**getters**/
+  PictureViewer* getPictureViewer();
+  void fitToWindow();
 private:
   /**Attributes**/
   PictureModifier* m_pictureModifier;
@@ -28,8 +31,10 @@ private:
   int m_numDegrees;
   
   /**Methodes **/
+  
   void setDownCoordinate(QMouseEvent*);
   void setSelection();
+  
 public slots:
   /** SLOTS**/
   void 	keyPressEvent ( QKeyEvent * event );

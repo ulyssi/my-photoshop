@@ -77,3 +77,4 @@ void PictureManager::resizeEvent(QResizeEvent* event){
   
   refresh();
 }
+

@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QPoint>
+#include <QMouseEvent>
 
 class PictureModifier;
 class PictureViewer;
@@ -24,7 +25,9 @@ private:
   QPoint *up,*down;
   bool cliked;	
   bool ctrl;
-
+  /**Methodes **/
+  void setDownCoordinate(QMouseEvent*);
+  void setSelection();
 private slots:
   /** SLOTS**/
   void 	keyPressEvent ( QKeyEvent * event );

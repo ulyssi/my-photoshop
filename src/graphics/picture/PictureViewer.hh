@@ -2,6 +2,7 @@
 #define _PICTURE_VIEWER_HH_
 
 #include <QLabel>
+#include <QImage>
 
 class PictureModifier;
 
@@ -13,17 +14,20 @@ public:
   ~PictureViewer();
                
   /** Methodes */
+
+  void zoomIn();
   void refresh();
-  
+  void refreshData();
+  PictureModifier*  getPictureModifier();
 private:
 
   /** Methodes internes */
-  void scaleImage(double factor);
-
   /** Attributs */
   double m_scaleFactor;
   PictureModifier* m_pictureModifier;
- 
+  QImage m_qImage;
+  QImage* m_realqImage;
+  bool tmp;
 };
 
 #endif

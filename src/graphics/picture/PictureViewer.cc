@@ -7,7 +7,7 @@
 PictureViewer::PictureViewer(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier)
 {
-  
+  refreshData();
   refresh();
 }
 
@@ -22,11 +22,16 @@ PictureViewer::~PictureViewer() {}
 
 /** Accesseurs */
 
-
+#include <iostream>
 /** Methodes */
-// void PictureViewer::zoomIn() { scaleImage(1.25); }
+ void PictureViewer::zoomIn() { 
+   m_qImage=m_qImage.scaled((int)m_qImage.width()*1.25,(int)m_qImage.height()*1.25);
+   resize(m_qImage.width(), m_qImage.height());
+   setPixmap(QPixmap::fromImage((const QImage&)(m_qImage)));
+   tmp=true;
+ }
 
-// void PictureViewer::zoomOut() { scaleImage(0.8); }
+// void PictureViewer::zoomOut() { m_pictureModifier.scaleImage(0.8); }
 
 // void PictureViewer::normalSize() {
 //   adjustSize();
@@ -37,11 +42,18 @@ PictureViewer::~PictureViewer() {}
 //   scrollArea->setWidgetResizable(fitToWindow);
 // }
 
-#include <iostream>
-void PictureViewer::refresh() {
-   resize(m_pictureModifier->getImage()->width(), m_pictureModifier->getImage()->height());
-  setPixmap(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
 
+void PictureViewer::refresh() {
+  refreshData();
+  std::cout << "refeshing cout"<<std::endl;
+  resize(m_qImage.width(), m_qImage.height());
+  setPixmap(QPixmap::fromImage((const QImage&)(m_qImage)));
+
+}
+
+
+void PictureViewer::refreshData(){
+  m_qImage=m_pictureModifier->getImage()->scaled(m_pictureModifier->getImage()->width(),m_pictureModifier->getImage()->height());
 }
 
 /** Methodes internes */

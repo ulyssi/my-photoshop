@@ -3,6 +3,8 @@
 
 #include <QLabel>
 #include <QImage>
+#include <iostream>
+#include <QPixmap>
 
 class PictureModifier;
 
@@ -14,8 +16,9 @@ public:
   ~PictureViewer();
                
   /** Methodes */
-
+  void scaleImage(double);
   void zoomIn();
+  void zoomOut();
   void refresh();
   void refreshData();
   PictureModifier*  getPictureModifier();
@@ -26,8 +29,7 @@ private:
   double m_scaleFactor;
   PictureModifier* m_pictureModifier;
   QImage m_qImage;
-  QImage* m_realqImage;
-  bool tmp;
+   
 };
 
 #endif

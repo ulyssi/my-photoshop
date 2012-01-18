@@ -25,6 +25,8 @@ private:
   QPoint *up,*down;
   bool cliked;	
   bool ctrl;
+  int m_numDegrees;
+  
   /**Methodes **/
   void setDownCoordinate(QMouseEvent*);
   void setSelection();

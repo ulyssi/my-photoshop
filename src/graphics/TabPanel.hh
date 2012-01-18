@@ -26,6 +26,10 @@ public :
   virtual Picture* getSelectedPicture() = 0;
   virtual void notifyCurrent();
   virtual void refresh() = 0;
+  virtual void zoomIn();
+  virtual void zoomOut();  
+  virtual void normalSize();
+  virtual void fitToWindow();
 
 private : 
   

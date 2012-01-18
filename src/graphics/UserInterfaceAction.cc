@@ -38,7 +38,7 @@ void UserInterface::save() {
   QString path = QFileDialog::getSaveFileName(this, 
 						"Enregistrer le fichier", 
 						picture->getPath() , 
-						"Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
+						"All files *.* ;; Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
   
   Matrix<unsigned int>* pictureData = picture->getData();
   QImage *m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
@@ -56,10 +56,18 @@ void UserInterface::exit() {}
 void UserInterface::undo() {}
 void UserInterface::redo() {}
 
-void UserInterface::zoomIn() {}
-void UserInterface::zoomOut() {}
-void UserInterface::normalSize() {}
-void UserInterface::fitToWindow() {}
+void UserInterface::zoomIn() {
+  m_viewTabWidget->getTabPanel()->zoomIn();
+}
+void UserInterface::zoomOut() {
+  m_viewTabWidget->getTabPanel()->zoomOut();
+}
+void UserInterface::normalSize() {
+  m_viewTabWidget->getTabPanel()->normalSize();
+}
+void UserInterface::fitToWindow() {
+  m_viewTabWidget->getTabPanel()->fitToWindow();
+}
 
 void UserInterface::binary() {}
 
@@ -126,10 +134,10 @@ void UserInterface::updateActions() {
   m_undoAct->setEnabled(false);
   m_redoAct->setEnabled(false);
   
-  m_zoomInAct->setEnabled(false);
-  m_zoomOutAct->setEnabled(false);
-  m_normalSizeAct->setEnabled(false);
-  m_fitToWindowAct->setEnabled(false);
+  m_zoomInAct->setEnabled(true);
+  m_zoomOutAct->setEnabled(true);
+  m_normalSizeAct->setEnabled(true);
+  m_fitToWindowAct->setEnabled(true);
 
   m_increaseContrastAct->setEnabled(true);
   m_averageBlurAct->setEnabled(true);

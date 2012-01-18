@@ -32,6 +32,12 @@ void PictureArea::refresh(){
   setSceneRect ( (qreal) 0, (qreal) 0, (qreal) size.width(), (qreal) size.height() );
   resize(size.width(),size.height());
 } 
+
+/** getters **/
+PictureViewer* PictureArea::getPictureViewer(){
+  return m_pictureViewer;
+}
+
 /** Private Methodes **/
 void PictureArea::setDownCoordinate(QMouseEvent* event){
   down->setX(event->x());
@@ -44,6 +50,10 @@ void PictureArea::setDownCoordinate(QMouseEvent* event){
     down->setY(sizeHint().height()-10);
   else if (down->y()<0)
     down->setY(0);
+}
+
+void PictureArea::fitToWindow(){
+  m_pictureViewer->fitToWindow(parentWidget()->size());
 }
 
 void PictureArea::setSelection(){
@@ -95,9 +105,9 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
   int numDegrees = event->delta() / 8;
   if(ctrl==true){  
     if (numDegrees>0)
-	m_pictureViewer->zoomIn();
-      else
-	m_pictureViewer->zoomOut();
-       refresh();
+      m_pictureViewer->zoomIn();
+    else
+      m_pictureViewer->zoomOut();
+    refresh();
   }
 }

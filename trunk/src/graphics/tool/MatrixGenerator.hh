@@ -15,9 +15,14 @@ class MatrixGenerator : public QDialog { Q_OBJECT
 public:
   
   /** Constructeurs et destructeur */
-  MatrixGenerator(Matrix<double>*, bool = true);
+  MatrixGenerator(Matrix<double>*, int = 0, int = 100, bool = true);
   ~MatrixGenerator();
 
+  /** Mutateurs */
+  void setMinimum(int);
+  void setMaximum(int);
+  void setRange(int, int);
+  
   /** Methodes */
   Matrix<double>* createMatrix();
 
@@ -35,6 +40,7 @@ private:
   QHBoxLayout* createControlsLayout();
   
   /** Attributs */
+  int m_min, m_max;
   Matrix<double>* m_matrix;
   QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
   QGridLayout* m_matrixLayout;

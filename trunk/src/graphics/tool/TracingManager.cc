@@ -7,6 +7,7 @@
 #include "Tracing.hh"
 #include "Picture.hh"
 
+
 /** Constructeurs et destructeur */
 TracingManager::TracingManager(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier),

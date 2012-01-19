@@ -8,6 +8,7 @@
 
 class UserInterface;
 class PictureModifier;
+class SeamCarvingOperation;
 
 
 class ToolBoxChooser : public QWidget { Q_OBJECT
@@ -43,6 +44,7 @@ private:
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
   QSlider *m_sliderSeamCarvingWidth, *m_sliderSeamCarvingHeight;
+  SeamCarvingOperation* m_seamCarvingOperation;
 
 };
 

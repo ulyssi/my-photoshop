@@ -75,7 +75,7 @@ void ToolBoxChooser::refreshPreview() {
   Previewer* previewer = m_userInterface->getPreviewer();
   // if (m_seamCarvingOperation != NULL) {
   if (m_pictureModifier != NULL) {
-    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
+    if (m_seamCarvingOperation == NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
     m_seamCarvingOperation->setTargetWidth(m_sliderSeamCarvingWidth->value());
     m_seamCarvingOperation->setTargetHeight(m_sliderSeamCarvingHeight->value());
     previewer->setData(m_seamCarvingOperation->updatePreview());
@@ -106,6 +106,8 @@ QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
   layout->addWidget(m_sliderSeamCarvingWidth);
   layout->addWidget(m_sliderSeamCarvingHeight);
   
+  // groupBox->setCheckable(true);
+  // connect(groupBox, SIGNAL(toggled(bool)), groupBox, SLOT(setEnabled(bool)));
   groupBox->setLayout(layout);
   return groupBox;
 }

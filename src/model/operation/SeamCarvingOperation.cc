@@ -12,7 +12,10 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_width(m_pictureData->getWidth()),
   m_height(m_pictureData->getHeight()),
   m_gradient(createGradientMatrix()),
-  m_minimumPath(createMinimumPath()),
+  m_minimumPathH(createMinimumPathH()),
+  m_minimumPathV(createMinimumPathV()),
+  m_pathH(new int[m_width]),
+  m_pathV(new int[m_height]),
   m_targetWidth(m_width),
   m_targetHeight(m_height)
 {
@@ -54,8 +57,8 @@ void SeamCarvingOperation::setTargetHeight(int targetHeight) { m_targetHeight = 
 /** Methodes */
 Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   
+  initializeMinimumPathV();
   while (m_width > m_targetWidth) {
-    initializeMinimumPathV();
     deleteRow();
   }
   
@@ -64,11 +67,6 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
     deleteLine();
   }
   
-  // for (int k = 0; k < height - m_targetHeight; k++) {
-  //   initializeMinimumPathY();
-  //   deleteLine();
-  // }
-
   return new Matrix<unsigned int>(m_width, m_height, m_pictureData->getData());
 }
 
@@ -78,10 +76,16 @@ Picture* SeamCarvingOperation::applyOperation() {
 
 
 /** Methodes internes */
-SeamCarvingOperation::Path** SeamCarvingOperation::createMinimumPath() {
-  m_minimumPath = new Path*[m_width];
-  for (int i = 0; i < m_width; i++) m_minimumPath[i] = new Path[m_height];
-  return m_minimumPath;
+SeamCarvingOperation::Path** SeamCarvingOperation::createMinimumPathH() {
+  m_minimumPathH = new Path*[m_width];
+  for (int i = 0; i < m_width; i++) m_minimumPathH[i] = new Path[m_height];
+  return m_minimumPathH;
+}
+
+SeamCarvingOperation::Path** SeamCarvingOperation::createMinimumPathV() {
+  m_minimumPathV = new Path*[m_width];
+  for (int i = 0; i < m_width; i++) m_minimumPathV[i] = new Path[m_height];
+  return m_minimumPathV;
 }
 
 unsigned int** SeamCarvingOperation::createGradientMatrix() {
@@ -115,30 +119,46 @@ void SeamCarvingOperation::deleteRow() {
   unsigned int** pictureData = m_pictureData->getData();
 
   // recherche du chemin de plus faible poids
-  int xFinal = 0;
+  int xFinal = 0, xInit;
   for (int i = 1; i < m_width; i++)
-    if (m_minimumPath[i][m_height-1].m_pathValueV < m_minimumPath[xFinal][m_height-1].m_pathValueV) 
+    if (m_minimumPathV[i][m_height-1].m_pathValue < m_minimumPathV[xFinal][m_height-1].m_pathValue) 
       xFinal = i;
-
-  // mise a jour des donnees de l'image
+  m_pathV[m_height-1] = xFinal;
+  for (int j = m_height-1; j > 0; j--) m_pathV[j-1] = m_minimumPathV[m_pathV[j]][j].m_previous;
   m_width--;
-  int xTmp = xFinal;
-  for (int j = m_height-1; j >= 0; j--) {
-    for (int i = xTmp; i < m_width; i++) {
+  
+  // mise a jour des donnees de l'image
+  for (int j = 0; j < m_height; j++)
+    for (int i = m_pathV[j]; i < m_width; i++) {
       pictureData[i][j] = pictureData[i+1][j];
       m_gradient[i][j] = m_gradient[i+1][j];
+      m_minimumPathV[i][j].m_pathValue = m_minimumPathV[i+1][j].m_pathValue;
+      m_minimumPathV[i][j].m_previous = m_minimumPathV[i+1][j].m_previous-1;
     }
-    xTmp = m_minimumPath[xTmp][j].m_previousV;
+  
+  // mise a jour des gradients locaux
+  for (int j = 0; j < m_height; j++)
+    for (int i = m_pathV[j]-1; i <= m_pathV[j]+1; i++)
+      if (0 <= i && i < m_width)
+	updateGradient(i, j);
+
+  // mise a jour des chemins
+  int xMin = m_pathV[0], xMax = m_pathV[0]+1;
+  for (int j = 0; j < m_height; j++) {
+    int min = xMin-1, max = xMax+1;
+    for (int i = xMin; i < xMax; i++) {
+      unsigned int pathValue = m_minimumPathV[i][j].m_pathValue;
+      updateMinimumPathV(i, j);
+      if (pathValue != m_minimumPathV[i][j].m_pathValue) {
+      	if (min == xMin-1) min = i-2;
+      	max = i+3;
+      }
+    }
+    if (min < 0) xMin = 0; else xMin = min;
+    if (max > m_width) xMax = m_width; else xMax = max;
   }
 
-  // mise a jour des gradients locaux
-  xTmp = xFinal;
-  for (int j = m_height-1; j >= 0; j--) {
-    for (int i = xTmp-2; i <= xTmp+2; i++)
-      if (0 <= i && i < m_width) 
-	updateGradient(i, j);
-    xTmp = m_minimumPath[xTmp][j].m_previousV;
-  }
+  // initializeMinimumPathV();
 }
 
 void SeamCarvingOperation::deleteLine() {
@@ -147,7 +167,7 @@ void SeamCarvingOperation::deleteLine() {
   // recherche du chemin de plus faible poids
   int yFinal = 0;
   for (int j = 1; j < m_height; j++)
-    if (m_minimumPath[m_width-1][j].m_pathValueH < m_minimumPath[m_width-1][yFinal].m_pathValueH) 
+    if (m_minimumPathH[m_width-1][j].m_pathValue < m_minimumPathH[m_width-1][yFinal].m_pathValue) 
       yFinal = j;
 
   // mise a jour des donnees de l'image
@@ -158,7 +178,7 @@ void SeamCarvingOperation::deleteLine() {
       pictureData[i][j] = pictureData[i][j+1];
       m_gradient[i][j] = m_gradient[i][j+1];
     }
-    yTmp = m_minimumPath[i][yTmp].m_previousH;
+    yTmp = m_minimumPathH[i][yTmp].m_previous;
   }
 
   // mise a jour des gradients locaux
@@ -167,37 +187,49 @@ void SeamCarvingOperation::deleteLine() {
     for (int j = yTmp-2; j <= yTmp+2; j++)
       if (0 <= j && j < m_height) 
 	updateGradient(i, j);
-    yTmp = m_minimumPath[i][yTmp].m_previousH;
+    yTmp = m_minimumPathH[i][yTmp].m_previous;
   }
 }
 
 inline void SeamCarvingOperation::updateMinimumPathH(int i, int j) {
   if (i == 0) {
-    m_minimumPath[0][j].m_pathValueH = m_gradient[0][j];
-    m_minimumPath[0][j].m_previousH = -1;
+    m_minimumPathH[0][j].m_pathValue = m_gradient[0][j];
+    m_minimumPathH[0][j].m_previous = -1;
   }
   else {
-    m_minimumPath[i][j].m_previousH = j;
-    if (j-1 >= 0 && m_minimumPath[i-1][j-1].m_pathValueH < m_minimumPath[i-1][m_minimumPath[i][j].m_previousH].m_pathValueH) 
-      m_minimumPath[i][j].m_previousH = j-1;
-    if (j+1 < m_height && m_minimumPath[i-1][j+1].m_pathValueH < m_minimumPath[i-1][m_minimumPath[i][j].m_previousH].m_pathValueH)
-      m_minimumPath[i][j].m_previousH = j+1;
-    m_minimumPath[i][j].m_pathValueH = m_minimumPath[i-1][m_minimumPath[i][j].m_previousH].m_pathValueH + m_gradient[i][j];
+    unsigned int k = m_gradient[i][j];
+    unsigned int kSide = k;
+    m_minimumPathH[i][j].m_previous = j;
+    m_minimumPathH[i][j].m_pathValue = m_minimumPathH[i-1][j].m_pathValue + k;
+    if (j-1 >= 0 && m_minimumPathH[i-1][j-1].m_pathValue + kSide < m_minimumPathH[i-1][m_minimumPathH[i][j].m_previous].m_pathValue) {
+      m_minimumPathH[i][j].m_previous = j-1;
+      m_minimumPathH[i][j].m_pathValue = m_minimumPathH[i-1][j-1].m_pathValue + kSide;
+    }
+    if (j+1 < m_height && m_minimumPathH[i-1][j+1].m_pathValue < m_minimumPathH[i-1][m_minimumPathH[i][j].m_previous].m_pathValue) {
+      m_minimumPathH[i][j].m_previous = j+1;
+      m_minimumPathH[i][j].m_pathValue = m_minimumPathH[i-1][j+1].m_pathValue + kSide;
+    }
   }
 }
 
 inline void SeamCarvingOperation::updateMinimumPathV(int i, int j) {
   if (j == 0) {
-    m_minimumPath[i][0].m_pathValueV = m_gradient[i][0];
-    m_minimumPath[i][0].m_previousV = -1;
+    m_minimumPathV[i][0].m_pathValue = m_gradient[i][0];
+    m_minimumPathV[i][0].m_previous = -1;
   }
   else {
-    m_minimumPath[i][j].m_previousV = i;
-    if (i-1 >= 0 && m_minimumPath[i-1][j-1].m_pathValueV < m_minimumPath[m_minimumPath[i][j].m_previousV][j-1].m_pathValueV) 
-      m_minimumPath[i][j].m_previousV = i-1;
-    if (i+1 < m_width && m_minimumPath[i+1][j-1].m_pathValueV < m_minimumPath[m_minimumPath[i][j].m_previousV][j-1].m_pathValueV)
-      m_minimumPath[i][j].m_previousV = i+1;
-    m_minimumPath[i][j].m_pathValueV = m_minimumPath[m_minimumPath[i][j].m_previousV][j-1].m_pathValueV + m_gradient[i][j];
+    unsigned int k = m_gradient[i][j];
+    unsigned int kSide = k;
+    m_minimumPathV[i][j].m_previous = i;
+    m_minimumPathV[i][j].m_pathValue = m_minimumPathV[i][j-1].m_pathValue + k;
+    if (i-1 >= 0 && m_minimumPathV[i-1][j-1].m_pathValue < m_minimumPathV[m_minimumPathV[i][j].m_previous][j-1].m_pathValue) {
+      m_minimumPathV[i][j].m_previous = i-1;
+      m_minimumPathV[i][j].m_pathValue = m_minimumPathV[i-1][j-1].m_pathValue + kSide;
+    }
+    if (i+1 < m_width && m_minimumPathV[i+1][j-1].m_pathValue < m_minimumPathV[m_minimumPathV[i][j].m_previous][j-1].m_pathValue) {
+      m_minimumPathV[i][j].m_previous = i+1;
+      m_minimumPathV[i][j].m_pathValue = m_minimumPathV[i+1][j-1].m_pathValue + kSide;
+    }
   }
 }
 

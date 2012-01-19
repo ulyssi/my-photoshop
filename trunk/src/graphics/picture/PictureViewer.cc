@@ -41,10 +41,16 @@ void PictureViewer::normalSize(){
   m_scale=1.0;
 }
 void PictureViewer::fitToWindow(QSize size){
+  //refreshData();
   std::cout<<"mscale2 "<<m_qImage.width()<<std::endl;
-  //  float scale =(float)((float)m_qImage.width()/((float)size.width()));
-  //std::cout<<scale<<std::endl;
-  //m_scale = 1/scale;
+  float scaleW=(float)((float)m_qImage.width()/((float)size.width()));
+  float scaleH=(float)((float)m_qImage.height()/((float)size.height())); 
+  std::cout<<scaleW<<std::endl;
+  std::cout<<scaleH<<std::endl;
+  if(scaleH>scaleW)
+    m_scale = 1/scaleH;
+  else 
+    m_scale =1 /scaleW;
   std::cout<<m_scale<<std::endl;
 }
 

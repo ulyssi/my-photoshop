@@ -89,6 +89,7 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 }
 
 
+
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
   up->setX(event->x());
   up->setY(event->y());

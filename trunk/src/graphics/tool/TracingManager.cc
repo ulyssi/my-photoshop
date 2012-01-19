@@ -16,9 +16,11 @@ TracingManager::TracingManager(PictureModifier* pictureModifier) :
 {
   setAccessibleName(tr("Tracing"));
   m_vLayout=new QVBoxLayout();
+  m_grid=new QGridLayout();
   buildFoot();
   buildHead(); 
-  m_vLayout->addWidget(m_header);
+  
+ 
   setLayout(m_vLayout);
   m_selected=new std::vector<int>();
   
@@ -49,7 +51,7 @@ void TracingManager::refresh() {
       std::vector <Tracing *> list=cPicture->getTracingList();
       int id;
       for(id=m_lastIndex;id<list.size();id++){
-	buildLine(list[id]);
+	buildLine(list[id],id+1);
       }
       m_lastIndex=id;
     }
@@ -57,26 +59,38 @@ void TracingManager::refresh() {
 }
 
 /*the following methodes are used to build and connect the buttons of the manager*/
-void TracingManager::buildHead(){}
+void TracingManager::buildHead(){ 
+  m_grid=new QGridLayout();
+  QLabel *tracing=new QLabel(tr("tracing"));
+  QLabel *visible=new QLabel(tr("visible"));
+  QLabel *selected=new QLabel(tr("selected"));
+  QLabel *alpha=new QLabel(tr("alpha"));
+  m_grid->addWidget(tracing,0,0);
+  m_grid->addWidget(visible,0,1);
+  m_grid->addWidget(selected,0,2);
+  m_grid->addWidget(alpha,0,3);
+  m_vLayout->addLayout((QLayout *)m_grid);
+  
+}
 
 
-void TracingManager::buildLine(Tracing *cTracing){
+void TracingManager::buildLine(Tracing *cTracing,int line){
 
   SignalManager *sm=new SignalManager(cTracing,m_pictureModifier,this);
-  QHBoxLayout* line =new QHBoxLayout();
+ 
   int num=cTracing->getIndex();
   QLabel * label=new QLabel((QString("Tracing")+QString(QString::number(num))));
   QCheckBox * select=new QCheckBox(QString(""));
   QCheckBox * visible=new QCheckBox(QString(""));
   visible->setCheckState (Qt::Checked);
   QSpinBox*  alpha=new QSpinBox();
- 
+  
   initSpin(alpha);
-  line->addWidget(label);
-  line->addWidget(visible);
-  line->addWidget(select);
-  line->addWidget(alpha);
-  m_vLayout->addLayout(line);
+  m_grid->addWidget(label,line,0);
+  m_grid->addWidget(visible,line,1);
+  m_grid->addWidget(select,line,2);
+  m_grid->addWidget(alpha,line,3);
+  
   connect(alpha,SIGNAL(valueChanged ( int)),sm, SLOT(setAlpha(int))); 
   connect(visible,SIGNAL(stateChanged ( int)),sm, SLOT(setVisible(int))); 
   connect(select,SIGNAL(stateChanged ( int)),sm, SLOT(setSelected(int))); 

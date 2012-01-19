@@ -31,6 +31,21 @@ SeamCarvingOperation::~SeamCarvingOperation() {}
 
 
 /** Accesseurs */
+// void SeamCarvingOperation::setPicture(Picture* picture) {
+//   if (picture != m_picture) {
+//     delete m_pictureData;
+//     delete m_gradient;
+//     delete m_minimumPath;
+//     m_picture = picture;
+//     m_pictureData = new Matrix<unsigned int>(m_picture->getData());
+//     m_width(m_pictureData->getWidth());
+//     m_height(m_pictureData->getHeight());
+//     m_gradient(createGradientMatrix());
+//     m_minimumPath(createMinimumPath());
+//     initializeGradientMatrix();
+//   }
+// }
+
 void SeamCarvingOperation::setTargetWidth(int targetWidth) { m_targetWidth = targetWidth; }
 
 void SeamCarvingOperation::setTargetHeight(int targetHeight) { m_targetHeight = targetHeight; }
@@ -119,38 +134,11 @@ void SeamCarvingOperation::deleteRow() {
   // mise a jour des gradients locaux
   xTmp = xFinal;
   for (int j = m_height-1; j >= 0; j--) {
-    for (int i = xTmp-1; i <= xTmp+1; i++)
+    for (int i = xTmp-2; i <= xTmp+2; i++)
       if (0 <= i && i < m_width) 
 	updateGradient(i, j);
     xTmp = m_minimumPath[xTmp][j].m_previousV;
   }
-
-  // recherche du chemin de plus faible poids
-  // int xFin = 0;
-  // for (int i = 1; i < m_width; i++)
-  //   if (m_minimumPath[i][m_height-1].m_pathValueY < m_minimumPath[yPath][m_height-1].m_pathValueY) 
-  //     xFin = i;
-
-  // suppression du chemin par copie de la partie haute de l'image
-  // m_width--;
-  // int xTmp = xFin;
-  // for (int j = m_height-1; j >= 0; j--) {
-  //   for (int i = xTmp; i < m_width; i++) m_pictureData->setValue(i, j, m_pictureData->getValue(i+1, j));
-  //   xTmp = m_minimumPath[xTmp][j].m_previousX;
-  // }
-  
-  // mise a jour du gradient des points voisins du chemin
-  // yPathTmp = yPath;
-  // for (int j = m_height-1; j >= 0; j--) {
-  //   for (int i = yPathTmp-1; i <= yPathTmp+1; i++) 
-  //     if (0 <= i && i < m_width && 0 <= j && j < m_height)
-  // 	m_gradient[i][j] = updateGradient(i, j);
-  //   for (int i = yPathTmp+2; i < m_width; i++) if (0 <= i && i < m_width && 0 <= j && j < m_height) m_gradient[i][j] = m_gradient[i+1][j];
-  //   yPathTmp = m_minimumPath[yPathTmp][j].m_previousY;
-  // }
-
-  // mise a jour des chemins
-  
 }
 
 void SeamCarvingOperation::deleteLine() {
@@ -176,7 +164,7 @@ void SeamCarvingOperation::deleteLine() {
   // mise a jour des gradients locaux
   yTmp = yFinal;
   for (int i = m_width-1; i >= 0; i--) {
-    for (int j = yTmp-1; j <= yTmp+1; j++)
+    for (int j = yTmp-2; j <= yTmp+2; j++)
       if (0 <= j && j < m_height) 
 	updateGradient(i, j);
     yTmp = m_minimumPath[i][yTmp].m_previousH;
@@ -228,3 +216,4 @@ inline void SeamCarvingOperation::updateGradient(int i, int j) {
   m_gradient[i][j] = gradientX * gradientX + gradientY * gradientY;
 }
 
+// inline void updatePixel(int i, int j, 

@@ -26,19 +26,21 @@ private:
 
   /** Structure interne */
   typedef struct Path {
-    unsigned int m_pathValueX, m_pathValueY;
-    int m_previousX;
-    int m_previousY;
+    unsigned int m_pathValueH, m_pathValueV;
+    int m_previousH, m_previousV;
   } Path;
 
   /** Methodes internes */
   Path** createMinimumPath();
   unsigned int** createGradientMatrix();
-  void initializeMinimumPathX();
-  void initializeMinimumPathY();
+  void initializeGradientMatrix();
+  void initializeMinimumPathH();
+  void initializeMinimumPathV();
   void deleteLine();
   void deleteRow();
-  unsigned int inline updateGradient(int, int);
+  inline void updateMinimumPathH(int, int);
+  inline void updateMinimumPathV(int, int);
+  inline void updateGradient(int, int);
 
   /** Attributs */
   Picture* m_picture;
@@ -47,6 +49,8 @@ private:
   unsigned int** m_gradient;
   Path** m_minimumPath;
   int m_targetWidth, m_targetHeight;
+  int m_sobelX[3][3];
+  int m_sobelY[3][3];
 
 };
 

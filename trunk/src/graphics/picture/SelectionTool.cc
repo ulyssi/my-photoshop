@@ -16,7 +16,7 @@ SelectionTool::~SelectionTool()
 {}
 
 void SelectionTool::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget ) {
-    painter->setPen((const QPen&)*my_borderPen);
+  painter->setPen((const QPen&)*my_borderPen);
   painter->setBrush((const QBrush& )*my_brush);
   painter->drawRect(rect());
   

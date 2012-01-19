@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QSpinBox>
@@ -45,6 +46,7 @@ private:
   /** Attributs */
   PictureModifier* m_pictureModifier;
   QLabel * m_header;
+  QGridLayout * m_grid;
   QHBoxLayout * m_foot;
   QVBoxLayout* m_vLayout;
   int m_lastIndex;
@@ -52,7 +54,7 @@ private:
 
   /**Methodes */
   void buildHead();
-  void buildLine(Tracing *);
+  void buildLine(Tracing *,int);
   void buildFoot();
   void initSpin(QSpinBox *);
   

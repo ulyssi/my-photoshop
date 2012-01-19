@@ -19,11 +19,11 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
   m_picture(picture),
   m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
+  setTabName(m_picture->getName());
   refreshData();
   m_pictureArea = new PictureArea(this);
   // setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
   // setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
-  setTabName(m_picture->getName());
   setWidget(m_pictureArea);
   refresh();
 }

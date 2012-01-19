@@ -82,18 +82,18 @@ void PictureModifier::keyReleaseEvent ( QKeyEvent * event ) {
 
 
 void PictureModifier::zoomIn(){
-  m_pictureArea->getPictureViewer()->zoomIn();
+  m_pictureArea->zoomIn();
   refresh();
 }
 void PictureModifier::zoomOut(){
-  m_pictureArea->getPictureViewer()->zoomOut();
+  m_pictureArea->zoomOut();
   refresh();
 }  
 void PictureModifier::normalSize(){
-  m_pictureArea->getPictureViewer()->normalSize();
+  m_pictureArea->normalSize();
   refresh();
 }
 void PictureModifier::fitToWindow(){
-  m_pictureArea->fitToWindow();
+   m_pictureArea->fitToWindow();
   refresh();
 }

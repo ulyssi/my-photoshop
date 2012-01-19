@@ -19,10 +19,10 @@ public:
   void scaleImage(double);
   void refresh();
   void refreshData();
-  void zoomIn();
-  void zoomOut();
-  void normalSize();
-  void fitToWindow(QSize);
+  double zoomIn();
+  double zoomOut();
+  double normalSize();
+  double fitToWindow(QSize);
   PictureModifier*  getPictureModifier();
 private:
 

@@ -18,6 +18,9 @@ public:
   /**getters**/
   PictureViewer* getPictureViewer();
   void fitToWindow();
+  void zoomIn();
+  void zoomOut();
+  void normalSize();
 private:
   /**Attributes**/
   PictureModifier* m_pictureModifier;
@@ -31,7 +34,8 @@ private:
   int m_numDegrees;
   
   /**Methodes **/
-  
+  void setDownCoordinate(double,double);
+  void setUpCoordinate(double x , double y);
   void setDownCoordinate(QMouseEvent*);
   void setSelection();
   

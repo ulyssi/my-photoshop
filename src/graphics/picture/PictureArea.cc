@@ -25,12 +25,12 @@ PictureArea::PictureArea(PictureModifier* p){
 PictureArea::~PictureArea(){}
 
 /** Puclic Methodes**/
+
 void PictureArea::refresh(){
   m_pictureViewer->refresh();
   this->repaint();
-  QSize size= m_pictureViewer->sizeHint();
-  setSceneRect ( (qreal) 0, (qreal) 0, (qreal) size.width(), (qreal) size.height() );
-  resize(size.width(),size.height());
+  setSceneRect ( (qreal) 0, (qreal) 0, (qreal) m_pictureViewer->width(), (qreal) m_pictureViewer->height() );
+  resize(m_pictureViewer->width()+5,m_pictureViewer->height()+5);
 } 
 
 /** getters **/
@@ -38,22 +38,86 @@ PictureViewer* PictureArea::getPictureViewer(){
   return m_pictureViewer;
 }
 
+
 /** Private Methodes **/
 void PictureArea::setDownCoordinate(QMouseEvent* event){
   down->setX(event->x());
   down->setY(event->y());
-  if(down->x()>sizeHint().width())
-    down->setX(sizeHint().width()-10);
+  if(down->x()>m_pictureViewer->width())
+    down->setX(m_pictureViewer->width());
   else if (down->x()<0)
     down->setX(0);
-  if(down->y()>sizeHint().height())
-    down->setY(sizeHint().height()-10);
+  if(down->y()>m_pictureViewer->height())
+    down->setY(m_pictureViewer->height());
   else if (down->y()<0)
     down->setY(0);
+  std::cout<<"down coordinate mouse "<<down->y()<<std::endl;
+}
+void PictureArea::setDownCoordinate(double x , double y){
+  std::cout<<"down coordinate resize"<<y<<std::endl;
+  down->setX(x);
+  down->setY(y);
+  if(double(down->x())>m_pictureViewer->width())
+    down->setX(m_pictureViewer->width());
+  else if (down->x()<0)
+    down->setX(0);
+  if(double(down->y())>m_pictureViewer->height())
+    down->setY(m_pictureViewer->height());
+  else if (down->y()<0)
+    down->setY(0);
+  std::cout<<"down coordinate resize2    "<<y<<std::endl;
+}
+
+void PictureArea::setUpCoordinate(double x , double y){
+  up->setX(x);
+  up->setY(y);
+  if(up->x()>m_pictureViewer->width())
+    up->setX(m_pictureViewer->width());
+  else if (up->x()<0)
+    up->setX(0);
+  if(up->y()>m_pictureViewer->height())
+    up->setY(m_pictureViewer->height());
+  else if (up->y()<0)
+    up->setY(0);
+
 }
 
 void PictureArea::fitToWindow(){
-  m_pictureViewer->fitToWindow(parentWidget()->size());
+  double resize =m_pictureViewer->fitToWindow(parentWidget()->size());
+  refresh();
+  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
+  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
+  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
+  setSelection();
+  this->repaint();
+}
+
+void PictureArea::zoomIn(){
+  double resize = m_pictureViewer->zoomIn();
+  refresh();
+  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
+  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
+  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
+  setSelection();
+  this->repaint();
+}
+void PictureArea::zoomOut(){
+   double resize = m_pictureViewer->zoomOut();
+   refresh();
+  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
+  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
+  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
+  setSelection();
+  this->repaint();
+}
+void PictureArea::normalSize(){
+  double resize = m_pictureViewer->normalSize();
+  refresh();
+  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
+  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
+  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
+  setSelection();
+  this->repaint();
 }
 
 void PictureArea::setSelection(){
@@ -88,27 +152,23 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   }
 }
 
-
-
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
   up->setX(event->x());
   up->setY(event->y());
   cliked=true;
-  
 }
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
   cliked=false;
 }
-
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {
   QGraphicsView::wheelEvent(event); 
   int numDegrees = event->delta() / 8;
   if(ctrl==true){  
     if (numDegrees>0)
-      m_pictureViewer->zoomIn();
+      zoomIn();
     else
-      m_pictureViewer->zoomOut();
+      zoomOut();
     refresh();
   }
 }

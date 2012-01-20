@@ -21,6 +21,9 @@ void PictureViewer::scaleImage(double scale){
     
 }
 
+QImage PictureViewer::getImage(){
+  return m_qImage;
+}
 
 double PictureViewer::zoomIn() { 
   double scale=m_scale+m_scaleFactor;
@@ -46,16 +49,12 @@ double PictureViewer::normalSize(){
 double PictureViewer::fitToWindow(QSize size){
   refreshData();
   refresh();
-  // std::cout<<"mscale2 "<<m_qImage.width()<<std::endl;
   float scaleW=(float)((float)m_qImage.width()/((float)size.width()));
   float scaleH=(float)((float)m_qImage.height()/((float)size.height())); 
-  //std::cout<<scaleW<<std::endl;
-  //std::cout<<scaleH<<std::endl;
   if(scaleH>scaleW)
     m_scale = 1/scaleH;
   else 
     m_scale =1 /scaleW;
-  std::cout<<m_scale<<std::endl;
   return m_scale;
 }
 

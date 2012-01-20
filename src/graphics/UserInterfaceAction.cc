@@ -56,6 +56,14 @@ void UserInterface::exit() {}
 void UserInterface::undo() {}
 void UserInterface::redo() {}
 
+
+#include <iostream>
+void UserInterface::copy(){
+  m_viewTabWidget->getTabPanel()->copy();
+}
+void UserInterface::cut(){}
+void UserInterface::paste(){}
+
 void UserInterface::zoomIn() {
   m_viewTabWidget->getTabPanel()->zoomIn();
 }
@@ -133,7 +141,10 @@ void UserInterface::updateActions() {
   
   m_undoAct->setEnabled(false);
   m_redoAct->setEnabled(false);
-  
+  m_copy->setEnabled(true);
+  m_cut->setEnabled(true);
+  m_paste->setEnabled(true);
+ 
   m_zoomInAct->setEnabled(true);
   m_zoomOutAct->setEnabled(true);
   m_normalSizeAct->setEnabled(true);
@@ -185,6 +196,20 @@ void UserInterface::createEditAction() {
   m_redoAct = new QAction(tr("&Redo"), this);
   m_redoAct->setShortcut(tr("Ctrl+E"));
   connect(m_redoAct, SIGNAL(triggered()), this, SLOT(redo()));
+
+  m_copy=  new QAction(tr("&Copy"), this);
+  m_undoAct->setShortcut(tr("Ctrl+C"));
+  connect(m_copy, SIGNAL(triggered()), this, SLOT(copy()));
+
+  m_paste=  new QAction(tr("&Paste"), this);
+  m_undoAct->setShortcut(tr("Ctrl+V"));
+  connect(m_paste, SIGNAL(triggered()), this, SLOT(paste()));
+
+  m_cut= new QAction(tr("&Cut"), this);
+  m_undoAct->setShortcut(tr("Ctrl+X"));
+  connect(m_cut, SIGNAL(triggered()), this, SLOT(cut()));
+  
+
 }
 
 void UserInterface::createViewAction() {

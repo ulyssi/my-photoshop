@@ -30,7 +30,9 @@ public :
   void zoomOut();  
   void normalSize();
   void fitToWindow();
-
+  void copy();	
+  void paste();
+  void cut();
 private :
 
   /** Attributs */

@@ -26,6 +26,10 @@ QMenu* UserInterface::createEditMenu() {
   m_editMenu = new QMenu(tr("&Edit"), this);
   m_editMenu->addAction(m_undoAct);
   m_editMenu->addAction(m_redoAct);
+  m_fileMenu->addSeparator();
+  m_editMenu->addAction(m_copy);
+  m_editMenu->addAction(m_paste);
+  m_editMenu->addAction(m_cut);
   return m_editMenu;
 }
 

@@ -9,10 +9,10 @@
 class PictureModifier;
 class PictureViewer;
 class SelectionTool;
-
+class UserInterface;
 class PictureArea: public QGraphicsView { Q_OBJECT
 public: 
-  PictureArea(PictureModifier*);
+  PictureArea(PictureModifier*,UserInterface*);
   ~PictureArea();
   void refresh();
   /**getters**/
@@ -21,8 +21,12 @@ public:
   void zoomIn();
   void zoomOut();
   void normalSize();
+  void copy();	
+  void paste();
+  void cut();
 private:
   /**Attributes**/
+  UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
   QGraphicsScene *m_Scene;
   PictureViewer* m_pictureViewer;
@@ -38,7 +42,8 @@ private:
   void setUpCoordinate(double x , double y);
   void setDownCoordinate(QMouseEvent*);
   void setSelection();
-  
+  void refreshCoordinate(double);
+				
 public slots:
   /** SLOTS**/
   void 	keyPressEvent ( QKeyEvent * event );

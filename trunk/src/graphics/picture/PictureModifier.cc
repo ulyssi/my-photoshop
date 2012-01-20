@@ -21,9 +21,7 @@ PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface)
 {
   setTabName(m_picture->getName());
   refreshData();
-  m_pictureArea = new PictureArea(this);
-  // setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
-  // setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
+  m_pictureArea = new PictureArea(this,userInterface);
   setWidget(m_pictureArea);
   refresh();
 }
@@ -96,4 +94,15 @@ void PictureModifier::normalSize(){
 void PictureModifier::fitToWindow(){
    m_pictureArea->fitToWindow();
   refresh();
+}
+
+
+void PictureModifier:: copy(){
+  m_pictureArea->copy();
+}		
+void PictureModifier:: paste(){
+  m_pictureArea->paste();
+}
+void PictureModifier:: cut(){
+  m_pictureArea->cut();
 }

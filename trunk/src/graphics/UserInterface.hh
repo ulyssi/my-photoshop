@@ -7,7 +7,9 @@
 #include <QAction>
 #include <QMenu>
 #include <QToolBar>
-
+#include <QClipboard>
+#include <QShortcut>
+#include <QKeySequence>
 #include "Matrix.hh"
 
 class Previewer;
@@ -29,10 +31,11 @@ class UserInterface : public QMainWindow { Q_OBJECT
 public:
 
   /** Constructeurs et destructeur */
-  UserInterface(QApplication*);
+  UserInterface(QApplication*,QClipboard* );
   ~UserInterface();
 
   /** Accesseurs */
+  
   Previewer* getPreviewer();
   Histogram* getHistogram();
   ColorChooser* getColorChooser();
@@ -42,7 +45,7 @@ public:
   ConvolveOperationChooser* getConvolveOperationChooser();
   AlgebricOperationChooser* getAlgebricOperationChooser();
   ColorConvertOperationChooser* getColorConvertOperationChooser();
-
+  QClipboard* getClipBoard();
   /** Methodes */
   void update();
 
@@ -67,6 +70,11 @@ public slots:
 
   void undo();
   void redo();
+  
+  void cut();
+  void copy();
+  void paste();
+  
 
   void zoomIn();
   void zoomOut();
@@ -144,10 +152,12 @@ private:
   QDockWidget* createColorConvertOperationChooserDock();
 
   /** Attributs */
+ 
   QApplication* m_QApplication;
+  QClipboard* m_clipboard;
   PictureManager* m_pictureManager;
   TabWidget* m_viewTabWidget;
-
+  
   Previewer* m_previewer;
   Histogram* m_histogram;
   ColorChooser* m_colorChooser;
@@ -179,6 +189,10 @@ private:
   QDockWidget* m_convolveOperationChooserDock;
   QDockWidget* m_algebricOperationChooserDock;
   QDockWidget* m_colorConvertOperationChooserDock;
+  
+  QAction* m_copy;
+  QAction* m_cut;
+  QAction* m_paste;
 
   QAction* m_openAct;
   QAction* m_saveAct;

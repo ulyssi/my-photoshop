@@ -4,8 +4,9 @@
 
 int main(int argc, char **argv) {
   QApplication application(argc, argv);
-  //[WINDOWS] application->setStyle("windows");
-  UserInterface userInterface(&application);
+  QClipboard* m_clipboard= QApplication::clipboard();
+  UserInterface userInterface(&application ,m_clipboard );
   userInterface.show();
+  
   return application.exec();
 }

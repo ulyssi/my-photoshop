@@ -7,21 +7,19 @@
 
 
 /** Constructeurs et Destructeurs */
-UserInterface::UserInterface(QApplication* qapplication) :
+UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   m_QApplication(qapplication)
-{
+{ m_clipboard = clipboard;
+  
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
-
   createActions();
   createMenuBar();
   createToolBars();
   createToolBoxDocks();
-
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
-
   update();
 }
     

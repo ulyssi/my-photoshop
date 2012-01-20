@@ -40,3 +40,7 @@ void TabPanel:: zoomIn() {}
 void TabPanel:: zoomOut(){}
 void TabPanel:: normalSize(){}
 void TabPanel:: fitToWindow(){}
+
+void TabPanel:: copy(){}		
+void TabPanel:: paste(){}
+void TabPanel:: cut(){}

@@ -3,8 +3,10 @@
 #include "PictureViewer.hh"
 #include "PictureModifier.hh"
 #include "SelectionTool.hh"
+#include "UserInterface.hh"
 
-PictureArea::PictureArea(PictureModifier* p){
+PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
+  m_userInterface = userinterface;
   m_pictureModifier=p;
   m_Scene=new QGraphicsScene(this);
   m_Scene->setBackgroundBrush(QColor(128, 128, 128, 0));
@@ -51,8 +53,8 @@ void PictureArea::setDownCoordinate(QMouseEvent* event){
     down->setY(m_pictureViewer->height());
   else if (down->y()<0)
     down->setY(0);
-  std::cout<<"down coordinate mouse "<<down->y()<<std::endl;
 }
+
 void PictureArea::setDownCoordinate(double x , double y){
   std::cout<<"down coordinate resize"<<y<<std::endl;
   down->setX(x);
@@ -65,7 +67,6 @@ void PictureArea::setDownCoordinate(double x , double y){
     down->setY(m_pictureViewer->height());
   else if (down->y()<0)
     down->setY(0);
-  std::cout<<"down coordinate resize2    "<<y<<std::endl;
 }
 
 void PictureArea::setUpCoordinate(double x , double y){
@@ -82,43 +83,34 @@ void PictureArea::setUpCoordinate(double x , double y){
 
 }
 
-void PictureArea::fitToWindow(){
-  double resize =m_pictureViewer->fitToWindow(parentWidget()->size());
+void PictureArea::refreshCoordinate(double resize){
   refresh();
   this->resize(m_pictureViewer->width(),m_pictureViewer->height());
   setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
   setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
   setSelection();
   this->repaint();
+
 }
 
+
+
+
+void PictureArea::fitToWindow(){
+  refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
+}
 void PictureArea::zoomIn(){
-  double resize = m_pictureViewer->zoomIn();
-  refresh();
-  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
-  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
-  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
-  setSelection();
-  this->repaint();
+  refreshCoordinate(m_pictureViewer->zoomIn());
 }
 void PictureArea::zoomOut(){
-   double resize = m_pictureViewer->zoomOut();
-   refresh();
-  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
-  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
-  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
-  setSelection();
-  this->repaint();
+  refreshCoordinate(m_pictureViewer->zoomOut());
 }
 void PictureArea::normalSize(){
-  double resize = m_pictureViewer->normalSize();
-  refresh();
-  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
-  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
-  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
-  setSelection();
-  this->repaint();
+  refreshCoordinate(m_pictureViewer->normalSize());
 }
+
+
+
 
 void PictureArea::setSelection(){
   if(down->x()<up->x()&&down->y()<up->y())
@@ -132,10 +124,11 @@ void PictureArea::setSelection(){
 }
 
 
+
 /** Public Slots **/
 void PictureArea::keyPressEvent ( QKeyEvent * event ){
   if (event->modifiers()==Qt::ControlModifier)
-     ctrl= true;
+    ctrl= true;
 }
 
 void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
@@ -143,7 +136,11 @@ void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
 }
 
 
-void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){}
+void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
+    QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+    m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
+    //m_selectionTool->hide();
+}
 #include <iostream>
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   if(cliked){
@@ -155,10 +152,12 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
   up->setX(event->x());
   up->setY(event->y());
+  //m_selectionTool->show();
   cliked=true;
 }
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
   cliked=false;
+ 
 }
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {
@@ -171,4 +170,19 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
       zoomOut();
     refresh();
   }
+}
+
+
+void PictureArea::copy(){
+  QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+  m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
+
+}	
+void PictureArea::paste(){
+
+
+}
+void PictureArea::cut(){
+
+
 }

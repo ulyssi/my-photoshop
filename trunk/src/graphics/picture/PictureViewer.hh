@@ -19,6 +19,7 @@ public:
   void scaleImage(double);
   void refresh();
   void refreshData();
+  QImage getImage();
   double zoomIn();
   double zoomOut();
   double normalSize();

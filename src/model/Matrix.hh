@@ -74,9 +74,10 @@ public:
 	m_data[i][j] = data[i][j];
     }
   }
+  
 
   /** Methodes */
-  void initialize(T& value) {
+  void initialize(T value) {
     for (int i = 0; i < m_width; i++) 
       for (int j = 0; j < m_height; j++)
 	m_data[i][j] = value;

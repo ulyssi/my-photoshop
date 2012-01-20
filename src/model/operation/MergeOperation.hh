@@ -23,14 +23,14 @@ public:
 
   Tracing* doOperation(Tracing*);
 
-  Tracing* doOperation(std::vector<Tracing * >);
+  Matrix<unsigned int>* doOperation(std::vector<Tracing * >);
 
   Operation* clone();
 
 private:
 
   /** Methodes internes */
-  Tracing* doOperation(Tracing*, Tracing*);
+  Matrix<unsigned int>* doOperation(Matrix<unsigned int>*, Tracing*);
 
   inline  unsigned int combineAlpha(float a1,float a2) {
      return ((unsigned int)(floor((a1+a2-(a1*a2))*255.0f+0.5f)))<<24; 
@@ -51,6 +51,7 @@ private:
   inline float getAlpha(unsigned int p, float a){
     return (float)(PixelMod::getAlpha(p))*a/255.0f;
   }
+
 
 };
 

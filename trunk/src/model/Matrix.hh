@@ -49,14 +49,14 @@ public:
 
 
   /** Accesseurs */
-  int getWidth() const { return m_width; }
-  int getHeight() const { return m_height; }
+  inline int getWidth() const { return m_width; }
+  inline int getHeight() const { return m_height; }
 
-  T& getValue(int i, int j) const { return m_data[i][j]; }
+  inline T& getValue(int i, int j) const { return m_data[i][j]; }
   T** getData() { return m_data; }
   
   /** Mutateurs */
-  void setValue(int i, int j, T value) { m_data[i][j] = value; }
+  inline void setValue(int i, int j, T value) { m_data[i][j] = value; }
   //  void setValue(int i, int j, T& value) { m_data[i][j] = value; }
   
   void setData(Matrix<T>* matrix) {

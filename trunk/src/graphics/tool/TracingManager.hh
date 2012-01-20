@@ -40,6 +40,7 @@ private slots:
   void up();
   void down();
   void merge();
+  void remove();
 private:
 
  

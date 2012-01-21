@@ -19,7 +19,7 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_widthTarget(m_widthInit),
   m_heightTarget(m_heightInit),
   m_widthMax(m_widthInit),
-  m_heightMax(m_heightMax),
+  m_heightMax(m_heightInit),
   m_width(m_widthInit),
   m_height(m_heightInit),
   m_dataInit(createData()),
@@ -66,6 +66,7 @@ void SeamCarvingOperation::setTargetHeight(int heightTarget) { m_heightTarget = 
 
 /** Methodes */
 #include <iostream>
+#include <cmath>
 
 Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   
@@ -85,7 +86,7 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   for (int i = 0; i < m_width; i++) {
     Point* point = m_indexH[i];
     for (int j = 0; j < m_height && point != NULL; j++) {
-      preview->setValue(i, j, point->color);// PixelMod::createGrayScale(PixelMod::threshold(point->gradient / 10)));
+      preview->setValue(i, j, point->color);
       point = getSouthFrom(point);
     }
   }
@@ -120,23 +121,19 @@ inline SeamCarvingOperation::Point* SeamCarvingOperation::getWestFrom(Point* poi
 }
 
 inline SeamCarvingOperation::Point* SeamCarvingOperation::getNorthEastFrom(Point* point) {
-  if (point != NULL) return getEastFrom(point->north);
-  return NULL;
+  return getEastFrom(getNorthFrom(point));
 }
 
 inline SeamCarvingOperation::Point* SeamCarvingOperation::getNorthWestFrom(Point* point) {
-  if (point != NULL) return getWestFrom(point->north);
-  return NULL;
+  return getWestFrom(getNorthFrom(point));
 }
 
 inline SeamCarvingOperation::Point* SeamCarvingOperation::getSouthEastFrom(Point* point) {
-  if (point != NULL) return getEastFrom(point->south);
-  return NULL;
+  return getEastFrom(getSouthFrom(point));
 }
 
 inline SeamCarvingOperation::Point* SeamCarvingOperation::getSouthWestFrom(Point* point) {
-  if (point != NULL) return getWestFrom(point->south);
-  return NULL;
+  return getWestFrom(getSouthFrom(point));
 }
 
 
@@ -177,9 +174,9 @@ void SeamCarvingOperation::initializeData() {
     for (int j = 0; j < m_heightInit; j++) {
       Point* point = m_dataInit->getValue(i, j);
       if (j > 0) point->north = m_dataInit->getValue(i, j-1);
-      if (i > 0) point->west = m_dataInit->getValue(i-1, j);
       if (j < m_heightInit-1) point->south = m_dataInit->getValue(i, j+1);
       if (i < m_widthInit-1) point->east = m_dataInit->getValue(i+1, j);
+      if (i > 0) point->west = m_dataInit->getValue(i-1, j);
     }
 }
 
@@ -293,32 +290,34 @@ inline void SeamCarvingOperation::updateGradient(Point* point) {
 
 inline void SeamCarvingOperation::updateMinimumPathH(Point* point) {
   point->previous = NULL;
+  point->pathValue = point->gradient;
   Point* previous[3] = { getNorthWestFrom(point),
-			 getWestFrom(point),
-			 getSouthWestFrom(point)
+                         getWestFrom(point),
+                         getSouthWestFrom(point)
   };
   for (int i = 0; i < 3; i++)
-    if (previous[i] != NULL)
-      if (point->previous == NULL || previous[i]->pathValue < point->previous->pathValue)
-	point->previous = previous[i];
+    if (previous[i] != NULL && (point->previous == NULL || previous[i]->pathValue < point->previous->pathValue))
+      point->previous = previous[i];
+  if (point->previous != NULL) point->pathValue += point->previous->pathValue;
 }
 
 inline void SeamCarvingOperation::updateMinimumPathV(Point* point) {
   point->previous = NULL;
+  point->pathValue = point->gradient;
   Point* previous[3] = { getNorthWestFrom(point),
-			 getNorthFrom(point),
-			 getNorthEastFrom(point)
+                         getNorthFrom(point),
+                         getNorthEastFrom(point)
   };
   for (int i = 0; i < 3; i++)
-    if (previous[i] != NULL)
-      if (point->previous == NULL || previous[i]->pathValue < point->previous->pathValue)
-	point->previous = previous[i];
+    if (previous[i] != NULL && (point->previous == NULL || previous[i]->pathValue < point->previous->pathValue))
+      point->previous = previous[i];
+  if (point->previous != NULL) point->pathValue += point->previous->pathValue;
 }
 
 void SeamCarvingOperation::deleteRow() {
   
   // recherche du chemin de plus faible poids
-  Point *pMin = NULL, *pCur = m_indexV[0];
+  Point *pMin = NULL, *pCur = m_indexV[m_height-1];
   for (int i = 0; i < m_width && pCur != NULL; i++) {
     if (pMin == NULL || pCur->pathValue < pMin->pathValue) pMin = pCur;
     pCur = pCur->east;
@@ -328,9 +327,12 @@ void SeamCarvingOperation::deleteRow() {
   pCur = pMin;
   for (int j = 0; j < m_height && pCur != NULL; j++) {
     pCur->color = PixelMod::createRGB(255, 0, 0);
-    pCur = pCur->north;
+    // Point* pNext = pCur;
+    pCur = pCur->previous;
+    // if (pCur != NULL) pCur->next = pNext;
   }
   
+  // suppression du chemin
 
   // int xFinal = 0, xInit;
   // for (int i = 1; i < m_width; i++)

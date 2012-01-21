@@ -138,7 +138,7 @@ void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
 
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
     QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-    m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
+    // m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
     //m_selectionTool->hide();
 }
 #include <iostream>
@@ -175,7 +175,7 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
 
 void PictureArea::copy(){
   QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-  m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
+  // m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
 
 }	
 void PictureArea::paste(){

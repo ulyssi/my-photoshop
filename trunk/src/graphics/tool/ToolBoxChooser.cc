@@ -76,6 +76,7 @@ void ToolBoxChooser::refreshPreview() {
   // if (m_seamCarvingOperation != NULL) {
   if (m_pictureModifier != NULL) {
     if (m_seamCarvingOperation == NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
+    // m_seamCarvingOperation->setTargetWidth(m_pictureModifier->getPicture()->getWidth() - 1);
     m_seamCarvingOperation->setTargetWidth(m_sliderSeamCarvingWidth->value());
     m_seamCarvingOperation->setTargetHeight(m_sliderSeamCarvingHeight->value());
     previewer->setData(m_seamCarvingOperation->updatePreview());

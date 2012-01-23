@@ -37,6 +37,7 @@ private:
     unsigned int color;
     unsigned int gradient;
     unsigned int pathValue;
+    bool modify;
     Point *previous, *next;
     Point *north, *south, *east, *west;
   } Point;

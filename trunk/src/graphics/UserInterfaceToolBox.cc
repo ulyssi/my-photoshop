@@ -32,7 +32,7 @@ TracingManager* UserInterface::createTracingManager() { return new TracingManage
 AffineOperationChooser* UserInterface::createAffineOperationChooser() { return new AffineOperationChooser(this); }
 ConvolveOperationChooser* UserInterface::createConvolveOperationChooser() { return new ConvolveOperationChooser(this); }
 AlgebricOperationChooser* UserInterface::createAlgebricOperationChooser() { return new AlgebricOperationChooser(); }
-ColorConvertOperationChooser* UserInterface::createColorConvertOperationChooser() { return new ColorConvertOperationChooser(); }
+ColorConvertOperationChooser* UserInterface::createColorConvertOperationChooser() { return new ColorConvertOperationChooser(this); }
 
 
 /** Methodes internes */

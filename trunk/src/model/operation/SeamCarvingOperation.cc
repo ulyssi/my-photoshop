@@ -70,10 +70,8 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   // std::cout << "Invariant avant = " << invariant() << std::endl;
   
   if (m_width != m_widthTarget) {
-    while (m_widthTarget < m_width) {
-      initializeMinimumPathV2();
-      deleteRow();
-    }
+    initializeMinimumPathV2();
+    while (m_widthTarget < m_width) deleteRow();
     while (m_width < m_widthTarget && m_width < m_widthInit) newRow();
   }
     
@@ -86,13 +84,15 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   // std::cout << "Invariant apres = " << invariant() << std::endl;
 
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_width, m_height);
-  // for (int j = 0; j < m_height; j++) {
-  //   Point* point = m_indexV[j];
-  //   for (int i = 0; i < m_width; i++) {
-  //     if (point == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
+  // for (int i = 0; i < m_width; i++) {
+  //   Point *pi = m_indexH[i];
+  //   Point *pj = pi;
+  //   for (int j = 0; j < m_height; j++) {
+  //     if (pj == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
   //     else {
-  //       preview->setValue(i, j, point->color);
-  //       point = getEastFrom(point);
+  // 	if (pj->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
+  // 	else preview->setValue(i, j, pj->color);
+  //       pj = pj->south;
   //     }
   //   }
   // }
@@ -101,9 +101,10 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
     Point *pj = m_indexV[j];
     Point *pi = pj;
     for (int i = 0; i < m_width; i++) {
-      if (pi == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 255));
+      if (pi == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
       else {
-        preview->setValue(i, j, pi->color);
+  	if (pi->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
+  	else preview->setValue(i, j, pi->color);
         pi = pi->east;
       }
     }
@@ -163,6 +164,7 @@ Matrix<SeamCarvingOperation::Point*>* SeamCarvingOperation::createData() {
     for (int j = 0; j < m_heightInit; j++) {
       Point* point = new Point;
       point->color = colorData->getValue(i, j);
+      point->modify = false;
       point->gradient = 0;
       point->pathValue = 0;
       point->previous = NULL;
@@ -334,96 +336,108 @@ inline void SeamCarvingOperation::updateMinimumPathV(Point* point) {
 }
 
 void SeamCarvingOperation::deleteRow() {
-  
+
   // recherche du chemin de plus faible poids
-  Point *pMin = NULL, *pCur = m_indexV[m_height-1], *pNext;
-  for (int i = 0; i < m_width && pCur != NULL; i++) {
-  // while (pCur != NULL) {
+  Point *pMin = NULL, *pCur = m_indexV[m_height-1];
+  while (pCur != NULL) {
     if (pMin == NULL || pCur->pathValue < pMin->pathValue) pMin = pCur;
     pCur = pCur->east;
   }
   
-  // tracer du chemin en rouge
-  // pNext = NULL;
-  pCur = pMin;
-  for (int j = 0; j < m_height && pCur != NULL; j++) {
-    pCur->color = PixelMod::createRGB(255, 0, 0);
-    // pCur->next = pNext;
-    // pNext = pCur;
-    pCur = pCur->previous;
-  }
-  
   // suppression du chemin
   pCur = pMin;
-  for (int j = m_height-1; j >= 0 && pCur != NULL; j--) {
-    Point *pHaut = getNorthFrom(pCur), *pBas = getSouthFrom(pCur);
+  for (int j = m_height-1; j >= 0; j--) {
+    Point *pPrec = NULL;
+    if (pCur != NULL) pPrec = pCur->previous;
     Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
-
+    Point *pHautGauche = getNorthWestFrom(pCur), *pHaut = getNorthFrom(pCur), *pHautDroit = getNorthEastFrom(pCur);
+    
+    // Chainage laterale
     if (pDroit != NULL) pDroit->west = pGauche;
     if (pGauche != NULL) pGauche->east = pDroit;
-    else m_indexV[j] = pDroit;
+    else {
+      if (pCur == NULL) { std::cout << "ERROR_1" << std::endl; }
+      else {
+	if (m_indexV[j] == pCur) {
+	  std::cout << "OK" << std::endl;
+	  m_indexV[j] = pDroit;
+	}
+	else std::cout << "ERROR_2" << std::endl;
+      }
+    }
 
-    if (j == 0) {
+    // Chainage haut
+    if (pPrec == NULL) {
       int k = 0;
       while (k < m_width && m_indexH[k] != pCur) k++;
-      for (int i = k; i < m_width-1; i++) {
-        Point *tmp = m_indexH[i];
-        m_indexH[i] = m_indexH[i+1];
-        m_indexH[i+1] = tmp;
+      while (k < m_width-1) { m_indexH[k] = m_indexH[k+1]; k++; }
+      m_indexH[k] = pCur;
+    }
+    else if (pPrec == pHautGauche) {
+      if (pGauche != NULL) pGauche->north = pHaut;
+      pHaut->south = pGauche;
+    }
+    else if (pPrec == pHautDroit) {
+      if (pDroit != NULL) pDroit->north = pHaut;
+      pHaut->south = pDroit;
+    }
+    
+    // tracer du chemin en rouge
+    // pCur->modify = true;
+    pCur = pPrec;
+  }
+
+  // mise a jour des gradients locaux
+  pCur = pMin;
+  for (int j = 0; j < m_height && pCur != NULL; j++) {
+    Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
+    
+    if (pGauche != NULL) {
+      // pGauche->modify = true;
+      updateGradient(pGauche);
+      if (pGauche->west != NULL) {
+	// pGauche->west->modify = true;
+	updateGradient(pGauche->west);
+      }
+    }
+    
+    if (pDroit != NULL) {
+      // pDroit->modify = true;
+      updateGradient(pDroit);
+      if (pDroit->east != NULL) {
+	// pDroit->east->modify = true;
+	updateGradient(pDroit->east);
       }
     }
     
     pCur = pCur->previous;
   }
 
-  for (int tralala = 0; tralala < 10; tralala++) {
-    pCur = pMin;
-    for (int j = m_height-1; j >= 0 && pCur != NULL; j--) {
-      Point *pHaut = getNorthFrom(pCur), *pBas = getSouthFrom(pCur);
-      Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
-
-      if (pDroit != NULL) {
-        if (j > 0) {
-          if (pGauche != NULL) pDroit->north = pGauche->north->east;
-          else pDroit->north = m_indexV[j-1];
-        }
-              
-        if (j < m_height-1) {
-          if (pGauche != NULL) pDroit->south = pGauche->south->east;
-          else pDroit->south = m_indexV[j+1];
-        }
+  // mise a jour des chemins
+  Point *pInf = m_indexH[m_width-1]->west, *pSup = m_indexH[m_width-1]->east;
+  for (int j = 0; j < m_height; j++) {
+    Point *inf = NULL, *sup = NULL;
+    Point *cur = pInf;
+    while (cur != NULL && (pSup == NULL || cur != pSup->east)) {
+      unsigned int pathValue = cur->pathValue;
+      updateMinimumPathV(cur);
+      if (pathValue != cur->pathValue) {
+	if (inf == NULL) inf = cur->south;
+	sup = cur->south;
       }
-      pCur = pCur->previous;
+      // cur->modify = true;
+      cur = cur->east;
     }
+    if (inf == NULL || inf->west == NULL) pInf = m_indexV[j+1];
+    else pInf = inf->west;
+    
+    if (sup == NULL || sup->east == NULL) pSup = NULL;
+    else pSup = sup->east;
   }
-    // if (pDroit != NULL) {
-    //   pDroit->west = pGauche;
-    //   pDroit->north = pHaut;
-    //   pDroit->south = pBas;
-    // }
-      
-    // if (pGauche != NULL) pGauche->east = pDroit;
-    // else {
-    //   for (int k = 0; k < m_height; k++)
-    //     if (m_indexV[k] == pCur) m_indexV[k] = pDroit;
-    // }
-    
-    // if (pHaut != NULL) pHaut->south = pDroit;
-    // else {
-    //   int k = 0;
-    //   while (k < m_width && m_indexH[k] != pCur) k++;
-    //   for (int i = k; i < m_width-1; i++) {
-    //     Point *tmp = m_indexH[i];
-    //     m_indexH[i] = m_indexH[i+1];
-    //     m_indexH[i+1] = tmp;
-    //   }
-    // }
-    
-    // if (pBas != NULL) pBas->north = pDroit;
-    
+
   m_width--;
-}  
-    
+}
+
   // mise a jour du gradient
 
   // mise a jour des chemins
@@ -658,26 +672,21 @@ bool SeamCarvingOperation::invariant() {
     std::cout << "m_indexH / m_indexV error" << std::endl;
     return false;
   }
-  int i, j;
-  for (Point* ref = m_indexH[i = 0]; ref != NULL; ref = ref->east) {
-    if (i++ > m_width) {
-      std::cout << "m_width error" << std::endl;
-      return false;
-    }
-    if (m_indexH[i-1] != ref) {
+  Point* ref = m_indexH[0];
+  for (int i = 0; i < m_width; i++) {
+    if (m_indexH[i] != ref) {
       std::cout << "m_indexH error" << std::endl;
       return false;
     }
+    ref = ref->east;
   }
-  for (Point* ref = m_indexV[j = 0]; ref != NULL; ref = ref->south) {
+  ref = m_indexV[0];
+  for (int j = 0; j < m_height; j++) {
     if (m_indexV[j] != ref) {
       std::cout << "m_indexV error" << std::endl;
       return false;
     }
-    if (j++ > m_height) {
-      std::cout << "m_height error" << std::endl;
-      return false;
-    }
+    ref = ref->south;
   }
   Point *pi = m_indexH[0];
   for (int i = 0; i < m_width; i++) {

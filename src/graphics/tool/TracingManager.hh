@@ -51,14 +51,15 @@ private:
   QHBoxLayout * m_foot;
   QVBoxLayout* m_vLayout;
   int m_lastIndex;
+  int m_indexOfHead;
   std::vector<int>* m_selected;
 
   /**Methodes */
-  void buildHead();
+  void buildHead(int);
   void buildLine(Tracing *,int);
-  void buildFoot();
+  void buildButtons();
   void initSpin(QSpinBox *);
-  
+  void deleteHead();
 
 };
 

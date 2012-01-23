@@ -12,13 +12,17 @@
 /** Constructeurs et destructeur */
 TracingManager::TracingManager(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier),
-  m_lastIndex(0)
+  m_lastIndex(0),
+  m_indexOfHead(-1)
 {
   setAccessibleName(tr("Tracing"));
   m_vLayout=new QVBoxLayout();
   m_grid=new QGridLayout();
-  buildFoot();
-  buildHead(); 
+  
+  buildButtons(); 
+  buildHead(0); 
+  m_grid->setOriginCorner(Qt::BottomLeftCorner); 
+  m_vLayout->addLayout((QLayout *)m_grid);
   setLayout(m_vLayout);
   m_selected=new std::vector<int>();
   
@@ -42,38 +46,58 @@ bool TracingManager::isEnabled() { return m_pictureModifier != NULL; }
 
 
 void TracingManager::refresh() {
-  std::cout<<"refreshing tracings"<<std::endl;
+  std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;
+ 
   if (m_pictureModifier != NULL) {
     Picture * cPicture=m_pictureModifier->getPicture();
     if(cPicture!=NULL){
       std::vector <Tracing *> list=cPicture->getTracingList();
+      deleteHead();
+
+      std::cout<<"refreshing tracings 2 "<<std::endl;
       int id;
       for(id=m_lastIndex;id<list.size();id++){
-	buildLine(list[id],id+1);
+	buildLine(list[id],id);
       }
       m_lastIndex=id;
      
     }
+    std::cout<<"refreshing tracings 3 "<<m_lastIndex <<std::endl;
+    buildHead(m_lastIndex);
     
     
   }
 }
 
 /*the following methodes are used to build and connect the buttons of the manager*/
-void TracingManager::buildHead(){ 
-  m_grid=new QGridLayout();
-  QLabel *tracing=new QLabel(tr("tracing"));
-  QLabel *visible=new QLabel(tr("visible"));
-  QLabel *selected=new QLabel(tr("selected"));
-  QLabel *alpha=new QLabel(tr("alpha"));
-  m_grid->addWidget(tracing,0,0);
-  m_grid->addWidget(visible,0,1);
-  m_grid->addWidget(selected,0,2);
-  m_grid->addWidget(alpha,0,3);
-  m_vLayout->addLayout((QLayout *)m_grid);
-  
+void TracingManager::buildHead(int index){ 
+  std::cout<<"building head"<<std::endl;
+  if(m_indexOfHead==-1){
+    QLabel *tracing=new QLabel(tr("tracing"));
+    QLabel *visible=new QLabel(tr("visible"));
+    QLabel *selected=new QLabel(tr("selected"));
+    QLabel *alpha=new QLabel(tr("alpha"));
+    m_grid->addWidget(tracing,index,0);
+    m_grid->addWidget(visible,index,1);
+    m_grid->addWidget(selected,index,2);
+    m_grid->addWidget(alpha,index,3);
+    std::cout<<"done building head"<<std::endl;
+    m_indexOfHead=index;
+  }
 }
 
+void TracingManager::deleteHead(){
+  if(m_indexOfHead!=-1){
+    for(int i=m_lastIndex;i<=m_indexOfHead;i++)
+    for(int j=0;j<4;j++){
+      QWidget* widget = m_grid->itemAtPosition(i, j)->widget();
+      m_grid->removeItem(m_grid->itemAtPosition(i, j));
+      delete m_grid->itemAtPosition(i, j);
+      delete widget;
+    }
+    m_indexOfHead=-1;
+  }
+}
 
 void TracingManager::buildLine(Tracing *cTracing,int line){
 
@@ -98,18 +122,18 @@ void TracingManager::buildLine(Tracing *cTracing,int line){
   
 }
 
-void TracingManager::buildFoot(){
+void TracingManager::buildButtons(){
   m_foot=new QHBoxLayout();
-  QPushButton* add=new QPushButton(tr("+"));
+  QPushButton* add=new QPushButton(tr("add"));
   QPushButton* merge=new QPushButton(tr("merge"));
-  QPushButton* up=new QPushButton(tr("^"));
-  QPushButton* down=new QPushButton(tr("v"));
-  QPushButton* remove=new QPushButton(tr("X"));
+  QPushButton* up=new QPushButton(tr("down"));
+  QPushButton* down=new QPushButton(tr("up"));
+  QPushButton* remove=new QPushButton(tr("remove"));
   m_foot->addWidget(add);
-  m_foot->addWidget(merge);
-  m_foot->addWidget(up);
-  m_foot->addWidget(down);
   m_foot->addWidget(remove);
+  m_foot->addWidget(merge);
+  m_foot->addWidget(down);
+  m_foot->addWidget(up);
 
   m_vLayout->addLayout(m_foot);
   
@@ -117,7 +141,7 @@ void TracingManager::buildFoot(){
   connect(merge, SIGNAL(clicked()), this, SLOT(merge()));		   
   connect(up, SIGNAL(clicked()), this, SLOT(up()));		     
   connect(down, SIGNAL(clicked()), this, SLOT(down()));		 
-  connect(remove, SIGNAL(clicked()), this, SLOT(remove()));		  	    	   
+  connect(remove, SIGNAL(clicked()), this, SLOT(remove()));	  	   
 }
 
 
@@ -245,31 +269,24 @@ void TracingManager::merge(){
 /*remove the list of selected tracings from the list of all tracings*/
 /********************************************************************/
 void TracingManager::remove(){
-   std::cout<<"remove is as yet unimplemented"<<std::endl;
+  
    Picture * pic=m_pictureModifier->getPicture();
-   std::vector<int>::iterator it=m_selected->begin();
-   
-   while(it<m_selected->end()){
-     int i=(*it);
-     pic->removeTracing(i);
-     i++;
-     for(int j=0;j<4;j++){
-       QWidget* widget = m_grid->itemAtPosition(i, j)->widget();
-       m_grid->removeItem(m_grid->itemAtPosition(i, j));
-       delete m_grid->itemAtPosition(i, j);
-       delete widget;
+   std::vector<int>::reverse_iterator it=m_selected->rbegin();
+   if((pic->getTracingList()).size()>m_selected->size()){
+     while(it<m_selected->rend()){
+       pic->removeTracing(*it);
+       it++;
      }
-     it++;
+     
+     m_selected->clear();
+     m_lastIndex=0;
+     pic->refresh();
+     m_pictureModifier->refresh();
+     
+     
+     
+     std::cout<<"error?5"<<std::endl;
    }
-   m_selected->clear();
-   m_lastIndex=0;
-   pic->refresh();
-   m_pictureModifier->refresh();
-   
-   
-   
-   std::cout<<"error?5"<<std::endl;
-
 }
 
 

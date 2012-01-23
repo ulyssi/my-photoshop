@@ -14,6 +14,9 @@ public:
   SeamCarvingOperation(Picture*);
   ~SeamCarvingOperation();
 
+  /** Predicats */
+  bool invariant();
+
   /** Accesseurs */
   void setTargetWidth(int);
   void setTargetHeight(int);
@@ -34,7 +37,7 @@ private:
     unsigned int color;
     unsigned int gradient;
     unsigned int pathValue;
-    Point *previous;
+    Point *previous, *next;
     Point *north, *south, *east, *west;
   } Point;
 

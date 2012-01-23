@@ -137,9 +137,9 @@ void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
 
 
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
-    QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-    // m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
-    //m_selectionTool->hide();
+  QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+  m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
+  //m_selectionTool->hide();
 }
 #include <iostream>
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
@@ -172,12 +172,24 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
   }
 }
 
+#include <iostream>
 
 void PictureArea::copy(){
-  QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-  // m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
-
+  QImage image;
+  if(up->x()<down->x()&&up->y()<down->y())
+    image=m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+  else if(up->x() > down->x()&& up->y()<down->y())
+    image=m_pictureViewer->getImage().copy(down->x(),up->y(),up->x()-down->x(),down->y()-up->y());
+  else if(up->x() < down->x() &&  up->y()>down->y())
+    image=m_pictureViewer->getImage().copy(up->x(),down->y(),down->x()-up->x(),up->y()-down->y());
+  else if(up->x()>down->x()&& up->y()>down->y()){
+    image=m_pictureViewer->getImage().copy(down->x(),down->y(),up->x()-down->x(),up->y()-down->y());
+  }
+  m_userInterface->getClipBoard()->setImage(((const QImage&)image),QClipboard::Clipboard);
 }	
+
+
+
 void PictureArea::paste(){
 
 

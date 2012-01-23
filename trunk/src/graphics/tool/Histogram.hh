@@ -31,6 +31,8 @@ public:
   void crop(int,int);
   void equalization();
   void refreshData(bool = true);
+  int getChrominanceUForHistogram(int);
+  int getChrominanceVForHistogram(int);
 
 public slots:
   
@@ -41,7 +43,7 @@ public slots:
   void sliderSupChanged(int);
   void applyHistogramCrop();
   void applyHistogramEqualization();
-  
+  void applyHistogramLinearization();
 private:
   
   /** Attributs */
@@ -55,6 +57,7 @@ private:
   QSlider* m_sliderSup;
   QPushButton* m_applyRescale;
   QPushButton* m_applyEqualization;
+  QPushButton* m_applyLinearization;
   QLabel* m_histogramLabel;
   QImage* m_histogramImage;
   int m_histogramData[3][256];

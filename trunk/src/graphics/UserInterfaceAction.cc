@@ -59,6 +59,7 @@ void UserInterface::redo() {}
 
 #include <iostream>
 void UserInterface::copy(){
+  std::cout<<"copy"<<std::endl;
   m_viewTabWidget->getTabPanel()->copy();
 }
 void UserInterface::cut(){}
@@ -198,15 +199,16 @@ void UserInterface::createEditAction() {
   connect(m_redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
   m_copy=  new QAction(tr("&Copy"), this);
-  m_undoAct->setShortcut(tr("Ctrl+C"));
+  m_copy->setShortcut(tr("Ctrl+C"));
+ 
   connect(m_copy, SIGNAL(triggered()), this, SLOT(copy()));
 
   m_paste=  new QAction(tr("&Paste"), this);
-  m_undoAct->setShortcut(tr("Ctrl+V"));
+  m_paste->setShortcut(tr("Ctrl+V"));
   connect(m_paste, SIGNAL(triggered()), this, SLOT(paste()));
 
   m_cut= new QAction(tr("&Cut"), this);
-  m_undoAct->setShortcut(tr("Ctrl+X"));
+  m_cut->setShortcut(tr("Ctrl+X"));
   connect(m_cut, SIGNAL(triggered()), this, SLOT(cut()));
   
 

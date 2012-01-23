@@ -11,7 +11,7 @@
 #include <vector>
 
 class PictureModifier;
-
+class SignalManager;
 class TracingManager : public QScrollArea { Q_OBJECT
 
 public:
@@ -34,6 +34,7 @@ public:
   void removeSelected(int);
   
   
+  
   /**SLOTS*/
 private slots:
   void add();
@@ -41,6 +42,8 @@ private slots:
   void down();
   void merge();
   void remove();
+  void rename();
+  void label_R(int);
 private:
 
  
@@ -53,14 +56,15 @@ private:
   int m_lastIndex;
   int m_indexOfHead;
   std::vector<int>* m_selected;
-
-  /**Methodes */
+  std::vector<SignalManager *>*m_signalManagers;
+  /**Methodes internes*/
   void buildHead(int);
   void buildLine(Tracing *,int);
   void buildButtons();
   void initSpin(QSpinBox *);
   void deleteHead();
-
+  void normaliseOffs(std::vector<Tracing*>);
+  int * getminOffs(std::vector<Tracing*>);  
 };
 
 class SignalManager:public QObject{ Q_OBJECT
@@ -72,6 +76,12 @@ public:
   void setAlpha(int);
   void setVisible(int);
   void setSelected(int);
+  void setName_tmp(QString);
+  void setName();
+  
+signals:
+  void textSet(int id);
+
 private:
   /** attributs*/
   PictureModifier *m_pictureMod;
@@ -79,7 +89,7 @@ private:
   TracingManager *m_tracingManager;
   double m_V;
   double m_prevV;
-  
+  QString m_name;
 };
 
 #endif

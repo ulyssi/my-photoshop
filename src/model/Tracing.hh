@@ -24,13 +24,13 @@ public:
   int getOffY();
   float getAlpha(); 
   PixelMod::Type getType();
-  
+  QString getName();
   /** Mutateurs */
   void setIndex(int);
   void setOffX(int);
   void setOffY(int);
   void setAlpha(float);
-
+  void setName(QString);
 private:
 
   /** Attributs */

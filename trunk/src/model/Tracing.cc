@@ -8,6 +8,7 @@ Tracing::Tracing(int width, int height, int offX, int offY) :
   m_offX(offX),
   m_offY(offY),
   m_alpha(1.0)
+ 
 {}
 
 Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) :
@@ -41,11 +42,14 @@ PixelMod::Type Tracing::getType(){
   } 
   return result;
 }
+QString Tracing::getName(){return NULL;}
 
 
 /** mutateurs */
 
 void Tracing::setIndex(int index){m_index = index;}
+
+void Tracing::setName(QString name){/*m_name=QString(name);*/}
 
 void Tracing::setOffX(int val){m_offX = val;}
 

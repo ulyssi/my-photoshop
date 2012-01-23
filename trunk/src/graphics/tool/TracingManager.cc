@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <QFileDialog>
+#include <QLineEdit>
 #include "Tracing.hh"
 #include "Picture.hh"
 
@@ -18,7 +19,8 @@ TracingManager::TracingManager(PictureModifier* pictureModifier) :
   setAccessibleName(tr("Tracing"));
   m_vLayout=new QVBoxLayout();
   m_grid=new QGridLayout();
-  
+  m_signalManagers=new std::vector<SignalManager *>();
+
   buildButtons(); 
   buildHead(0); 
   m_grid->setOriginCorner(Qt::BottomLeftCorner); 
@@ -77,6 +79,7 @@ void TracingManager::buildHead(int index){
     QLabel *visible=new QLabel(tr("visible"));
     QLabel *selected=new QLabel(tr("selected"));
     QLabel *alpha=new QLabel(tr("alpha"));
+  
     m_grid->addWidget(tracing,index,0);
     m_grid->addWidget(visible,index,1);
     m_grid->addWidget(selected,index,2);
@@ -88,6 +91,8 @@ void TracingManager::buildHead(int index){
 
 void TracingManager::deleteHead(){
   if(m_indexOfHead!=-1){
+    if(m_lastIndex<m_signalManagers->size())
+      m_signalManagers->erase(m_signalManagers->begin()+m_lastIndex,m_signalManagers->end());
     for(int i=m_lastIndex;i<=m_indexOfHead;i++)
     for(int j=0;j<4;j++){
       QWidget* widget = m_grid->itemAtPosition(i, j)->widget();
@@ -102,9 +107,15 @@ void TracingManager::deleteHead(){
 void TracingManager::buildLine(Tracing *cTracing,int line){
 
   SignalManager *sm=new SignalManager(cTracing,m_pictureModifier,this);
- 
+  if(m_signalManagers->size()==0)
+    m_signalManagers->reserve(1);
+  m_signalManagers->push_back(sm);
   int num=cTracing->getIndex();
-  QLabel * label=new QLabel((QString("Tracing")+QString(QString::number(num))));
+  QLabel * label;
+  if(cTracing->getName()==NULL)
+    label=new QLabel((QString("Tracing")+QString(QString::number(num))));
+  else
+    label=new QLabel(cTracing->getName());
   QCheckBox * select=new QCheckBox(QString(""));
   QCheckBox * visible=new QCheckBox(QString(""));
   visible->setCheckState (Qt::Checked);
@@ -129,19 +140,22 @@ void TracingManager::buildButtons(){
   QPushButton* up=new QPushButton(tr("down"));
   QPushButton* down=new QPushButton(tr("up"));
   QPushButton* remove=new QPushButton(tr("remove"));
+  QPushButton* rename=new QPushButton(tr("rename"));
   m_foot->addWidget(add);
   m_foot->addWidget(remove);
   m_foot->addWidget(merge);
   m_foot->addWidget(down);
   m_foot->addWidget(up);
-
+  m_foot->addWidget(rename);
   m_vLayout->addLayout(m_foot);
   
   connect(add, SIGNAL(clicked()), this, SLOT(add()));		   
   connect(merge, SIGNAL(clicked()), this, SLOT(merge()));		   
   connect(up, SIGNAL(clicked()), this, SLOT(up()));		     
   connect(down, SIGNAL(clicked()), this, SLOT(down()));		 
-  connect(remove, SIGNAL(clicked()), this, SLOT(remove()));	  	   
+  connect(remove, SIGNAL(clicked()), this, SLOT(remove()));
+  connect(rename,SIGNAL(clicked()),this,SLOT(rename()));
+  
 }
 
 
@@ -240,31 +254,39 @@ void TracingManager::down(){
 /************************************************************/
 
 void TracingManager::merge(){
-  std::cout<<"merge is as yet unimplemented"<<std::endl;
-  /*  if(!m_selected->empty){
-    Picture pic;
-    vector<Tracing *> toBeMerged;
+  if(m_selected->size()>1){
+    Picture * pic=m_pictureModifier->getPicture();
+    std::vector<int>::iterator it;
+    std::vector<Tracing*> tracings=pic->getTracingList();
+    std::vector<Tracing*> toBeMerged=std::vector<Tracing*>();
     toBeMerged.reserve(m_selected->size());
-    while(it<m_selected->end()){
-      toBeMerged.push_back(m_tracingList[m_selected[i]]);
+    for(it=m_selected->begin();it< m_selected->end();it++){
+      toBeMerged.push_back(tracings[*it]);
     }
-    MergeOperation* mo=new MergeOperation();
-    Tracing *Tr= mo->doOperation(toBeMerged);
+    MergeOperation * mo=new MergeOperation();
+    Matrix<unsigned int> *merged=mo->doOperation(toBeMerged);
+    int rslt_id=m_selected->at(0);
+    int *offs=getminOffs(toBeMerged);
+     
+    int offX=offs[0];
+    int offY=offs[1];
+    delete offs;
+    normaliseOffs(toBeMerged);
+    std::vector<int>::reverse_iterator r_it=m_selected->rbegin();
+    while(r_it<m_selected->rend()){
+      pic->removeTracing((*r_it));
+      r_it++;
+    }
     
-    }*/
-  Picture * pic=m_pictureModifier->getPicture();
-  std::vector<Tracing*> tracings=pic->getTracingList();
-  for(int i=0;i<m_selected->size();i++){
-    std::cout<<m_selected->at(i)<<"   "<<tracings[m_selected->at(i)]->getIndex()<<std::endl;
-    std::cout<<tracings[m_selected->at(i)]->getWidth()<<"x"<<tracings[m_selected->at(i)]->getHeight()<<std::endl;
-
-
-    
+    pic->insertTracing(new Tracing(merged,offX,offY,1.0),rslt_id);
+    delete mo;
+    delete merged; 
+    m_lastIndex=rslt_id; 
+    m_selected->clear();
+    pic->refresh();
+    m_pictureModifier->refresh();
   }
-
-
 }
-
 /********************************************************************/
 /*remove the list of selected tracings from the list of all tracings*/
 /********************************************************************/
@@ -282,11 +304,59 @@ void TracingManager::remove(){
      m_lastIndex=0;
      pic->refresh();
      m_pictureModifier->refresh();
-     
-     
-     
+     normaliseOffs(pic->getTracingList());
      std::cout<<"error?5"<<std::endl;
    }
+}
+
+/********************************************************************/
+/*replaces the labels asoociated with each selected tracing with a  */
+/*Qline edit and adds it to the signal manager associated to that   */
+/*tracing                                                           */
+/********************************************************************/
+void TracingManager::rename(){
+  for(int i=0;i<5;i++){
+    (m_foot->itemAt(i))->widget()->setEnabled(false);
+  }
+
+}
+/********************************************************************/
+/*builds a Qlabel corresponding to the correct name of the tracing  */
+/*                                                                  */
+/********************************************************************/
+
+void TracingManager::label_R(int id){
+  std::cout<<id;
+  
+  
+}
+
+
+void TracingManager::normaliseOffs(std::vector<Tracing*> tracing){
+  int* offs=getminOffs(tracing);
+  int offX=offs[0];
+  int offY=offs[1];
+  delete offs;
+  std::vector<Tracing*>::iterator it;
+  for(it=tracing.begin();it<tracing.end();it++){
+    (*it)->setOffX((*it)->getOffX()-offX);
+    (*it)->setOffY((*it)->getOffY()-offY);
+  }
+  
+}
+int * TracingManager::getminOffs(std::vector<Tracing*> tracing){
+  int *rslt=new int[2];
+  rslt[0]=0;
+  rslt[1]=0;
+  std::vector<Tracing*>::iterator it;
+  for(it=tracing.begin();it<tracing.end();it++){
+    if(rslt[0]<(*it)->getOffX())
+      rslt[0]=(*it)->getOffX();
+    if(rslt[1]<(*it)->getOffY())
+      rslt[1]=(*it)->getOffY();
+    
+  }
+  return rslt;
 }
 
 
@@ -341,8 +411,13 @@ void SignalManager::setVisible(int i){
   m_pictureMod->refresh();
 }
 
+void SignalManager::setName_tmp(QString tmp){
+  m_name=QString(tmp);  
+}
 
-
+void SignalManager::setName(){
+  emit textSet(m_tracing->getIndex());
+}
 
 
   

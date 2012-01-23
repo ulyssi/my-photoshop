@@ -35,6 +35,7 @@ private:
   QPoint *up,*down;
   bool cliked;	
   bool ctrl;
+  bool m_fit;
   int m_numDegrees;
   
   /**Methodes **/

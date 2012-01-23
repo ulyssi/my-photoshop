@@ -30,7 +30,7 @@ double PictureViewer::zoomIn() {
   if((m_qImage.width()*m_scaleFactor)<100000
      &&(m_qImage.height()*m_scaleFactor)<10000)
     m_scale=scale;
-  return m_scaleFactor;
+  return m_scale;
 } 
 
 double PictureViewer::zoomOut() { 
@@ -38,7 +38,7 @@ double PictureViewer::zoomOut() {
   if((m_qImage.width()*m_scaleFactor)>10 && 
      (m_qImage.height()*m_scaleFactor)>10)
     m_scale=scale;
-  return -m_scaleFactor;
+  return m_scale;
 }
 
 double PictureViewer::normalSize(){
@@ -47,15 +47,13 @@ double PictureViewer::normalSize(){
   return 1.0/t_scale;
 }
 double PictureViewer::fitToWindow(QSize size){
-  refreshData();
-  refresh();
-  float scaleW=(float)((float)m_qImage.width()/((float)size.width()));
-  float scaleH=(float)((float)m_qImage.height()/((float)size.height())); 
+  float scaleW=(float)((float)m_pictureModifier->getImage()->width()/((float)size.width()));
+  float scaleH=(float)((float)m_pictureModifier->getImage()->height()/((float)size.height())); 
   if(scaleH>scaleW)
     m_scale = 1/scaleH;
   else 
     m_scale =1 /scaleW;
-  return m_scale;
+  return double(m_scale);
 }
 
 

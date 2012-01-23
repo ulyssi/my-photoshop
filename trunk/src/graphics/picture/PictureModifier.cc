@@ -92,7 +92,7 @@ void PictureModifier::normalSize(){
   refresh();
 }
 void PictureModifier::fitToWindow(){
-   m_pictureArea->fitToWindow();
+  m_pictureArea->fitToWindow();
   refresh();
 }
 

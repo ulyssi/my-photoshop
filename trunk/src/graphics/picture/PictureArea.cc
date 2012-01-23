@@ -22,6 +22,7 @@ PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   cliked=false;
   ctrl=false;
   show();
+  m_fit=false;
 }
 
 PictureArea::~PictureArea(){}
@@ -56,7 +57,6 @@ void PictureArea::setDownCoordinate(QMouseEvent* event){
 }
 
 void PictureArea::setDownCoordinate(double x , double y){
-  std::cout<<"down coordinate resize"<<y<<std::endl;
   down->setX(x);
   down->setY(y);
   if(double(down->x())>m_pictureViewer->width())
@@ -90,26 +90,32 @@ void PictureArea::refreshCoordinate(double resize){
   setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
   setSelection();
   this->repaint();
-
 }
 
 
 
 
 void PictureArea::fitToWindow(){
-  refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
-}
-void PictureArea::zoomIn(){
-  refreshCoordinate(m_pictureViewer->zoomIn());
-}
-void PictureArea::zoomOut(){
-  refreshCoordinate(m_pictureViewer->zoomOut());
+  if (!m_fit){
+    refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
+    m_fit=true;
+  }
 }
 void PictureArea::normalSize(){
+  m_fit=false;
   refreshCoordinate(m_pictureViewer->normalSize());
 }
 
-
+void PictureArea::zoomIn(){
+  m_fit=false;
+  m_selectionTool->hide();
+  refreshCoordinate(m_pictureViewer->zoomIn());
+}
+void PictureArea::zoomOut(){
+  m_fit=false;
+  m_selectionTool->hide();
+  refreshCoordinate(m_pictureViewer->zoomOut());
+}
 
 
 void PictureArea::setSelection(){
@@ -121,6 +127,7 @@ void PictureArea::setSelection(){
     m_selectionTool->setRect(up->x(),down->y(),(down->x()-up->x()),(up->y()-down->y()));
   else
     m_selectionTool->setRect(up->x(),up->y(),(down->x()-up->x()),(down->y()-up->y()));
+  
 }
 
 
@@ -137,9 +144,7 @@ void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
 
 
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
-  QImage t =m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-  m_userInterface->getClipBoard()->setImage(((const QImage&)t),QClipboard::Clipboard);
-  //m_selectionTool->hide();
+  m_selectionTool->hide();
 }
 #include <iostream>
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
@@ -152,7 +157,7 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
   up->setX(event->x());
   up->setY(event->y());
-  //m_selectionTool->show();
+  m_selectionTool->show();
   cliked=true;
 }
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
@@ -172,7 +177,6 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
   }
 }
 
-#include <iostream>
 
 void PictureArea::copy(){
   QImage image;

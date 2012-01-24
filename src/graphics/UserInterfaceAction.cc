@@ -60,12 +60,12 @@ void UserInterface::redo() {}
 
 
 #include <iostream>
-void UserInterface::copy(){
-  std::cout<<"copy"<<std::endl;
-  m_viewTabWidget->getTabPanel()->copy();
+void UserInterface::copy(){m_viewTabWidget->getTabPanel()->copy();
 }
 void UserInterface::cut(){}
-void UserInterface::paste(){}
+void UserInterface::paste(){
+  m_viewTabWidget->getTabPanel()->paste();
+}
 
 void UserInterface::zoomIn() {
   m_viewTabWidget->getTabPanel()->zoomIn();

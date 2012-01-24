@@ -147,7 +147,7 @@ void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
   m_selectionTool->hide();
 }
-#include <iostream>
+
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   QString m_string;
   QString m_coord;

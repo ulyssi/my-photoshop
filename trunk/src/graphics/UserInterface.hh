@@ -10,6 +10,7 @@
 #include <QClipboard>
 #include <QShortcut>
 #include <QKeySequence>
+#include <QStatusBar>
 #include "Matrix.hh"
 
 class Previewer;
@@ -100,6 +101,8 @@ public slots:
   void rescale();
 
   void about();
+  void print(QString);
+  
       
 private:
 
@@ -113,6 +116,7 @@ private:
   void createToolBars();
   void createToolBoxDocks();
   TabWidget* createTabWidget();
+  
   QDockWidget* createDockWidget(QWidget* widget);
   
   void createFileAction();
@@ -173,7 +177,7 @@ private:
   QMenu* m_viewMenu;
   QMenu* m_helpMenu;
   QMenu* m_operationMenu;
-
+  
   QToolBar* m_fileToolBar;
   QToolBar* m_editToolBar;
   QToolBar* m_viewToolBar;
@@ -190,6 +194,8 @@ private:
   QDockWidget* m_algebricOperationChooserDock;
   QDockWidget* m_colorConvertOperationChooserDock;
   
+  
+
   QAction* m_copy;
   QAction* m_cut;
   QAction* m_paste;

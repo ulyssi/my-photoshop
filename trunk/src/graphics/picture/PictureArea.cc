@@ -148,6 +148,18 @@ void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
 }
 #include <iostream>
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
+  QString m_string;
+  QString m_coord;
+  m_string.append("x: ");
+  m_coord.setNum(event->x());
+  m_string=m_string+m_coord;
+  m_string.append("  y:");
+  m_coord.setNum(event->y());
+  m_string=m_string+m_coord;
+  m_userInterface->print(m_string);
+  // pixel =
+  // coord.setNum  PixelMod::getLuma(pixel);
+  //ajout des pixel en dble;
   if(cliked){
     setDownCoordinate(event);
     setSelection();

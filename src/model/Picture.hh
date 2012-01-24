@@ -32,6 +32,7 @@ public:
   void insertTracing(Tracing*, int);
   void removeTracing(int);
   void removeTracing(Tracing*);
+  void swapTracing(int,int);
   void refresh();
   bool saveQImage(QString&, QImage);
   

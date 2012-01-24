@@ -41,7 +41,10 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   
   if (m_width != m_widthTarget) {
     while (m_widthTarget < m_width) deleteRow();
-    while (m_width < m_widthTarget && m_width < m_widthInit) newRow();
+    while (m_width < m_widthTarget) {
+      updateIndexH();
+      newRow();
+    }
   }
     
   // if (m_height != m_heightTarget) {
@@ -399,17 +402,64 @@ void SeamCarvingOperation::newRow() {
         m_indexH[k] = pCur;
         m_indexH[k]->north = NULL;
       }
-      else if (pPrec == pHautGauche) {
-        pGauche->north = pHautGauche;
-        pHautGauche->south = pGauche;
-      }
-      else if (pPrec == pHautDroit) {
-        pDroit->north = pHautDroit;
-        pHautDroit->south = pDroit;
-      }
+      // toContinue
+
+      pCur = pPrec;
+    }
+  }
+  else {
+
+    // recherche du chemin de plus faible poids
+    Point *pMin = NULL, *pCur = m_indexV[m_height-1];
+    while (pCur != NULL) {
+      if (pMin == NULL || pCur->pathValue < pMin->pathValue) pMin = pCur;
+      pCur = pCur->east;
+    }
+  
+    // clonage du chemin a droite du chemin actuel
+    pCur = pMin;
+    for (int j = m_height-1; j >= 0; j--) {
+      Point *pPrec = pCur->previous;
+      Point *pDroit = getEastFrom(pCur);
+      Point *pHautGauche = getNorthWestFrom(pCur), *pHaut = getNorthFrom(pCur), *pHautDroit = getNorthEastFrom(pCur);
+    
+      Point *pNew = new Point;
+      pNew->color = pCur->color;
+      pNew->modify = false;
+      pNew->deleted = false;
+      pNew->gradient = 0;
+      pNew->pathValue = 0;
+      pNew->previous = NULL;
+      pNew->next = NULL;
+      pNew->north = NULL;
+      pNew->south = NULL;
+      pNew->east = pDroit;
+      pNew->west = pCur;
+
+      // Chainage laterale
+      if (pDroit != NULL) pDroit->west = pNew;
+      pCur->east = pNew;
+
+      // Chainage haut
+    //   if (pPrec == NULL) {
+    //     int k = 0;
+    //     while (k < m_width && m_indexH[k] != pCur) k++;
+    //     while (k < m_width-1) { m_indexH[k] = m_indexH[k+1]; k++; }
+    //     m_indexH[k] = pCur;
+    //     m_indexH[k]->north = pMin;
+    //   }
+    //   else if (pPrec == pHautGauche) {
+    //     pGauche->north = pHaut;
+    //     pHaut->south = pGauche;
+    //   }
+    //   else if (pPrec == pHautDroit) {
+    //     pDroit->north = pHaut;
+    //     pHaut->south = pDroit;
+    //   }
       pCur = pPrec;
     }
 
+    
   }
 
   m_width++;

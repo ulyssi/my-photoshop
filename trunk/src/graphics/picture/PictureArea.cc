@@ -206,17 +206,16 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   m_coord.setNum(PixelMod::getBlue(pixel)); //int
   m_string=m_string+m_coord;
   m_string.append("  YUV :  Y:");
-  m_coord.setNum(PixelMod::getLuma(pixel),'g',2); 
+  m_coord.setNum(PixelMod::getLuma(pixel),'g',6); 
   m_string=m_string+m_coord;
   m_string.append("  U:");
-  m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',2);
+  m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',6);
   m_string=m_string+m_coord;
   m_string.append("  V:"); 
-  m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',2);
+  m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',6);
   m_string=m_string+m_coord;
   m_userInterface->print(m_string);
-  std::cout<<PixelMod::getChrominanceV(pixel)<<std::endl;
-  
+    
 if(cliked){
     setDownCoordinate(event);
     setSelection();

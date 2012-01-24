@@ -41,9 +41,9 @@ namespace PixelMod {
   inline int getGreen(unsigned int rgb) { return ((GREEN_MSK & rgb) >> GREEN_OFFSET); }
   inline int getBlue(unsigned int rgb) { return (BLUE_MSK & rgb) >> BLUE_OFFSET; }
   
-  inline int getLuma(unsigned int rgb) { return 0.299 * getRed(rgb) + 0.587 * getGreen(rgb) + 0.114 * getBlue(rgb); }
-  inline int getChrominanceU(unsigned int rgb) { return -0.14713 * getRed(rgb) - 0.28886 * getGreen(rgb) + 0.436 * getBlue(rgb); }
-  inline int getChrominanceV(unsigned int rgb) { return 0.615 * getRed(rgb) - 0.51499 * getGreen(rgb) - 0.10001 * getBlue(rgb); }
+  inline double getLuma(unsigned int rgb) { return 0.299 * (double)getRed(rgb) + 0.587 * (double)getGreen(rgb) + 0.114 * (double)getBlue(rgb); }
+  inline double getChrominanceU(unsigned int rgb) { return -0.14713 * (double)getRed(rgb) - 0.28886 * (double)getGreen(rgb) + 0.436 * (double)getBlue(rgb); }
+  inline double getChrominanceV(unsigned int rgb) { return 0.615 * (double)getRed(rgb) - 0.51499 * (double)getGreen(rgb) - 0.10001 * (double)getBlue(rgb); }
   
   inline int threshold(int composante) {
     if (composante < minValue) return minValue;
@@ -55,11 +55,23 @@ namespace PixelMod {
   inline unsigned int createRGB(int red, int green, int blue, int alpha = OPAQUE) {
     return (alpha << ALPHA_OFFSET) | (red << RED_OFFSET) | (green << GREEN_OFFSET) | (blue << BLUE_OFFSET);
   }
+  
+  inline int getIntFromDouble(double x){
+    if(fmod(x*1000.0,1000.0) > 500.0) return ceil(x);
+    else return floor(x);
+  }
 
-  inline unsigned int createYUV(int luma, int chrominanceU, int chrominanceV, int alpha = OPAQUE) {
-    return createRGB(luma + 1.13983 * chrominanceV,
-		     luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV,
-		     luma + 2.03211 * chrominanceU,
+//   inline unsigned int createYUV(double luma, double chrominanceU, double chrominanceV, int alpha = OPAQUE) {
+//     return createRGB(getIntFromDouble(luma + 1.13983 * chrominanceV),
+// 		     getIntFromDouble(luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV),
+// 		     getIntFromDouble(luma + 2.03211 * chrominanceU),
+// 		     alpha);
+//   }
+
+  inline unsigned int createYUV(double luma, double chrominanceU, double chrominanceV, int alpha = OPAQUE) {
+    return createRGB(floor(luma + 1.13983 * chrominanceV),
+		     floor(luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV),
+		     floor(luma + 2.03211 * chrominanceU),
 		     alpha);
   }
   
@@ -71,6 +83,7 @@ namespace PixelMod {
     if (color) return createGrayScale(maxValue, alpha);
     return createGrayScale(minValue, alpha);
   }
+
 
   inline Type getTypeFromRGB(unsigned int rgb) {
     if (getRed(rgb) == getBlue(rgb) && getGreen(rgb) == getBlue(rgb)) {

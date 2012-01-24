@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <cmath>
+#include <iostream>
 
 #include "PictureModifier.hh"
 #include "Tracing.hh"
@@ -106,10 +107,13 @@ void Histogram::refresh() {
       }
       amplitude[i] = max[i] - min[i];
     }
+//     for(int j = 0; j < 3; j++) std::cout << min[2] <<  " " <<min[1] << " " << min[0] << std::endl;
+//     for(int j = 0; j < 3; j++) std::cout << max[2] <<  " " <<max[1] << " " << max[0] << std::endl;
     if (m_pictureModifier != NULL) {
       int seuil[3];
       for (int i = 0; i < 256; i++) {
-	for (int j = 0; j < 3; j++) seuil[j] = (m_histogramData[j][i] - min[j]) * 100 / amplitude[j];
+	for (int j = 0; j < 3; j++) seuil[j] = PixelMod::getIntFromDouble(((float)m_histogramData[j][i] - (float)min[j]) * 100.0 / (float)amplitude[j]);
+	//std::cout << seuil[2] <<  " " <<seuil[1] << " " << seuil[0] << std::endl;
 	for (int j = 0; j < 100; j++) {
 	  int color[3] = { 255, 255, 255 };
 	  for (int k = 0; k < 3; k++)
@@ -117,6 +121,7 @@ void Histogram::refresh() {
 	    
 	  if (color[0] + color[1] + color[2] == 0) m_histogramImage->setPixel(i, j, PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID));
 	  else m_histogramImage->setPixel(i, j, PixelMod::createRGB(color[2], color[1], color[0]));
+	  //std::cout << color[2] <<  " " <<color[1] << " " << color[0] << std::endl;
 	}
       }
       m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramImage)));
@@ -126,6 +131,11 @@ void Histogram::refresh() {
 
 
 void Histogram::equalization() {
+  
+    unsigned int test = PixelMod::createRGB(0,3,251);
+  unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
+  std::cout << PixelMod::getRed(test2) << "  "<<PixelMod::getGreen(test2)<< " " << PixelMod::getBlue(test2) << std::endl;
+  
   if (m_pictureModifier != NULL) {
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 256; j++)
@@ -145,12 +155,13 @@ void Histogram::equalization() {
       m_cumulativeHistogram[PixelMod::RED][i] = kRed;
       m_cumulativeHistogram[PixelMod::GREEN][i] = kGreen;
       m_cumulativeHistogram[PixelMod::BLUE][i] = kBlue;
+      std::cout << kRed << " " << kGreen << " " << kBlue << std::endl;
     } 
     
     //egalisation de l'image
     bool rgb = m_radioButtonRGB->isChecked();
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
-    float nbPixel = tracing->getWidth() * tracing->getHeight();
+    double nbPixel = tracing->getWidth() * tracing->getHeight();
     unsigned int couleur;
     for(int i=0; i < tracing->getHeight(); i++){
       for(int j=0; j < tracing->getWidth(); j++){
@@ -180,15 +191,15 @@ void Histogram::equalization() {
 	  else
 	    tracing->setValue(j,
 			      i,
-			      PixelMod::createRGB(PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::RED][PixelMod::getRed(couleur)]))/ nbPixel)),
-						  PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::GREEN][PixelMod::getGreen(couleur)]))/ nbPixel)),
-						  PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::BLUE][PixelMod::getBlue(couleur)]))/ nbPixel)),
+			      PixelMod::createRGB(PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)m_cumulativeHistogram[PixelMod::RED][PixelMod::getRed(couleur)]))/ nbPixel)),
+						  PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)m_cumulativeHistogram[PixelMod::GREEN][PixelMod::getGreen(couleur)]))/ nbPixel)),
+						  PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)m_cumulativeHistogram[PixelMod::BLUE][PixelMod::getBlue(couleur)]))/ nbPixel)),
 						  PixelMod::getAlpha(couleur)));
 	} else { //yuv
 	  if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Luma")) 
 	    tracing->setValue(j,
 	    		      i,
-	    		      PixelMod::createYUV(PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::LUMA][PixelMod::getLuma(couleur)]))/ nbPixel)),
+	    		      PixelMod::createYUV(PixelMod::threshold((255.0*((float)m_cumulativeHistogram[PixelMod::LUMA][PixelMod::getIntFromDouble(PixelMod::getLuma(couleur))]))/ nbPixel),
 	    					  PixelMod::getChrominanceU(couleur),
 	    					  PixelMod::getChrominanceV(couleur),
 	    					  PixelMod::getAlpha(couleur)));
@@ -197,7 +208,7 @@ void Histogram::equalization() {
 	    tracing->setValue(j,
 			      i,
 			      PixelMod::createYUV(PixelMod::getLuma(couleur),
-						  PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::CHROMINANCE_U][getChrominanceUForHistogram(PixelMod::getChrominanceU(couleur))]))/ nbPixel)),
+						  PixelMod::threshold((255.0*((float)m_cumulativeHistogram[PixelMod::CHROMINANCE_U][getChrominanceUForHistogram(PixelMod::getChrominanceU(couleur))]))/ nbPixel),
 						  PixelMod::getChrominanceV(couleur),
 						  PixelMod::getAlpha(couleur)));
 
@@ -206,7 +217,7 @@ void Histogram::equalization() {
 			      i,
 			      PixelMod::createYUV(PixelMod::getLuma(couleur),
 						  PixelMod::getChrominanceU(couleur),
-						  PixelMod::threshold(floor((255.0*(m_cumulativeHistogram[PixelMod::CHROMINANCE_V][getChrominanceUForHistogram(PixelMod::getChrominanceV(couleur))]))/ nbPixel)),
+						  PixelMod::threshold((255.0*((float)m_cumulativeHistogram[PixelMod::CHROMINANCE_V][getChrominanceVForHistogram(PixelMod::getChrominanceV(couleur))]))/ nbPixel),
 						  PixelMod::getAlpha(couleur)));
 	}
       }
@@ -220,7 +231,11 @@ void Histogram::equalization() {
 
 
 void Histogram::crop(int bInf, int bSup) {
-  double L = bSup - bInf;
+  unsigned int test = PixelMod::createRGB(1,41,191);
+  unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
+  std::cout << PixelMod::getRed(test2) << " "<<PixelMod::getGreen(test2)<< " " << PixelMod::getBlue(test2) << std::endl;
+  
+  double L = (float)bSup - (float)bInf;
   unsigned int couleur;
   bool rgb = m_radioButtonRGB->isChecked();
   if (m_pictureModifier != NULL) {
@@ -232,7 +247,7 @@ void Histogram::crop(int bInf, int bSup) {
 	  if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red"))
 	    tracing->setValue(j,
 			      i,
-			      PixelMod::createRGB(PixelMod::threshold(floor((255.0*(PixelMod::getRed(couleur) - bInf))/ L)),
+			      PixelMod::createRGB(PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)PixelMod::getRed(couleur) - (float)bInf))/ L)),
 						  PixelMod::getGreen(couleur),
 						  PixelMod::getBlue(couleur),
 						  PixelMod::getAlpha(couleur)));
@@ -240,7 +255,7 @@ void Histogram::crop(int bInf, int bSup) {
 	    tracing->setValue(j,
 			      i,
 			      PixelMod::createRGB(PixelMod::getRed(couleur),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getGreen(couleur) - bInf))/ L)),
+						  PixelMod::threshold(floor((255.0*((float)PixelMod::getGreen(couleur) - (float)bInf))/ L)),
 						  PixelMod::getBlue(couleur),
 						  PixelMod::getAlpha(couleur)));
 	  else if ((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Blue"))
@@ -248,20 +263,20 @@ void Histogram::crop(int bInf, int bSup) {
 			      i,
 			      PixelMod::createRGB(PixelMod::getRed(couleur),
 						  PixelMod::getGreen(couleur),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getBlue(couleur) - bInf))/ L)),
+						  PixelMod::threshold(floor((255.0*((float)PixelMod::getBlue(couleur) - (float)bInf))/ L)),
 						  PixelMod::getAlpha(couleur)));
 	  else
 	    tracing->setValue(j,
 			      i,
-			      PixelMod::createRGB(PixelMod::threshold(floor((255.0*(PixelMod::getRed(couleur) - bInf))/ L)),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getGreen(couleur) - bInf))/ L)),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getBlue(couleur) - bInf))/ L)),
+			      PixelMod::createRGB(PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)PixelMod::getRed(couleur) - (float)bInf))/ L)),
+						  PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)PixelMod::getGreen(couleur) - (float)bInf))/ L)),
+						  PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)PixelMod::getBlue(couleur) - (float)bInf))/ L)),
 						  PixelMod::getAlpha(couleur)));
 	} else { //yuv
 	  if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Luma"))
 	    tracing->setValue(j,
 			      i,
-			      PixelMod::createYUV(PixelMod::threshold(floor((255.0*(PixelMod::getLuma(couleur) - bInf))/ L)),
+			      PixelMod::createYUV(PixelMod::threshold((255.0*((float)PixelMod::getLuma(couleur) - (float)bInf))/ L),
 						  PixelMod::getChrominanceU(couleur),
 						  PixelMod::getChrominanceV(couleur),
 						  PixelMod::getAlpha(couleur)));
@@ -269,7 +284,7 @@ void Histogram::crop(int bInf, int bSup) {
 	    tracing->setValue(j,
 			      i,
 			      PixelMod::createYUV(PixelMod::getLuma(couleur),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getChrominanceU(couleur) - bInf))/ L)),
+						  PixelMod::threshold((255.0*((float)PixelMod::getChrominanceU(couleur) - (float)bInf))/ L),
 						  PixelMod::getChrominanceV(couleur),
 						  PixelMod::getAlpha(couleur)));
 	  else if ((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Chrominance V"))
@@ -277,7 +292,7 @@ void Histogram::crop(int bInf, int bSup) {
 			      i,
 			      PixelMod::createYUV(PixelMod::getLuma(couleur),
 						  PixelMod::getChrominanceU(couleur),
-						  PixelMod::threshold(floor((255.0*(PixelMod::getChrominanceV(couleur) - bInf))/ L)),
+						  PixelMod::threshold((255.0*((float)PixelMod::getChrominanceV(couleur) - (float)bInf))/ L),
 						  PixelMod::getAlpha(couleur)));
 	}
       }
@@ -298,13 +313,21 @@ void Histogram::refreshData(bool rgb) {
       for(int j = 0; j < tracing->getHeight(); j++) {
 	unsigned int color = tracing->getValue(i,j);
 	if (PixelMod::getAlpha(color) != PixelMod::TRANSLUCID) {
+	  
 	  if (rgb) {
-	    m_histogramData[PixelMod::RED][PixelMod::getRed(color)]++;
-	    m_histogramData[PixelMod::GREEN][PixelMod::getGreen(color)]++;
-	    m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;
-	  }
+// 	    if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red Green Blue")){
+// 	      int a = PixelMod::getIntFromDouble(((float)PixelMod::getRed(color)+(float)PixelMod::getGreen(color) + (float)PixelMod::getBlue(color))/3.0);
+// 	      m_histogramData[PixelMod::RED][a]++;
+// 	      m_histogramData[PixelMod::GREEN][a]++;
+// 	      m_histogramData[PixelMod::BLUE][a]++;	      
+// 	    } else{
+	      m_histogramData[PixelMod::RED][PixelMod::getRed(color)]++;
+	      m_histogramData[PixelMod::GREEN][PixelMod::getGreen(color)]++;
+	      m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;  
+	    }
+// 	  }
 	  else {
-	    m_histogramData[PixelMod::LUMA][PixelMod::getLuma(color)]++;
+	    m_histogramData[PixelMod::LUMA][PixelMod::getIntFromDouble(PixelMod::getLuma(color))]++;
 	    m_histogramData[PixelMod::CHROMINANCE_U][getChrominanceUForHistogram(PixelMod::getChrominanceU(color))]++;
 	    m_histogramData[PixelMod::CHROMINANCE_V][getChrominanceVForHistogram(PixelMod::getChrominanceV(color))]++;
 	  }
@@ -314,16 +337,21 @@ void Histogram::refreshData(bool rgb) {
   }
 }
 
-int Histogram::getChrominanceUForHistogram(int color){
+int Histogram::getChrominanceUForHistogram(float color){
   float xa = -111.18;
   float xb = 111.18;
-  return floor(((float)color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)); 
+  
+  //std::cout<< color << " " << PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)) << " " <<floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb))<< std::endl;
+  return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
+  //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
 }
 
-int Histogram::getChrominanceVForHistogram(int color){
+int Histogram::getChrominanceVForHistogram(float color){
   float xa = -156.825;
   float xb = 156.825;
-  return floor(((float)color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)); 
+  //std::cout<< color << " " << PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)) << " " <<floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb))<< std::endl;
+  //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
+  return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)); 
 }
 
 /** Slots */
@@ -378,10 +406,12 @@ void Histogram::applyHistogramLinearization(){
   if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red")) {
     i = 0;
     while(i<256 && m_histogramData[PixelMod::RED][i]==0){
+      //i++;
       bInf = i; i++;
     }
     i = 255;
     while (i>0 && m_histogramData[PixelMod::RED][i]==0){
+      //i--;
       bSup = i; i--;
     }
   }

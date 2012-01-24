@@ -49,6 +49,8 @@ QMenu* UserInterface::createViewMenu() {
   m_viewMenu->addAction(m_convolveOperationAct);
   m_viewMenu->addAction(m_algebricOperationAct);
   m_viewMenu->addAction(m_colorConvertOperationAct);
+  m_viewMenu->addSeparator();
+  m_viewMenu->addAction(m_guiMode);
   return m_viewMenu;
 }
 

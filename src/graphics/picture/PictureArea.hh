@@ -10,6 +10,8 @@ class PictureModifier;
 class PictureViewer;
 class SelectionTool;
 class UserInterface;
+class TracingManager;
+
 class PictureArea: public QGraphicsView { Q_OBJECT
 public: 
   PictureArea(PictureModifier*,UserInterface*);

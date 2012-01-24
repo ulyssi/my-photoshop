@@ -4,6 +4,7 @@
 #include "PictureModifier.hh"
 #include "SelectionTool.hh"
 #include "UserInterface.hh"
+#include "TracingManager.hh"
 
 PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   m_userInterface = userinterface;
@@ -207,7 +208,7 @@ void PictureArea::copy(){
 
 
 void PictureArea::paste(){
-
+  m_userInterface->getTracingManager()->paste();
 
 }
 void PictureArea::cut(){

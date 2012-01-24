@@ -28,6 +28,7 @@ public:
   
   /** Methodes */
   void refresh();
+  void paste();
   
   void addSelected(int);
   

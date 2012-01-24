@@ -12,13 +12,13 @@
 #include "ConvolveOperationChooser.hh"
 #include "PictureArea.hh"
 
-
 /** Constructeurs et destructeur */
 PictureModifier::PictureModifier(Picture* picture, UserInterface* userInterface) :
   TabPanel(userInterface),
   m_picture(picture),
   m_image(new QImage(m_picture->getWidth(), m_picture->getHeight(), QImage::Format_ARGB32))
 {
+  m_userInterface=userInterface;
   setTabName(m_picture->getName());
   refreshData();
   m_pictureArea = new PictureArea(this,userInterface);
@@ -31,8 +31,11 @@ PictureModifier::~PictureModifier() {}
 
 /** Accesseurs */
 QImage* PictureModifier::getImage() { return m_image; }
-Picture* PictureModifier::getPicture() { return m_picture; }
 
+Picture* PictureModifier::getPicture() { return m_picture;}
+
+QClipboard* PictureModifier::getClipBoard(){return m_userInterface->getClipBoard();
+}
 
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {

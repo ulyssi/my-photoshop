@@ -46,7 +46,10 @@ bool TracingManager::isEnabled() { return m_pictureModifier != NULL; }
 
 
 /** Methodes */
-
+void TracingManager::paste(){
+  m_pictureModifier->getClipBoard()->image();
+  
+}
 
 void TracingManager::refresh() {
   std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;

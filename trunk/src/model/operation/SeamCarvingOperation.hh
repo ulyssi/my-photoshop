@@ -27,13 +27,8 @@ public:
 
 private:
 
-  /** Structure interne */
-  // typedef struct Path {
-  //   unsigned int m_pathValue;
-  //   int m_previous;
-  // } Path;
-
   typedef struct Point {
+    int relevant;
     unsigned int color;
     unsigned int gradient;
     unsigned int pathValue;

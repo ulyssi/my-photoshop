@@ -117,7 +117,8 @@ void ConvolveOperationChooser::modifyDetection() {
 }
 
 void ConvolveOperationChooser::customize() {
-  MatrixGenerator* matrixGenerator = new MatrixGenerator(m_kernel, -255, 255);
+  MatrixGenerator* matrixGenerator = new MatrixGenerator(m_kernel);
+  matrixGenerator->setRange(-255, 255);
   Matrix<double>* result = matrixGenerator->createMatrix();
   if (result != NULL) {
     resetBlurOperation();

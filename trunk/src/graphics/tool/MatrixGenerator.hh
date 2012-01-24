@@ -1,7 +1,7 @@
 #ifndef _MATRIX_GENERATOR_HH_
 #define _MATRIX_GENERATOR_HH_
 
-#include <QDialog>
+#include <QWidget>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -10,25 +10,27 @@
 #include "Matrix.hh"
 
 
-class MatrixGenerator : public QDialog { Q_OBJECT
+class MatrixGenerator : public QWidget { Q_OBJECT
 
 public:
   
   /** Constructeurs et destructeur */
-  MatrixGenerator(Matrix<double>*, int = 0, int = 100, bool = true);
+  MatrixGenerator(Matrix<double>*, bool = true);
   ~MatrixGenerator();
 
   /** Mutateurs */
   void setMinimum(int);
   void setMaximum(int);
   void setRange(int, int);
-  
+  void setMatrix(Matrix<double>*);
+
   /** Methodes */
   Matrix<double>* createMatrix();
 
 public slots:
 
   /** Slots */
+  void refresh();
   void modifyMatrix();
   void resizeMatrix();
   
@@ -37,7 +39,8 @@ private:
   /** Methodes internes */
   QGroupBox* createDimensionBox();
   QGroupBox* createMatrixBox();
-  QHBoxLayout* createControlsLayout();
+  void initialize();
+  void clear();
   
   /** Attributs */
   int m_min, m_max;

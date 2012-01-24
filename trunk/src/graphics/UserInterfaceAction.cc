@@ -35,17 +35,19 @@ void UserInterface::open() {
 
 void UserInterface::save() {
   Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
-  QString path = QFileDialog::getSaveFileName(this, 
+
+    QString path = QFileDialog::getSaveFileName(this, 
 						"Enregistrer le fichier", 
 						picture->getPath() , 
 						"All files *.* ;; Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
   
-  Matrix<unsigned int>* pictureData = picture->getData();
-  QImage *m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
-  for (int i = 0; i < pictureData->getWidth(); i++)
-    for (int j = 0; j < pictureData->getHeight(); j++)
-      m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
-  picture->saveQImage(path, *m_image);
+    Matrix<unsigned int>* pictureData = picture->getData();
+    QImage *m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
+    for (int i = 0; i < pictureData->getWidth(); i++)
+      for (int j = 0; j < pictureData->getHeight(); j++)
+	m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
+    picture->saveQImage(path, *m_image);
+  
 }
 
 void UserInterface::close(QWidget* q) {

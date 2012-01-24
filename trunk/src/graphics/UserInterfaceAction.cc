@@ -282,7 +282,7 @@ void UserInterface::createViewAction() {
 
   m_previewerAct = new QAction(tr("Previewer"), this);
   m_previewerAct->setCheckable(true);
-  m_previewerAct->setChecked(true);
+  m_previewerAct->setChecked(false);
   connect(m_previewerAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
   
   m_histogramAct = new QAction(tr("Histogram"), this);
@@ -292,12 +292,12 @@ void UserInterface::createViewAction() {
 
   m_colorChooserAct = new QAction(tr("ColorChooser"), this);
   m_colorChooserAct->setCheckable(true);
-  m_colorChooserAct->setChecked(true);
+  m_colorChooserAct->setChecked(false);
   connect(m_colorChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_toolBoxChooserAct = new QAction(tr("ToolBoxChooser"), this);
   m_toolBoxChooserAct->setCheckable(true);
-  m_toolBoxChooserAct->setChecked(true);
+  m_toolBoxChooserAct->setChecked(false);
   connect(m_toolBoxChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_tracingManagerAct = new QAction(tr("TracingManager"), this);
@@ -307,22 +307,22 @@ void UserInterface::createViewAction() {
 
   m_affineOperationAct = new QAction(tr("AffineOperation"), this);
   m_affineOperationAct->setCheckable(true);
-  m_affineOperationAct->setChecked(true);
+  m_affineOperationAct->setChecked(false);
   connect(m_affineOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_convolveOperationAct = new QAction(tr("ConvolveOperation"), this);
   m_convolveOperationAct->setCheckable(true);
-  m_convolveOperationAct->setChecked(true);
+  m_convolveOperationAct->setChecked(false);
   connect(m_convolveOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_algebricOperationAct = new QAction(tr("AlgebricOperation"), this);
   m_algebricOperationAct->setCheckable(true);
-  m_algebricOperationAct->setChecked(true);
+  m_algebricOperationAct->setChecked(false);
   connect(m_algebricOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_colorConvertOperationAct = new QAction(tr("ColorConvertOperation"), this);
   m_colorConvertOperationAct->setCheckable(true);
-  m_colorConvertOperationAct->setChecked(true);
+  m_colorConvertOperationAct->setChecked(false);
   connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 }
 

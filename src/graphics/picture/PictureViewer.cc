@@ -7,6 +7,8 @@ PictureViewer::PictureViewer(PictureModifier* pictureModifier) :
 { 
   m_scale=1.0;
   m_scaleFactor=0.25;
+  m_width_translation=0.0;
+  m_height_translation=0.0;
   refreshData();
   refresh();
 } 
@@ -25,13 +27,22 @@ QImage PictureViewer::getImage(){
   return m_qImage;
 }
 
-double PictureViewer::zoomIn() { 
+void PictureViewer::zoomIn() { 
   double scale=m_scale+m_scaleFactor;
   if((m_qImage.width()*m_scaleFactor)<100000
      &&(m_qImage.height()*m_scaleFactor)<10000)
     m_scale=scale;
-  return m_scale;
+  m_width_translation=m_pictureModifier->getImage()->width()*m_scaleFactor;
+  m_height_translation=m_pictureModifier->getImage()->height()*m_scaleFactor;
 } 
+
+double PictureViewer::getWidthTranslation(){
+  return m_width_translation;
+}
+
+double PictureViewer::getHeightTranslation(){
+  return m_height_translation;
+}
 
 double PictureViewer::zoomOut() { 
   double scale=m_scale-m_scaleFactor;

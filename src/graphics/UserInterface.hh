@@ -103,6 +103,7 @@ public slots:
   void convolve();
   void rescale();
 
+  void changeGIMode();
   void about();
   void print(QString);
   
@@ -197,8 +198,8 @@ private:
   QDockWidget* m_algebricOperationChooserDock;
   QDockWidget* m_colorConvertOperationChooserDock;
   
+  bool m_actionIconMod;
   
-
   QAction* m_copy;
   QAction* m_cut;
   QAction* m_paste;
@@ -241,7 +242,8 @@ private:
   QAction* m_colorConvertAct;
   QAction* m_convolveAct;
   QAction* m_rescaleAct;
-
+  
+  QAction* m_guiMode;
   QAction* m_aboutAct;
   QAction* m_aboutQtAct;
 

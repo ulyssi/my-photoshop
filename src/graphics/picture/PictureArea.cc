@@ -24,7 +24,7 @@ PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   ctrl=false;
   m_fit=false;
   m_indSelect=false;
-  //  m_indMove=true;
+  m_indMove=false;
   m_selectionTool->hide();
   show();
 }
@@ -57,6 +57,16 @@ void PictureArea::disableSelection(){
   m_indSelect=false;
 }
 
+void PictureArea::enableMove(){
+  setCursor(Qt::SizeAllCursor);
+  m_indMove=true;
+}
+
+void PictureArea::disableMove(){
+  setCursor(Qt::ArrowCursor);
+  m_indMove=false;
+}
+
 void PictureArea::fitToWindow(){
   if (!m_fit){
     refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
@@ -70,13 +80,15 @@ void PictureArea::normalSize(){
 
 void PictureArea::zoomIn(){
   m_fit=false;
+  m_selectionTool->hide();
   m_pictureViewer->zoomIn();
  
 }
 void PictureArea::zoomOut(){
   m_fit=false;
-  m_pictureViewer->zoomOut();
   m_selectionTool->hide();
+  m_pictureViewer->zoomOut();
+
 }
 
 
@@ -176,10 +188,10 @@ void PictureArea::keyPressEvent ( QKeyEvent * event ){
   if (event->modifiers()==Qt::ControlModifier)
     ctrl= true;
 }
-#include <iostream>
+
 void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
   ctrl= false;
- }
+}
 
 
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
@@ -188,62 +200,68 @@ void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
 
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
   
-  QString m_string;
-  QString m_coord;
-  m_string.append("x: ");
-  m_coord.setNum(event->x());
-  m_string=m_string+m_coord;
-  m_string.append("  y: ");
-  m_coord.setNum(event->y());
-  m_string=m_string+m_coord;
-  unsigned int pixel = m_pictureViewer->getImage().pixel(event->x(),event->y());
-  m_string.append("   RGB :  R:");
-  m_coord.setNum(PixelMod::getRed(pixel)); //int
-  m_string=m_string+m_coord;
-  m_string.append("  G:");
-  m_coord.setNum(PixelMod::getGreen(pixel)); //int
-  m_string=m_string+m_coord;
-  m_string.append("  B:"); 
-  m_coord.setNum(PixelMod::getBlue(pixel)); //int
-  m_string=m_string+m_coord;
-  m_string.append("  YUV :  Y:");
-  m_coord.setNum(PixelMod::getLuma(pixel),'g',6); 
-  m_string=m_string+m_coord;
-  m_string.append("  U:");
-  m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',6);
-  m_string=m_string+m_coord;
-  m_string.append("  V:"); 
-  m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',6);
-  m_string=m_string+m_coord;
-  m_userInterface->print(m_string);
+  if(event->x()<m_pictureViewer->width()&&event->y()<m_pictureViewer->height()){
+    /** print the pixel info**/
+    QString m_string;
+    QString m_coord;
+    m_string.append("x: ");
+    m_coord.setNum(event->x());
+    m_string=m_string+m_coord;
+    m_string.append("  y: ");
+    m_coord.setNum(event->y());
+    m_string=m_string+m_coord;
+    unsigned int pixel = m_pictureViewer->getImage().pixel(event->x(),event->y());
+    m_string.append("   RGB :  R:");
+    m_coord.setNum(PixelMod::getRed(pixel)); //int
+    m_string=m_string+m_coord;
+    m_string.append("  G:");
+    m_coord.setNum(PixelMod::getGreen(pixel)); //int
+    m_string=m_string+m_coord;
+    m_string.append("  B:"); 
+    m_coord.setNum(PixelMod::getBlue(pixel)); //int
+    m_string=m_string+m_coord;
+    m_string.append("  YUV :  Y:");
+    m_coord.setNum(PixelMod::getLuma(pixel),'g',6); 
+    m_string=m_string+m_coord;
+    m_string.append("  U:");
+    m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',6);
+    m_string=m_string+m_coord;
+    m_string.append("  V:"); 
+    m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',6);
+    m_string=m_string+m_coord;
+    m_userInterface->print(m_string);
     
-if(cliked){
-    setDownCoordinate(event);
-    setSelection();
- }
-//modify
- setDownCoordinate(event);
- 
+    if(cliked){
+      setCursor(Qt::SizeFDiagCursor);
+      setDownCoordinate(event);
+      setSelection();
+      m_selectionTool->show();
+    }
+    else if (m_indMove)
+      setDownCoordinate(event);
+  }
  
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
-  up->setX(event->x());
-  up->setY(event->y());
-  
-  
-  if(m_indSelect!=false){
+  if (m_indMove){
     up->setX(event->x());
     up->setY(event->y());
+  }
+  else if(m_indSelect){
     m_selectionTool->show();
+    up->setX(event->x());
+    up->setY(event->y());
     cliked=true;
   }
 }
-#include <iostream>
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
-  cliked=false;
-  m_userInterface->getTracingManager()->move(down->x()-up->x(),down->y()-up->y());
-
+  if(m_indSelect){
+    setCursor(Qt::ArrowCursor);
+    cliked=false;
+  }
+  if (m_indMove)
+    m_userInterface->getTracingManager()->move(down->x()-up->x(),down->y()-up->y());
 }
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {

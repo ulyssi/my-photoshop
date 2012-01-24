@@ -33,6 +33,9 @@ public:
   void enableSelection();
   void disableSelection();
   
+  void enableMove();
+  void disableMove();
+  
 private:
   /**Attributes**/
   UserInterface* m_userInterface;
@@ -46,6 +49,7 @@ private:
   bool cliked;	
   bool ctrl;
   bool m_fit;
+  bool m_indMove;
   int m_numDegrees;
   
   /**Methodes **/

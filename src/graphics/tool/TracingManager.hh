@@ -34,7 +34,7 @@ public:
   
   void removeSelected(int);
   bool isSelected(int);
-  
+  void toGuiIcon(); 
   
   /**SLOTS*/
 private slots:
@@ -59,7 +59,15 @@ private:
   int m_tobeSet;
   std::vector<int>* m_selected;/*destroy*/
   std::vector<SignalManager *>*m_signalManagers;/*destroy + SMs*/
+  QPushButton* m_add;
+  QPushButton* m_merge;
+  QPushButton* m_up;
+  QPushButton* m_down;
+  QPushButton* m_remove;
+  QPushButton* m_rename;
   /**Methodes internes*/
+
+  void paintEvent(QPaintEvent*);
   void buildHead(int);
   void buildLine(Tracing *,int);
   void buildButtons();
@@ -74,6 +82,8 @@ class SignalManager:public QObject{ Q_OBJECT
 public:
   SignalManager(Tracing *,PictureModifier*,TracingManager *);
   ~SignalManager();
+  /**Public Methods**/
+  
  private slots: 
   void setAlpha(int);
   void setVisible(int);
@@ -92,6 +102,8 @@ private:
   double m_V;
   double m_prevV;
   QString m_name;
+
+  
 };
 
 #endif

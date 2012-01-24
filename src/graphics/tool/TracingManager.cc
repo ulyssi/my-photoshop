@@ -47,12 +47,38 @@ bool TracingManager::isEnabled() { return m_pictureModifier != NULL; }
 
 /** Methodes */
 void TracingManager::paste(){
-  m_pictureModifier->getClipBoard()->image();
+  //std::cout<<"attempting to paste"<<std::endl;
+  Picture * pic=m_pictureModifier->getPicture();
+  QImage tmp= m_pictureModifier->getClipBoard()->image();
   
+  Tracing * cTracing=new Tracing(tmp.width(),tmp.height(),20,20);
+  for (int i = 0; i < cTracing->getWidth(); i++)
+    for (int j = 0; j < cTracing->getHeight(); j++)
+      cTracing->setValue(i, j, (unsigned int)tmp.pixel(i, j));
+  pic->addTracing(cTracing);
+  pic->refresh();
+  m_pictureModifier->refresh();
+}
+
+void TracingManager::move(int x,int y){
+  
+  Tracing* cTracing;
+  Picture * pic=m_pictureModifier->getPicture();
+  std::vector<int>::iterator it=m_selected->begin();
+  std::vector<Tracing*> tracings=pic->getTracingList();
+  while(it<m_selected->end()){
+    cTracing=tracings[(*it)];
+    cTracing->setOffX(cTracing->getOffX()+x);
+    cTracing->setOffY(cTracing->getOffY()+y);
+    it++;
+  }
+  pic->refresh();
+  m_pictureModifier->refresh();
+
 }
 
 void TracingManager::refresh() {
-  std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;
+  //std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;
  
   if (m_pictureModifier != NULL) {
     Picture * cPicture=m_pictureModifier->getPicture();
@@ -60,7 +86,7 @@ void TracingManager::refresh() {
       std::vector <Tracing *> list=cPicture->getTracingList();
       deleteHead();
 
-      std::cout<<"refreshing tracings 2 "<<std::endl;
+      //std::cout<<"refreshing tracings 2 "<<std::endl;
       int id;
       for(id=m_lastIndex;id<list.size();id++){
 	buildLine(list[id],id);
@@ -68,7 +94,7 @@ void TracingManager::refresh() {
       m_lastIndex=id;
      
     }
-    std::cout<<"refreshing tracings 3 "<<m_lastIndex <<std::endl;
+    //std::cout<<"refreshing tracings 3 "<<m_lastIndex <<std::endl;
     buildHead(m_lastIndex);
     
     
@@ -77,7 +103,7 @@ void TracingManager::refresh() {
 
 /*the following methodes are used to build and connect the buttons of the manager*/
 void TracingManager::buildHead(int index){ 
-  std::cout<<"building head"<<std::endl;
+  //std::cout<<"building head"<<std::endl;
   if(m_indexOfHead==-1){
     QLabel *tracing=new QLabel(tr("tracing"));
     QLabel *visible=new QLabel(tr("visible"));
@@ -88,7 +114,7 @@ void TracingManager::buildHead(int index){
     m_grid->addWidget(visible,index,1);
     m_grid->addWidget(selected,index,2);
     m_grid->addWidget(alpha,index,3);
-    std::cout<<"done building head"<<std::endl;
+    //std::cout<<"done building head"<<std::endl;
     m_indexOfHead=index;
   }
 }
@@ -333,7 +359,7 @@ void TracingManager::remove(){
      pic->refresh();
      m_pictureModifier->refresh();
      normaliseOffs(pic->getTracingList());
-     std::cout<<"error?5"<<std::endl;
+     //std::cout<<"error?5"<<std::endl;
    }
 }
 
@@ -362,7 +388,7 @@ void TracingManager::rename(){
     
     
     SignalManager*cSig= m_signalManagers->at((*it));
-    std::cout<<"renaming selected trancing "<<(*it) <<std::endl;
+    //std::cout<<"renaming selected trancing "<<(*it) <<std::endl;
     connect(rename,SIGNAL(textEdited( QString)),cSig, SLOT(setName_tmp(QString)));
     connect(rename,SIGNAL(returnPressed()),cSig, SLOT(setName()));
     connect(cSig,SIGNAL(textSet(int)),this,SLOT(label_R(int)));
@@ -381,29 +407,29 @@ void TracingManager::rename(){
 
 void TracingManager::label_R(int id){
  
-  std::cout<<"label "<<id<<" set"<<std::endl;
+  //std::cout<<"label "<<id<<" set"<<std::endl;
   m_tobeSet--;
   Picture *pic=m_pictureModifier->getPicture();
   Tracing *cTracing=(pic->getTracingList())[id];
-  std::cout<<"label naming problem ??"<<std::endl;
+  //std::cout<<"label naming problem ??"<<std::endl;
   QLabel *rename=new QLabel(cTracing->getName());
   QWidget* widget = m_grid->itemAtPosition(id, 0)->widget();
-  std::cout<<"widget removal problem ??"<<std::endl;
+  //std::cout<<"widget removal problem ??"<<std::endl;
   m_grid->removeItem(m_grid->itemAtPosition(id, 0));
-  std::cout<<"delete1 problem ??"<<std::endl;
+  //std::cout<<"delete1 problem ??"<<std::endl;
   delete m_grid->itemAtPosition(id, 0);
- std::cout<<"add problem ??"<<std::endl;
+ //std::cout<<"add problem ??"<<std::endl;
   
  m_grid->addWidget(rename,id,0);
-  std::cout<<"delete2 problem ??"<<std::endl;
+  //std::cout<<"delete2 problem ??"<<std::endl;
  delete widget;
   
-  std::cout<<"aparently not"<<std::endl;  
+  //std::cout<<"aparently not"<<std::endl;  
   if(m_tobeSet==0)
     for(int i=0;i<6;i++){
       (m_foot->itemAt(i))->widget()->setEnabled(true);
     } 
-  std::cout<<"aparently once more"<<std::endl; 
+  //std::cout<<"aparently once more"<<std::endl; 
 }
 
 
@@ -462,11 +488,11 @@ void SignalManager::setAlpha(int i){
 
 void SignalManager::setSelected(int i){
   if(i!=0){
-    std::cout<<"selected  "<<m_tracing->getIndex()<<std::endl;   
+    //std::cout<<"selected  "<<m_tracing->getIndex()<<std::endl;   
     m_tracingManager->addSelected(m_tracing->getIndex());
   }
   else{
-    std::cout<<"unselected  "<<m_tracing->getIndex()<<std::endl;
+    //std::cout<<"unselected  "<<m_tracing->getIndex()<<std::endl;
     m_tracingManager->removeSelected(m_tracing->getIndex());
   }
   
@@ -487,15 +513,15 @@ void SignalManager::setVisible(int i){
 }
 
 void SignalManager::setName_tmp(QString tmp){
-  std::cout<<"not so funny now is it222?"<<std::endl;
+  //std::cout<<"not so funny now is it222?"<<std::endl;
   m_name=QString(tmp);  
 }
 
 void SignalManager::setName(){
-  std::cout<<"finished editing"<<std::endl;
+  //std::cout<<"finished editing"<<std::endl;
   m_tracing->setName(m_name);
-  std::cout<<m_name.isNull()<<std::endl;
-  std::cout<<"not so funny now is it?"<<std::endl;
+  //std::cout<<m_name.isNull()<<std::endl;
+  //std::cout<<"not so funny now is it?"<<std::endl;
   emit textSet(m_tracing->getIndex());
 }
 

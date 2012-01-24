@@ -68,13 +68,36 @@ void UserInterface::paste(){
 }
 
 void UserInterface::select(){
-  //if(m_move)
+  if(m_move->isChecked()){
+    m_move->setChecked(false);
+    m_viewTabWidget->getTabPanel()->disableMove();
+  }
+  if(m_viewTabWidget->getTabPanel()->enableSelection())
+    m_selection->setChecked(true);
+  else
+    m_selection->setChecked(false);
     
 }
 
 void UserInterface::move(){
+  if(m_selection->isChecked()){
+    m_selection->setChecked(false);
+    m_viewTabWidget->getTabPanel()->disableSelection();
+  }
+   if(m_viewTabWidget->getTabPanel()->enableSelection())
+    m_move->setChecked(true);
+   else
+    m_move->setChecked(false);
 }
 
+void UserInterface::resetEditionTool(){
+  // if(m_move!=NULL&&m_selection!=NULL){
+  //   m_viewTabWidget->getTabPanel()->disableSelection();
+  //   m_selection->setChecked(false);
+  //   m_viewTabWidget->getTabPanel()->disableMove();
+  //   m_move->setChecked(false);
+  // }
+}
 
 void UserInterface::zoomIn() {
   m_viewTabWidget->getTabPanel()->zoomIn();

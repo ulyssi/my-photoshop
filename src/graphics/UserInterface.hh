@@ -78,7 +78,8 @@ public slots:
  
   void select();
   void move();
-
+  void resetEditionTool();
+  
   void zoomIn();
   void zoomOut();
   void normalSize();

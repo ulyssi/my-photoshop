@@ -8,11 +8,11 @@
 
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
-  m_QApplication(qapplication)
-{ m_clipboard = clipboard;
+  m_QApplication(qapplication){ 
+  m_clipboard = clipboard;
+  createActions();
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
-  createActions();
   createMenuBar();
   createToolBars();
   createToolBoxDocks();

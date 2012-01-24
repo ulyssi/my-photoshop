@@ -45,6 +45,7 @@ int TabWidget::addTab(TabPanel* tabPanel) {
 
 /** Slots */
 void TabWidget::selectTab(int index) {
+  m_userInterface->resetEditionTool();
   if (index > 0  && index >= tabBar()->count()-1) 
     setCurrentIndex(index-1);
   else {

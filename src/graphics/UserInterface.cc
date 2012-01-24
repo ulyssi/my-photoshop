@@ -51,5 +51,5 @@ QDockWidget* UserInterface::createDockWidget(QWidget* widget) {
 
 
 void UserInterface::print(QString string){
-  statusBar()->showMessage(string, 2000);
+  statusBar()->showMessage(string, 10000);
 }

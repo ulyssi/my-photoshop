@@ -108,13 +108,13 @@ void PictureArea::normalSize(){
 
 void PictureArea::zoomIn(){
   m_fit=false;
+  m_pictureViewer->zoomIn();
   m_selectionTool->hide();
-  refreshCoordinate(m_pictureViewer->zoomIn());
 }
 void PictureArea::zoomOut(){
   m_fit=false;
+  m_pictureViewer->zoomOut();
   m_selectionTool->hide();
-  refreshCoordinate(m_pictureViewer->zoomOut());
 }
 
 

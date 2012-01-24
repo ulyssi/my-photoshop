@@ -20,7 +20,9 @@ public:
   void refresh();
   void refreshData();
   QImage getImage();
-  double zoomIn();
+  void zoomIn();
+  double getWidthTranslation();
+  double getHeightTranslation();
   double zoomOut();
   double normalSize();
   double fitToWindow(QSize);
@@ -29,6 +31,8 @@ private:
 
   /** Methodes internes */
   /** Attributs */
+  double m_width_translation;
+  double m_height_translation; 
   double m_scaleFactor;
   double m_scale;
   PictureModifier* m_pictureModifier;

@@ -112,8 +112,19 @@ void PictureModifier:: cut(){
   m_pictureArea->cut();
 }
 
-bool PictureModifier::enableMove(){return true;}
-void PictureModifier::disableMove(){}
+bool PictureModifier::enableMove(){
+  m_pictureArea->enableMove();
+ 
+  return true;
+}
+void PictureModifier::disableMove(){
+  m_pictureArea->disableMove();
+}
 
-bool PictureModifier::enableSelection(){return true;}
-void PictureModifier::disableSelection(){}
+bool PictureModifier::enableSelection(){
+  m_pictureArea->enableSelection();
+  return true;
+}
+void PictureModifier::disableSelection(){
+  m_pictureArea->disableSelection();
+}

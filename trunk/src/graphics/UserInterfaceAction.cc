@@ -5,6 +5,7 @@
 #include <QListIterator>
 #include <QApplication>
 
+
 #include "Picture.hh"
 #include "PictureManager.hh"
 #include "PictureModifier.hh"
@@ -13,7 +14,7 @@
 #include "ColorConvertOperation.hh"
 #include "AffineTransformationOperation.hh"
 #include "Tracing.hh"
-
+#include "TracingManager.hh"
 /** Slots */
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
@@ -68,26 +69,38 @@ void UserInterface::paste(){
 }
 
 void UserInterface::select(){
-  if(m_move->isChecked()){
-    m_move->setChecked(false);
-    m_viewTabWidget->getTabPanel()->disableMove();
-  }
-  if(m_viewTabWidget->getTabPanel()->enableSelection())
-    m_selection->setChecked(true);
-  else
-    m_selection->setChecked(false);
-    
-}
-
-void UserInterface::move(){
-  if(m_selection->isChecked()){
+  if(!m_selection->isChecked()){
     m_selection->setChecked(false);
     m_viewTabWidget->getTabPanel()->disableSelection();
   }
-   if(m_viewTabWidget->getTabPanel()->enableSelection())
-    m_move->setChecked(true);
-   else
+  else{
+    if(m_move->isChecked()){
+      m_move->setChecked(false);
+      m_viewTabWidget->getTabPanel()->disableMove();
+    }
+    if(m_viewTabWidget->getTabPanel()->enableSelection())
+      m_selection->setChecked(true);
+    else
+      m_selection->setChecked(false);
+  }
+  
+}
+
+void UserInterface::move(){
+  if(!m_move->isChecked()){
     m_move->setChecked(false);
+    m_viewTabWidget->getTabPanel()->disableMove();
+  }
+  else{
+    if(m_selection->isChecked()){
+      m_selection->setChecked(false);
+      m_viewTabWidget->getTabPanel()->disableSelection();
+    }
+    if(m_viewTabWidget->getTabPanel()->enableMove())
+      m_move->setChecked(true);
+    else
+      m_move->setChecked(false);
+  }
 }
 
 void UserInterface::resetEditionTool(int index){
@@ -95,7 +108,7 @@ void UserInterface::resetEditionTool(int index){
   // m_selection->setChecked(false);
   // m_viewTabWidget->getTabPanel()->disableMove();
   // m_move->setChecked(false);
-  std::cout<<"resetEditionTool"<<std::endl;
+
 }
 
 void UserInterface::zoomIn() {
@@ -140,6 +153,25 @@ void UserInterface::colorConvert() {
   colorConvertOperation(application);
   delete application;
 }
+
+void UserInterface::changeGIMode(){
+  m_copy->setIcon(QPixmap("Icon/Copy.png"));
+  m_cut->setIcon(QPixmap("Icon/Cut.png"));
+  m_paste->setIcon(QPixmap("Icon/Paste.png"));
+  m_openAct->setIcon(QPixmap("Icon/Open.png"));
+  m_saveAct->setIcon(QPixmap("Icon/Save.png"));
+  m_undoAct->setIcon(QPixmap("Icon/Undo.png"));
+  m_redoAct->setIcon(QPixmap("Icon/Redo.png"));
+  m_zoomInAct->setIcon(QPixmap("Icon/ZoomIn.png"));
+  m_zoomOutAct->setIcon(QPixmap("Icon/ZoomOut.png"));
+  m_normalSizeAct->setIcon(QPixmap("Icon/NormalSize.png"));
+  m_fitToWindowAct->setIcon(QPixmap("Icon/FitToWindow.png"));
+  m_selection->setIcon(QPixmap("Icon/Selection.png"));
+  m_move->setIcon(QPixmap("Icon/Move.png"));
+  m_tracingManager->toGuiIcon();
+  
+}
+
 
 void UserInterface::rescale() {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
@@ -324,6 +356,11 @@ void UserInterface::createViewAction() {
   m_colorConvertOperationAct->setCheckable(true);
   m_colorConvertOperationAct->setChecked(false);
   connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
+  
+  m_guiMode= new QAction(tr("Graphical Interface Mode"),this);
+  connect(m_guiMode, SIGNAL(triggered()), this, SLOT(changeGIMode()));
+  
+  
 }
 
 void UserInterface::createOperationAction() {

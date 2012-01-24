@@ -29,7 +29,7 @@ public:
   /** Methodes */
   void refresh();
   void paste();
-  
+  void move(int,int);
   void addSelected(int);
   
   void removeSelected(int);

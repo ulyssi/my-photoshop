@@ -31,8 +31,8 @@ public:
   void crop(int,int);
   void equalization();
   void refreshData(bool = true);
-  int getChrominanceUForHistogram(int);
-  int getChrominanceVForHistogram(int);
+  int getChrominanceUForHistogram(float);
+  int getChrominanceVForHistogram(float);
 
 public slots:
   

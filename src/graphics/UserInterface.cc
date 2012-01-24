@@ -10,7 +10,6 @@
 UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   m_QApplication(qapplication)
 { m_clipboard = clipboard;
-  
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
   createActions();
@@ -21,6 +20,7 @@ UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
   update();
+  this->statusBar()->showMessage("ready");
 }
     
 UserInterface::~UserInterface() {
@@ -46,4 +46,10 @@ QDockWidget* UserInterface::createDockWidget(QWidget* widget) {
   QDockWidget* dockWidget = new QDockWidget(widget->accessibleName());
   dockWidget->setWidget(widget);
   return dockWidget;
+}
+
+
+
+void UserInterface::print(QString string){
+  statusBar()->showMessage(string, 2000);
 }

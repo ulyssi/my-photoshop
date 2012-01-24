@@ -34,6 +34,10 @@ public :
   void copy();	
   void paste();
   void cut();
+  bool enableSelection();
+  void disableSelection();
+  bool enableMove();
+  void disableMove();
   
 private :
 

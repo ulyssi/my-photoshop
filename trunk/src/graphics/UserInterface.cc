@@ -39,6 +39,7 @@ void UserInterface::update() {
 TabWidget* UserInterface::createTabWidget() {
   TabWidget* tabWidget = new TabWidget(this);
   tabWidget->addTab((TabPanel*)m_pictureManager);
+  QObject::connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(resetEditionTool(int)));
   return tabWidget;
 }
   

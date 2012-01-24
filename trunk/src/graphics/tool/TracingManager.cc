@@ -72,6 +72,7 @@ void TracingManager::move(int x,int y){
     cTracing->setOffY(cTracing->getOffY()+y);
     it++;
   }
+  normaliseOffs(tracings);
   pic->refresh();
   m_pictureModifier->refresh();
 

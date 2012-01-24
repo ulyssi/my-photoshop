@@ -90,13 +90,12 @@ void UserInterface::move(){
     m_move->setChecked(false);
 }
 
-void UserInterface::resetEditionTool(){
-  // if(m_move!=NULL&&m_selection!=NULL){
-  //   m_viewTabWidget->getTabPanel()->disableSelection();
-  //   m_selection->setChecked(false);
-  //   m_viewTabWidget->getTabPanel()->disableMove();
-  //   m_move->setChecked(false);
-  // }
+void UserInterface::resetEditionTool(int index){
+  // m_viewTabWidget->getTabPanel()->disableSelection();
+  // m_selection->setChecked(false);
+  // m_viewTabWidget->getTabPanel()->disableMove();
+  // m_move->setChecked(false);
+  std::cout<<"resetEditionTool"<<std::endl;
 }
 
 void UserInterface::zoomIn() {

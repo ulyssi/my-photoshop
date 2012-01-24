@@ -109,3 +109,9 @@ void PictureModifier:: paste(){
 void PictureModifier:: cut(){
   m_pictureArea->cut();
 }
+
+bool PictureModifier::enableMove(){return true;}
+void PictureModifier::disableMove(){}
+
+bool PictureModifier::enableSelection(){return true;}
+void PictureModifier::disableSelection(){}

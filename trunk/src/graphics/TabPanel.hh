@@ -34,9 +34,9 @@ public :
   virtual void paste();
   virtual void cut();
   virtual bool enableSelection();
-  virtual bool disableSelection();
+  virtual void disableSelection();
   virtual bool enableMove();
-  virtual bool disableMove();
+  virtual void disableMove();
 private : 
   
   /** Attributs */

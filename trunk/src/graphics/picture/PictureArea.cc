@@ -24,6 +24,7 @@ PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   ctrl=false;
   m_fit=false;
   m_indSelect=false;
+  //  m_indMove=true;
   m_selectionTool->hide();
   show();
 }
@@ -175,10 +176,10 @@ void PictureArea::keyPressEvent ( QKeyEvent * event ){
   if (event->modifiers()==Qt::ControlModifier)
     ctrl= true;
 }
-
+#include <iostream>
 void PictureArea::keyReleaseEvent ( QKeyEvent * event ) {
   ctrl= false;
-}
+ }
 
 
 void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
@@ -219,10 +220,18 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 if(cliked){
     setDownCoordinate(event);
     setSelection();
-  }
+ }
+//modify
+ setDownCoordinate(event);
+ 
+ 
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
+  up->setX(event->x());
+  up->setY(event->y());
+  
+  
   if(m_indSelect!=false){
     up->setX(event->x());
     up->setY(event->y());
@@ -230,9 +239,11 @@ void PictureArea::mousePressEvent ( QMouseEvent * event ){
     cliked=true;
   }
 }
+#include <iostream>
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
   cliked=false;
- 
+  m_userInterface->getTracingManager()->move(down->x()-up->x(),down->y()-up->y());
+
 }
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {

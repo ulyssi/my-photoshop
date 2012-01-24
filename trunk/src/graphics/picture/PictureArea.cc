@@ -23,7 +23,7 @@ PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   cliked=false;
   ctrl=false;
   m_fit=false;
-  m_indSelect;
+  m_indSelect=false;
   m_selectionTool->hide();
   show();
 }
@@ -186,26 +186,45 @@ void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
 }
 
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
+  
   QString m_string;
   QString m_coord;
   m_string.append("x: ");
   m_coord.setNum(event->x());
   m_string=m_string+m_coord;
-  m_string.append("  y:");
+  m_string.append("  y: ");
   m_coord.setNum(event->y());
   m_string=m_string+m_coord;
+  unsigned int pixel = m_pictureViewer->getImage().pixel(event->x(),event->y());
+  m_string.append("   RGB :  R:");
+  m_coord.setNum(PixelMod::getRed(pixel)); //int
+  m_string=m_string+m_coord;
+  m_string.append("  G:");
+  m_coord.setNum(PixelMod::getGreen(pixel)); //int
+  m_string=m_string+m_coord;
+  m_string.append("  B:"); 
+  m_coord.setNum(PixelMod::getBlue(pixel)); //int
+  m_string=m_string+m_coord;
+  m_string.append("  YUV :  Y:");
+  m_coord.setNum(PixelMod::getLuma(pixel),'g',2); 
+  m_string=m_string+m_coord;
+  m_string.append("  U:");
+  m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',2);
+  m_string=m_string+m_coord;
+  m_string.append("  V:"); 
+  m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',2);
+  m_string=m_string+m_coord;
   m_userInterface->print(m_string);
-  // pixel =
-  // coord.setNum  PixelMod::getLuma(pixel);
-  //ajout des pixel en dble;
-  if(cliked){
+  std::cout<<PixelMod::getChrominanceV(pixel)<<std::endl;
+  
+if(cliked){
     setDownCoordinate(event);
     setSelection();
   }
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
-  if(m_indSelect){
+  if(m_indSelect!=false){
     up->setX(event->x());
     up->setY(event->y());
     m_selectionTool->show();

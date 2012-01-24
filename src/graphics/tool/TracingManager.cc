@@ -78,7 +78,7 @@ void TracingManager::move(int x,int y){
 }
 
 void TracingManager::refresh() {
-  //std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;
+  // std::cout<<"refreshing tracings 0 "<<m_lastIndex <<std::endl;
  
   if (m_pictureModifier != NULL) {
     Picture * cPicture=m_pictureModifier->getPicture();
@@ -86,7 +86,7 @@ void TracingManager::refresh() {
       std::vector <Tracing *> list=cPicture->getTracingList();
       deleteHead();
 
-      //std::cout<<"refreshing tracings 2 "<<std::endl;
+      // std::cout<<"refreshing tracings 2 "<<std::endl;
       int id;
       for(id=m_lastIndex;id<list.size();id++){
 	buildLine(list[id],id);
@@ -96,14 +96,13 @@ void TracingManager::refresh() {
     }
     //std::cout<<"refreshing tracings 3 "<<m_lastIndex <<std::endl;
     buildHead(m_lastIndex);
-    
-    
+        
   }
 }
 
 /*the following methodes are used to build and connect the buttons of the manager*/
 void TracingManager::buildHead(int index){ 
-  //std::cout<<"building head"<<std::endl;
+  // std::cout<<"building head"<<std::endl;
   if(m_indexOfHead==-1){
     QLabel *tracing=new QLabel(tr("tracing"));
     QLabel *visible=new QLabel(tr("visible"));
@@ -120,18 +119,21 @@ void TracingManager::buildHead(int index){
 }
 
 void TracingManager::deleteHead(){
+  //std::cout<<"deleting head"<<std::endl;
   if(m_indexOfHead!=-1){
     if(m_lastIndex<m_signalManagers->size())
       m_signalManagers->erase(m_signalManagers->begin()+m_lastIndex,m_signalManagers->end());
     for(int i=m_lastIndex;i<=m_indexOfHead;i++)
     for(int j=0;j<4;j++){
       QWidget* widget = m_grid->itemAtPosition(i, j)->widget();
+      widget->setEnabled(false);
+      widget->setVisible(false);
       m_grid->removeItem(m_grid->itemAtPosition(i, j));
-      delete m_grid->itemAtPosition(i, j);
-      delete widget;
+      //delete m_grid->itemAtPosition(i, j);
+      // delete widget;
     }
     m_indexOfHead=-1;
-  }
+  }//std::cout<<"done deleting head"<<std::endl;
 }
 
 void TracingManager::buildLine(Tracing *cTracing,int line){
@@ -148,10 +150,17 @@ void TracingManager::buildLine(Tracing *cTracing,int line){
     label=new QLabel(cTracing->getName());
   QCheckBox * select=new QCheckBox(QString(""));
   QCheckBox * visible=new QCheckBox(QString(""));
+  
   visible->setCheckState (Qt::Checked);
   QSpinBox*  alpha=new QSpinBox();
+   if(isSelected(line))
+     select->setCheckState (Qt::Checked);
+  alpha->setSuffix(QString("/255"));
+  alpha->setMinimum(0);
+  alpha->setMaximum(255);
+  alpha->setSingleStep(3);
+  alpha->setValue((int)(cTracing->getAlpha()*255.0+0.5));
   
-  initSpin(alpha);
   m_grid->addWidget(label,line,0);
   m_grid->addWidget(visible,line,1);
   m_grid->addWidget(select,line,2);
@@ -167,8 +176,8 @@ void TracingManager::buildButtons(){
   m_foot=new QHBoxLayout();
   QPushButton* add=new QPushButton(tr("add"));
   QPushButton* merge=new QPushButton(tr("merge"));
-  QPushButton* up=new QPushButton(tr("down"));
-  QPushButton* down=new QPushButton(tr("up"));
+  QPushButton* up=new QPushButton(tr("up"));
+  QPushButton* down=new QPushButton(tr("down"));
   QPushButton* remove=new QPushButton(tr("remove"));
   QPushButton* rename=new QPushButton(tr("rename"));
   m_foot->addWidget(add);
@@ -189,15 +198,7 @@ void TracingManager::buildButtons(){
 }
 
 
-void TracingManager::initSpin(QSpinBox *al){
-  
-  al->setSuffix(QString("/255"));
-  al->setMinimum(0);
-  al->setMaximum(255);
-  al->setSingleStep(3);
-  al->setValue(255);
-  
-}
+
 
 
 /**the following methodes are used to manage the selected tracings*/
@@ -230,7 +231,17 @@ void TracingManager::removeSelected(int i){
 
 }
 
-
+bool TracingManager::isSelected(int id){
+ 
+  std::vector<int>::iterator it;
+  it=m_selected->begin();
+ 
+  while(it<m_selected->end()&&id!=(*it)){
+    it++;
+  }
+ 
+  return it<m_selected->end();
+}
 
 /** Methode SLOT*/
 
@@ -277,6 +288,16 @@ void TracingManager::up(){
       prev=(*it);
     it++;
   }
+  
+  /*maj list selection*/
+  prev=(pic->getTracingList()).size();
+  for(int i=0;i<m_selected->size();i++){
+    if(m_selected->at(i)+1!=prev)
+      m_selected->at(i)++;
+    else
+      prev=m_selected->at(i);
+  }
+  
   m_lastIndex=0;
   pic->refresh();
   m_pictureModifier->refresh();
@@ -297,6 +318,12 @@ void TracingManager::down(){
     else
       prev=(*it);
     it++;
+  }
+  for(int i=m_selected->size()-1;i>=0;i--){
+    if(m_selected->at(i)-1!=prev)
+      m_selected->at(i)--;
+    else
+      prev=m_selected->at(i);
   }
   m_lastIndex=0;
   pic->refresh();
@@ -356,10 +383,11 @@ void TracingManager::remove(){
      
      m_selected->clear();
      m_lastIndex=0;
+     normaliseOffs(pic->getTracingList());
      pic->refresh();
      m_pictureModifier->refresh();
-     normaliseOffs(pic->getTracingList());
-     //std::cout<<"error?5"<<std::endl;
+    
+     std::cout<<"error?5"<<std::endl;
    }
 }
 
@@ -369,34 +397,35 @@ void TracingManager::remove(){
 /*tracing                                                           */
 /********************************************************************/
 void TracingManager::rename(){
-  for(int i=0;i<6;i++){
-    (m_foot->itemAt(i))->widget()->setEnabled(false);
+  if(m_selected->size()!=0){
+    for(int i=0;i<6;i++){
+      (m_foot->itemAt(i))->widget()->setEnabled(false);
     
     
-  }
-  m_tobeSet=m_selected->size();
-  //for(int i=0;) for() disable grid
-  std::vector<int>::iterator it=m_selected->begin();
-  while(it<m_selected->end()){
-    QLineEdit *rename=new QLineEdit();
-    QWidget* widget = m_grid->itemAtPosition((*it), 0)->widget();
-    m_grid->removeItem(m_grid->itemAtPosition((*it), 0));
+    }
+    m_tobeSet=m_selected->size();
+    //for(int i=0;) for() disable grid
+    std::vector<int>::iterator it=m_selected->begin();
+    while(it<m_selected->end()){
+      QLineEdit *rename=new QLineEdit();
+      QWidget* widget = m_grid->itemAtPosition((*it), 0)->widget();
+      m_grid->removeItem(m_grid->itemAtPosition((*it), 0));
    
-    delete m_grid->itemAtPosition((*it), 0);
-    m_grid->addWidget(rename,(*it),0);
-    delete widget;
+      delete m_grid->itemAtPosition((*it), 0);
+      m_grid->addWidget(rename,(*it),0);
+      delete widget;
     
     
-    SignalManager*cSig= m_signalManagers->at((*it));
-    //std::cout<<"renaming selected trancing "<<(*it) <<std::endl;
-    connect(rename,SIGNAL(textEdited( QString)),cSig, SLOT(setName_tmp(QString)));
-    connect(rename,SIGNAL(returnPressed()),cSig, SLOT(setName()));
-    connect(cSig,SIGNAL(textSet(int)),this,SLOT(label_R(int)));
-    it++;
+      SignalManager*cSig= m_signalManagers->at((*it));
+      //std::cout<<"renaming selected trancing "<<(*it) <<std::endl;
+      connect(rename,SIGNAL(textEdited( QString)),cSig, SLOT(setName_tmp(QString)));
+      connect(rename,SIGNAL(returnPressed()),cSig, SLOT(setName()));
+      connect(cSig,SIGNAL(textSet(int)),this,SLOT(label_R(int)));
+      it++;
+    }
+  
+  
   }
-  
-  
-  
   
 
 }
@@ -414,15 +443,17 @@ void TracingManager::label_R(int id){
   //std::cout<<"label naming problem ??"<<std::endl;
   QLabel *rename=new QLabel(cTracing->getName());
   QWidget* widget = m_grid->itemAtPosition(id, 0)->widget();
+  widget->setEnabled(false);
+  widget->setVisible(false);
   //std::cout<<"widget removal problem ??"<<std::endl;
   m_grid->removeItem(m_grid->itemAtPosition(id, 0));
   //std::cout<<"delete1 problem ??"<<std::endl;
-  delete m_grid->itemAtPosition(id, 0);
+  //delete m_grid->itemAtPosition(id, 0);
  //std::cout<<"add problem ??"<<std::endl;
   
  m_grid->addWidget(rename,id,0);
   //std::cout<<"delete2 problem ??"<<std::endl;
- delete widget;
+ //delete widget;
   
   //std::cout<<"aparently not"<<std::endl;  
   if(m_tobeSet==0)
@@ -447,13 +478,13 @@ void TracingManager::normaliseOffs(std::vector<Tracing*> tracing){
 }
 int * TracingManager::getminOffs(std::vector<Tracing*> tracing){
   int *rslt=new int[2];
-  rslt[0]=0;
-  rslt[1]=0;
+  rslt[0]=10000;
+  rslt[1]=10000;
   std::vector<Tracing*>::iterator it;
   for(it=tracing.begin();it<tracing.end();it++){
-    if(rslt[0]<(*it)->getOffX())
+    if(rslt[0]>(*it)->getOffX())
       rslt[0]=(*it)->getOffX();
-    if(rslt[1]<(*it)->getOffY())
+    if(rslt[1]>(*it)->getOffY())
       rslt[1]=(*it)->getOffY();
     
   }

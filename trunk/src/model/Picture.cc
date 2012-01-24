@@ -108,3 +108,15 @@ void Picture::removeTracing(int index){
 void Picture::removeTracing(Tracing *tracing){
   removeTracing(tracing->getIndex());
 }
+
+void Picture::swapTracing(int id1,int id2){
+  if(id1>0&&id1<m_tracingList.size()&&id2>0&&id2<m_tracingList.size()){
+    Tracing *tmp=m_tracingList[id1];
+    m_tracingList[id1] = m_tracingList[id2];
+    m_tracingList[id2] = tmp;
+    ( m_tracingList[id1])->setIndex(id1);
+    (m_tracingList[id2])->setIndex(id2);
+  }
+  else
+    cout<<"index out of bounds"<<std::endl;
+}

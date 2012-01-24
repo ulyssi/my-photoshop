@@ -14,6 +14,7 @@
 TracingManager::TracingManager(PictureModifier* pictureModifier) :
   m_pictureModifier(pictureModifier),
   m_lastIndex(0),
+  m_tobeSet(0),
   m_indexOfHead(-1)
 {
   setAccessibleName(tr("Tracing"));
@@ -105,7 +106,7 @@ void TracingManager::deleteHead(){
 }
 
 void TracingManager::buildLine(Tracing *cTracing,int line){
-
+  
   SignalManager *sm=new SignalManager(cTracing,m_pictureModifier,this);
   if(m_signalManagers->size()==0)
     m_signalManagers->reserve(1);
@@ -237,7 +238,19 @@ void TracingManager::add(){
 /**********************************************/
 
 void TracingManager::up(){
-  std::cout<<"up is as yet unimplemented"<<std::endl;
+ Picture *pic= m_pictureModifier->getPicture();
+ int prev=(pic->getTracingList()).size();
+  std::vector<int>::reverse_iterator it=m_selected->rbegin();
+  while(it<m_selected->rend()){
+    if((*it)+1!=prev)
+      pic->swapTracing((*it),(*it)+1);
+    else
+      prev=(*it);
+    it++;
+  }
+  m_lastIndex=0;
+  pic->refresh();
+  m_pictureModifier->refresh();
 }
 
 
@@ -246,7 +259,19 @@ void TracingManager::up(){
 /************************************************/
 
 void TracingManager::down(){
-  std::cout<<"down is as yet unimplemented"<<std::endl;
+  Picture *pic= m_pictureModifier->getPicture();
+  int prev =-1;
+  std::vector<int>::iterator it=m_selected->begin();
+  while(it<m_selected->end()){
+    if((*it)-1!=prev)
+      pic->swapTracing((*it),(*it)-1);
+    else
+      prev=(*it);
+    it++;
+  }
+  m_lastIndex=0;
+  pic->refresh();
+  m_pictureModifier->refresh();
 }
 
 /************************************************************/
@@ -315,9 +340,35 @@ void TracingManager::remove(){
 /*tracing                                                           */
 /********************************************************************/
 void TracingManager::rename(){
-  for(int i=0;i<5;i++){
+  for(int i=0;i<6;i++){
     (m_foot->itemAt(i))->widget()->setEnabled(false);
+    
+    
   }
+  m_tobeSet=m_selected->size();
+  //for(int i=0;) for() disable grid
+  std::vector<int>::iterator it=m_selected->begin();
+  while(it<m_selected->end()){
+    QLineEdit *rename=new QLineEdit();
+    QWidget* widget = m_grid->itemAtPosition((*it), 0)->widget();
+    m_grid->removeItem(m_grid->itemAtPosition((*it), 0));
+   
+    delete m_grid->itemAtPosition((*it), 0);
+    m_grid->addWidget(rename,(*it),0);
+    delete widget;
+    
+    
+    SignalManager*cSig= m_signalManagers->at((*it));
+    std::cout<<"renaming selected trancing "<<(*it) <<std::endl;
+    connect(rename,SIGNAL(textEdited( QString)),cSig, SLOT(setName_tmp(QString)));
+    connect(rename,SIGNAL(returnPressed()),cSig, SLOT(setName()));
+    connect(cSig,SIGNAL(textSet(int)),this,SLOT(label_R(int)));
+    it++;
+  }
+  
+  
+  
+  
 
 }
 /********************************************************************/
@@ -326,9 +377,30 @@ void TracingManager::rename(){
 /********************************************************************/
 
 void TracingManager::label_R(int id){
-  std::cout<<id;
+ 
+  std::cout<<"label "<<id<<" set"<<std::endl;
+  m_tobeSet--;
+  Picture *pic=m_pictureModifier->getPicture();
+  Tracing *cTracing=(pic->getTracingList())[id];
+  std::cout<<"label naming problem ??"<<std::endl;
+  QLabel *rename=new QLabel(cTracing->getName());
+  QWidget* widget = m_grid->itemAtPosition(id, 0)->widget();
+  std::cout<<"widget removal problem ??"<<std::endl;
+  m_grid->removeItem(m_grid->itemAtPosition(id, 0));
+  std::cout<<"delete1 problem ??"<<std::endl;
+  delete m_grid->itemAtPosition(id, 0);
+ std::cout<<"add problem ??"<<std::endl;
   
+ m_grid->addWidget(rename,id,0);
+  std::cout<<"delete2 problem ??"<<std::endl;
+ delete widget;
   
+  std::cout<<"aparently not"<<std::endl;  
+  if(m_tobeSet==0)
+    for(int i=0;i<6;i++){
+      (m_foot->itemAt(i))->widget()->setEnabled(true);
+    } 
+  std::cout<<"aparently once more"<<std::endl; 
 }
 
 
@@ -388,7 +460,7 @@ void SignalManager::setAlpha(int i){
 void SignalManager::setSelected(int i){
   if(i!=0){
     std::cout<<"selected  "<<m_tracing->getIndex()<<std::endl;   
- m_tracingManager->addSelected(m_tracing->getIndex());
+    m_tracingManager->addSelected(m_tracing->getIndex());
   }
   else{
     std::cout<<"unselected  "<<m_tracing->getIndex()<<std::endl;
@@ -412,10 +484,15 @@ void SignalManager::setVisible(int i){
 }
 
 void SignalManager::setName_tmp(QString tmp){
+  std::cout<<"not so funny now is it222?"<<std::endl;
   m_name=QString(tmp);  
 }
 
 void SignalManager::setName(){
+  std::cout<<"finished editing"<<std::endl;
+  m_tracing->setName(m_name);
+  std::cout<<m_name.isNull()<<std::endl;
+  std::cout<<"not so funny now is it?"<<std::endl;
   emit textSet(m_tracing->getIndex());
 }
 

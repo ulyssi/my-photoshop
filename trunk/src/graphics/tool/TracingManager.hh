@@ -48,15 +48,16 @@ private:
 
  
   /** Attributs */
-  PictureModifier* m_pictureModifier;
-  QLabel * m_header;
-  QGridLayout * m_grid;
-  QHBoxLayout * m_foot;
-  QVBoxLayout* m_vLayout;
+  PictureModifier* m_pictureModifier;/*do not destroy*/
+  QLabel * m_header;/*destroy*/
+  QGridLayout * m_grid;/*destroy*/
+  QHBoxLayout * m_foot;/*destroy*/
+  QVBoxLayout* m_vLayout;/*destroy*/
   int m_lastIndex;
   int m_indexOfHead;
-  std::vector<int>* m_selected;
-  std::vector<SignalManager *>*m_signalManagers;
+  int m_tobeSet;
+  std::vector<int>* m_selected;/*destroy*/
+  std::vector<SignalManager *>*m_signalManagers;/*destroy + SMs*/
   /**Methodes internes*/
   void buildHead(int);
   void buildLine(Tracing *,int);
@@ -84,9 +85,9 @@ signals:
 
 private:
   /** attributs*/
-  PictureModifier *m_pictureMod;
-  Tracing *m_tracing;
-  TracingManager *m_tracingManager;
+  PictureModifier *m_pictureMod;/*do not destroy*/
+  Tracing *m_tracing;/*do not destroy*/
+  TracingManager *m_tracingManager;/*do not destroy*/
   double m_V;
   double m_prevV;
   QString m_name;

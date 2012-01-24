@@ -33,7 +33,7 @@ public:
   void addSelected(int);
   
   void removeSelected(int);
-  
+  bool isSelected(int);
   
   
   /**SLOTS*/
@@ -63,7 +63,7 @@ private:
   void buildHead(int);
   void buildLine(Tracing *,int);
   void buildButtons();
-  void initSpin(QSpinBox *);
+ 
   void deleteHead();
   void normaliseOffs(std::vector<Tracing*>);
   int * getminOffs(std::vector<Tracing*>);  

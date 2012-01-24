@@ -3,6 +3,7 @@
 
 #include "TabPanel.hh"
 #include <QImage>
+#include <QClipboard>
 
 class Picture;
 class PictureViewer;
@@ -20,7 +21,7 @@ public :
   /** Accesseurs */
   QImage* getImage();
   Picture* getPicture();
-  
+  QClipboard* getClipBoard();
   /** Methodes */
   Picture* getSelectedPicture();
   void notifyCurrent();
@@ -33,12 +34,14 @@ public :
   void copy();	
   void paste();
   void cut();
+  
 private :
 
   /** Attributs */
   Picture* m_picture;
   QImage* m_image;
   PictureArea* m_pictureArea;
+  UserInterface* m_userInterface;
   
 private slots:
   /** SLOTS**/

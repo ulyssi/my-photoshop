@@ -10,6 +10,7 @@
 #include "ToolBoxChooser.hh"
 #include "AffineOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"
+#include "ColorConvertOperationChooser.hh"
 #include "PictureArea.hh"
 
 /** Constructeurs et destructeur */
@@ -43,6 +44,7 @@ void PictureModifier::notifyCurrent() {
   getUserInterface()->getToolBoxChooser()->setPictureModifier(this);
   getUserInterface()->getAffineOperationChooser()->setPictureModifier(this);
   getUserInterface()->getConvolveOperationChooser()->setPictureModifier(this);
+  getUserInterface()->getColorConvertOperationChooser()->setPictureModifier(this);
   getUserInterface()->getHistogram()->setPictureModifier(this);
   getUserInterface()->getTracingManager()->setPictureModifier(this);
   getUserInterface()->update();

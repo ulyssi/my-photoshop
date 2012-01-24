@@ -7,6 +7,7 @@
 #include "ToolBoxChooser.hh"
 #include "AffineOperationChooser.hh"
 #include "ConvolveOperationChooser.hh"
+#include "ColorConvertOperationChooser.hh"
 
 
 /** Constructeurs et destructeur */
@@ -28,7 +29,8 @@ void TabPanel::notifyCurrent() {
   m_userInterface->getPreviewer()->setPictureModifier(NULL);
   m_userInterface->getToolBoxChooser()->setPictureModifier(NULL);
   m_userInterface->getAffineOperationChooser()->setPictureModifier(NULL);
-  m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL);
+  m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL); 
+  m_userInterface->getColorConvertOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getTracingManager()->setPictureModifier(NULL);
   m_userInterface->getHistogram()->setPictureModifier(NULL);
   m_userInterface->update();

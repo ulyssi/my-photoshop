@@ -19,6 +19,11 @@ public:
   Tracing* doOperation(Tracing*);
   Operation* clone();
 
+  /** Methodes de classes */
+  static Matrix<double>* createIdentityKernel();
+  static Matrix<double>* createGreyScaleKernel();
+  static Matrix<double>* createSepiaKernel();
+
 private:
 
   /** Attributs */

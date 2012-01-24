@@ -14,16 +14,19 @@
 /** Constructeurs et destructeur */
 ColorConvertOperationChooser::ColorConvertOperationChooser(UserInterface* userInterface) :
   m_userInterface(userInterface),
-  m_pictureModifier(NULL)
+  m_pictureModifier(NULL),
+  m_kernel(new Matrix<double>(4, 4)),
+  m_greyScaleString(tr("Grey Scale")),
+  m_sepiaString(tr("Sepia"))
 {
   setAccessibleName(tr("ColorConvertOp"));
-    
-  m_kernel = new Matrix<double>(4, 4);
+
   m_kernel->initialize(0.0);
   for (int i = 0; i < 4; i++) m_kernel->setValue(i, i, 1.0);
-    
+      
   QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(createMatrixGroupBox());
+  layout->addWidget(createKernelGroupBox());
+  layout->addWidget(m_matrixGenerator = new MatrixGenerator(m_kernel, false));
   layout->addLayout(createControlsLayout());
   layout->addStretch();
 
@@ -47,17 +50,16 @@ void ColorConvertOperationChooser::refresh() {
 
 
 /** Slots */
-void ColorConvertOperationChooser::modifyMatrix() {
-  for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) {
-      QSpinBox* spinBox = (QSpinBox*)m_matrixLayout->itemAtPosition(i, j)->widget();
-      m_kernel->setValue(i, j, (double)spinBox->value());
-    }
-}
-
 void ColorConvertOperationChooser::resetOperation() {
   // m_kernel = new Matrix<double>(1, 1);
   // m_kernel->setValue(0, 0, 1.0);
+}
+
+void ColorConvertOperationChooser::kernelSelection(int index) {
+  QString text = m_kernelComboBox->itemText(index);
+  if (text == m_greyScaleString) m_kernel = ColorConvertOperation::createGreyScaleKernel();
+  else if (text == m_sepiaString) m_kernel = ColorConvertOperation::createSepiaKernel();
+  m_matrixGenerator->setMatrix(m_kernel);
 }
 
 void ColorConvertOperationChooser::refreshPreview() {}
@@ -66,20 +68,19 @@ void ColorConvertOperationChooser::applyOperation() {}
 
 
 /** Methodes internes */
-QGroupBox* ColorConvertOperationChooser::createMatrixGroupBox() {
-  QGroupBox*  groupBox = new QGroupBox(tr("Matrix"));  
-  m_matrixLayout = new QGridLayout;
+QGroupBox* ColorConvertOperationChooser::createKernelGroupBox() {
+  QGroupBox* groupBox = new QGroupBox(tr("Kernels"));  
+  QGridLayout* layout = new QGridLayout;
 
-  for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) {
-      QSpinBox* spinBox = new QSpinBox();
-      spinBox->setValue(m_kernel->getValue(i, j));
-      spinBox->setRange(-255, 255);
-      connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(modifyMatrix()));
-      m_matrixLayout->addWidget(spinBox, i, j);
-    }
+  m_kernelComboBox = new QComboBox;
+  m_kernelComboBox->addItem(m_greyScaleString);
+  m_kernelComboBox->addItem(m_sepiaString);
 
-  groupBox->setLayout(m_matrixLayout);
+  connect(m_kernelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelSelection(int)));
+
+  layout->addWidget(m_kernelComboBox);
+
+  groupBox->setLayout(layout);
   return groupBox;
 }
 
@@ -89,17 +90,14 @@ QHBoxLayout* ColorConvertOperationChooser::createControlsLayout() {
 
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
-  QPushButton* pushButtonCustomized = new QPushButton(tr("Customize"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
   
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
-  connect(pushButtonCustomized, SIGNAL(clicked()), this, SLOT(customize()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
 
   layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
-  layout->addWidget(pushButtonCustomized);
   layout->addWidget(pushButtonApply);
   
   return layout;

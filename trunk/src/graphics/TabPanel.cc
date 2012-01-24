@@ -44,3 +44,9 @@ void TabPanel:: fitToWindow(){}
 void TabPanel:: copy(){}		
 void TabPanel:: paste(){}
 void TabPanel:: cut(){}
+
+bool TabPanel:: enableSelection(){return false;}
+bool TabPanel:: disableSelection(){return false;}
+
+bool TabPanel:: enableMove(){return false;}
+bool TabPanel:: disableMove(){return false;}

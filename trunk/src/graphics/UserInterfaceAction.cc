@@ -67,6 +67,15 @@ void UserInterface::paste(){
   m_viewTabWidget->getTabPanel()->paste();
 }
 
+void UserInterface::select(){
+  //if(m_move)
+    
+}
+
+void UserInterface::move(){
+}
+
+
 void UserInterface::zoomIn() {
   m_viewTabWidget->getTabPanel()->zoomIn();
 }
@@ -213,7 +222,21 @@ void UserInterface::createEditAction() {
   m_cut->setShortcut(tr("Ctrl+X"));
   connect(m_cut, SIGNAL(triggered()), this, SLOT(cut()));
   
+  
+  m_selection= new QAction(tr("&Selection"), this);
+  m_selection->setShortcut(tr("Alt"));
+  m_selection->setCheckable(true);
+  connect(m_selection, SIGNAL(triggered()), this, SLOT(select()));
+  
+  m_move= new QAction(tr("&Move"), this);
+  m_move->setShortcut(tr("Atl+S"));
+  m_move->setCheckable(true);
+  connect(m_move, SIGNAL(triggered()), this, SLOT(move()));
+  
 
+  
+
+  
 }
 
 void UserInterface::createViewAction() {

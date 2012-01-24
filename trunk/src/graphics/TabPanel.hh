@@ -33,6 +33,10 @@ public :
   virtual void copy();
   virtual void paste();
   virtual void cut();
+  virtual bool enableSelection();
+  virtual bool disableSelection();
+  virtual bool enableMove();
+  virtual bool disableMove();
 private : 
   
   /** Attributs */

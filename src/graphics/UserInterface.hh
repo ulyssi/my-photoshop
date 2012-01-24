@@ -75,7 +75,9 @@ public slots:
   void cut();
   void copy();
   void paste();
-  
+ 
+  void select();
+  void move();
 
   void zoomIn();
   void zoomOut();
@@ -203,6 +205,8 @@ private:
   QAction* m_openAct;
   QAction* m_saveAct;
   QAction* m_exitAct;
+  
+  QAction* m_closeTab;
 
   QAction* m_undoAct;
   QAction* m_redoAct;
@@ -211,6 +215,8 @@ private:
   QAction* m_zoomOutAct;
   QAction* m_normalSizeAct;
   QAction* m_fitToWindowAct;
+  QAction* m_selection;
+  QAction* m_move;
 
   QAction* m_previewerAct;
   QAction* m_histogramAct;

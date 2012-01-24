@@ -22,8 +22,10 @@ PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   down = new QPoint(0,0);
   cliked=false;
   ctrl=false;
-  show();
   m_fit=false;
+  m_indSelect;
+  m_selectionTool->hide();
+  show();
 }
 
 PictureArea::~PictureArea(){}
@@ -41,6 +43,64 @@ void PictureArea::refresh(){
 PictureViewer* PictureArea::getPictureViewer(){
   return m_pictureViewer;
 }
+
+/** Setter**/
+
+void PictureArea::enableSelection(){
+  m_selectionTool->show();
+  m_indSelect=true;
+}
+
+void PictureArea::disableSelection(){
+  m_selectionTool->hide();
+  m_indSelect=false;
+}
+
+void PictureArea::fitToWindow(){
+  if (!m_fit){
+    refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
+    m_fit=true;
+  }
+}
+void PictureArea::normalSize(){
+  m_fit=false;
+  refreshCoordinate(m_pictureViewer->normalSize());
+}
+
+void PictureArea::zoomIn(){
+  m_fit=false;
+  m_pictureViewer->zoomIn();
+ 
+}
+void PictureArea::zoomOut(){
+  m_fit=false;
+  m_pictureViewer->zoomOut();
+  m_selectionTool->hide();
+}
+
+
+void PictureArea::copy(){
+  QImage image;
+  if(up->x()<down->x()&&up->y()<down->y())
+    image=m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+  else if(up->x() > down->x()&& up->y()<down->y())
+    image=m_pictureViewer->getImage().copy(down->x(),up->y(),up->x()-down->x(),down->y()-up->y());
+  else if(up->x() < down->x() &&  up->y()>down->y())
+    image=m_pictureViewer->getImage().copy(up->x(),down->y(),down->x()-up->x(),up->y()-down->y());
+  else if(up->x()>down->x()&& up->y()>down->y()){
+    image=m_pictureViewer->getImage().copy(down->x(),down->y(),up->x()-down->x(),up->y()-down->y());
+  }
+  m_userInterface->getClipBoard()->setImage(((const QImage&)image),QClipboard::Clipboard);
+}	
+
+void PictureArea::paste(){
+  m_userInterface->getTracingManager()->paste();
+
+}
+void PictureArea::cut(){
+}
+
+
 
 
 /** Private Methodes **/
@@ -84,40 +144,6 @@ void PictureArea::setUpCoordinate(double x , double y){
 
 }
 
-void PictureArea::refreshCoordinate(double resize){
-  refresh();
-  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
-  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
-  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
-  setSelection();
-  this->repaint();
-}
-
-
-
-
-void PictureArea::fitToWindow(){
-  if (!m_fit){
-    refreshCoordinate(m_pictureViewer->fitToWindow(parentWidget()->size()));
-    m_fit=true;
-  }
-}
-void PictureArea::normalSize(){
-  m_fit=false;
-  refreshCoordinate(m_pictureViewer->normalSize());
-}
-
-void PictureArea::zoomIn(){
-  m_fit=false;
-  m_pictureViewer->zoomIn();
-  m_selectionTool->hide();
-}
-void PictureArea::zoomOut(){
-  m_fit=false;
-  m_pictureViewer->zoomOut();
-  m_selectionTool->hide();
-}
-
 
 void PictureArea::setSelection(){
   if(down->x()<up->x()&&down->y()<up->y())
@@ -131,9 +157,20 @@ void PictureArea::setSelection(){
   
 }
 
+void PictureArea::refreshCoordinate(double resize){
+  refresh();
+  this->resize(m_pictureViewer->width(),m_pictureViewer->height());
+  setDownCoordinate(int(double(down->x())*resize),int(double(down->y())*resize));
+  setUpCoordinate(int(double (up->x())*resize),int(double(up->y())*resize));
+  setSelection();
+  this->repaint();
+}
 
 
 /** Public Slots **/
+
+
+
 void PictureArea::keyPressEvent ( QKeyEvent * event ){
   if (event->modifiers()==Qt::ControlModifier)
     ctrl= true;
@@ -168,10 +205,12 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
-  up->setX(event->x());
-  up->setY(event->y());
-  m_selectionTool->show();
-  cliked=true;
+  if(m_indSelect){
+    up->setX(event->x());
+    up->setY(event->y());
+    m_selectionTool->show();
+    cliked=true;
+  }
 }
 void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
   cliked=false;
@@ -191,27 +230,4 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
 }
 
 
-void PictureArea::copy(){
-  QImage image;
-  if(up->x()<down->x()&&up->y()<down->y())
-    image=m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
-  else if(up->x() > down->x()&& up->y()<down->y())
-    image=m_pictureViewer->getImage().copy(down->x(),up->y(),up->x()-down->x(),down->y()-up->y());
-  else if(up->x() < down->x() &&  up->y()>down->y())
-    image=m_pictureViewer->getImage().copy(up->x(),down->y(),down->x()-up->x(),up->y()-down->y());
-  else if(up->x()>down->x()&& up->y()>down->y()){
-    image=m_pictureViewer->getImage().copy(down->x(),down->y(),up->x()-down->x(),up->y()-down->y());
-  }
-  m_userInterface->getClipBoard()->setImage(((const QImage&)image),QClipboard::Clipboard);
-}	
 
-
-
-void PictureArea::paste(){
-  m_userInterface->getTracingManager()->paste();
-
-}
-void PictureArea::cut(){
-
-
-}

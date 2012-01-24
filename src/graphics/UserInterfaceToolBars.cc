@@ -25,6 +25,8 @@ QToolBar* UserInterface::createEditToolBar() {
   m_editToolBar->addAction(m_copy);
   m_editToolBar->addAction(m_paste);
   m_editToolBar->addAction(m_cut);
+  m_editToolBar->addAction(m_selection);
+  m_editToolBar->addAction(m_move);
   return m_editToolBar;
 }
 

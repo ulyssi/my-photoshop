@@ -19,13 +19,20 @@ public:
   void refresh();
   /**getters**/
   PictureViewer* getPictureViewer();
+  /**Methodes**/
+  
   void fitToWindow();
   void zoomIn();
   void zoomOut();
   void normalSize();
+  
   void copy();	
   void paste();
   void cut();
+  
+  void enableSelection();
+  void disableSelection();
+  
 private:
   /**Attributes**/
   UserInterface* m_userInterface;
@@ -35,6 +42,7 @@ private:
   SelectionTool* m_selectionTool;
   QGraphicsProxyWidget* m_proxy;
   QPoint *up,*down;
+  bool m_indSelect;
   bool cliked;	
   bool ctrl;
   bool m_fit;

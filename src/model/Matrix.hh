@@ -82,6 +82,40 @@ public:
       for (int j = 0; j < m_height; j++)
 	m_data[i][j] = value;
   }
+  
+  static Matrix<T>* centrer(int w1, int h1, Matrix<T>* k){
+    int w = 1 + 2 * w1;
+    int h = 1 + 2 * h1;
+    Matrix<T>* kernel;
+    int width = k->getWidth();
+    int height = k->getHeight();
+    if(w < width){
+      if(h < height){
+	kernel = new Matrix<T>(width, height);
+      } else {
+	kernel = new Matrix<T>(width, h);
+      }
+    } else { //w > = 3 
+      if(h < height){
+	kernel = new Matrix<T>(w, height);
+      } else {
+	kernel = new Matrix<T>(w, h);
+      }
+    }
+    for (int i = 0; i < w; i++)
+      for (int j = 0; j < h; j++) {
+	kernel->setValue(i, j, 0.0);
+	if (i >= i/width && i < i/width+width){
+	  if (j >= j/height && j < j/height+height){
+	    kernel->setValue(i, j, k->getValue(i-i/width,j-j/height));
+	  } 
+	}
+      }
+    return kernel;
+  }
+  
+  
 };
 
+  
 #endif

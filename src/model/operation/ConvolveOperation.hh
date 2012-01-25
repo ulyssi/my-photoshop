@@ -38,7 +38,7 @@ public:
   static Matrix<double>* createIdentityKernel(int = 1, int = 1);
   
   static Matrix<double>* createAverageBlurKernel(int = 1, int = 1);
-  static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1);
+  static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1, double = 1.0);
 
   static Matrix<double>* createEdgeDetectionKernel(int = 1, int = 1);
   static Matrix<double>* createLeftEdgeStrengtheningKernel(int = 1, int = 1);

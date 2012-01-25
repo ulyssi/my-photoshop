@@ -2,12 +2,12 @@
 
 
 /** constructeur destructeur */
-Tracing::Tracing(int width, int height, int offX, int offY) :
+Tracing::Tracing(int width, int height, int offX, int offY,float alpha) :
   Matrix<unsigned int>(width, height),
   m_index(0),
   m_offX(offX),
   m_offY(offY),
-  m_alpha(1.0),
+  m_alpha(alpha),
   m_prevAlpha(1.0),
   m_name(),
   m_visible(true),

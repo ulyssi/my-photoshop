@@ -23,7 +23,7 @@ void CutOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1,QCl
   while(it<tracings.end()){
     cTracing=(*it);
     if(cTracing->isSelected()){
-      Tracing *tr=new Tracing(x1-x0,y1-y0);
+      Tracing *tr=new Tracing(x1-x0,y1-y0,0,0,cTracing->getAlpha());
       for(int i=x0;i<x1;i++)
 	for(int j=y0;j<y1;j++){
 	  int xtr=i-cTracing->getOffX();
@@ -52,8 +52,11 @@ void CutOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1,QCl
     }
   clipboard->setImage(img);
   
-
-  
+  while(!trForClipboard.empty()){
+    Tracing* del =trForClipboard.back();
+    trForClipboard.pop_back();
+    delete del;
+  }
 }
 
 

@@ -32,16 +32,21 @@ public:
 public slots:
 
   /** Slots */
-  void kernelSelection(int);
+  void kernelComboBoxChanged(int);
+  void setKernelValue(int, int, double);
+
   void resetOperation();
   void refreshPreview();
   void applyOperation();
 
+signals:
+
 private:
 
   /** Methodes internes */
-  QGroupBox* createKernelGroupBox();
+  QComboBox* createKernelGroupBox();
   QHBoxLayout* createControlsLayout();
+  MatrixGenerator* createMatrixModifier();
   void resetBlurOperation();
   void resetDetectionOperation();
   
@@ -53,6 +58,7 @@ private:
   ColorConvertOperation* m_colorConvertOperation;
   
   MatrixGenerator* m_matrixGenerator;
+  QString m_identityString;
   QString m_greyScaleString;
   QString m_sepiaString;
   

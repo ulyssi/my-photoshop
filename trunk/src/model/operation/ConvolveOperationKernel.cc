@@ -1,6 +1,16 @@
 #include "ConvolveOperation.hh"
 
 
+Matrix<double>* ConvolveOperation::createIdentityKernel(int w, int h) {
+  int width = 1 + 2 * w, height = 1 + 2 * h;
+  Matrix<double>* kernel = new Matrix<double>(width, height);
+  for (int i = 0; i < width; i++)
+    for (int j = 0; j < height; j++)
+      if (i == width / 2 && j == height / 2) kernel->setValue(i, j, 1.0);
+      else kernel->setValue(i, j, 0.0);
+  return kernel;
+}
+
 Matrix<double>* ConvolveOperation::createAverageBlurKernel(int w, int h) {
   int width = 1 + 2 * w, height = 1 + 2 * h;
   Matrix<double>* kernel = new Matrix<double>(width, height);

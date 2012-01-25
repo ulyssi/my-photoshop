@@ -4,15 +4,16 @@
 #include <QWidget>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QSlider>
 #include <QCheckBox>
-#include <QRadioButton>
+#include <QComboBox>
+#include <QString>
 
 #include "Matrix.hh"
 
 class UserInterface;
 class ConvolveOperation;
 class PictureModifier;
+class MatrixGenerator;
 
 
 class ConvolveOperationChooser : public QWidget { Q_OBJECT
@@ -32,9 +33,9 @@ public:
 public slots:
 
   /** Slots */
-  void modifyBlur();
-  void modifyDetection();
-  void customize();
+  void kernelComboBoxChanged(int);
+  void setKernelValue(int, int, double);
+
   void resetOperation();
   void refreshPreview();
   void applyOperation();
@@ -42,23 +43,43 @@ public slots:
 private:
 
   /** Methodes internes */
-  QGroupBox* createBlurGroupBox();
-  QGroupBox* createDetectionGroupBox();
+  QComboBox* createKernelGroupBox();
+  MatrixGenerator* createMatrixModifier();
   QGroupBox* createCanalsGroupBox();
+  QGroupBox* createSizeGroupBox();
+  QHBoxLayout* createSettingsGroupBox();
   QHBoxLayout* createControlsLayout();
-  void resetBlurOperation();
-  void resetDetectionOperation();
+
+private slots:
+
+  /** Slots internes */
+  
+signals:
+
+  /** Signaux internes */
+  void dataChanged();
+
+private:
   
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
   ConvolveOperation* m_convolveOperation;
-  Matrix<double>* m_kernel;
-  QRadioButton *m_buttonNoneBlur, *m_buttonAverageBlur, *m_buttonGaussianBlur;
-  QSlider *m_sliderBlurLevel;
-  QRadioButton *m_buttonNoneDetection, *m_buttonEdgeDetection, *m_buttonLeftEdgeStrengthening, *m_buttonRepulsing;
-  QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
 
+  Matrix<double>* m_kernel;
+  MatrixGenerator* m_matrixModifier;
+
+  QComboBox* m_kernelComboBox;
+  QString m_identityKernelString;
+  QString m_averageBlurKernelString;
+  QString m_gaussianBlurKernelString;
+  QString m_edgeDetectionKernelString;
+  QString m_leftEdgeStrengtheningKernelString;
+  QString m_repulsingKernelString;
+  QString m_customizeKernelString;
+
+  QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
+  
 };
 
 #endif

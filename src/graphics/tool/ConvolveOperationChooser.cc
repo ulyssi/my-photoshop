@@ -67,6 +67,7 @@ void ConvolveOperationChooser::kernelUpdate() {
   else if (text == m_edgeDetectionKernelString) m_kernel = ConvolveOperation::createEdgeDetectionKernel(width, height);
   else if (text == m_leftEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createLeftEdgeStrengtheningKernel(width, height);
   else if (text == m_repulsingKernelString) m_kernel = ConvolveOperation::createRepulsingKernel(width, height);
+  else m_kernel->resize(width, height, 0.0);
 
   disconnect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
   disconnect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));

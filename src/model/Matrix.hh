@@ -83,7 +83,23 @@ public:
 	m_data[i][j] = value;
   }
   
-  void resize(int width, int height) {
+  void resize(int width, int height, T value) {
+    int decalX = width - m_width, decalY = height - m_height;
+    
+    T** data = new T*[width];
+    for (int i = 0; i < width; i++) {
+      data[i] = new T[height];
+      for (int j = 0; j < height; j++) {
+	if (0 <= i + decalX && i + decalX < m_width && 0 <= j + decalY && j + decalY < m_height)
+	  data[i][j] = m_data[i+decalX][j+decalY];
+	else 
+	  data[i][j] = value;
+      }
+    }
+
+    m_data = data;
+    m_width = width;
+    m_height = height;
   }
 
 

@@ -140,6 +140,7 @@ void PictureArea::crop(){
     crop->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale());
   else if(up->x()>down->x()&& up->y()>down->y())
     crop->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale());
+  m_selectionTool->hide();
 }
 
 

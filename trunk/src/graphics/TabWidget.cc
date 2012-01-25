@@ -83,7 +83,7 @@ QPushButton* TabWidget::createNewTabButton() {
   QPushButton* newTabButton = new QPushButton(); 
   newTabButton->setFixedWidth(16);
   newTabButton->setFixedHeight(16);
-  newTabButton->setIcon(QIcon::fromTheme("window-new"));
+  newTabButton->setIcon(QIcon("Icon/Open.png"));
   newTabButton->setFlat(true);
   QObject::connect(newTabButton, SIGNAL(clicked()), m_userInterface, SLOT(open()));
   return newTabButton;
@@ -92,7 +92,7 @@ QPushButton* TabWidget::createNewTabButton() {
 QPushButton* TabWidget::createCloseButton() {
   m_mutex.lock();
   MPushButton* t_icon = new MPushButton(count()-1);
-  t_icon->setIcon(QIcon::fromTheme("window-close"));
+  t_icon->setIcon(QIcon("Icon/CloseTab.png"));
   t_icon->setFlat(true);
   t_icon->setFixedWidth(16);
   t_icon->setFixedHeight(16);

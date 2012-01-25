@@ -90,15 +90,14 @@ bool Histogram::isEnabled() { return QWidget::isEnabled() && m_pictureModifier !
 
 
 /** Methodes */
-void Histogram::refresh() {
+void Histogram::refresh() {  
   bool rgb = m_radioButtonRGB->isChecked();
   refreshData(rgb);
-  
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
     int nbPixel = tracing->getWidth() * tracing->getHeight();
-    int min[3] = { nbPixel };
-    int max[3] = { 0 };
+    int min[3] = { nbPixel, nbPixel, nbPixel };
+    int max[3] = { 0, 0, 0 };
     int amplitude[3];
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 256; j++) {
@@ -127,9 +126,6 @@ void Histogram::refresh() {
 
 
 void Histogram::equalization() {
-  
-  unsigned int test = PixelMod::createRGB(0,3,251);
-  unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
   if (m_pictureModifier != NULL) {
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 256; j++)
@@ -196,7 +192,6 @@ void Histogram::equalization() {
 	    					  PixelMod::getChrominanceU(couleur),
 	    					  PixelMod::getChrominanceV(couleur),
 	    					  PixelMod::getAlpha(couleur)));
-
 	  else if ((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Chrominance U"))
 	    tracing->setValue(j,
 			      i,
@@ -224,9 +219,6 @@ void Histogram::equalization() {
 
 
 void Histogram::crop(int bInf, int bSup) {
-  unsigned int test = PixelMod::createRGB(1,41,191);
-  unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
-  
   double L = (float)bSup - (float)bInf;
   unsigned int couleur;
   bool rgb = m_radioButtonRGB->isChecked();
@@ -299,6 +291,7 @@ void Histogram::refreshData(bool rgb) {
       for (int j = 0; j < 256; j++)
 	m_histogramData[i][j] = 0;
       
+          
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
     for(int i = 0; i < tracing->getWidth(); i++) {
@@ -307,18 +300,17 @@ void Histogram::refreshData(bool rgb) {
 	if (PixelMod::getAlpha(color) != PixelMod::TRANSLUCID) {
 	  
 	  if (rgb) {
-// 	    if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red Green Blue")){
-// 	      int a = PixelMod::getIntFromDouble(((float)PixelMod::getRed(color)+(float)PixelMod::getGreen(color) + (float)PixelMod::getBlue(color))/3.0);
-// 	      m_histogramData[PixelMod::RED][a]++;
-// 	      m_histogramData[PixelMod::GREEN][a]++;
-// 	      m_histogramData[PixelMod::BLUE][a]++;	      
-// 	    } else{
+	    if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red Green Blue")){
+	      int a = PixelMod::getIntFromDouble(((float)PixelMod::getRed(color)+(float)PixelMod::getGreen(color) + (float)PixelMod::getBlue(color))/3.0);
+	      m_histogramData[PixelMod::RED][a]++;
+	      m_histogramData[PixelMod::GREEN][a]++;
+	      m_histogramData[PixelMod::BLUE][a]++;	
+	    } else{
 	      m_histogramData[PixelMod::RED][PixelMod::getRed(color)]++;
 	      m_histogramData[PixelMod::GREEN][PixelMod::getGreen(color)]++;
 	      m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;  
 	    }
-// 	  }
-	  else {
+	  } else {
 	    m_histogramData[PixelMod::LUMA][PixelMod::getIntFromDouble(PixelMod::getLuma(color))]++;
 	    m_histogramData[PixelMod::CHROMINANCE_U][getChrominanceUForHistogram(PixelMod::getChrominanceU(color))]++;
 	    m_histogramData[PixelMod::CHROMINANCE_V][getChrominanceVForHistogram(PixelMod::getChrominanceV(color))]++;

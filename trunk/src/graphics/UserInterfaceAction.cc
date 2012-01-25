@@ -35,8 +35,12 @@ void UserInterface::open() {
 }
 
 void UserInterface::save() {
+  std::cout << "lol" << std::endl;
+  if(m_viewTabWidget->getTabPanel() != NULL){
+    std::cout << "lol2" << std::endl;
   Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
-
+  std::cout << "lol3" << std::endl;
+  if(picture == NULL){
     QString path = QFileDialog::getSaveFileName(this, 
 						"Enregistrer le fichier", 
 						picture->getPath() , 
@@ -48,7 +52,8 @@ void UserInterface::save() {
       for (int j = 0; j < pictureData->getHeight(); j++)
 	m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
     picture->saveQImage(path, *m_image);
-  
+  }
+  } 
 }
 
 void UserInterface::close(QWidget* q) {
@@ -314,7 +319,7 @@ void UserInterface::createViewAction() {
 
   m_previewerAct = new QAction(tr("Previewer"), this);
   m_previewerAct->setCheckable(true);
-  m_previewerAct->setChecked(false);
+  m_previewerAct->setChecked(true);
   connect(m_previewerAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
   
   m_histogramAct = new QAction(tr("Histogram"), this);
@@ -324,12 +329,12 @@ void UserInterface::createViewAction() {
 
   m_colorChooserAct = new QAction(tr("ColorChooser"), this);
   m_colorChooserAct->setCheckable(true);
-  m_colorChooserAct->setChecked(false);
+  m_colorChooserAct->setChecked(true);
   connect(m_colorChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_toolBoxChooserAct = new QAction(tr("ToolBoxChooser"), this);
   m_toolBoxChooserAct->setCheckable(true);
-  m_toolBoxChooserAct->setChecked(false);
+  m_toolBoxChooserAct->setChecked(true);
   connect(m_toolBoxChooserAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_tracingManagerAct = new QAction(tr("TracingManager"), this);
@@ -339,22 +344,22 @@ void UserInterface::createViewAction() {
 
   m_affineOperationAct = new QAction(tr("AffineOperation"), this);
   m_affineOperationAct->setCheckable(true);
-  m_affineOperationAct->setChecked(false);
+  m_affineOperationAct->setChecked(true);
   connect(m_affineOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_convolveOperationAct = new QAction(tr("ConvolveOperation"), this);
   m_convolveOperationAct->setCheckable(true);
-  m_convolveOperationAct->setChecked(false);
+  m_convolveOperationAct->setChecked(true);
   connect(m_convolveOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_algebricOperationAct = new QAction(tr("AlgebricOperation"), this);
   m_algebricOperationAct->setCheckable(true);
-  m_algebricOperationAct->setChecked(false);
+  m_algebricOperationAct->setChecked(true);
   connect(m_algebricOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
 
   m_colorConvertOperationAct = new QAction(tr("ColorConvertOperation"), this);
   m_colorConvertOperationAct->setCheckable(true);
-  m_colorConvertOperationAct->setChecked(false);
+  m_colorConvertOperationAct->setChecked(true);
   connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
   
   m_guiMode= new QAction(tr("Graphical Interface Mode"),this);

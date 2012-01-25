@@ -107,13 +107,10 @@ void Histogram::refresh() {
       }
       amplitude[i] = max[i] - min[i];
     }
-//     for(int j = 0; j < 3; j++) std::cout << min[2] <<  " " <<min[1] << " " << min[0] << std::endl;
-//     for(int j = 0; j < 3; j++) std::cout << max[2] <<  " " <<max[1] << " " << max[0] << std::endl;
     if (m_pictureModifier != NULL) {
       int seuil[3];
       for (int i = 0; i < 256; i++) {
 	for (int j = 0; j < 3; j++) seuil[j] = PixelMod::getIntFromDouble(((float)m_histogramData[j][i] - (float)min[j]) * 100.0 / (float)amplitude[j]);
-	//std::cout << seuil[2] <<  " " <<seuil[1] << " " << seuil[0] << std::endl;
 	for (int j = 0; j < 100; j++) {
 	  int color[3] = { 255, 255, 255 };
 	  for (int k = 0; k < 3; k++)
@@ -121,7 +118,6 @@ void Histogram::refresh() {
 	    
 	  if (color[0] + color[1] + color[2] == 0) m_histogramImage->setPixel(i, j, PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID));
 	  else m_histogramImage->setPixel(i, j, PixelMod::createRGB(color[2], color[1], color[0]));
-	  //std::cout << color[2] <<  " " <<color[1] << " " << color[0] << std::endl;
 	}
       }
       m_histogramLabel->setPixmap(QPixmap::fromImage((const QImage&)(*m_histogramImage)));
@@ -132,10 +128,8 @@ void Histogram::refresh() {
 
 void Histogram::equalization() {
   
-    unsigned int test = PixelMod::createRGB(0,3,251);
+  unsigned int test = PixelMod::createRGB(0,3,251);
   unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
-  std::cout << PixelMod::getRed(test2) << "  "<<PixelMod::getGreen(test2)<< " " << PixelMod::getBlue(test2) << std::endl;
-  
   if (m_pictureModifier != NULL) {
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 256; j++)
@@ -155,7 +149,6 @@ void Histogram::equalization() {
       m_cumulativeHistogram[PixelMod::RED][i] = kRed;
       m_cumulativeHistogram[PixelMod::GREEN][i] = kGreen;
       m_cumulativeHistogram[PixelMod::BLUE][i] = kBlue;
-      std::cout << kRed << " " << kGreen << " " << kBlue << std::endl;
     } 
     
     //egalisation de l'image
@@ -233,7 +226,6 @@ void Histogram::equalization() {
 void Histogram::crop(int bInf, int bSup) {
   unsigned int test = PixelMod::createRGB(1,41,191);
   unsigned int test2 = PixelMod::createYUV(PixelMod::getLuma(test), PixelMod::getChrominanceU(test), PixelMod::getChrominanceV(test));
-  std::cout << PixelMod::getRed(test2) << " "<<PixelMod::getGreen(test2)<< " " << PixelMod::getBlue(test2) << std::endl;
   
   double L = (float)bSup - (float)bInf;
   unsigned int couleur;
@@ -341,7 +333,6 @@ int Histogram::getChrominanceUForHistogram(float color){
   float xa = -111.18;
   float xb = 111.18;
   
-  //std::cout<< color << " " << PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)) << " " <<floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb))<< std::endl;
   return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
   //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
 }
@@ -349,7 +340,6 @@ int Histogram::getChrominanceUForHistogram(float color){
 int Histogram::getChrominanceVForHistogram(float color){
   float xa = -156.825;
   float xb = 156.825;
-  //std::cout<< color << " " << PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)) << " " <<floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb))<< std::endl;
   //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
   return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)); 
 }
@@ -470,7 +460,6 @@ void Histogram::applyHistogramLinearization(){
     }
     bInf = min(bir,min(bib,big));
     bSup = max(bsr,max(bsg,bsb));
-    std::cout << "bi " << bInf << " bf " << bSup << std::endl;
   }
   else if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Luma")){
     i = 0;

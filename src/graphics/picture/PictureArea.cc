@@ -84,7 +84,6 @@ void PictureArea::zoomIn(){
   m_fit=false;
   m_selectionTool->hide();
   m_pictureViewer->zoomIn();
- 
 }
 void PictureArea::zoomOut(){
   m_fit=false;
@@ -282,14 +281,18 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
+  down->setY(event->y());
+  down->setX(event->x());
+  
   if (m_indMove){
     up->setX(event->x());
     up->setY(event->y());
   }
   else if(m_indSelect){
-    m_selectionTool->show();
     up->setX(event->x());
     up->setY(event->y());
+    setSelection();
+    m_selectionTool->show();
     cliked=true;
   }
 }

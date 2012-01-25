@@ -57,28 +57,36 @@ void ConvolveOperationChooser::refresh() {
 
 
 /** Slots */
+void ConvolveOperationChooser::kernelUpdate() {
+  int width = (m_spinBoxWidth->value()-1)/2, height = (m_spinBoxHeight->value()-1)/2;
+
+  QString text = m_kernelComboBox->itemText(m_kernelComboBox->currentIndex());
+  if (text == m_identityKernelString) m_kernel = ConvolveOperation::createIdentityKernel(width, height);
+  else if (text == m_averageBlurKernelString) m_kernel = ConvolveOperation::createAverageBlurKernel(width, height);
+  else if (text == m_gaussianBlurKernelString) m_kernel = ConvolveOperation::createGaussianBlurKernel(width, height);
+  else if (text == m_edgeDetectionKernelString) m_kernel = ConvolveOperation::createEdgeDetectionKernel(width, height);
+  else if (text == m_leftEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createLeftEdgeStrengtheningKernel(width, height);
+  else if (text == m_repulsingKernelString) m_kernel = ConvolveOperation::createRepulsingKernel(width, height);
+
+  disconnect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
+  disconnect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
+  disconnect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
+
+  m_spinBoxWidth->setValue(m_kernel->getWidth());
+  m_spinBoxHeight->setValue(m_kernel->getHeight());
+  m_matrixModifier->setMatrix(m_kernel);
+  
+  connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
+  connect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
+  connect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
+  emit(dataChanged());
+}
+
 void ConvolveOperationChooser::setKernelValue(int i, int j, double value) {
   m_kernel->setValue(i, j, value);
   disconnect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
   m_kernelComboBox->setCurrentIndex(m_kernelComboBox->count()-1);
   connect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
-  emit(dataChanged());
-}
-
-void ConvolveOperationChooser::kernelComboBoxChanged(int index) {
-  QString text = m_kernelComboBox->itemText(index);
-  if (text == m_identityKernelString) m_kernel = ConvolveOperation::createIdentityKernel();
-  else if (text == m_averageBlurKernelString) m_kernel = ConvolveOperation::createAverageBlurKernel();
-  else if (text == m_gaussianBlurKernelString) m_kernel = ConvolveOperation::createGaussianBlurKernel();
-  else if (text == m_edgeDetectionKernelString) m_kernel = ConvolveOperation::createEdgeDetectionKernel();
-  else if (text == m_leftEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createLeftEdgeStrengtheningKernel();
-  else if (text == m_repulsingKernelString) m_kernel = ConvolveOperation::createRepulsingKernel();
-
-  disconnect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
-  for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) 
-      m_matrixModifier->setValue(i, j, m_kernel->getValue(i, j));
-  connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
   emit(dataChanged());
 }
 
@@ -136,7 +144,7 @@ QComboBox* ConvolveOperationChooser::createKernelGroupBox() {
   m_kernelComboBox->addItem(m_repulsingKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
   m_kernelComboBox->addItem(m_customizeKernelString);
-  connect(m_kernelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelComboBoxChanged(int)));
+  connect(m_kernelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelUpdate()));
   return m_kernelComboBox;
 }
 
@@ -172,27 +180,24 @@ QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
   QGroupBox* groupBox = new QGroupBox(tr("Size"));
   QGridLayout* layout = new QGridLayout();
 
-  QSpinBox* spinBoxWidth = new QSpinBox();
-  spinBoxWidth->setRange(1, 5);
-  spinBoxWidth->setValue(m_kernel->getWidth());
-  spinBoxWidth->setSingleStep(2);
+  m_spinBoxWidth = new QSpinBox();
+  m_spinBoxWidth->setRange(1, 5);
+  m_spinBoxWidth->setValue(m_kernel->getWidth());
+  m_spinBoxWidth->setSingleStep(2);
   
-  QSpinBox* spinBoxHeight = new QSpinBox();
-  spinBoxHeight->setRange(1, 5);
-  spinBoxHeight->setValue(m_kernel->getHeight());
-  spinBoxHeight->setSingleStep(2);
+  m_spinBoxHeight = new QSpinBox();
+  m_spinBoxHeight->setRange(1, 5);
+  m_spinBoxHeight->setValue(m_kernel->getHeight());
+  m_spinBoxHeight->setSingleStep(2);
 
-  connect(spinBoxWidth, SIGNAL(valueChanged(int)), m_matrixModifier, SLOT(setWidth(int)));
-  //   connect(m_matrixModifier, SIGNAL(widthChanged(int)), spinBoxWidth, SLOT(setValue(int)));
-
-  connect(spinBoxHeight, SIGNAL(valueChanged(int)), m_matrixModifier, SLOT(setHeight(int)));
-  //  connect(m_matrixModifier, SIGNAL(heightChanged(int)), spinBoxHeight, SLOT(setValue(int)));
+  connect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
+  connect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
 
   layout->addWidget(new QLabel(tr("Width")), 0, 0);
-  layout->addWidget(spinBoxWidth, 0, 1);
+  layout->addWidget(m_spinBoxWidth, 0, 1);
 
   layout->addWidget(new QLabel(tr("Height")), 1, 0);
-  layout->addWidget(spinBoxHeight, 1, 1);
+  layout->addWidget(m_spinBoxHeight, 1, 1);
   
   groupBox->setLayout(layout);
   return groupBox;

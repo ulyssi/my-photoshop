@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QSpinBox>
 #include <QString>
 
 #include "Matrix.hh"
@@ -33,7 +34,7 @@ public:
 public slots:
 
   /** Slots */
-  void kernelComboBoxChanged(int);
+  void kernelUpdate();
   void setKernelValue(int, int, double);
 
   void resetOperation();
@@ -78,6 +79,7 @@ private:
   QString m_repulsingKernelString;
   QString m_customizeKernelString;
 
+  QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
   QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
   
 };

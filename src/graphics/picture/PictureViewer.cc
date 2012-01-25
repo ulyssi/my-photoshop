@@ -27,6 +27,10 @@ QImage PictureViewer::getImage(){
   return m_qImage;
 }
 
+
+double PictureViewer::getScale(){
+  return m_scale;
+}
 void PictureViewer::zoomIn() { 
   double scale=m_scale+m_scaleFactor;
   if((m_qImage.width()*m_scaleFactor)<100000

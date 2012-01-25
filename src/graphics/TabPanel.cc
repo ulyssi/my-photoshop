@@ -52,3 +52,4 @@ void TabPanel:: disableSelection(){}
 
 bool TabPanel:: enableMove(){return false;}
 void TabPanel:: disableMove(){}
+void TabPanel:: crop(){}

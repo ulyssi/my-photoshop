@@ -6,6 +6,8 @@
 #include "UserInterface.hh"
 #include "TracingManager.hh"
 #include "CutOperation.hh"
+#include "CopyOperation.hh"
+#include "CropOperation.hh"
 PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   m_userInterface = userinterface;
   m_pictureModifier=p;
@@ -91,20 +93,20 @@ void PictureArea::zoomOut(){
 
 }
 
-
 void PictureArea::copy(){
+  CopyOperation* copy=new CopyOperation();
   QImage image;
+  std::cout<<m_pictureViewer->getScale()<<std::endl;
   if(up->x()<down->x()&&up->y()<down->y())
-    image=m_pictureViewer->getImage().copy(up->x(),up->y(),down->x()-up->x(),down->y()-up->y());
+    copy->copyOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x() > down->x()&& up->y()<down->y())
-    image=m_pictureViewer->getImage().copy(down->x(),up->y(),up->x()-down->x(),down->y()-up->y());
+    copy->copyOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x() < down->x() &&  up->y()>down->y())
-    image=m_pictureViewer->getImage().copy(up->x(),down->y(),down->x()-up->x(),up->y()-down->y());
-  else if(up->x()>down->x()&& up->y()>down->y()){
-    image=m_pictureViewer->getImage().copy(down->x(),down->y(),up->x()-down->x(),up->y()-down->y());
-  }
-  m_userInterface->getClipBoard()->setImage(((const QImage&)image),QClipboard::Clipboard);
-}	
+    copy->copyOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
+  else if(up->x()>down->x()&& up->y()>down->y())
+    copy->copyOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
+  
+}
 
 void PictureArea::paste(){
   m_userInterface->getTracingManager()->paste();
@@ -112,17 +114,42 @@ void PictureArea::paste(){
 }
 #include <iostream>
 void PictureArea::cut(){
-  CutOperation* Co=new CutOperation();
+  CutOperation* cut =new CutOperation();
   QImage image;
   if(up->x()<down->x()&&up->y()<down->y())
-    Co->doOperation(m_pictureModifier->getPicture(), up->x(), up->y(), down->x(), down->y(), m_userInterface->getClipBoard());
+    cut->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x() > down->x()&& up->y()<down->y())
-    Co->doOperation(m_pictureModifier->getPicture(), down->x(), up->y(), up->x(), down->y(), m_userInterface->getClipBoard());
+    cut->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x() < down->x() &&  up->y()>down->y())
-    Co->doOperation(m_pictureModifier->getPicture(), up->x(), down->y(), down->x(), up->y(), m_userInterface->getClipBoard());
+    cut->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x()>down->x()&& up->y()>down->y())
-    Co->doOperation(m_pictureModifier->getPicture(), down->x(), down->y(), up->x(), up->y(), m_userInterface->getClipBoard());
+    cut->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
+  refresh();
 }
+
+
+
+void PictureArea::crop(){
+  CropOperation* crop =new CropOperation;
+  QImage image;
+  if(up->x()<down->x()&&up->y()<down->y())
+    crop->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale());
+  else if(up->x() > down->x()&& up->y()<down->y())
+    crop->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale());
+  else if(up->x() < down->x() &&  up->y()>down->y())
+    crop->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale());
+  else if(up->x()>down->x()&& up->y()>down->y())
+    crop->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale());
+}
+
+
+
+
+
+
+
+
+
 
 
 

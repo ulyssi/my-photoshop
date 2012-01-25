@@ -36,8 +36,8 @@ void PictureViewer::zoomIn() {
   if((m_qImage.width()*m_scaleFactor)<100000
      &&(m_qImage.height()*m_scaleFactor)<10000)
     m_scale=scale;
-  m_width_translation=m_pictureModifier->getImage()->width()*m_scaleFactor;
-  m_height_translation=m_pictureModifier->getImage()->height()*m_scaleFactor;
+  m_width_translation=m_pictureModifier->getImage()->width()*m_scale;
+  m_height_translation=m_pictureModifier->getImage()->height()*m_scale;
 } 
 
 double PictureViewer::getWidthTranslation(){

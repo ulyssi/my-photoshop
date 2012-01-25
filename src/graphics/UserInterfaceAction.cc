@@ -70,7 +70,9 @@ void UserInterface::redo() {}
 #include <iostream>
 void UserInterface::copy(){m_viewTabWidget->getTabPanel()->copy();
 }
-void UserInterface::cut(){}
+void UserInterface::cut(){
+  m_viewTabWidget->getTabPanel()->cut();
+}
 void UserInterface::paste(){
   m_viewTabWidget->getTabPanel()->paste();
 }

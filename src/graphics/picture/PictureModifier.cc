@@ -111,6 +111,7 @@ void PictureModifier:: paste(){
 }
 void PictureModifier:: cut(){
   m_pictureArea->cut();
+  refresh();
 }
 
 bool PictureModifier::enableMove(){

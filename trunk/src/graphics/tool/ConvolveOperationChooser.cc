@@ -67,7 +67,6 @@ void ConvolveOperationChooser::setKernelValue(int i, int j, double value) {
 
 void ConvolveOperationChooser::kernelComboBoxChanged(int index) {
   QString text = m_kernelComboBox->itemText(index);
-
   if (text == m_identityKernelString) m_kernel = ConvolveOperation::createIdentityKernel();
   else if (text == m_averageBlurKernelString) m_kernel = ConvolveOperation::createAverageBlurKernel();
   else if (text == m_gaussianBlurKernelString) m_kernel = ConvolveOperation::createGaussianBlurKernel();

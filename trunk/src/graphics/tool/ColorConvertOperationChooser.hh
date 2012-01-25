@@ -50,6 +50,17 @@ private:
   void resetBlurOperation();
   void resetDetectionOperation();
   
+private slots:
+
+  /** Slots internes */
+  
+signals:
+  
+  /** Signaux internes */
+  void dataChanged();
+
+private:
+
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
@@ -58,10 +69,11 @@ private:
   ColorConvertOperation* m_colorConvertOperation;
   
   MatrixGenerator* m_matrixGenerator;
-  QString m_identityString;
-  QString m_greyScaleString;
-  QString m_sepiaString;
-  
+  QString m_identityKernelString;
+  QString m_greyScaleKernelString;
+  QString m_sepiaKernelString;
+  QString m_customizeKernelString;
+ 
 };
 
 #endif

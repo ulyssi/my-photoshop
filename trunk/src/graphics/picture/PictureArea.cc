@@ -122,7 +122,6 @@ void PictureArea::cut(){
     Co->doOperation(m_pictureModifier->getPicture(), up->x(), down->y(), down->x(), up->y(), m_userInterface->getClipBoard());
   else if(up->x()>down->x()&& up->y()>down->y())
     Co->doOperation(m_pictureModifier->getPicture(), down->x(), down->y(), up->x(), up->y(), m_userInterface->getClipBoard());
-  
 }
 
 

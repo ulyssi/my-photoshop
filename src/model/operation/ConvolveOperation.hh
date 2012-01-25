@@ -14,6 +14,7 @@ class ConvolveOperation {
 public:
 
   /** Type internes */
+  enum Operator { TIMES_OPERATOR, MEDIAN_OPERATOR, MAX_OERATOR, MIN_OPERATOR };
   enum EdgeControl { EXTEND_EDGE, CROP_EDGE, WRAP_EDGE };
 
   /** Constructeurs et destructeur */
@@ -33,6 +34,7 @@ public:
   void setBlue(bool);
   void setAlpha(bool);
   void setEdgeControl(EdgeControl);
+  void setOperator(Operator);
 
   /** Methodes */
   Matrix<unsigned int>* updatePreview();
@@ -55,6 +57,10 @@ public:
 private:
 
   /** Methodes internes */
+  inline unsigned int timesOperator(int, int);
+  inline unsigned int medianOperator(int, int);
+  inline unsigned int maxOperator(int, int);
+  inline unsigned int minOperator(int, int);
   inline unsigned int getPixelColor(int, int);
 
   /** Attributs */
@@ -62,9 +68,13 @@ private:
   Picture* m_picture;
   Matrix<double>* m_kernel;
   bool m_red, m_green, m_blue, m_alpha;
+  double m_convolutionCoef;
+  unsigned int m_decalage;
+  int m_startI2, m_startJ2, m_endI2, m_endJ2;
   Matrix<unsigned int>* m_pictureData;
   Matrix<unsigned int>* m_previewData;
   EdgeControl m_edgeControl;
+  Operator m_operator;
 
 };
 

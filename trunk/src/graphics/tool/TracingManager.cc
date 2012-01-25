@@ -391,7 +391,7 @@ void TracingManager::merge(){
     pic->insertTracing(new Tracing(merged,offX,offY,1.0),rslt_id);
     delete mo;
     delete merged; 
-    m_lastIndex=rslt_id; 
+    
     m_selected->clear();
     pic->refresh();
     m_pictureModifier->refresh();

@@ -35,8 +35,9 @@ QImage* PictureModifier::getImage() { return m_image; }
 
 Picture* PictureModifier::getPicture() { return m_picture;}
 
-QClipboard* PictureModifier::getClipBoard(){return m_userInterface->getClipBoard();
-}
+QClipboard* PictureModifier::getClipBoard(){return m_userInterface->getClipBoard();}
+
+PictureArea * PictureModifier::getPictureArea(){return m_pictureArea;}
 
 /** Mutateurs */
 void PictureModifier::notifyCurrent() {

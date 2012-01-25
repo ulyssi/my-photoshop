@@ -8,7 +8,10 @@ Tracing::Tracing(int width, int height, int offX, int offY) :
   m_offX(offX),
   m_offY(offY),
   m_alpha(1.0),
-  m_name()
+  m_prevAlpha(1.0),
+  m_name(),
+  m_visible(true),
+  m_selected(false)
 {}
 
 Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) :
@@ -17,7 +20,10 @@ Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) 
   m_offX(offX),
   m_offY(offY),
   m_alpha(alpha),
-  m_name()
+  m_prevAlpha(1.0),
+  m_name(),
+  m_visible(true),
+  m_selected(false)  
 {}
 
 
@@ -32,7 +38,7 @@ int Tracing::getOffX(){return m_offX;}
 
 int Tracing::getOffY(){return m_offY;}
 
-float Tracing::getAlpha(){return m_alpha;}
+float Tracing::getAlpha(){  return m_alpha;}
 
 PixelMod::Type Tracing::getType(){
   PixelMod::Type result = PixelMod::BINARY;
@@ -45,6 +51,9 @@ PixelMod::Type Tracing::getType(){
 }
 QString Tracing::getName(){return m_name;}
 
+bool Tracing::isVisible(){return m_visible;}
+
+bool Tracing::isSelected(){return m_selected;}
 
 /** mutateurs */
 
@@ -56,5 +65,12 @@ void Tracing::setOffX(int val){m_offX = val;}
 
 void Tracing::setOffY(int val){ m_offY = val;}
 
-void Tracing::setAlpha(float val){m_alpha = val;} 
+void Tracing::setAlpha(float val){
+  m_prevAlpha=m_alpha;
+  m_alpha = val;} 
 
+void Tracing::resetAlpha(){ m_alpha=m_prevAlpha;}
+
+void Tracing::setVisible(bool val){m_visible=val;}
+
+void Tracing::setSelected(bool val){m_selected=val;}

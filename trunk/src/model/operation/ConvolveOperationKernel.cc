@@ -23,10 +23,14 @@ Matrix<double>* ConvolveOperation::createAverageBlurKernel(int w, int h) {
 Matrix<double>* ConvolveOperation::createGaussianBlurKernel(int w, int h, double sigma) {
   int width = 1 + 2 * w, height = 1 + 2 * h;
   double pi = 4.0 * atan(1.0);
-  Matrix<double>* kernel = new Matrix<double>(width, height);
+  sigma = 1.55 - ((double)w+(double)h)/10.0;
+//   int size = width;
+//   if(width < height) size = height;
+  Matrix<double>* kernel = new Matrix<double>(width, height); 
+  
   for (double i = 0; i < width; i++)
     for (double j = 0; j < height; j++)
-      kernel->setValue(i, j, 100.0*((1.0/(2.0*pi*pow(sigma,2.0)))*exp(-(pow(i,2.0)+pow(j,2.0))/(2.0*pow(sigma, 2.0)))));
+      kernel->setValue(i, j, 100.0*((1.0/(2.0*pi*pow(sigma,2.0)))*exp(-(pow(fabs(i-(double)(width/2)),2.0)+pow(fabs(j-(double)(height/2)),2.0))/(2.0*pow(sigma, 2.0)))));
   return kernel;
 }
 

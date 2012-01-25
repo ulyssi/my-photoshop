@@ -53,6 +53,7 @@ public:
 
   static Matrix<double>* createSobelXKernel(int = 1, int = 1);
   static Matrix<double>* createSobelYKernel(int = 1, int = 1);
+  static Matrix<double>* stamping(int = 1, int = 1);
 
 private:
 
@@ -62,7 +63,8 @@ private:
   inline unsigned int maxOperator(int, int);
   inline unsigned int minOperator(int, int);
   inline unsigned int getPixelColor(int, int);
-
+  inline unsigned int getSum(unsigned int);
+  
   /** Attributs */
   Operation* m_operation;
   Picture* m_picture;

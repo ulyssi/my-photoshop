@@ -5,7 +5,7 @@
 #include "SelectionTool.hh"
 #include "UserInterface.hh"
 #include "TracingManager.hh"
-
+#include "CutOperation.hh"
 PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   m_userInterface = userinterface;
   m_pictureModifier=p;
@@ -110,7 +110,25 @@ void PictureArea::paste(){
   m_userInterface->getTracingManager()->paste();
 
 }
+#include <iostream>
 void PictureArea::cut(){
+  CutOperation* Co=new CutOperation();
+  QImage image;
+  if(up->x()<down->x()&&up->y()<down->y()){
+    std::cout<<"cut"<<std::endl;
+    Co->doOperation(m_pictureModifier->getPicture(), up->x(), up->y(), down->x(), down->y(), m_userInterface->getClipBoard());
+  }
+  else if(up->x() > down->x()&& up->y()<down->y()){
+    
+  }
+  else if(up->x() < down->x() &&  up->y()>down->y()){
+  
+  }
+  else if(up->x()>down->x()&& up->y()>down->y()){
+    
+  }
+ 
+
 }
 
 

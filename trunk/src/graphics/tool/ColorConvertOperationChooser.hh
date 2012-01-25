@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QSpinBox>
 #include <QString>
 
 #include "Matrix.hh"
@@ -32,6 +33,8 @@ public:
 public slots:
 
   /** Slots */
+  void minThresholdUpdate(int);
+  void maxThresholdUpdate(int);
   void kernelComboBoxChanged(int);
   void setKernelValue(int, int, double);
 
@@ -45,6 +48,7 @@ private:
 
   /** Methodes internes */
   QComboBox* createKernelGroupBox();
+  QGroupBox* createSettingsGroupBox();
   QHBoxLayout* createControlsLayout();
   MatrixGenerator* createMatrixModifier();
   void resetBlurOperation();
@@ -73,6 +77,11 @@ private:
   QString m_greyScaleKernelString;
   QString m_sepiaKernelString;
   QString m_customizeKernelString;
+
+  // QSpinBox *m_spinBoxMinThreshold, *m_spinBoxMaxThreshold; 
+  QSpinBox *m_spinBoxMinThresholdRed, *m_spinBoxMaxThresholdRed; 
+  QSpinBox *m_spinBoxMinThresholdGreen, *m_spinBoxMaxThresholdGreen; 
+  QSpinBox *m_spinBoxMinThresholdBlue, *m_spinBoxMaxThresholdBlue; 
  
 };
 

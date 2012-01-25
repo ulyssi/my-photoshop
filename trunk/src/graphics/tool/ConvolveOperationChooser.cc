@@ -24,14 +24,17 @@ ConvolveOperationChooser::ConvolveOperationChooser(UserInterface* userInterface)
   m_edgeDetectionKernelString(tr("Edge Detection")),
   m_leftEdgeStrengtheningKernelString(tr("Left Edge Strengthening")),
   m_repulsingKernelString(tr("Repulsing")),
-  m_customizeKernelString(tr("Customize"))
+  m_customizeKernelString(tr("Customize")),
+  m_extendControlString(tr("Extend")),
+  m_cropControlString(tr("Crop")),
+  m_wrapControlString(tr("Wrap"))
 {
   setAccessibleName(tr("ConvolveOp"));
     
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(createKernelGroupBox());
-  layout->addWidget(createMatrixModifier());
   layout->addLayout(createSettingsGroupBox());
+  layout->addWidget(createMatrixModifier());
   layout->addLayout(createControlsLayout());
   layout->addStretch();
 
@@ -195,31 +198,31 @@ QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
   connect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
 
   layout->addWidget(new QLabel(tr("Width")), 0, 0);
-  layout->addWidget(m_spinBoxWidth, 0, 1);
+  layout->addWidget(m_spinBoxHeight, 0, 1);
 
   layout->addWidget(new QLabel(tr("Height")), 1, 0);
-  layout->addWidget(m_spinBoxHeight, 1, 1);
+  layout->addWidget(m_spinBoxWidth, 1, 1);
   
   groupBox->setLayout(layout);
   return groupBox;
 }
 
 QHBoxLayout* ConvolveOperationChooser::createSettingsGroupBox() {
-  // QGroupBox* groupBox = new QGroupBox();
   QHBoxLayout* layout = new QHBoxLayout();
 
-  QComboBox* edgeControlComboBox = new QComboBox();
+  m_edgeControlComboBox = new QComboBox();
+  m_edgeControlComboBox->addItem(m_extendControlString);
+  m_edgeControlComboBox->addItem(m_cropControlString);
+  m_edgeControlComboBox->addItem(m_wrapControlString);
 
   QVBoxLayout* layoutBis = new QVBoxLayout();
   layoutBis->addWidget(createSizeGroupBox());
-  layoutBis->addWidget(edgeControlComboBox);
+  layoutBis->addWidget(m_edgeControlComboBox);
   
   layout->addWidget(createCanalsGroupBox());
   layout->addLayout(layoutBis);
   
   return layout;
-  // groupBox->setLayout(layout);
-  // return groupBox;
 }
 
 QHBoxLayout* ConvolveOperationChooser::createControlsLayout() {

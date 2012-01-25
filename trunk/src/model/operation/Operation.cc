@@ -6,6 +6,7 @@
 #include <iostream>
 
 /** Constructeurs et destructeur */
+// Mettre la picture en param
 Operation::Operation() :
   m_operation(NULL)
 {}
@@ -18,6 +19,17 @@ Operation::~Operation() {}
 
 
 /** Methodes */
+// Matrix<unsigned int>* updatePreview() {
+//   // lister les tracings selectionnée
+//   // appele la methode updateInternalPreview en changeant m_pictureData avec les données du calque courant
+//   // merger les Matrix<unsigned int> resultante sans oublié les calques visible mais non selectionné de l'image
+//   // retourné la preview correspondant a cette fusion
+// }
+
+// Picture* applyOperation();
+
+
+
 Picture* Operation::applyOn(Picture* picture) {
   if (m_operation != NULL) picture = m_operation->applyOn(picture);
   return doOperation(picture);

@@ -22,6 +22,7 @@ public:
 
   /** Mutateurs */
   void setSingleStep(double);
+  void setMatrix(Matrix<double>*);
 
   /** Accesseurs */
   int width();
@@ -51,10 +52,6 @@ signals:
 private:
 
   /** Methodes internes */
-  // QGroupBox* createDimensionBox();
-  // QGroupBox* createMatrixBox();
-  // void initialize();
-  // void clear();
 
 private slots:
   

@@ -83,7 +83,57 @@ public:
 	m_data[i][j] = value;
   }
   
-  static Matrix<T>* centrer(int w1, int h1, Matrix<T>* k){
+  void resize(int width, int height) {
+  }
+
+
+  //   T** data = 
+
+  //   if (width < m_width) {
+  //     int decal = (m_width - width) / 2;
+  //     for (int i = decal; i < m_width; i++)
+  // 	for (int j = 0; j < m_height; j++) {
+  // 	  QDoubleSpinBox* source = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget());
+  // 	  QDoubleSpinBox* target = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i - decal)->widget());
+  // 	  target->setValue(source->value());
+  // 	}
+
+  //     for (int i = width; i < m_width; i++)
+  // 	for (int j = 0; j < m_height; j++) {
+  // 	  QWidget* widget = m_layout->itemAtPosition(j, i)->widget();
+  // 	  m_layout->removeItem(m_layout->itemAtPosition(j, i));
+  // 	  delete m_layout->itemAtPosition(j, i);
+  // 	  delete widget;
+  // 	}
+
+  //     m_width = width;
+  //     emit(widthChanged(m_width));
+  //   }
+  //   else if (m_width < width) {
+  //     for (int i = m_width; i < width; i++)
+  // 	for (int j = 0; j < m_height; j++) {
+  // 	  QDoubleSpinBox* spinBox = new QDoubleSpinBox();
+  // 	  spinBox->setValue(m_min);
+  // 	  spinBox->setRange(m_min, m_max);
+        
+  // 	  m_signalMapper->setMapping((QObject*)spinBox, (QObject*)new QPoint(i, j));
+  // 	  connect(spinBox, SIGNAL(valueChanged(double)), m_signalMapper, SLOT(map()));
+        
+  // 	  m_layout->addWidget(spinBox, j, i);
+  // 	}
+
+  //     int decal = (width - m_width) / 2;
+  //     for (int i = m_width-1; i >= 0; i--)
+  // 	for (int j = 0; j < m_height; j++) {
+  // 	  QDoubleSpinBox* source = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget());
+  // 	  QDoubleSpinBox* target = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i + decal)->widget());
+  // 	  target->setValue(source->value());
+  // 	  source->setValue(m_min);
+  // 	}
+  //   }
+  // }
+
+  static Matrix<T>* centrer(int w1, int h1, Matrix<T>* k) {
     int w = 1 + 2 * w1;
     int h = 1 + 2 * h1;
     Matrix<T>* kernel;

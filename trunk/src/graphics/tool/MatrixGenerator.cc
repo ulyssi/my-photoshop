@@ -51,6 +51,15 @@ void MatrixGenerator::setSingleStep(double singleStep) {
       ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget())->setSingleStep(singleStep);
 }
 
+void MatrixGenerator::setMatrix(Matrix<double>* matrix) {
+  setSize(matrix->getWidth(), matrix->getHeight());
+  disconnect(m_signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(valueChanged(QObject*)));
+  for (int i = 0; i < m_width; i++)
+    for (int j = 0; j < m_height; j++)
+      ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget())->setValue(matrix->getValue(i, j));
+  connect(m_signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(valueChanged(QObject*)));
+}
+
 
 /** Slots */
 void MatrixGenerator::setMinimum(double min) { 
@@ -126,9 +135,58 @@ void MatrixGenerator::setWidth(int width) {
 }
 
 void MatrixGenerator::setHeight(int height) {
+  disconnect(m_signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(valueChanged(QObject*)));
+  if (height < m_height) {
+    int decal = (m_height - height) / 2;
+    for (int j = decal; j < m_height; j++)
+      for (int i = 0; i < m_width; i++) {
+        QDoubleSpinBox* source = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget());
+        QDoubleSpinBox* target = ((QDoubleSpinBox*)m_layout->itemAtPosition(j - decal, i)->widget());
+        target->setValue(source->value());
+      }
+
+    for (int j = height; j < m_height; j++)
+      for (int i = 0; i < m_width; i++) {
+        QWidget* widget = m_layout->itemAtPosition(j, i)->widget();
+        m_layout->removeItem(m_layout->itemAtPosition(j, i));
+        delete m_layout->itemAtPosition(j, i);
+        delete widget;
+      }
+
+    m_height = height;
+    emit(heightChanged(m_height));
+  }
+  else if (m_height < height) {
+    for (int j = m_height; j < height; j++)
+      for (int i = 0; i < m_width; i++) {
+        QDoubleSpinBox* spinBox = new QDoubleSpinBox();
+        spinBox->setValue(m_min);
+        spinBox->setRange(m_min, m_max);
+        
+        m_signalMapper->setMapping((QObject*)spinBox, (QObject*)new QPoint(i, j));
+        connect(spinBox, SIGNAL(valueChanged(double)), m_signalMapper, SLOT(map()));
+        
+        m_layout->addWidget(spinBox, j, i);
+      }
+
+    int decal = (height - m_height) / 2;
+    for (int j = m_height-1; j >= 0; j--)
+      for (int i = 0; i < m_width; i++) {
+        QDoubleSpinBox* source = ((QDoubleSpinBox*)m_layout->itemAtPosition(j, i)->widget());
+        QDoubleSpinBox* target = ((QDoubleSpinBox*)m_layout->itemAtPosition(j + decal, i)->widget());
+        target->setValue(source->value());
+        source->setValue(m_min);
+      }
+
+    m_height = height;
+    emit(heightChanged(m_height));
+  }
+  connect(m_signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(valueChanged(QObject*)));
 }
 
 void MatrixGenerator::setSize(int width, int height) {
+  setWidth(width);
+  setHeight(height);
 }
 
 void MatrixGenerator::setValue(int i, int j, double value) {

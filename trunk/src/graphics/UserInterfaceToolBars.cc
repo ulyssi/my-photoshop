@@ -27,6 +27,7 @@ QToolBar* UserInterface::createEditToolBar() {
   m_editToolBar->addAction(m_cut);
   m_editToolBar->addAction(m_selection);
   m_editToolBar->addAction(m_move);
+  m_editToolBar->addAction(m_crop);
   return m_editToolBar;
 }
 

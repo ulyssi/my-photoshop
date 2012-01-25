@@ -21,6 +21,7 @@ public:
   void refreshData();
   QImage getImage();
   void zoomIn();
+  double getScale();
   double getWidthTranslation();
   double getHeightTranslation();
   double zoomOut();

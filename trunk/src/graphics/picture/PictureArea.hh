@@ -29,7 +29,8 @@ public:
   void copy();	
   void paste();
   void cut();
-  
+  void crop();
+
   void enableSelection();
   void disableSelection();
   

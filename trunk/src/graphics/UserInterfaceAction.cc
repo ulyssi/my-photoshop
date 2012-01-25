@@ -77,6 +77,10 @@ void UserInterface::paste(){
   m_viewTabWidget->getTabPanel()->paste();
 }
 
+void UserInterface::crop(){
+  m_viewTabWidget->getTabPanel()->crop();
+}
+
 void UserInterface::select(){
   if(!m_selection->isChecked()){
     m_selection->setChecked(false);
@@ -276,6 +280,10 @@ void UserInterface::createEditAction() {
   m_move->setShortcut(tr("Atl+S"));
   m_move->setCheckable(true);
   connect(m_move, SIGNAL(triggered()), this, SLOT(move()));
+  
+  m_crop= new QAction(tr("&Crop"), this);
+  m_crop->setShortcut(tr("Ctrl+Q"));
+  connect(m_crop, SIGNAL(triggered()), this, SLOT(crop()));
   
 
   

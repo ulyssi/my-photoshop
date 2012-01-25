@@ -62,9 +62,5 @@ void CutOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1,QCl
 
 
 
-
-
-/** Methodes internes */
-
  
 

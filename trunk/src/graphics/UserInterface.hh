@@ -75,7 +75,8 @@ public slots:
   void cut();
   void copy();
   void paste();
- 
+  
+  void crop();
   void select();
   void move();
   void resetEditionTool(int);
@@ -219,6 +220,7 @@ private:
   QAction* m_fitToWindowAct;
   QAction* m_selection;
   QAction* m_move;
+  QAction* m_crop;
 
   QAction* m_previewerAct;
   QAction* m_histogramAct;

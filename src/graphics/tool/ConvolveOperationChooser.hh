@@ -84,6 +84,12 @@ private:
   QString m_cropControlString;
   QString m_wrapControlString;
 
+  QComboBox* m_operatorComboBox;
+  QString m_timesOperatorString;
+  QString m_medianOperatorString;
+  QString m_maxOperatorString;
+  QString m_minOperatorString;
+
   QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
   QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
   

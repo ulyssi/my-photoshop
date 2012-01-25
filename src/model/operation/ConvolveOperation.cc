@@ -77,11 +77,9 @@ Matrix<unsigned int>* ConvolveOperation::updatePreview() {
   }
 
   int startI = 0, endI = m_pictureData->getWidth(), startJ = 0, endJ = m_pictureData->getHeight();
-  m_startI2 = -(m_kernel->getWidth()-1)/2;
-  m_endI2 = (m_kernel->getWidth()-1)/2;
-  m_startJ2 = -(m_kernel->getHeight()-1)/2;
-  m_endJ2 = (m_kernel->getHeight()-1)/2;
-
+  m_startI2 = -(m_endI2 = (m_kernel->getWidth()-1)/2);
+  m_startJ2 = -(m_endJ2 = (m_kernel->getHeight()-1)/2);
+  
   if (m_edgeControl == CROP_EDGE) {
     startI += m_endI2;
     endI += m_startI2;
@@ -92,9 +90,10 @@ Matrix<unsigned int>* ConvolveOperation::updatePreview() {
     for (int j = 0; j < m_pictureData->getHeight(); j++) {
       unsigned int color = m_pictureData->getValue(i, j);
       if (startI <= i && i < endI && startJ <= j && j < endJ) {
-        // if (m_operator == TIMES_OPERATOR) color = timesOperator(i, j);
-        // else color = timesOperator(i, j);
-        color = maxOperator(i, j);
+        if (m_operator == TIMES_OPERATOR) color = timesOperator(i, j);
+        else if (m_operator == MEDIAN_OPERATOR) color = medianOperator(i, j);
+        else if (m_operator == MIN_OPERATOR) color = minOperator(i, j);
+        else if (m_operator == MAX_OPERATOR) color = maxOperator(i, j);
       }
       m_previewData->setValue(i, j, color);
     }

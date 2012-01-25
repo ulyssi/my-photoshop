@@ -23,9 +23,7 @@ Matrix<double>* ColorConvertOperation::createGreyScaleKernel() {
     { 0.30 , 0.59 , 0.11 , 0.00 },
     { 0.00 , 0.00 , 0.00 , 1.00 }
   };
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 4; j++)
-      kernel->setValue(i, j, (double)data[i][j]);
+  for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) kernel->setValue(i, j, (double)data[i][j]);
   return kernel;
 }
 

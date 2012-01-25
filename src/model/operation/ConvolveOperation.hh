@@ -13,6 +13,9 @@ class ConvolveOperation {
 
 public:
 
+  /** Type internes */
+  enum EdgeControl { EXTEND_EDGE, CROP_EDGE, WRAP_EDGE };
+
   /** Constructeurs et destructeur */
   ConvolveOperation(Picture*, Operation* = 0);
   ~ConvolveOperation();
@@ -29,6 +32,7 @@ public:
   void setGreen(bool);
   void setBlue(bool);
   void setAlpha(bool);
+  void setEdgeControl(EdgeControl);
 
   /** Methodes */
   Matrix<unsigned int>* updatePreview();
@@ -50,6 +54,9 @@ public:
 
 private:
 
+  /** Methodes internes */
+  inline unsigned int getPixelColor(int, int);
+
   /** Attributs */
   Operation* m_operation;
   Picture* m_picture;
@@ -57,6 +64,7 @@ private:
   bool m_red, m_green, m_blue, m_alpha;
   Matrix<unsigned int>* m_pictureData;
   Matrix<unsigned int>* m_previewData;
+  EdgeControl m_edgeControl;
 
 };
 

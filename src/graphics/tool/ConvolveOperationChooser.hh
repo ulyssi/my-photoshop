@@ -79,6 +79,11 @@ private:
   QString m_repulsingKernelString;
   QString m_customizeKernelString;
 
+  QComboBox* m_edgeControlComboBox;
+  QString m_extendControlString;
+  QString m_cropControlString;
+  QString m_wrapControlString;
+
   QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
   QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
   

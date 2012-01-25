@@ -3,11 +3,8 @@
 
 #include <QPoint>
 #include <QWidget>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QGridLayout>
 #include <QSignalMapper>
-#include <QSpinBox>
 
 #include "Matrix.hh"
 
@@ -62,7 +59,7 @@ private:
 
   /** Attributs */
   int m_width, m_height;
-  double m_min, m_max;
+  double m_min, m_max, m_singleStep, m_pageStep;
   QGridLayout* m_layout;
   QSignalMapper* m_signalMapper;
 

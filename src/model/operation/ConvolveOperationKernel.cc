@@ -32,7 +32,7 @@ Matrix<double>* ConvolveOperation::createGaussianBlurKernel(int w, int h, double
 
 Matrix<double>* ConvolveOperation::createEdgeDetectionKernel(int w, int h) {
   int width = 1 + 2 * w, height = 1 + 2 * h;
-  Matrix<double>* kernel = new Matrix<double>(3, 3);
+  Matrix<double>* kernel = new Matrix<double>(width, height);
   double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
                        { 1.00 , -4.00 , 1.00 },
                        { 0.00 , 1.00 , 0.00 }};

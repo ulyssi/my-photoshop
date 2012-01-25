@@ -14,7 +14,7 @@ class ConvolveOperation {
 public:
 
   /** Type internes */
-  enum Operator { TIMES_OPERATOR, MEDIAN_OPERATOR, MAX_OERATOR, MIN_OPERATOR };
+  enum Operator { TIMES_OPERATOR, MEDIAN_OPERATOR, MAX_OPERATOR, MIN_OPERATOR };
   enum EdgeControl { EXTEND_EDGE, CROP_EDGE, WRAP_EDGE };
 
   /** Constructeurs et destructeur */

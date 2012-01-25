@@ -27,7 +27,11 @@ ConvolveOperationChooser::ConvolveOperationChooser(UserInterface* userInterface)
   m_customizeKernelString(tr("Customize")),
   m_extendControlString(tr("Extend")),
   m_cropControlString(tr("Crop")),
-  m_wrapControlString(tr("Wrap"))
+  m_wrapControlString(tr("Wrap")),
+  m_timesOperatorString(tr("Times")),
+  m_medianOperatorString(tr("Median")),
+  m_maxOperatorString(tr("Maximum")),
+  m_minOperatorString(tr("Minimum"))
 {
   setAccessibleName(tr("ConvolveOp"));
     
@@ -118,7 +122,13 @@ void ConvolveOperationChooser::refreshPreview() {
     if (text == m_extendControlString) op->setEdgeControl(ConvolveOperation::EXTEND_EDGE);
     else if (text == m_cropControlString) op->setEdgeControl(ConvolveOperation::CROP_EDGE);
     else if (text == m_wrapControlString) op->setEdgeControl(ConvolveOperation::WRAP_EDGE);
-    
+
+    QString text2 = m_operatorComboBox->itemText(m_operatorComboBox->currentIndex());
+    if (text2 == m_timesOperatorString) op->setOperator(ConvolveOperation::TIMES_OPERATOR);
+    else if (text2 == m_medianOperatorString) op->setOperator(ConvolveOperation::MEDIAN_OPERATOR);
+    else if (text2 == m_minOperatorString) op->setOperator(ConvolveOperation::MIN_OPERATOR);
+    else if (text2 == m_maxOperatorString) op->setOperator(ConvolveOperation::MAX_OPERATOR);
+
     op->setKernel(m_kernel);
     previewer->setData(op->updatePreview());
   }
@@ -177,6 +187,8 @@ QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
   m_buttonCanalBlue = new QCheckBox(tr("Blue"));
   m_buttonCanalAlpha = new QCheckBox(tr("Alpha"));
 
+  //  connect(m_buttonCanalRed, SIGNAL(changed()), this, SLOT(refreshPreview()));
+
   layout->addWidget(m_buttonCanalRed);
   layout->addWidget(m_buttonCanalGreen);
   layout->addWidget(m_buttonCanalBlue);
@@ -221,9 +233,19 @@ QHBoxLayout* ConvolveOperationChooser::createSettingsGroupBox() {
   m_edgeControlComboBox->addItem(m_cropControlString);
   m_edgeControlComboBox->addItem(m_wrapControlString);
 
+  m_operatorComboBox = new QComboBox();
+  m_operatorComboBox->addItem(m_timesOperatorString);
+  m_operatorComboBox->addItem(m_medianOperatorString);
+  m_operatorComboBox->addItem(m_maxOperatorString);
+  m_operatorComboBox->addItem(m_minOperatorString);
+
+  connect(m_edgeControlComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(refreshPreview()));
+  connect(m_operatorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(refreshPreview()));
+
   QVBoxLayout* layoutBis = new QVBoxLayout();
   layoutBis->addWidget(createSizeGroupBox());
   layoutBis->addWidget(m_edgeControlComboBox);
+  layoutBis->addWidget(m_operatorComboBox);
   
   layout->addWidget(createCanalsGroupBox());
   layout->addLayout(layoutBis);

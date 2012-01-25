@@ -113,6 +113,12 @@ void ConvolveOperationChooser::refreshPreview() {
     op->setGreen(m_buttonCanalGreen->isChecked());
     op->setBlue(m_buttonCanalBlue->isChecked());
     op->setAlpha(m_buttonCanalAlpha->isChecked());
+    
+    QString text = m_edgeControlComboBox->itemText(m_edgeControlComboBox->currentIndex());
+    if (text == m_extendControlString) op->setEdgeControl(ConvolveOperation::EXTEND_EDGE);
+    else if (text == m_cropControlString) op->setEdgeControl(ConvolveOperation::CROP_EDGE);
+    else if (text == m_wrapControlString) op->setEdgeControl(ConvolveOperation::WRAP_EDGE);
+    
     op->setKernel(m_kernel);
     previewer->setData(op->updatePreview());
   }

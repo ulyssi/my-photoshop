@@ -229,9 +229,9 @@ QHBoxLayout* ConvolveOperationChooser::createSettingsGroupBox() {
   QHBoxLayout* layout = new QHBoxLayout();
 
   m_edgeControlComboBox = new QComboBox();
-  m_edgeControlComboBox->addItem(m_extendControlString);
   m_edgeControlComboBox->addItem(m_cropControlString);
   m_edgeControlComboBox->addItem(m_wrapControlString);
+  m_edgeControlComboBox->addItem(m_extendControlString);
 
   m_operatorComboBox = new QComboBox();
   m_operatorComboBox->addItem(m_timesOperatorString);

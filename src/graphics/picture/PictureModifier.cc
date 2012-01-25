@@ -111,7 +111,12 @@ void PictureModifier:: paste(){
 }
 void PictureModifier:: cut(){
   m_pictureArea->cut();
-  refresh();
+  this->refresh();
+}
+
+void PictureModifier::crop(){
+  m_pictureArea->crop();
+  this->refresh();
 }
 
 bool PictureModifier::enableMove(){

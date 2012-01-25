@@ -17,8 +17,7 @@ CropOperation::~CropOperation() {}
 void CropOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1) {
   vector<Tracing *>tracings = picture->getTracingList();
   vector<Tracing *>::iterator it= tracings.begin();
-  
-  std::cout<<x0<<" "<<x1<<" "<<y0<<" "<<y1<<std::endl;
+ 
   Tracing * cTracing;
   while(it<tracings.end()){
     cTracing=(*it);
@@ -43,7 +42,7 @@ void CropOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1) {
     }
     it++;
   }
-  
+  picture->refresh();
 }
 
 

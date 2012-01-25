@@ -35,6 +35,7 @@ public :
   void copy();	
   void paste();
   void cut();
+  void crop();
   bool enableSelection();
   void disableSelection();
   bool enableMove();

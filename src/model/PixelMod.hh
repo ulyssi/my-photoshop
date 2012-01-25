@@ -61,20 +61,13 @@ namespace PixelMod {
     else return floor(x);
   }
 
-//   inline unsigned int createYUV(double luma, double chrominanceU, double chrominanceV, int alpha = OPAQUE) {
-//     return createRGB(getIntFromDouble(luma + 1.13983 * chrominanceV),
-// 		     getIntFromDouble(luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV),
-// 		     getIntFromDouble(luma + 2.03211 * chrominanceU),
-// 		     alpha);
-//   }
-
   inline unsigned int createYUV(double luma, double chrominanceU, double chrominanceV, int alpha = OPAQUE) {
-    return createRGB(floor(luma + 1.13983 * chrominanceV),
-		     floor(luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV),
-		     floor(luma + 2.03211 * chrominanceU),
+    return createRGB(getIntFromDouble(luma + 1.13983 * chrominanceV),
+		     getIntFromDouble(luma - 0.39465 * chrominanceU - 0.58060 * chrominanceV),
+		     getIntFromDouble(luma + 2.03211 * chrominanceU),
 		     alpha);
   }
-  
+
   inline unsigned int createGrayScale(int grey, int alpha = OPAQUE) {
     return createRGB(grey, grey, grey, alpha);
   }

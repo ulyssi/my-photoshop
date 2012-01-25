@@ -114,23 +114,16 @@ void PictureArea::paste(){
 void PictureArea::cut(){
   CutOperation* Co=new CutOperation();
   QImage image;
-  if(up->x()<down->x()&&up->y()<down->y()){
-    std::cout<<"cut"<<std::endl;
+  if(up->x()<down->x()&&up->y()<down->y())
     Co->doOperation(m_pictureModifier->getPicture(), up->x(), up->y(), down->x(), down->y(), m_userInterface->getClipBoard());
-  }
-  else if(up->x() > down->x()&& up->y()<down->y()){
-    
-  }
-  else if(up->x() < down->x() &&  up->y()>down->y()){
+  else if(up->x() > down->x()&& up->y()<down->y())
+    Co->doOperation(m_pictureModifier->getPicture(), down->x(), up->y(), up->x(), down->y(), m_userInterface->getClipBoard());
+  else if(up->x() < down->x() &&  up->y()>down->y())
+    Co->doOperation(m_pictureModifier->getPicture(), up->x(), down->y(), down->x(), up->y(), m_userInterface->getClipBoard());
+  else if(up->x()>down->x()&& up->y()>down->y())
+    Co->doOperation(m_pictureModifier->getPicture(), down->x(), down->y(), up->x(), up->y(), m_userInterface->getClipBoard());
   
-  }
-  else if(up->x()>down->x()&& up->y()>down->y()){
-    
-  }
- 
-
 }
-
 
 
 

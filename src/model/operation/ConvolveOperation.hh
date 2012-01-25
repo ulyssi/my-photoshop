@@ -35,6 +35,8 @@ public:
   Picture* applyOperation();
 
   /** Methodes de classe */
+  static Matrix<double>* createIdentityKernel(int = 1, int = 1);
+  
   static Matrix<double>* createAverageBlurKernel(int = 1, int = 1);
   static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1);
 

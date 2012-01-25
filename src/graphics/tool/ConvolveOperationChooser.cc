@@ -2,6 +2,8 @@
 
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QGridLayout>
+#include <QSlider>
 
 #include "ConvolveOperation.hh"
 #include "UserInterface.hh"
@@ -14,16 +16,26 @@
 /** Constructeurs et destructeur */
 ConvolveOperationChooser::ConvolveOperationChooser(UserInterface* userInterface) :
   m_userInterface(userInterface),
-  m_pictureModifier(NULL)
+  m_pictureModifier(NULL),
+  m_kernel(ConvolveOperation::createIdentityKernel()),
+  m_identityKernelString(tr("Identity")),
+  m_averageBlurKernelString(tr("Average Blur")),
+  m_gaussianBlurKernelString(tr("Gaussian Blur")),
+  m_edgeDetectionKernelString(tr("Edge Detection")),
+  m_leftEdgeStrengtheningKernelString(tr("Left Edge Strengthening")),
+  m_repulsingKernelString(tr("Repulsing")),
+  m_customizeKernelString(tr("Customize"))
 {
   setAccessibleName(tr("ConvolveOp"));
     
   QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(createBlurGroupBox());
-  layout->addWidget(createDetectionGroupBox());
-  layout->addWidget(createCanalsGroupBox());
+  layout->addWidget(createKernelGroupBox());
+  layout->addWidget(createMatrixModifier());
+  layout->addLayout(createSettingsGroupBox());
   layout->addLayout(createControlsLayout());
   layout->addStretch();
+
+  connect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
 
   resetOperation();
   setLayout(layout);
@@ -45,100 +57,41 @@ void ConvolveOperationChooser::refresh() {
 
 
 /** Slots */
-void ConvolveOperationChooser::modifyBlur() {
-  resetDetectionOperation();
-  
-  if (m_buttonNoneBlur->isChecked()) {
-    m_sliderBlurLevel->setEnabled(false);
-    m_kernel = new Matrix<double>(1, 1);
-    m_kernel->setValue(0, 0, 1.0);
-  }
-  else if (m_buttonAverageBlur->isChecked()) {
-    m_sliderBlurLevel->setEnabled(true);
-    m_kernel = new Matrix<double>(3, 3);
-    double data[3][3] = {{ 1.00 , 1.00 , 1.00 },
-			 { 1.00 , 1.00 , 1.00 },
-			 { 1.00 , 1.00 , 1.00 }};
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-	m_kernel->setValue(i, j, (double)data[i][j]);
-  }
-  else if (m_buttonGaussianBlur->isChecked()) {
-    m_sliderBlurLevel->setEnabled(true);
-    m_kernel = new Matrix<double>(3, 3);
-    double data[3][3] = {{ 1.00 , 2.00 , 1.00 },
-			 { 2.00 , 4.00 , 2.00 },
-			 { 1.00 , 2.00 , 1.00 }};
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-	m_kernel->setValue(i, j, (double)data[i][j]);
-  }
-
-  refreshPreview();
+void ConvolveOperationChooser::setKernelValue(int i, int j, double value) {
+  m_kernel->setValue(i, j, value);
+  disconnect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
+  m_kernelComboBox->setCurrentIndex(m_kernelComboBox->count()-1);
+  connect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
+  emit(dataChanged());
 }
 
-void ConvolveOperationChooser::modifyDetection() {
-  resetBlurOperation();
+void ConvolveOperationChooser::kernelComboBoxChanged(int index) {
+  QString text = m_kernelComboBox->itemText(index);
 
-  if (m_buttonNoneDetection->isChecked()) {
-    m_sliderBlurLevel->setEnabled(false);
-    m_kernel = new Matrix<double>(1, 1);
-    m_kernel->setValue(0, 0, 1.0);
-  }
-  else if (m_buttonEdgeDetection->isChecked()) {
-    m_kernel = new Matrix<double>(3, 3);
-    double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
-			 { 1.00 , -4.00 , 1.00 },
-			 { 0.00 , 1.00 , 0.00 }};
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-	m_kernel->setValue(i, j, (double)data[i][j]);
-  }
-  else if (m_buttonLeftEdgeStrengthening->isChecked()) {
-    m_kernel = new Matrix<double>(3, 3);
-    double data[3][3] = {{ 0.00 , 0.00 , 0.00 },
-			 { -1.00 , 1.00 , 0.00 },
-			 { 0.00 , 0.00 , 0.00 }};
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-        m_kernel->setValue(i, j, (double)data[i][j]);
-  }
-  else if (m_buttonRepulsing->isChecked()) {
-    m_kernel = new Matrix<double>(3, 3);
-    double data[3][3] = {{ -2.00 , -1.00 , 0.00 },
-			 { -1.00 , 1.00 , 1.00 },
-			 { 0.00 , 1.00 , 2.00 }};
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-        m_kernel->setValue(i, j, (double)data[i][j]);
-  }
+  if (text == m_identityKernelString) m_kernel = ConvolveOperation::createIdentityKernel();
+  else if (text == m_averageBlurKernelString) m_kernel = ConvolveOperation::createAverageBlurKernel();
+  else if (text == m_gaussianBlurKernelString) m_kernel = ConvolveOperation::createGaussianBlurKernel();
+  else if (text == m_edgeDetectionKernelString) m_kernel = ConvolveOperation::createEdgeDetectionKernel();
+  else if (text == m_leftEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createLeftEdgeStrengtheningKernel();
+  else if (text == m_repulsingKernelString) m_kernel = ConvolveOperation::createRepulsingKernel();
 
-  refreshPreview();
-}
-
-void ConvolveOperationChooser::customize() {
-  MatrixGenerator* matrixGenerator = new MatrixGenerator(m_kernel);
-  matrixGenerator->setRange(-255, 255);
-  Matrix<double>* result = matrixGenerator->createMatrix();
-  if (result != NULL) {
-    resetBlurOperation();
-    resetDetectionOperation();
-    m_kernel = result;
-    refreshPreview();
-  }
+  disconnect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
+  for (int i = 0; i < m_kernel->getWidth(); i++)
+    for (int j = 0; j < m_kernel->getHeight(); j++) 
+      m_matrixModifier->setValue(i, j, m_kernel->getValue(i, j));
+  connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
+  emit(dataChanged());
 }
 
 void ConvolveOperationChooser::resetOperation() {
-  resetBlurOperation();
-  resetDetectionOperation();
-
+  disconnect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
+  m_kernelComboBox->setCurrentIndex(0);
   m_buttonCanalRed->setChecked(true);
   m_buttonCanalGreen->setChecked(true);
   m_buttonCanalBlue->setChecked(true);
   m_buttonCanalAlpha->setChecked(false);
-
-  m_kernel = new Matrix<double>(1, 1);
-  m_kernel->setValue(0, 0, 1.0);
+  connect(this, SIGNAL(dataChanged()), this, SLOT(refreshPreview()));
+  emit(dataChanged());
 }
 
 void ConvolveOperationChooser::refreshPreview() {
@@ -172,57 +125,35 @@ void ConvolveOperationChooser::applyOperation() {
 
 
 /** Methodes internes */
-QGroupBox* ConvolveOperationChooser::createBlurGroupBox() {
-  QGroupBox* groupBox = new QGroupBox(tr("Blur"));
-  QVBoxLayout* layout = new QVBoxLayout();
-
-  m_buttonNoneBlur = new QRadioButton(tr("None"));
-  m_buttonAverageBlur = new QRadioButton(tr("Average Blur"));
-  m_buttonGaussianBlur = new QRadioButton(tr("Gaussian Blur"));
-  m_sliderBlurLevel = new QSlider(Qt::Horizontal);
-  m_sliderBlurLevel->setRange(1, 5);
-  m_sliderBlurLevel->setTickInterval(10);
-  m_sliderBlurLevel->setSingleStep(1);
-  
-  connect(m_buttonNoneBlur, SIGNAL(toggled(bool)), this, SLOT(modifyBlur()));
-  connect(m_buttonAverageBlur, SIGNAL(toggled(bool)), this, SLOT(modifyBlur()));
-  connect(m_buttonGaussianBlur, SIGNAL(toggled(bool)), this, SLOT(modifyBlur()));
-  
-  layout->addWidget(m_buttonNoneBlur);
-  layout->addWidget(m_buttonAverageBlur);
-  layout->addWidget(m_buttonGaussianBlur);
-  layout->addWidget(m_sliderBlurLevel);
-  
-  groupBox->setLayout(layout);
-  return groupBox;
+QComboBox* ConvolveOperationChooser::createKernelGroupBox() {
+  m_kernelComboBox = new QComboBox();
+  m_kernelComboBox->addItem(m_identityKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+  m_kernelComboBox->addItem(m_averageBlurKernelString);
+  m_kernelComboBox->addItem(m_gaussianBlurKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+  m_kernelComboBox->addItem(m_edgeDetectionKernelString);
+  m_kernelComboBox->addItem(m_leftEdgeStrengtheningKernelString);
+  m_kernelComboBox->addItem(m_repulsingKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+  m_kernelComboBox->addItem(m_customizeKernelString);
+  connect(m_kernelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelComboBoxChanged(int)));
+  return m_kernelComboBox;
 }
 
-QGroupBox* ConvolveOperationChooser::createDetectionGroupBox() {
-  QGroupBox* groupBox = new QGroupBox(tr("Edge Detection"));
-  QVBoxLayout* layout = new QVBoxLayout();
-
-  m_buttonNoneDetection = new QRadioButton(tr("None"));
-  m_buttonEdgeDetection = new QRadioButton(tr("Edge Detection"));
-  m_buttonLeftEdgeStrengthening = new QRadioButton(tr("Left Edge Strengthening"));
-  m_buttonRepulsing = new QRadioButton(tr("Repulsing"));
-
-  connect(m_buttonNoneDetection, SIGNAL(toggled(bool)), this, SLOT(modifyDetection()));
-  connect(m_buttonEdgeDetection, SIGNAL(toggled(bool)), this, SLOT(modifyDetection()));
-  connect(m_buttonLeftEdgeStrengthening, SIGNAL(toggled(bool)), this, SLOT(modifyDetection()));
-  connect(m_buttonRepulsing, SIGNAL(toggled(bool)), this, SLOT(modifyDetection()));
-  
-  layout->addWidget(m_buttonNoneDetection);
-  layout->addWidget(m_buttonEdgeDetection);
-  layout->addWidget(m_buttonLeftEdgeStrengthening);
-  layout->addWidget(m_buttonRepulsing);
-  
-  groupBox->setLayout(layout);
-  return groupBox;
+MatrixGenerator* ConvolveOperationChooser::createMatrixModifier() {
+  m_matrixModifier = new MatrixGenerator(m_kernel->getWidth(), m_kernel->getHeight());
+  m_matrixModifier->setRange(-255, 255);
+  for (int i = 0; i < m_kernel->getWidth(); i++)
+    for (int j = 0; j < m_kernel->getHeight(); j++) 
+      m_matrixModifier->setValue(i, j, m_kernel->getValue(i, j));
+  connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
+  return m_matrixModifier;
 }
 
 QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
   QGroupBox* groupBox = new QGroupBox(tr("Canals"));
-  QHBoxLayout* layout = new QHBoxLayout();
+  QVBoxLayout* layout = new QVBoxLayout();
 
   m_buttonCanalRed = new QCheckBox(tr("Red"));
   m_buttonCanalGreen = new QCheckBox(tr("Green"));
@@ -238,38 +169,68 @@ QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
   return groupBox;
 }
 
+QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
+  QGroupBox* groupBox = new QGroupBox(tr("Size"));
+  QGridLayout* layout = new QGridLayout();
+
+  QSpinBox* spinBoxWidth = new QSpinBox();
+  spinBoxWidth->setRange(1, 5);
+  spinBoxWidth->setValue(m_kernel->getWidth());
+  spinBoxWidth->setSingleStep(2);
+  
+  QSpinBox* spinBoxHeight = new QSpinBox();
+  spinBoxHeight->setRange(1, 5);
+  spinBoxHeight->setValue(m_kernel->getHeight());
+  spinBoxHeight->setSingleStep(2);
+
+  connect(spinBoxWidth, SIGNAL(valueChanged(int)), m_matrixModifier, SLOT(setWidth(int)));
+  //   connect(m_matrixModifier, SIGNAL(widthChanged(int)), spinBoxWidth, SLOT(setValue(int)));
+
+  connect(spinBoxHeight, SIGNAL(valueChanged(int)), m_matrixModifier, SLOT(setHeight(int)));
+  //  connect(m_matrixModifier, SIGNAL(heightChanged(int)), spinBoxHeight, SLOT(setValue(int)));
+
+  layout->addWidget(new QLabel(tr("Width")), 0, 0);
+  layout->addWidget(spinBoxWidth, 0, 1);
+
+  layout->addWidget(new QLabel(tr("Height")), 1, 0);
+  layout->addWidget(spinBoxHeight, 1, 1);
+  
+  groupBox->setLayout(layout);
+  return groupBox;
+}
+
+QHBoxLayout* ConvolveOperationChooser::createSettingsGroupBox() {
+  // QGroupBox* groupBox = new QGroupBox();
+  QHBoxLayout* layout = new QHBoxLayout();
+
+  QComboBox* edgeControlComboBox = new QComboBox();
+
+  QVBoxLayout* layoutBis = new QVBoxLayout();
+  layoutBis->addWidget(createSizeGroupBox());
+  layoutBis->addWidget(edgeControlComboBox);
+  
+  layout->addWidget(createCanalsGroupBox());
+  layout->addLayout(layoutBis);
+  
+  return layout;
+  // groupBox->setLayout(layout);
+  // return groupBox;
+}
+
 QHBoxLayout* ConvolveOperationChooser::createControlsLayout() {
   QHBoxLayout* layout = new QHBoxLayout();
 
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
-  QPushButton* pushButtonCustomized = new QPushButton(tr("Customize"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
   
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
-  connect(pushButtonCustomized, SIGNAL(clicked()), this, SLOT(customize()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
 
   layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
-  layout->addWidget(pushButtonCustomized);
   layout->addWidget(pushButtonApply);
   
   return layout;
-}
-
-void ConvolveOperationChooser::resetBlurOperation() {
-  m_buttonNoneBlur->setChecked(true);
-  m_buttonAverageBlur->setChecked(false);
-  m_buttonGaussianBlur->setChecked(false);
-  m_sliderBlurLevel->setValue(1);
-  m_sliderBlurLevel->setEnabled(false);
-}
-
-void ConvolveOperationChooser::resetDetectionOperation() {
-  m_buttonNoneDetection->setChecked(true);
-  m_buttonEdgeDetection->setChecked(false);
-  m_buttonLeftEdgeStrengthening->setChecked(false);
-  m_buttonRepulsing->setChecked(false);
 }

@@ -1,10 +1,12 @@
 #ifndef _MATRIX_GENERATOR_HH_
 #define _MATRIX_GENERATOR_HH_
 
+#include <QPoint>
 #include <QWidget>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include <QSignalMapper>
 #include <QSpinBox>
 
 #include "Matrix.hh"
@@ -15,38 +17,57 @@ class MatrixGenerator : public QWidget { Q_OBJECT
 public:
   
   /** Constructeurs et destructeur */
-  MatrixGenerator(Matrix<double>*, bool = true);
+  MatrixGenerator(int, int);
   ~MatrixGenerator();
 
   /** Mutateurs */
-  void setMinimum(int);
-  void setMaximum(int);
-  void setRange(int, int);
-  void setMatrix(Matrix<double>*);
+  void setSingleStep(double);
 
-  /** Methodes */
-  Matrix<double>* createMatrix();
+  /** Accesseurs */
+  int width();
+  int height();
+  double value(int, int);
 
 public slots:
 
   /** Slots */
-  void refresh();
-  void modifyMatrix();
-  void resizeMatrix();
+  void setMinimum(double);
+  void setMaximum(double);
+  void setRange(double, double);
+
+  void setWidth(int);
+  void setHeight(int);
+  void setSize(int, int);
+
+  void setValue(int, int, double);
+
+signals:
+  
+  /** Signaux */
+  void valueChanged(int, int, double);
+  void widthChanged(int);
+  void heightChanged(int);
   
 private:
 
   /** Methodes internes */
-  QGroupBox* createDimensionBox();
-  QGroupBox* createMatrixBox();
-  void initialize();
-  void clear();
+  // QGroupBox* createDimensionBox();
+  // QGroupBox* createMatrixBox();
+  // void initialize();
+  // void clear();
+
+private slots:
   
+  /** Signaux internes */
+  void valueChanged(QObject*);
+  
+private:
+
   /** Attributs */
-  int m_min, m_max;
-  Matrix<double>* m_matrix;
-  QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
-  QGridLayout* m_matrixLayout;
+  int m_width, m_height;
+  double m_min, m_max;
+  QGridLayout* m_layout;
+  QSignalMapper* m_signalMapper;
 
 };
 

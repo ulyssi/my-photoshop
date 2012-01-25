@@ -15,6 +15,8 @@
 #include "AffineTransformationOperation.hh"
 #include "Tracing.hh"
 #include "TracingManager.hh"
+
+
 /** Slots */
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
@@ -132,31 +134,12 @@ void UserInterface::fitToWindow() {
 void UserInterface::binary() {}
 
 void UserInterface::greyScale() {
-  double data[3][3] = {{ 0.30 , 0.59 , 0.11 },
-                       { 0.30 , 0.59 , 0.11 },
-                       { 0.30 , 0.59 , 0.11 }};
-
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-
-  colorConvertOperation(application);
-  delete application;
+  convolveOperation(ColorConvertOperation::createGreyScaleKernel());
 }
 
+
 void UserInterface::colorConvert() {
-  double data[3][3] = {{ 0.00 , 1.00 , 0.00 },
-                       { 0.00 , 0.00 , 1.00 },
-                       { 1.00 , 0.00 , 0.00 }};
-
-  Matrix<double>* application = new Matrix<double>(3, 3);
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
-      application->setValue(i, j, (double)data[i][j]);
-
-  colorConvertOperation(application);
-  delete application;
+  colorConvertOperation(ColorConvertOperation::createSepiaKernel());
 }
 
 void UserInterface::changeGIMode(){
@@ -194,12 +177,12 @@ void UserInterface::about() {
 
 
 /** Methodes internes */
-void UserInterface::colorConvertOperation(Matrix<double>* application) {
+void UserInterface::colorConvertOperation(Matrix<double>* kernel) {
   TabPanel* panel = m_viewTabWidget->getTabPanel();
-  Picture* picture = panel->getSelectedPicture();  
-  std::cout<<picture->getName().toStdString();
-  ColorConvertOperation* op = new ColorConvertOperation(application);
-  op->applyOn(picture);
+  Picture* picture = panel->getSelectedPicture();
+  ColorConvertOperation* op = new ColorConvertOperation(picture);
+  op->setKernel(kernel);
+  picture = op->applyOperation();
   delete op;
   picture->refresh();
   panel->refresh();

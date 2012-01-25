@@ -22,6 +22,7 @@ public :
   QImage* getImage();
   Picture* getPicture();
   QClipboard* getClipBoard();
+  PictureArea * getPictureArea();
   /** Methodes */
   Picture* getSelectedPicture();
   void notifyCurrent();

@@ -25,12 +25,17 @@ public:
   float getAlpha(); 
   PixelMod::Type getType();
   QString getName();
+  bool isVisible();
+  bool isSelected();
   /** Mutateurs */
   void setIndex(int);
   void setOffX(int);
   void setOffY(int);
   void setAlpha(float);
+  void resetAlpha();
   void setName(QString);
+  void setVisible(bool);
+  void setSelected(bool);
 private:
 
   /** Attributs */
@@ -39,7 +44,9 @@ private:
   int m_offX;
   int m_offY;
   float m_alpha;
-
+  float m_prevAlpha;
+  bool m_selected;
+  bool m_visible;
 };
 
 #endif

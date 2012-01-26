@@ -80,7 +80,7 @@ Matrix<unsigned int>* ConvolveOperation::updatePreview() {
   int startI = 0, endI = m_pictureData->getWidth(), startJ = 0, endJ = m_pictureData->getHeight();
   m_startI2 = -(m_endI2 = (m_kernel->getWidth()-1)/2);
   m_startJ2 = -(m_endJ2 = (m_kernel->getHeight()-1)/2);
-  
+    
   if (m_edgeControl == CROP_EDGE) {
     startI += m_endI2;
     endI += m_startI2;
@@ -138,18 +138,18 @@ unsigned int ConvolveOperation::timesOperator(int i, int j) {
 
 unsigned int ConvolveOperation::medianOperator(int i, int j) {
   int size = m_kernel->getWidth() * m_kernel->getHeight();
-  unsigned int tabSum[size];
+  double tabSum[size];
   unsigned int tabColor[size];
   int k = 0;
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int color = getPixelColor(i + i2, j + j2);
-      unsigned int sum = getSum(tabColor[k]) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
-      int k2 = k;
+      double sum = getSum(color) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
+      int k2 = k; 
       while (k2 > 0 && tabSum[k2-1] > sum) {
         tabColor[k2] = tabColor[k2-1];
         tabSum[k2] = tabSum[k2-1];
-        k2--;
+	k2--;
       }
       tabColor[k2] = color;
       tabSum[k2] = sum;

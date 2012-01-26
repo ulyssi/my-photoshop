@@ -34,8 +34,7 @@ public:
   
   void removeSelected(int);
   bool isSelected(int);
-  void toGuiIcon(); 
-  
+    
   /**SLOTS*/
 private slots:
   void add();

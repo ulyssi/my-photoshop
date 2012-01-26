@@ -11,7 +11,7 @@ Tracing::Tracing(int width, int height, int offX, int offY,float alpha) :
   m_prevAlpha(1.0),
   m_name(),
   m_visible(true),
-  m_selected(false)
+  m_selected(true)
 {}
 
 Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) :
@@ -23,7 +23,7 @@ Tracing::Tracing(Matrix<unsigned int>* source, int offX, int offY, float alpha) 
   m_prevAlpha(1.0),
   m_name(),
   m_visible(true),
-  m_selected(false)  
+  m_selected(true)  
 {}
 
 

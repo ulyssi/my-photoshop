@@ -149,21 +149,39 @@ void UserInterface::colorConvert() {
 }
 
 void UserInterface::changeGIMode(){
-  m_copy->setIcon(QPixmap("Icon/Copy.png"));
-  m_cut->setIcon(QPixmap("Icon/Cut.png"));
-  m_paste->setIcon(QPixmap("Icon/Paste.png"));
-  m_openAct->setIcon(QPixmap("Icon/Open.png"));
-  m_saveAct->setIcon(QPixmap("Icon/Save.png"));
-  m_undoAct->setIcon(QPixmap("Icon/Undo.png"));
-  m_redoAct->setIcon(QPixmap("Icon/Redo.png"));
-  m_zoomInAct->setIcon(QPixmap("Icon/ZoomIn.png"));
-  m_zoomOutAct->setIcon(QPixmap("Icon/ZoomOut.png"));
-  m_normalSizeAct->setIcon(QPixmap("Icon/NormalSize.png"));
-  m_fitToWindowAct->setIcon(QPixmap("Icon/FitToWindow.png"));
-  m_selection->setIcon(QPixmap("Icon/Selection.png"));
-  m_move->setIcon(QPixmap("Icon/Move.png"));
-  m_crop->setIcon(QPixmap("Icon/Crop.png"));
-  m_tracingManager->toGuiIcon();
+  
+  if(m_guiMode->isChecked()){
+    m_copy->setIcon(QPixmap("Icon/Copy.png"));
+    m_cut->setIcon(QPixmap("Icon/Cut.png"));
+    m_paste->setIcon(QPixmap("Icon/Paste.png"));
+    m_openAct->setIcon(QPixmap("Icon/Open.png"));
+    m_saveAct->setIcon(QPixmap("Icon/Save.png"));
+    m_undoAct->setIcon(QPixmap("Icon/Undo.png"));
+    m_redoAct->setIcon(QPixmap("Icon/Redo.png"));
+    m_zoomInAct->setIcon(QPixmap("Icon/ZoomIn.png"));
+    m_zoomOutAct->setIcon(QPixmap("Icon/ZoomOut.png"));
+    m_normalSizeAct->setIcon(QPixmap("Icon/NormalSize.png"));
+    m_fitToWindowAct->setIcon(QPixmap("Icon/FitToWindow.png"));
+    m_selection->setIcon(QPixmap("Icon/Selection.png"));
+    m_move->setIcon(QPixmap("Icon/Move.png"));
+    m_crop->setIcon(QPixmap("Icon/Crop.png"));
+  }
+  else{
+    m_copy->setIcon(QIcon());
+    m_cut->setIcon(QIcon());
+    m_paste->setIcon(QIcon());
+    m_openAct->setIcon(QIcon());
+    m_saveAct->setIcon(QIcon());
+    m_undoAct->setIcon(QIcon());
+    m_redoAct->setIcon(QIcon());
+    m_zoomInAct->setIcon(QIcon());
+    m_zoomOutAct->setIcon(QIcon());
+    m_normalSizeAct->setIcon(QIcon());
+    m_fitToWindowAct->setIcon(QIcon());
+    m_selection->setIcon(QIcon());
+    m_move->setIcon(QIcon());
+    m_crop->setIcon(QIcon());
+  }
   
 }
 
@@ -356,8 +374,11 @@ void UserInterface::createViewAction() {
   m_colorConvertOperationAct->setChecked(true);
   connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
   
-  m_guiMode= new QAction(tr("Change Graphical Iterface Mode"),this);
-  connect(m_guiMode, SIGNAL(triggered()), this, SLOT(changeGIMode()));
+  m_guiMode= new QAction(tr("Graphical Interface Icon Mode"),this);
+  m_guiMode->setCheckable(true);
+  m_guiMode->setChecked(true);
+  changeGIMode();
+  connect(m_guiMode, SIGNAL(changed()), this, SLOT(changeGIMode()));
   
   
 }

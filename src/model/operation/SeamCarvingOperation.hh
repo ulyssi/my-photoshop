@@ -32,6 +32,7 @@ private:
     int mask;
     Point *previous, *next;
     Point *north, *south, *east, *west;
+    // bool test;
   } Point;
 
   /** Accesseurs internes */

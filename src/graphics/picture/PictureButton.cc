@@ -25,3 +25,7 @@ Picture* PictureButton::getPicture(){
   return m_pictureModifier->getPicture();
 }
 
+#include <iostream>
+void PictureButton::cliked(){
+  std::cout<<"hit"<<std::endl;
+}

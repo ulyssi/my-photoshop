@@ -12,7 +12,7 @@ PictureManager::PictureManager(UserInterface* userInterface) :
   TabPanel(userInterface){
   setTabName(QString("Thumbnail"));
   m_buttonGroup=new QButtonGroup();
-  m_buttonGroup->setExclusive(false);
+  m_buttonGroup->setExclusive(true);
   m_QWidget =new QWidget();
   m_layout= new QGridLayout();
   m_layout->setSpacing(10);
@@ -30,6 +30,7 @@ Picture* PictureManager::getSelectedPicture() {
 
 void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
   PictureButton* t_pictureButton=new PictureButton(pictureModifier);
+  QObject::connect((QAbstractButton*)t_pictureButton,SIGNAL(pressed()),(QAbstractButton*)t_pictureButton,SLOT(cliked));
   m_buttonGroup->addButton((QAbstractButton*)t_pictureButton);
   refresh();
 }
@@ -54,8 +55,8 @@ void PictureManager::refresh() {
     QSize* b_size =((PictureButton*)m_buttonGroup->buttons().first())->geticonSize();
     m_nbCol=floor((t_width-m_layout->spacing())/(b_size->width()+m_layout->spacing())+0.5);    
     m_nbLig=ceil(float(m_buttonGroup->buttons().size())/float(m_nbCol));
-    if (m_nbCol<=1) m_nbCol=2;
-    if (m_nbLig<=1) m_nbLig=2;
+    if (m_nbCol<=1) m_nbCol=3;
+    if (m_nbLig<=1) m_nbLig=3;
     m_QWidget->resize(t_width-20,m_nbLig*b_size->height()+m_layout->spacing()*(m_nbLig*2));
     for (int i =0 ; i<m_buttonGroup->buttons().size();i++)
       m_layout->removeWidget((QPushButton*)m_buttonGroup->buttons().at(i));

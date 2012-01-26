@@ -28,8 +28,7 @@ public:
 private:
 
   typedef struct Point {
-    unsigned int color, gradient;
-    int pathValue;
+    unsigned int color, gradient, pathValue;
     int mask;
     Point *previous, *next;
     Point *north, *south, *east, *west;
@@ -47,7 +46,8 @@ private:
 
   /** Methodes internes */
   Matrix<Point*>* createData();
-
+  
+  void refreshData();
   void refreshGradient();
   void refreshMinimumPathH();
   void refreshMinimumPathV();
@@ -67,8 +67,6 @@ private:
   int m_width, m_height;
   Matrix<Point*>* m_data;
   int m_iteration;
-  
-  int **m_gauss, **m_sobelX, **m_sobelY;
 
 };
 

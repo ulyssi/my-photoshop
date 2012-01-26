@@ -24,8 +24,8 @@ Operation::Operation(Operation* operation,Picture *picture) :
 {}
 
 Operation::~Operation() {
-  std::vector<Tracing*>::iterator it=m_toBdel.begin();
-  while(it<m_toBdel.end()){
+  std::vector<Tracing*>::iterator it=m_prev.begin();
+  while(it<m_prev.end()){
     delete(*it);
     it++;
   }
@@ -45,24 +45,35 @@ Matrix<unsigned int>* Operation::updatePreview() {
   while(it<list.end()){
     if(m_prev.empty())
       m_prev.reserve(1);
+    m_pictureData = (Matrix<unsigned int>*)(*it);
+    //m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(),m_pictureData->getHeight());
+   
+    //std::cout<<"burerum"<<m_previewData->getWidth()<<"x"<<m_previewData->getHeight();
+    int normX=0;
+    int normY=0;
+    Tracing * tr;
     if((*it)->isSelected()){
-      if(m_toBdel.empty())
-	m_prev.reserve(1);
-      m_pictureData = (Matrix<unsigned int>*)(*it);
-      m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(),m_pictureData->getHeight());
       updateInternalPreview();
-      Tracing *tr=new Tracing(m_previewData);
-      delete(m_previewData);
-      int normX=-((*it)->getWidth()-m_previewData->getWidth())/2;
-      int normY=-((*it)->getHeight()-m_previewData->getHeight())/2;
-      tr->setOffX((*it)->getOffX()-normX);
-      tr->setOffY((*it)->getOffY()-normY);
-      tr->setVisible((*it)->isVisible());
-      m_prev.push_back(tr);
-      m_toBdel.push_back(tr);
+      normX=((*it)->getWidth()-m_previewData->getWidth())/2;
+      normY=((*it)->getHeight()-m_previewData->getHeight())/2;
+      tr=new Tracing(m_previewData);
+      delete(m_previewData);   
+    
+     
+     
     }
-    else
-      m_prev.push_back(*it);
+    else{
+      tr=new Tracing(m_pictureData);
+    }
+    
+    tr->setVisible((*it)->isVisible());
+    tr->setSelected((*it)->isSelected());
+    tr->setOffX((*it)->getOffX()+normX);
+    tr->setOffY((*it)->getOffY()+normY);
+     
+    
+    m_prev.push_back(tr);
+     
     it++;
   }
   m_picture->normaliseOffs(m_prev);
@@ -88,7 +99,6 @@ Picture* Operation::applyInternalOperation(){std::cout<<"should not come here"<<
 
 Picture* Operation::applyOperation(){
   updatePreview(); 
-  m_toBdel.clear();
   std::cout<<"applying1"<<std::endl;
   if(!m_prev.empty()){
     std::cout<<"applying"<<std::endl;
@@ -106,7 +116,9 @@ Picture* Operation::applyOperation(){
       it++;
       itsel++;
     }
+    m_picture->normaliseOffs(list);
   }
+ 
   return m_picture;
 }
 

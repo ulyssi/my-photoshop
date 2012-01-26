@@ -38,10 +38,10 @@ public :
   virtual void disableSelection();
   virtual bool enableMove();
   virtual void disableMove();
-private : 
-  
+protected : 
   /** Attributs */
   UserInterface* m_userInterface; 
+private: 
   QString m_tabName;
   
 };

@@ -143,6 +143,7 @@ void PictureArea::cut(){
     cut->doOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x()>down->x()&& up->y()>down->y())
     cut->doOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
+  m_pictureModifier->getPicture()->refresh();
   refresh();
 }
 

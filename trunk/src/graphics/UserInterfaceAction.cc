@@ -11,6 +11,7 @@
 #include "PictureModifier.hh"
 #include "TabWidget.hh"
 #include "Histogram.hh"
+#include "Operation.hh"
 #include "ColorConvertOperation.hh"
 #include "AffineTransformationOperation.hh"
 #include "Tracing.hh"

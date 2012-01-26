@@ -7,7 +7,7 @@
 
 class Picture;
 
-class AffineTransformationOperation {
+class AffineTransformationOperation:public Operation {
 
 public:
 
@@ -36,10 +36,11 @@ public:
   void setSymetrieX(bool);
   void setSymetrieY(bool);
   void setInterpolation(Interpolation);
+  void setData(Matrix<unsigned int>*);
 
   /** Methodes */
-  Matrix<unsigned int>* updatePreview();
-  Picture* applyOperation();
+  Matrix<unsigned int>* updateInternalPreview();
+  Picture* applyInternalOperation();
   
 private:
 
@@ -48,16 +49,15 @@ private:
   unsigned int bilinearInterpolation(double, double);
 
   /** Attributs */
-  Operation* m_operation;
-  Picture* m_picture;
+ 
+ 
   double m_scaleX, m_scaleY, m_alpha;
   double m_x0, m_y0;
   double m_cosAlpha, m_sinAlpha;
   int m_symetrieX, m_symetrieY;
   Interpolation m_interpolation;
   
-  Matrix<unsigned int>* m_pictureData;
-  Matrix<unsigned int>* m_previewData;
+ 
   Matrix<double>* m_mapping;
   Matrix<double>* m_mappingInv;
   unsigned int m_defaultColor;

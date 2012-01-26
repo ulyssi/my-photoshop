@@ -2,6 +2,7 @@
 #define _OPERATION_HH_
 
 #include "Matrix.hh"
+#include <vector>
 
 class Picture;
 class Tracing;
@@ -13,7 +14,8 @@ public:
 
   /** Constructeurs et destructeur */
   Operation();
-  Operation(Operation*);
+  Operation(Picture *);
+  Operation(Operation*,Picture *);
   ~Operation();
 
   /** Accesseurs */
@@ -22,23 +24,30 @@ public:
   // Matrix<unsigned int>* getPreviewData();
 
   /** Methodes */
-  // Matrix<unsigned int>* updatePreview();
-  // Picture* applyOperation();
-
+  Matrix<unsigned int>* updatePreview();
+  Picture* applyOperation();
+  virtual Matrix<unsigned int>* updateInternalPreview();
+  virtual Picture* applyInternalOperation();
+  
   Picture* applyOn(Picture*);
   Tracing* applyOn(Tracing*);
 
   Picture* doOperation(Picture*);
-  virtual Tracing* doOperation(Tracing*) = 0;
-  virtual Operation* clone() = 0;
+  //virtual Tracing* doOperation(Tracing*) = 0;
+  //virtual Operation* clone() = 0;
 
+protected:
+  Picture* m_picture; 
+  Matrix<unsigned int>* m_pictureData;
+  Matrix<unsigned int>* m_previewData; 
 private:
 
   /** Attributs */
+  
   Operation* m_operation;
-  Matrix<unsigned int>* m_pictureData;
-  Matrix<unsigned int>* m_previewData;
-
+  std::vector<Tracing*>m_prev;
+  std::vector<Tracing*>m_toBdel;
+  
 };
 
 #endif

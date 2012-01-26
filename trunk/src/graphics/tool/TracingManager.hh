@@ -72,9 +72,7 @@ private:
   void buildButtons();
  
   void deleteHead();
-  void normaliseOffs(std::vector<Tracing*>);
-  int * getminOffs(std::vector<Tracing*>);  
-};
+ };
 
 class SignalManager:public QObject{ Q_OBJECT
   

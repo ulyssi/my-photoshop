@@ -35,7 +35,8 @@ public:
   void swapTracing(int,int);
   void refresh();
   bool saveQImage(QString&, QImage);
-  
+  void normaliseOffs(std::vector<Tracing*>);
+  int * getminOffs(std::vector<Tracing*>);    
 private:
 
   /** Methodes Chargement et Sauvegarde des QImages */

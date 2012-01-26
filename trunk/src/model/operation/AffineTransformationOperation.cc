@@ -9,8 +9,6 @@
 
 /** Constructeurs et destructeur */
 AffineTransformationOperation::AffineTransformationOperation(Picture* picture, Operation* operation) :
-  m_operation(operation),
-  m_picture(picture),
   m_scaleX(1.0),
   m_scaleY(1.0),
   m_alpha(0.0),
@@ -21,13 +19,12 @@ AffineTransformationOperation::AffineTransformationOperation(Picture* picture, O
   m_symetrieX(1),
   m_symetrieY(1),
   m_interpolation(BILINEAR_INTERPOLATION),
-  m_pictureData(NULL),
-  m_previewData(NULL),
   m_mapping(new Matrix<double>(3, 3)),
   m_mappingInv(new Matrix<double>(3, 3)),
   m_defaultColor(PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID))
-{
-  m_pictureData = m_picture->getData();
+{ 
+  m_picture=picture;
+  m_pictureData=NULL;
 }
 
 AffineTransformationOperation::~AffineTransformationOperation() {
@@ -83,10 +80,13 @@ void AffineTransformationOperation::setSymetrieY(bool symetrieY) {
 void AffineTransformationOperation::setInterpolation(Interpolation interpolation) {
   m_interpolation = interpolation;
 }
+void AffineTransformationOperation::setData(Matrix<unsigned int> *val){
+  m_pictureData=val;
 
+}
 
 /** Methodes */
-Matrix<unsigned int>* AffineTransformationOperation::updatePreview() {
+Matrix<unsigned int>* AffineTransformationOperation::updateInternalPreview() {
   // if (m_operation != NULL) m_pictureData = m_operation->updatePreview();
 
   double mappingData[3][3] = {
@@ -115,7 +115,7 @@ Matrix<unsigned int>* AffineTransformationOperation::updatePreview() {
 }
 
 
-Picture* AffineTransformationOperation::applyOperation() { 
+Picture* AffineTransformationOperation::applyInternalOperation() { 
   // if (m_operation != NULL) m_picture = m_operation->doOperation();
   double mappingData[3][3] = {
     { m_symetrieX * m_scaleX * m_cosAlpha, m_symetrieY * m_scaleY * -m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
@@ -204,7 +204,7 @@ void AffineTransformationOperation::createPreview() {
                       { m_pictureData->getWidth(), 0, 1 },
                       { m_pictureData->getWidth(), m_pictureData->getHeight(), 1 },
                       { 0, m_pictureData->getHeight(), 1 }};
-  int minX, minY, maxX, maxY;
+  int minX=0, minY=0, maxX=0, maxY=0;
   for (int p = 0; p < 4; p++) {
     double x = 0, y = 0;
     for (int i = 0; i < 3; i++) {
@@ -221,7 +221,7 @@ void AffineTransformationOperation::createPreview() {
     }
   }
 
-  if (m_previewData != NULL) delete m_previewData;
+  //if (m_previewData != NULL) delete m_previewData;
   m_previewData = new Matrix<unsigned int>(maxX - minX, maxY - minY);
 
   double mappingDataInv[3][3] = {

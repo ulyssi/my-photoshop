@@ -72,7 +72,7 @@ void TracingManager::move(int x,int y){
     cTracing->setOffY(cTracing->getOffY()+y);
     it++;
   }
-  normaliseOffs(tracings);
+  pic->normaliseOffs(tracings);
   (m_pictureModifier->getPicture())->refresh();
   m_pictureModifier->refreshData();
   (m_pictureModifier->getPictureArea())->refresh();
@@ -373,12 +373,12 @@ void TracingManager::merge(){
     MergeOperation * mo=new MergeOperation();
     Matrix<unsigned int> *merged=mo->doOperation(toBeMerged);
     int rslt_id=m_selected->at(0);
-    int *offs=getminOffs(toBeMerged);
+    int *offs=pic->getminOffs(toBeMerged);
      
     int offX=offs[0];
     int offY=offs[1];
     delete offs;
-    normaliseOffs(toBeMerged);
+    pic->normaliseOffs(toBeMerged);
     std::vector<int>::reverse_iterator r_it=m_selected->rbegin();
     while(r_it<m_selected->rend()){
       pic->removeTracing((*r_it));
@@ -408,7 +408,7 @@ void TracingManager::remove(){
     }
      
     m_selected->clear();
-    normaliseOffs(pic->getTracingList());
+    pic->normaliseOffs(pic->getTracingList());
     pic->refresh();
     m_pictureModifier->refresh();
   }
@@ -487,32 +487,7 @@ void TracingManager::label_R(int id){
 }
 
 
-void TracingManager::normaliseOffs(std::vector<Tracing*> tracing){
-  int* offs=getminOffs(tracing);
-  int offX=offs[0];
-  int offY=offs[1];
-  delete offs;
-  std::vector<Tracing*>::iterator it;
-  for(it=tracing.begin();it<tracing.end();it++){
-    (*it)->setOffX((*it)->getOffX()-offX);
-    (*it)->setOffY((*it)->getOffY()-offY);
-  }
-  
-}
-int * TracingManager::getminOffs(std::vector<Tracing*> tracing){
-  int *rslt=new int[2];
-  rslt[0]=10000;
-  rslt[1]=10000;
-  std::vector<Tracing*>::iterator it;
-  for(it=tracing.begin();it<tracing.end();it++){
-    if(rslt[0]>(*it)->getOffX())
-      rslt[0]=(*it)->getOffX();
-    if(rslt[1]>(*it)->getOffY())
-      rslt[1]=(*it)->getOffY();
-    
-  }
-  return rslt;
-}
+
 
 
 

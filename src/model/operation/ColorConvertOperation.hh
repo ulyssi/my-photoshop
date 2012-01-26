@@ -8,7 +8,7 @@
 class Tracing;
 
 
-class ColorConvertOperation {
+class ColorConvertOperation:public Operation {
 
 public:
 
@@ -22,8 +22,8 @@ public:
   void setSeuilMax(PixelMod::RGB, int);
 
   /** Methodes */
-  Matrix<unsigned int>* updatePreview();
-  Picture* applyOperation();
+  Matrix<unsigned int>* updateInternalPreview();
+  Picture* applyInternalOperation();
 
   /** Methodes de classes */
   static Matrix<double>* createIdentityKernel();
@@ -33,12 +33,11 @@ public:
 private:
 
   /** Attributs */
-  Operation* m_operation;
-  Picture* m_picture;
+ 
+ 
   Matrix<double>* m_kernel;
   int *m_seuilMin, *m_seuilMax;
-  Matrix<unsigned int>* m_pictureData;
-  Matrix<unsigned int>* m_previewData;
+ 
   
 };
 

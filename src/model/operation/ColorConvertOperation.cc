@@ -7,18 +7,21 @@
 
 /** Constructeurs et destructeur */
 ColorConvertOperation::ColorConvertOperation(Picture* picture, Operation* operation) :
-  m_operation(operation),
-  m_picture(picture),
+
   m_kernel(NULL),
   m_seuilMin(new int[4]),
-  m_seuilMax(new int[4]),
-  m_pictureData(NULL),
-  m_previewData(NULL)
-{
+  m_seuilMax(new int[4])
+  
+
+{ std::cout<<"hellooo"<<std::endl;
+  m_pictureData=NULL;
+  m_previewData=NULL;
+  m_picture=picture;
   for (int i = 0; i < 4; i++) {
     m_seuilMin[i] = PixelMod::minValue;
     m_seuilMax[i] = PixelMod::maxValue;
   }
+  std::cout<<"hellooo"<<std::endl;
 }
 
 ColorConvertOperation::~ColorConvertOperation() {}
@@ -63,11 +66,11 @@ void ColorConvertOperation::setSeuilMax(PixelMod::RGB composante, int seuilMax) 
 
 
 /** Methodes */
-Matrix<unsigned int>* ColorConvertOperation::updatePreview() {
-  if (m_previewData != NULL) delete m_previewData;
-  m_pictureData = m_picture->getData();
-  m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
-
+Matrix<unsigned int>* ColorConvertOperation::updateInternalPreview() {
+  //if (m_previewData != NULL) delete m_previewData;
+  //m_pictureData = m_picture->getData();
+  //m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
+  std::cout<<"should come here"<<std::endl;
   for (int i = 0; i < m_pictureData->getWidth(); i++)
     for (int j = 0; j < m_pictureData->getHeight(); j++) {
       int color[4] = { 
@@ -91,7 +94,8 @@ Matrix<unsigned int>* ColorConvertOperation::updatePreview() {
   return m_previewData;
 }
 
-Picture* ColorConvertOperation::applyOperation() {
+Picture* ColorConvertOperation::applyInternalOperation() {
+  std::cout<<"should come here"<<std::endl;
   m_pictureData = m_picture->getData();
   m_picture->getBackground()->setData(updatePreview());
   m_picture->refresh();

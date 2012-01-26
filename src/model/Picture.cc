@@ -120,3 +120,31 @@ void Picture::swapTracing(int id1,int id2){
   else
     cout<<"index out of bounds"<<std::endl;
 }
+
+
+void Picture::normaliseOffs(std::vector<Tracing*> tracing){
+  int* offs=getminOffs(tracing);
+  int offX=offs[0];
+  int offY=offs[1];
+  delete offs;
+  std::vector<Tracing*>::iterator it;
+  for(it=tracing.begin();it<tracing.end();it++){
+    (*it)->setOffX((*it)->getOffX()-offX);
+    (*it)->setOffY((*it)->getOffY()-offY);
+  }
+  
+}
+int * Picture::getminOffs(std::vector<Tracing*> tracing){
+  int *rslt=new int[2];
+  rslt[0]=10000;
+  rslt[1]=10000;
+  std::vector<Tracing*>::iterator it;
+  for(it=tracing.begin();it<tracing.end();it++){
+    if(rslt[0]>(*it)->getOffX())
+      rslt[0]=(*it)->getOffX();
+    if(rslt[1]>(*it)->getOffY())
+      rslt[1]=(*it)->getOffY();
+    
+  }
+  return rslt;
+}

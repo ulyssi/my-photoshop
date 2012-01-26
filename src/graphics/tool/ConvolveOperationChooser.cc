@@ -142,6 +142,18 @@ void ConvolveOperationChooser::applyOperation() {
     op->setGreen(m_buttonCanalGreen->isChecked());
     op->setBlue(m_buttonCanalBlue->isChecked());
     op->setAlpha(m_buttonCanalAlpha->isChecked());
+
+    QString text = m_edgeControlComboBox->itemText(m_edgeControlComboBox->currentIndex());
+    if (text == m_extendControlString) op->setEdgeControl(ConvolveOperation::EXTEND_EDGE);
+    else if (text == m_cropControlString) op->setEdgeControl(ConvolveOperation::CROP_EDGE);
+    else if (text == m_wrapControlString) op->setEdgeControl(ConvolveOperation::WRAP_EDGE);
+
+    QString text2 = m_operatorComboBox->itemText(m_operatorComboBox->currentIndex());
+    if (text2 == m_timesOperatorString) op->setOperator(ConvolveOperation::TIMES_OPERATOR);
+    else if (text2 == m_medianOperatorString) op->setOperator(ConvolveOperation::MEDIAN_OPERATOR);
+    else if (text2 == m_minOperatorString) op->setOperator(ConvolveOperation::MIN_OPERATOR);
+    else if (text2 == m_maxOperatorString) op->setOperator(ConvolveOperation::MAX_OPERATOR);
+
     op->setKernel(m_kernel);
     picture = op->applyOperation();
     picture->refresh();
@@ -187,7 +199,10 @@ QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
   m_buttonCanalBlue = new QCheckBox(tr("Blue"));
   m_buttonCanalAlpha = new QCheckBox(tr("Alpha"));
 
-  //  connect(m_buttonCanalRed, SIGNAL(changed()), this, SLOT(refreshPreview()));
+  connect(m_buttonCanalRed, SIGNAL(stateChanged(int)), this, SLOT(refreshPreview()));
+  connect(m_buttonCanalGreen, SIGNAL(stateChanged(int)), this, SLOT(refreshPreview()));
+  connect(m_buttonCanalBlue, SIGNAL(stateChanged(int)), this, SLOT(refreshPreview()));
+  connect(m_buttonCanalAlpha, SIGNAL(stateChanged(int)), this, SLOT(refreshPreview()));
 
   layout->addWidget(m_buttonCanalRed);
   layout->addWidget(m_buttonCanalGreen);
@@ -203,12 +218,12 @@ QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
   QGridLayout* layout = new QGridLayout();
 
   m_spinBoxWidth = new QSpinBox();
-  m_spinBoxWidth->setRange(1, 5);
+  m_spinBoxWidth->setRange(1, 99);
   m_spinBoxWidth->setValue(m_kernel->getWidth());
   m_spinBoxWidth->setSingleStep(2);
   
   m_spinBoxHeight = new QSpinBox();
-  m_spinBoxHeight->setRange(1, 5);
+  m_spinBoxHeight->setRange(1, 99);
   m_spinBoxHeight->setValue(m_kernel->getHeight());
   m_spinBoxHeight->setSingleStep(2);
 

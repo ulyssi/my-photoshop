@@ -223,7 +223,7 @@ void AffineTransformationOperation::createPreview() {
 
   //if (m_previewData != NULL) delete m_previewData;
   m_previewData = new Matrix<unsigned int>(maxX - minX, maxY - minY);
-
+  //std::cout<<"sarky "<<maxX-minX<<"x"<<maxY-minY;
   double mappingDataInv[3][3] = {
     { m_cosAlpha / (m_symetrieX * m_scaleX),
       m_sinAlpha / (m_symetrieX * m_scaleX),

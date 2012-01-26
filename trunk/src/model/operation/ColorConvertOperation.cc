@@ -69,7 +69,7 @@ void ColorConvertOperation::setSeuilMax(PixelMod::RGB composante, int seuilMax) 
 Matrix<unsigned int>* ColorConvertOperation::updateInternalPreview() {
   //if (m_previewData != NULL) delete m_previewData;
   //m_pictureData = m_picture->getData();
-  //m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
+  m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
   std::cout<<"should come here"<<std::endl;
   for (int i = 0; i < m_pictureData->getWidth(); i++)
     for (int j = 0; j < m_pictureData->getHeight(); j++) {

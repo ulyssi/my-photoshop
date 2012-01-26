@@ -58,31 +58,31 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   // std::cout << "Invariant apres = " << invariant() << std::endl;
 
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_width, m_height);
-  for (int i = 0; i < m_width; i++) {
-    Point *pi = m_indexH[i];
-    Point *pj = pi;
-    for (int j = 0; j < m_height; j++) {
-      if (pj == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
-      else {
-  	if (pj->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
-  	else preview->setValue(i, j, pj->color);
-        pj = pj->south;
-      }
-    }
-  }
-  
-  // for (int j = 0; j < m_height; j++) {
-  //   Point *pj = m_indexV[j];
-  //   Point *pi = pj;
-  //   for (int i = 0; i < m_width; i++) {
-  //     if (pi == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
+  // for (int i = 0; i < m_width; i++) {
+  //   Point *pi = m_indexH[i];
+  //   Point *pj = pi;
+  //   for (int j = 0; j < m_height; j++) {
+  //     if (pj == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
   //     else {
-  // 	if (pi->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
-  // 	else preview->setValue(i, j, pi->color);
-  //       pi = pi->east;
+  // 	if (pj->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
+  // 	else preview->setValue(i, j, pj->color);
+  //       pj = pj->south;
   //     }
   //   }
   // }
+  
+  for (int j = 0; j < m_height; j++) {
+    Point *pj = m_indexV[j];
+    Point *pi = pj;
+    for (int i = 0; i < m_width; i++) {
+      if (pi == NULL) preview->setValue(i, j, PixelMod::createRGB(0, 0, 0));
+      else {
+  	if (pi->modify) preview->setValue(i, j, PixelMod::createRGB(255, 0, 0));
+  	else preview->setValue(i, j, pi->color);
+        pi = pi->east;
+      }
+    }
+  }
 
   return preview;
 }
@@ -185,9 +185,6 @@ void SeamCarvingOperation::initializeGradient2() {
       point = point->south;
     }
   }
-  // for (int i = 0; i < m_widthInit; i++)
-  //   for (int j = 0; j < m_heightInit; j++)
-  //     updateGradient(m_dataInit->getValue(i, j));
 }
 
 void SeamCarvingOperation::initializeMinimumPathH2() {
@@ -335,7 +332,7 @@ void SeamCarvingOperation::deleteRow() {
     Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
     Point *pHautGauche = getNorthWestFrom(pCur), *pHaut = getNorthFrom(pCur), *pHautDroit = getNorthEastFrom(pCur);
     
-    // Chainage laterale
+    // Chainage lateral
     if (pDroit != NULL) pDroit->west = pGauche;
     if (pGauche != NULL) pGauche->east = pDroit;
     else m_indexV[j] = pDroit;
@@ -395,36 +392,27 @@ void SeamCarvingOperation::deleteRow() {
 void SeamCarvingOperation::newRow() {
 
   // recherche de chemins deja existants
-  if (false && m_indexH[m_width] != NULL) {
+  if (m_indexH[m_width] != NULL) {
     Point *pCur = m_indexH[m_width];
-    for (int j = m_height-1; j >= 0; j--) {
+    for (int j = 0; j < m_height; j++) {
       Point *pPrec = pCur->previous, *pNext = pCur->next;
       Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
-      Point *pHautGauche = getNorthWestFrom(pCur), *pHaut = getNorthFrom(pCur), *pHautDroit = getNorthEastFrom(pCur);
-      Point *pBasGauche = getSouthWestFrom(pCur), *pBas = getSouthFrom(pCur), *pBasDroit = getSouthEastFrom(pCur);
+      Point *pHaut = getNorthFrom(pCur), *pBas = getSouthFrom(pCur);
     
-      // Chainage laterale
+      // Chainage lateral
       if (pDroit != NULL) pDroit->west = pCur;
       if (pGauche != NULL) pGauche->east = pCur;
       else m_indexV[j] = pCur;
+      
+      // Chainage vertical
       if (pHaut != NULL) pHaut->south = pCur;
+      else {
+	int k = m_width;
+	while (k > 0 && m_indexH[k-1] != pCur->west) { m_indexH[k] = m_indexH[k-1]; k--; }
+	m_indexH[k] = pCur;
+      }
       if (pBas != NULL) pBas->north = pCur;
       
-      // Chainage verticale
-      if (pHaut == NULL) {
-        int k = m_width-1;
-        while (k > 0 && m_indexH[k] != pCur->east) { m_indexH[k] = m_indexH[k-1]; k--; }
-        m_indexH[k] = pCur;
-      }
-      else if (pPrec == pHautGauche) {
-      	pGauche->north = pHautGauche;
-      	pHautGauche->south = pGauche;
-      }
-      else if (pPrec == pHautDroit) {
-      	pDroit->north = pHaut;
-      	pHautDroit->south = pDroit;
-      }
-
       pCur = pNext;
     }
   }
@@ -464,8 +452,7 @@ void SeamCarvingOperation::newRow() {
       pNew->previous = NULL;
       pNew->next = NULL;
     
-
-      // Chainage laterale
+      // Chainage lateral
       pNew->east = pDroit;
       if (pDroit != NULL) pDroit->west = pNew;
       pNew->west = pCur;

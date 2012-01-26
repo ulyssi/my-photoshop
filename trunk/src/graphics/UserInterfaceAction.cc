@@ -21,7 +21,7 @@
 void UserInterface::open() {
   QFileDialog *t_fileDialog = new QFileDialog(this, windowFlags());
   t_fileDialog->setViewMode(QFileDialog::List);
-  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.jpeg *.png *.ppm *.tiff* .xbm *.xpm);; All Files (*)"));
+  t_fileDialog->setNameFilter(tr("Images Files(*.jpg *.jpeg *.bmp *.png *.ppm *.tiff* .xbm *.xpm);; All Files (*)"));
   t_fileDialog->setFileMode(QFileDialog::ExistingFiles);
 
   QStringList fileNames;
@@ -37,17 +37,15 @@ void UserInterface::open() {
 }
 
 void UserInterface::save() {
-  std::cout << "lol" << std::endl;
   if(m_viewTabWidget->getTabPanel() != NULL){
-    std::cout << "lol2" << std::endl;
   Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
-  std::cout << "lol3" << std::endl;
-  if(picture == NULL){
+  std::cout << m_viewTabWidget->getTabPanel()->getTabName().toStdString()<< std::endl;
+  if(picture != 0){
     QString path = QFileDialog::getSaveFileName(this, 
 						"Enregistrer le fichier", 
 						picture->getPath() , 
-						"All files *.* ;; Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
-  
+						"All files *.* ;; Images () ;;Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
+
     Matrix<unsigned int>* pictureData = picture->getData();
     QImage *m_image = new QImage(pictureData->getWidth(), pictureData->getHeight(), QImage::Format_ARGB32);
     for (int i = 0; i < pictureData->getWidth(); i++)

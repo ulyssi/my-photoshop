@@ -17,11 +17,11 @@ TracingManager::TracingManager(PictureModifier* pictureModifier) :
   m_tobeSet(0),
   m_indexOfHead(-1)
 {
+  
   setAccessibleName(tr("Tracing"));
   m_vLayout=new QVBoxLayout();
   m_grid=new QGridLayout();
   m_signalManagers=new std::vector<SignalManager *>();
-
   buildButtons(); 
   buildHead(0); 
   m_grid->setOriginCorner(Qt::BottomLeftCorner); 
@@ -201,12 +201,12 @@ void TracingManager::buildLine(Tracing *cTracing,int line){
 
 void TracingManager::buildButtons(){
   m_foot=new QHBoxLayout();
-  m_add=new QPushButton(tr("add"));
-  m_merge=new QPushButton(tr("merge"));
-  m_up=new QPushButton(tr("up"));
-  m_down=new QPushButton(tr("down"));
-  m_remove=new QPushButton(tr("remove"));
-  m_rename=new QPushButton(tr("rename"));
+  m_add=new QPushButton(tr(""));
+  m_merge=new QPushButton(tr(""));
+  m_up=new QPushButton(tr(""));
+  m_down=new QPushButton(tr(""));
+  m_remove=new QPushButton(tr(""));
+  m_rename=new QPushButton(tr(""));
   m_foot->addWidget(m_add);
   m_foot->addWidget(m_remove);
   m_foot->addWidget(m_merge);

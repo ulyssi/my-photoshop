@@ -20,7 +20,9 @@ UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);
   update();
+  changeGIMode();
   this->statusBar()->showMessage("ready");
+  
 }
     
 UserInterface::~UserInterface() {

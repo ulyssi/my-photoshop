@@ -82,13 +82,33 @@ void PictureArea::normalSize(){
 
 void PictureArea::zoomIn(){
   m_fit=false;
-  m_selectionTool->hide();
+  down->setX(down->x()/m_pictureViewer->getScale());
+  down->setY(down->y()/m_pictureViewer->getScale());
+  up->setX(up->x()/m_pictureViewer->getScale());
+  up->setY(up->y()/m_pictureViewer->getScale());
   m_pictureViewer->zoomIn();
+  down->setX(down->x()*m_pictureViewer->getScale());
+  down->setY(down->y()*m_pictureViewer->getScale());
+  up->setX(up->x()*m_pictureViewer->getScale());
+  up->setY(up->y()*m_pictureViewer->getScale());
+  setSelection();
+  refresh();
 }
 void PictureArea::zoomOut(){
   m_fit=false;
-  m_selectionTool->hide();
+  
+  down->setX(down->x()/m_pictureViewer->getScale());
+  down->setY(down->y()/m_pictureViewer->getScale());
+  up->setX(up->x()/m_pictureViewer->getScale());
+  up->setY(up->y()/m_pictureViewer->getScale());
   m_pictureViewer->zoomOut();
+  down->setX(down->x()*m_pictureViewer->getScale());
+  down->setY(down->y()*m_pictureViewer->getScale());
+  up->setX(up->x()*m_pictureViewer->getScale());
+  up->setY(up->y()*m_pictureViewer->getScale());
+  setSelection();
+  refresh();
+ 
 
 }
 

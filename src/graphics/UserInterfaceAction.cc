@@ -162,6 +162,7 @@ void UserInterface::changeGIMode(){
   m_fitToWindowAct->setIcon(QPixmap("Icon/FitToWindow.png"));
   m_selection->setIcon(QPixmap("Icon/Selection.png"));
   m_move->setIcon(QPixmap("Icon/Move.png"));
+  m_crop->setIcon(QPixmap("Icon/Crop.png"));
   m_tracingManager->toGuiIcon();
   
 }
@@ -355,7 +356,7 @@ void UserInterface::createViewAction() {
   m_colorConvertOperationAct->setChecked(true);
   connect(m_colorConvertOperationAct, SIGNAL(changed()), this, SLOT(updateToolBoxDocks()));
   
-  m_guiMode= new QAction(tr("Graphical Interface Mode"),this);
+  m_guiMode= new QAction(tr("Change Graphical Iterface Mode"),this);
   connect(m_guiMode, SIGNAL(triggered()), this, SLOT(changeGIMode()));
   
   

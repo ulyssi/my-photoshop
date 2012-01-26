@@ -15,7 +15,7 @@ TabWidget::TabWidget(UserInterface* userInterface) :
   m_userInterface(userInterface)
 {
   insertTab(0, new QWidget(), "");
-  tabBar()->setTabButton(0, QTabBar::LeftSide, (QWidget*)createNewTabButton());
+  tabBar()->setTabButton(0, QTabBar::RightSide, (QWidget*)createNewTabButton());
   QObject::connect(this, SIGNAL(currentChanged(int)), this, SLOT(selectTab(int)));
 }
 

@@ -29,9 +29,8 @@ Picture* PictureManager::getSelectedPicture() {
 }
 
 void PictureManager::addPictureModifier(PictureModifier* pictureModifier) {
-  PictureButton* t_pictureButton=new PictureButton(pictureModifier);
-  QObject::connect((QAbstractButton*)t_pictureButton,SIGNAL(pressed()),(QAbstractButton*)t_pictureButton,SLOT(cliked));
-  m_buttonGroup->addButton((QAbstractButton*)t_pictureButton);
+  PictureButton* t_pictureButton=new PictureButton(pictureModifier,m_userInterface);
+   m_buttonGroup->addButton((QAbstractButton*)t_pictureButton);
   refresh();
 }
 

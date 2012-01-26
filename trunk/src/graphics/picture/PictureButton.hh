@@ -7,22 +7,24 @@
 #include "PictureViewer.hh" 
 class PictureModifier;
 class Picture;
-class PictureButton : public PictureViewer, public QPushButton {
+class UserInterface;
+class PictureButton :  public QPushButton {
+Q_OBJECT
 public : 
   /** Constructeurs et destructeur */
-  PictureButton(PictureModifier*); 
+  PictureButton(PictureModifier*,UserInterface*); 
   ~PictureButton(); 
   QSize *geticonSize();
   void seticonSize(int,int);
   Picture* getPicture();
 public slots:
-  void cliked(); 
-private: 
+  void clicked(); 
 
+private: 
   /** Attributs */
   QSize* m_size;
   PictureModifier* m_pictureModifier;
-  
+  UserInterface* m_userInterface;
 };
 
 #endif

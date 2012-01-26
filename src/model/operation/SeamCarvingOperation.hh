@@ -28,11 +28,9 @@ public:
 private:
 
   typedef struct Point {
-    int relevant;
-    unsigned int color;
-    unsigned int gradient;
-    unsigned int pathValue;
-    bool modify, deleted;
+    unsigned int color, gradient;
+    int pathValue;
+    int mask;
     Point *previous, *next;
     Point *north, *south, *east, *west;
   } Point;
@@ -46,53 +44,32 @@ private:
   inline Point* getNorthEastFrom(Point*);
   inline Point* getSouthWestFrom(Point*);
   inline Point* getSouthEastFrom(Point*);
-  
+
   /** Methodes internes */
   Matrix<Point*>* createData();
-  Point** createIndexH();
-  Point** createIndexV();
-  void initializeData();
-  void initializeGradient2();
-  void initializeMinimumPathH2();
-  void initializeMinimumPathV2();
-  void updateIndexH();
-  void updateIndexV();
+
+  void refreshGradient();
+  void refreshMinimumPathH();
+  void refreshMinimumPathV();
+
   inline void updateGradient(Point*);
   inline void updateMinimumPathH(Point*);
   inline void updateMinimumPathV(Point*);
-  void deleteRow();
-  void newRow();
-  void deleteLine();
-  void newLine();
 
-  // Path** createMinimumPathH();
-  // Path** createMinimumPathV();
-  // unsigned int** createGradientMatrix();
-  // void initializeGradientMatrix();
-  // void initializeMinimumPathH();
-  // void initializeMinimumPathV();
-  // void deleteLine();
-  // void deleteRow();
-  // inline void updateMinimumPathH(int, int);
-  // inline void updateMinimumPathV(int, int);
-  // inline void updateGradient(int, int);
+  void computeRemoveRow(int);
+  void computeRemoveLine(int);
 
   /** Attributs */
   Picture* m_picture;
-  // Matrix<unsigned int>* m_pictureData;
-  // unsigned int** m_gradient;
-  // Path **m_minimumPathH, **m_minimumPathV;
-  // int *m_pathH, *m_pathV;
+  Matrix<unsigned int>* m_pictureData;
   int m_widthInit, m_heightInit;
   int m_widthTarget, m_heightTarget;
-  int m_widthMax, m_heightMax;
   int m_width, m_height;
-  // int m_sobelX[3][3];
-  // int m_sobelY[3][3];
-
-  Matrix<Point*>* m_dataInit;
-  Point **m_indexH, **m_indexV;
+  Matrix<Point*>* m_data;
+  int m_iteration;
   
+  int **m_gauss, **m_sobelX, **m_sobelY;
+
 };
 
 #endif

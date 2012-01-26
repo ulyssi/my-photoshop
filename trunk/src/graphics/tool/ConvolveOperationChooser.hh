@@ -74,9 +74,26 @@ private:
   QString m_identityKernelString;
   QString m_averageBlurKernelString;
   QString m_gaussianBlurKernelString;
-  QString m_edgeDetectionKernelString;
-  QString m_leftEdgeStrengtheningKernelString;
+  QString m_increaseContrastKernelString;
+  QString m_sharpnessKernelString;
+  QString m_unsharpKernelString;
+  QString m_stampingKernelString;
   QString m_repulsingKernelString;
+  QString m_laplacianKernelString;
+  QString m_laplacianBisKernelString;
+  QString m_laplacianOfGaussianKernelString;
+  QString m_gradientXKernelString;
+  QString m_gradientYKernelString;
+  QString m_sobelXKernelString;
+  QString m_sobelYKernelString;
+  QString m_northEdgeStrengtheningKernelString;
+  QString m_southEdgeStrengtheningKernelString;
+  QString m_eastEdgeStrengtheningKernelString;
+  QString m_westEdgeStrengtheningKernelString;
+  QString m_lineDetectionHorizontalKernelString;
+  QString m_lineDetectionVerticalKernelString;
+  QString m_lineDetectionNorthEastKernelString;
+  QString m_lineDetectionSouthEastKernelString;
   QString m_customizeKernelString;
 
   QComboBox* m_edgeControlComboBox;

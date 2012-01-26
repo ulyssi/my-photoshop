@@ -21,9 +21,26 @@ ConvolveOperationChooser::ConvolveOperationChooser(UserInterface* userInterface)
   m_identityKernelString(tr("Identity")),
   m_averageBlurKernelString(tr("Average Blur")),
   m_gaussianBlurKernelString(tr("Gaussian Blur")),
-  m_edgeDetectionKernelString(tr("Edge Detection")),
-  m_leftEdgeStrengtheningKernelString(tr("Left Edge Strengthening")),
+  m_increaseContrastKernelString(tr("Increase Contrast")),
+  m_sharpnessKernelString(tr("Sharpness")),
+  m_unsharpKernelString(tr("Unsharpness")),
+  m_stampingKernelString(tr("Stamping")),
   m_repulsingKernelString(tr("Repulsing")),
+  m_laplacianKernelString(tr("Laplacian")),
+  m_laplacianBisKernelString(tr("Laplacian Diagonals")),
+  m_laplacianOfGaussianKernelString(tr("Laplacian of Gaussian")),
+  m_gradientXKernelString(tr("Gradient X")),
+  m_gradientYKernelString(tr("Gradient Y")),
+  m_sobelXKernelString(tr("Sobel X")),
+  m_sobelYKernelString(tr("Sobel Y")),
+  m_northEdgeStrengtheningKernelString(tr("North Edge Strengthening")),
+  m_southEdgeStrengtheningKernelString(tr("South Edge Strengthening")),
+  m_eastEdgeStrengtheningKernelString(tr("East Edge Strengthening")),
+  m_westEdgeStrengtheningKernelString(tr("West Edge Strengthening")),
+  m_lineDetectionHorizontalKernelString(tr("Line Detection Horizontal")),
+  m_lineDetectionVerticalKernelString(tr("Line Detection Vertical")),
+  m_lineDetectionNorthEastKernelString(tr("Line Detection NorthEast")),
+  m_lineDetectionSouthEastKernelString(tr("Line Detection SouthEast")),
   m_customizeKernelString(tr("Customize")),
   m_extendControlString(tr("Extend")),
   m_cropControlString(tr("Crop")),
@@ -71,9 +88,26 @@ void ConvolveOperationChooser::kernelUpdate() {
   if (text == m_identityKernelString) m_kernel = ConvolveOperation::createIdentityKernel(width, height);
   else if (text == m_averageBlurKernelString) m_kernel = ConvolveOperation::createAverageBlurKernel(width, height);
   else if (text == m_gaussianBlurKernelString) m_kernel = ConvolveOperation::createGaussianBlurKernel(width, height);
-  else if (text == m_edgeDetectionKernelString) m_kernel = ConvolveOperation::createEdgeDetectionKernel(width, height);
-  else if (text == m_leftEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createLeftEdgeStrengtheningKernel(width, height);
+  else if (text == m_increaseContrastKernelString) m_kernel = ConvolveOperation::createIncreaseContrastKernel(width, height);
+  else if (text == m_sharpnessKernelString) m_kernel = ConvolveOperation::createSharpnessKernel(width, height);
+  else if (text == m_unsharpKernelString) m_kernel = ConvolveOperation::createUnsharpKernel(width, height);
+  else if (text == m_stampingKernelString) m_kernel = ConvolveOperation::createStampingKernel(width, height);
   else if (text == m_repulsingKernelString) m_kernel = ConvolveOperation::createRepulsingKernel(width, height);
+  else if (text == m_laplacianKernelString) m_kernel = ConvolveOperation::createLaplacianKernel(width, height);
+  else if (text == m_laplacianBisKernelString) m_kernel = ConvolveOperation::createLaplacianBisKernel(width, height);
+  else if (text == m_laplacianOfGaussianKernelString) m_kernel = ConvolveOperation::createLaplacianOfGaussianKernel(width, height);
+  else if (text == m_gradientXKernelString) m_kernel = ConvolveOperation::createGradientXKernel(width, height);
+  else if (text == m_gradientYKernelString) m_kernel = ConvolveOperation::createGradientYKernel(width, height);
+  else if (text == m_sobelXKernelString) m_kernel = ConvolveOperation::createSobelXKernel(width, height);
+  else if (text == m_sobelYKernelString) m_kernel = ConvolveOperation::createSobelYKernel(width, height);
+  else if (text == m_northEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createNorthEdgeStrengtheningKernel(width, height);
+  else if (text == m_southEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createSouthEdgeStrengtheningKernel(width, height);
+  else if (text == m_eastEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createEastEdgeStrengtheningKernel(width, height);
+  else if (text == m_westEdgeStrengtheningKernelString) m_kernel = ConvolveOperation::createWestEdgeStrengtheningKernel(width, height);
+  else if (text == m_lineDetectionHorizontalKernelString) m_kernel = ConvolveOperation::createLineDetectionHorizontalKernel(width, height);
+  else if (text == m_lineDetectionVerticalKernelString) m_kernel = ConvolveOperation::createLineDetectionVerticalKernel(width, height);
+  else if (text == m_lineDetectionNorthEastKernelString) m_kernel = ConvolveOperation::createLineDetectionNorthEastKernel(width, height);
+  else if (text == m_lineDetectionSouthEastKernelString) m_kernel = ConvolveOperation::createLineDetectionSouthEastKernel(width, height);
   else m_kernel->resize(width * 2 + 1, height * 2 + 1, 0.0);
 
   disconnect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
@@ -166,16 +200,46 @@ void ConvolveOperationChooser::applyOperation() {
 /** Methodes internes */
 QComboBox* ConvolveOperationChooser::createKernelGroupBox() {
   m_kernelComboBox = new QComboBox();
+
   m_kernelComboBox->addItem(m_identityKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+  
   m_kernelComboBox->addItem(m_averageBlurKernelString);
   m_kernelComboBox->addItem(m_gaussianBlurKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
-  m_kernelComboBox->addItem(m_edgeDetectionKernelString);
-  m_kernelComboBox->addItem(m_leftEdgeStrengtheningKernelString);
+
+  m_kernelComboBox->addItem(m_increaseContrastKernelString);
+  m_kernelComboBox->addItem(m_sharpnessKernelString);
+  m_kernelComboBox->addItem(m_unsharpKernelString);
+  m_kernelComboBox->addItem(m_stampingKernelString);
   m_kernelComboBox->addItem(m_repulsingKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+
+  m_kernelComboBox->addItem(m_laplacianKernelString);
+  m_kernelComboBox->addItem(m_laplacianBisKernelString);
+  m_kernelComboBox->addItem(m_laplacianOfGaussianKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+
+  m_kernelComboBox->addItem(m_gradientXKernelString);
+  m_kernelComboBox->addItem(m_gradientYKernelString);
+  m_kernelComboBox->addItem(m_sobelXKernelString);
+  m_kernelComboBox->addItem(m_sobelYKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+
+  m_kernelComboBox->addItem(m_northEdgeStrengtheningKernelString);
+  m_kernelComboBox->addItem(m_southEdgeStrengtheningKernelString);
+  m_kernelComboBox->addItem(m_eastEdgeStrengtheningKernelString);
+  m_kernelComboBox->addItem(m_westEdgeStrengtheningKernelString);
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
+
+  m_kernelComboBox->addItem(m_lineDetectionHorizontalKernelString);
+  m_kernelComboBox->addItem(m_lineDetectionVerticalKernelString);
+  m_kernelComboBox->addItem(m_lineDetectionNorthEastKernelString);
+  m_kernelComboBox->addItem(m_lineDetectionSouthEastKernelString);
+
+  m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
   m_kernelComboBox->addItem(m_customizeKernelString);
+
   connect(m_kernelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelUpdate()));
   return m_kernelComboBox;
 }

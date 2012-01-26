@@ -42,18 +42,28 @@ public:
 
   /** Methodes de classe */
   static Matrix<double>* createIdentityKernel(int = 1, int = 1);
-  
   static Matrix<double>* createAverageBlurKernel(int = 1, int = 1);
-  static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1, double = 1.0);
-
-  static Matrix<double>* createEdgeDetectionKernel(int = 1, int = 1);
-  static Matrix<double>* createLeftEdgeStrengtheningKernel(int = 1, int = 1);
-  static Matrix<double>* createRepulsingKernel(int = 1, int = 1);
+  static Matrix<double>* createGaussianBlurKernel(int = 1, int = 1);
   static Matrix<double>* createIncreaseContrastKernel(int = 1, int = 1);
-
+  static Matrix<double>* createSharpnessKernel(int = 1, int = 1);
+  static Matrix<double>* createUnsharpKernel(int = 1, int = 1);
+  static Matrix<double>* createStampingKernel(int = 1, int = 1);
+  static Matrix<double>* createRepulsingKernel(int = 1, int = 1);
+  static Matrix<double>* createLaplacianKernel(int = 1, int = 1);
+  static Matrix<double>* createLaplacianBisKernel(int = 1, int = 1);
+  static Matrix<double>* createLaplacianOfGaussianKernel(int = 1, int = 1);
+  static Matrix<double>* createGradientXKernel(int = 1, int = 1);
+  static Matrix<double>* createGradientYKernel(int = 1, int = 1);
   static Matrix<double>* createSobelXKernel(int = 1, int = 1);
   static Matrix<double>* createSobelYKernel(int = 1, int = 1);
-  static Matrix<double>* stamping(int = 1, int = 1);
+  static Matrix<double>* createNorthEdgeStrengtheningKernel(int = 1, int = 1);
+  static Matrix<double>* createSouthEdgeStrengtheningKernel(int = 1, int = 1);
+  static Matrix<double>* createEastEdgeStrengtheningKernel(int = 1, int = 1);
+  static Matrix<double>* createWestEdgeStrengtheningKernel(int = 1, int = 1);
+  static Matrix<double>* createLineDetectionHorizontalKernel(int = 1, int = 1);
+  static Matrix<double>* createLineDetectionVerticalKernel(int = 1, int = 1);
+  static Matrix<double>* createLineDetectionNorthEastKernel(int = 1, int = 1);
+  static Matrix<double>* createLineDetectionSouthEastKernel(int = 1, int = 1);
 
 private:
 

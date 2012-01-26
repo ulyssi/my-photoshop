@@ -124,14 +124,11 @@ unsigned int ConvolveOperation::timesOperator(int i, int j) {
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int color = getPixelColor(i + i2, j + j2);
-      if (m_red) red += (double)PixelMod::getRed(color) 
-                   * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2) / m_convolutionCoef;
-      if (m_green) green += (double)PixelMod::getGreen(color) 
-                     * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2) / m_convolutionCoef;
-      if (m_blue) blue += (double)PixelMod::getBlue(color) 
-                    * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2) / m_convolutionCoef;
-      if (m_alpha) alpha += (double)PixelMod::getAlpha(color) 
-                     * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2) / m_convolutionCoef;
+      double coef = m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2) / m_convolutionCoef;
+      if (m_red) red += (double)PixelMod::getRed(color) * coef;
+      if (m_green) green += (double)PixelMod::getGreen(color) * coef;
+      if (m_blue) blue += (double)PixelMod::getBlue(color) * coef;
+      if (m_alpha) alpha += (double)PixelMod::getAlpha(color) * coef;
     }
   return PixelMod::createRGB(PixelMod::threshold(red),
                              PixelMod::threshold(green),
@@ -139,58 +136,39 @@ unsigned int ConvolveOperation::timesOperator(int i, int j) {
                              PixelMod::threshold(alpha));
 }
 
-
-
-unsigned int ConvolveOperation::getSum(unsigned int color){
-  unsigned int sum = 0;
-
-  if (m_red) sum += PixelMod::getRed(color);
-  if (m_green) sum += PixelMod::getGreen(color);
-  if (m_blue) sum += PixelMod::getBlue(color);
-  if (m_alpha) sum += PixelMod::getAlpha(color);
-  return sum;
-}
-
 unsigned int ConvolveOperation::medianOperator(int i, int j) {
   int size = m_kernel->getWidth() * m_kernel->getHeight();
   unsigned int tabSum[size];
   unsigned int tabColor[size];
-  int k=0;
+  int k = 0;
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
-      unsigned int colorTmp = getPixelColor(i + i2, j + j2);
-      tabSum[k] = getSum(colorTmp);
-      tabColor[k] = colorTmp;
+      unsigned int color = getPixelColor(i + i2, j + j2);
+      unsigned int sum = getSum(tabColor[k]) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
+      int k2 = k;
+      while (k2 > 0 && tabSum[k2-1] > sum) {
+        tabColor[k2] = tabColor[k2-1];
+        tabSum[k2] = tabSum[k2-1];
+        k2--;
+      }
+      tabColor[k2] = color;
+      tabSum[k2] = sum;
       k++;
     }
-  
-  int x,y,l;
-  for(int i=1; i< size; ++i){
-    x = tabSum[i];
-    y = tabColor[i];
-    l = i;
-    while(l > 0 && tabSum[l-1] >x){
-      tabSum[l] = tabSum[l-1];
-      tabColor[l] = tabColor[l-1];
-      l--;
-    }
-    tabSum[l] = x;
-    tabColor[l] = y;
-  }
-  return tabColor[size/2+1];
+  return tabColor[(size-1)/2];
 }
 
 unsigned int ConvolveOperation::maxOperator(int i, int j) {
   unsigned int color = m_pictureData->getValue(i, j);
-  unsigned int sum = getSum(color);
+  unsigned int sum = getSum(color) * m_kernel->getValue(m_endI2, m_endJ2);
   
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int colorTmp = getPixelColor(i + i2, j + j2);
-      unsigned int sumTmp = getSum(colorTmp);
+      unsigned int sumTmp = getSum(colorTmp) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
       if (sumTmp > sum) {
-        sum = sumTmp;
         color = colorTmp;
+        sum = sumTmp;
       }
     }
   return color;
@@ -198,21 +176,28 @@ unsigned int ConvolveOperation::maxOperator(int i, int j) {
 
 unsigned int ConvolveOperation::minOperator(int i, int j) {
   unsigned int color = m_pictureData->getValue(i, j);
-  unsigned int sum = getSum(color);
+  unsigned int sum = getSum(color) * m_kernel->getValue(m_endI2, m_endJ2);
   
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int colorTmp = getPixelColor(i + i2, j + j2);
-      unsigned int sumTmp = getSum(colorTmp);
+      unsigned int sumTmp = getSum(colorTmp) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
       if (sumTmp < sum) {
-        sum = sumTmp;
         color = colorTmp;
+        sum = sumTmp;
       }
     }
   return color;
-  
 }
 
+unsigned int ConvolveOperation::getSum(unsigned int color) {
+  unsigned int sum = 0;
+  if (m_red) sum += PixelMod::getRed(color);
+  if (m_green) sum += PixelMod::getGreen(color);
+  if (m_blue) sum += PixelMod::getBlue(color);
+  if (m_alpha) sum += PixelMod::getAlpha(color);
+  return sum;
+}
 
 unsigned int ConvolveOperation::getPixelColor(int i, int j) {
   if (m_edgeControl == EXTEND_EDGE) {

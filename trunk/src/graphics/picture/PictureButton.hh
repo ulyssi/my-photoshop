@@ -15,7 +15,8 @@ public :
   QSize *geticonSize();
   void seticonSize(int,int);
   Picture* getPicture();
-
+public slots:
+  void cliked(); 
 private: 
 
   /** Attributs */

@@ -25,6 +25,7 @@ PictureManager::~PictureManager() {
 }
 /** Methodes */
 Picture* PictureManager::getSelectedPicture() { 
+  if(m_buttonGroup->buttons().empty()) return 0;
   return ((PictureButton *)m_buttonGroup->buttons().first())->getPicture();
 }
 

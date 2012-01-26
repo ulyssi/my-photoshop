@@ -13,9 +13,9 @@ UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   createActions();
   m_pictureManager = new PictureManager(this);
   m_viewTabWidget = createTabWidget();
+  createToolBoxDocks();
   createMenuBar();
   createToolBars();
-  createToolBoxDocks();
   setCentralWidget((QTabWidget*)m_viewTabWidget);
   setWindowTitle(tr("MyPhotoShop"));
   resize(1024, 768);

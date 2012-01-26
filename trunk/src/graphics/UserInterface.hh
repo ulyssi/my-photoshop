@@ -222,17 +222,6 @@ private:
   QAction* m_move;
   QAction* m_crop;
 
-  QAction* m_previewerAct;
-  QAction* m_histogramAct;
-  QAction* m_colorChooserAct;
-  QAction* m_toolBoxChooserAct;
-  QAction* m_tracingManagerAct;
-  QAction* m_affineOperationAct;
-  QAction* m_rescaleOperationAct;
-  QAction* m_convolveOperationAct;
-  QAction* m_algebricOperationAct;
-  QAction* m_colorConvertOperationAct;
-
   QAction* m_increaseContrastAct;
   QAction* m_averageBlurAct;
   QAction* m_gaussianBlurAct;

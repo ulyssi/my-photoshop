@@ -58,41 +58,8 @@ void UserInterface::createToolBoxDocks() {
 }
 
 void UserInterface::updateToolBoxDocks() {
-  if (m_previewerAct->isChecked() && m_previewer->isEnabled())
-    m_previewerDock->show();
-  else m_previewerDock->hide();
-
-  if (m_histogramAct->isChecked() && m_histogram->isEnabled())
-    m_histogramDock->show();
-  else m_histogramDock->hide();
-  
-  if (m_colorChooserAct->isChecked() && m_colorChooser->isEnabled())
-    m_colorChooserDock->show();
-  else m_colorChooserDock->hide();
-
-  if (m_toolBoxChooserAct->isChecked() && m_toolBoxChooser->isEnabled())
-    m_toolBoxChooserDock->show();
-  else m_toolBoxChooserDock->hide();
-  
-  if (m_tracingManagerAct->isChecked() && m_tracingManager->isEnabled())
-    m_tracingManagerDock->show();
-  else m_tracingManagerDock->hide();
-  
-  if (m_affineOperationAct->isChecked() && m_affineOperationChooser->isEnabled())
-    m_affineOperationChooserDock->show();
-  else m_affineOperationChooserDock->hide();
-    
-  if (m_convolveOperationAct->isChecked() && m_convolveOperationChooser->isEnabled())
-    m_convolveOperationChooserDock->show();
-  else m_convolveOperationChooserDock->hide();
-  
-  if (m_algebricOperationAct->isChecked() && m_algebricOperationChooser->isEnabled())
-    m_algebricOperationChooserDock->show();
-  else m_algebricOperationChooserDock->hide();
-  
-  if (m_colorConvertOperationAct->isChecked() && m_colorConvertOperationChooser->isEnabled())
-    m_colorConvertOperationChooserDock->show();
-  else m_colorConvertOperationChooserDock->hide();
+  m_colorChooserDock->hide();
+  m_algebricOperationChooserDock->hide();
 }
 
 QDockWidget* UserInterface::createPreviewerDock() {

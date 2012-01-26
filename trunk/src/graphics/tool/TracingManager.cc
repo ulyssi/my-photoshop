@@ -41,15 +41,6 @@ void TracingManager::setPictureModifier(PictureModifier* pictureModifier) {
 }
 
 
-void TracingManager::toGuiIcon(){
-  m_add->setIcon((const QIcon &)QIcon("Icon/Add.png"));
-  m_merge->setIcon((const QIcon &)QIcon("Icon/Merge.png"));
-  m_up->setIcon((const QIcon &)QIcon("Icon/Up.png"));
-  m_down->setIcon((const QIcon &)QIcon("Icon/Down.png"));
-  m_remove->setIcon((const QIcon &)QIcon("Icon/Remove.png"));
-  m_rename->setIcon((const QIcon &)QIcon("Icon/Rename.png"));
-}
-
 /** Predicats */
 bool TracingManager::isEnabled() { return m_pictureModifier != NULL; }
 
@@ -207,6 +198,12 @@ void TracingManager::buildButtons(){
   m_down=new QPushButton(tr(""));
   m_remove=new QPushButton(tr(""));
   m_rename=new QPushButton(tr(""));
+  m_add->setIcon((const QIcon &)QIcon("Icon/Add.png"));
+  m_merge->setIcon((const QIcon &)QIcon("Icon/Merge.png"));
+  m_up->setIcon((const QIcon &)QIcon("Icon/Up.png"));
+  m_down->setIcon((const QIcon &)QIcon("Icon/Down.png"));
+  m_remove->setIcon((const QIcon &)QIcon("Icon/Remove.png"));
+  m_rename->setIcon((const QIcon &)QIcon("Icon/Rename.png"));
   m_foot->addWidget(m_add);
   m_foot->addWidget(m_remove);
   m_foot->addWidget(m_merge);

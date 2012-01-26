@@ -7,8 +7,8 @@
 
 /** Constructeurs et destructeur */
 ConvolveOperation::ConvolveOperation(Picture* picture, Operation* operation) :
-  m_operation(operation),
-  m_picture(picture),
+ 
+ 
   m_kernel(NULL),
   m_red(true),
   m_green(true),
@@ -16,11 +16,15 @@ ConvolveOperation::ConvolveOperation(Picture* picture, Operation* operation) :
   m_alpha(false),
   m_convolutionCoef(1.0),
   m_decalage(0),
-  m_pictureData(NULL),
-  m_previewData(NULL),
+ 
   m_edgeControl(CROP_EDGE),
   m_operator(TIMES_OPERATOR)
-{}
+{
+
+  m_picture=picture;
+  m_pictureData=NULL;
+  m_previewData=NULL;
+}
 
 ConvolveOperation::~ConvolveOperation() {}
 
@@ -60,9 +64,8 @@ void ConvolveOperation::setOperator(Operator op) { m_operator = op; }
 
 
 /** Methodes */
-Matrix<unsigned int>* ConvolveOperation::updatePreview() {
-  if (m_previewData != NULL) delete m_previewData;
-  m_pictureData = m_picture->getData();
+Matrix<unsigned int>* ConvolveOperation::updateInternalPreview() {
+  
   m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
 
   m_convolutionCoef = 0;
@@ -101,7 +104,7 @@ Matrix<unsigned int>* ConvolveOperation::updatePreview() {
   return m_previewData;
 }
 
-Picture* ConvolveOperation::applyOperation() {
+Picture* ConvolveOperation::applyInternalOperation() {
   m_pictureData = m_picture->getData();
   m_picture->getBackground()->setData(updatePreview());
   m_picture->refresh();

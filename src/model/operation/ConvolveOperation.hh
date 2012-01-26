@@ -9,7 +9,7 @@ class Picture;
 class Tracing;
 
 
-class ConvolveOperation {
+class ConvolveOperation:public Operation {
 
 public:
 
@@ -37,8 +37,8 @@ public:
   void setOperator(Operator);
 
   /** Methodes */
-  Matrix<unsigned int>* updatePreview();
-  Picture* applyOperation();
+  Matrix<unsigned int>* updateInternalPreview();
+  Picture* applyInternalOperation();
 
   /** Methodes de classe */
   static Matrix<double>* createIdentityKernel(int = 1, int = 1);
@@ -76,15 +76,13 @@ private:
   inline unsigned int getSum(unsigned int);
   
   /** Attributs */
-  Operation* m_operation;
-  Picture* m_picture;
+ 
+ 
   Matrix<double>* m_kernel;
   bool m_red, m_green, m_blue, m_alpha;
   double m_convolutionCoef;
   unsigned int m_decalage;
   int m_startI2, m_startJ2, m_endI2, m_endJ2;
-  Matrix<unsigned int>* m_pictureData;
-  Matrix<unsigned int>* m_previewData;
   EdgeControl m_edgeControl;
   Operator m_operator;
 

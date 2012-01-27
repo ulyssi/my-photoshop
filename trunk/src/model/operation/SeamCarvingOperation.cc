@@ -19,13 +19,13 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_dataV(createData()),
   m_iteration(0),
   m_iterationV(0),
-  m_pathValue(new int[m_widthInit])
+  m_pathValue(new int[m_widthInit]),
+  m_initH(false),
+  m_initV(false)
 {
-  refreshData();
-  refreshGradient();
+  
 
-  refreshDataV();
-  refreshGradientV();
+  
 }
 
 SeamCarvingOperation::~SeamCarvingOperation() {}
@@ -69,7 +69,12 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreviewHorizontal() {
   }
   else level = m_widthTarget - m_widthInit;
 
-  refreshMinimumPathV();
+  if (!m_initH) {
+    refreshData();
+    refreshGradient();
+    refreshMinimumPathV();
+    m_initH = true;
+  }
   while (m_iteration < level) m_pathValue[m_iteration-1] = computeRemoveRow(++m_iteration);
 
   // unsigned int sum = 0;
@@ -116,7 +121,12 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreviewVertical() {
   }
   else level = m_heightTarget - m_heightInit;
 
-  refreshMinimumPathH();  
+  if (!m_initV) {
+    refreshDataV();
+    refreshGradientV();
+    refreshMinimumPathH();
+    m_initV = true;
+  }
   while (m_iterationV < level) m_pathValue[m_iterationV-1] = computeRemoveLine(++m_iterationV);
   
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);

@@ -17,6 +17,7 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_height(m_heightInit),
   m_data(createData()),
   m_iteration(0),
+  m_iterationV(0),
   m_pathValue(new int[m_widthInit])
 {
   refreshData();
@@ -33,6 +34,7 @@ void SeamCarvingOperation::setTargetHeight(int heightTarget) { m_heightTarget = 
 
 
 /** Methodes */
+#include <iostream>
 Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
 
   // TEST [ affichage de l'image initiale avec marqueur ]
@@ -49,6 +51,12 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   //   }
   // }
 
+  if (m_widthInit != m_widthTarget) return updatePreviewHorizontal();
+  if (m_heightInit != m_heightTarget) return updatePreviewVertical();
+  return m_pictureData;
+}
+
+Matrix<unsigned int>* SeamCarvingOperation::updatePreviewHorizontal() {
   int level = 0;
   bool copy = true;
   if (m_widthTarget < m_widthInit) {
@@ -60,53 +68,67 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   refreshMinimumPathV();
   while (m_iteration < level) m_pathValue[m_iteration-1] = computeRemoveRow(++m_iteration);
 
-  // double* coef = new double[level+1];
-  // coef[level] = 1.0;
-  // for (int i = level-1; i > 0; i++)
-  //   coef[i-1] = ((double)m_pathValue[i]) * coef[i] / ((double)m_pathValue[i-1]);
+  // unsigned int sum = 0;
+  // for (int i = 0; i < level; i++) sum += m_pathValue[i];
+   
+  // double* coef = new double[level];
+  // for (int i = 0; i < level; i++) coef[i] = ((double)m_pathValue[i]) / ((double)sum);
+  // for (int i = 0; i < level-1; i++) {
+  //   coef[i] /= coef[i+1];
+  //   std::cout << coef[i] << " ";
+  // }
+  // std::cout << std::endl;
+  //   //   coef[i-1] = ((double)m_pathValue[i]) * coef[i] / ((double)m_pathValue[i-1]);
 
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
   for (int j = 0; j < m_heightInit; j++) {
     m_width = 0;
-    int insert = 0;
+    // int insert = 0;
     for (int i = 0; i < m_widthInit; i++) {
       if (copy) {
         preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
-        if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
-          // while (level > insert && coef[m_data->getValue(i, j)->mask-1] ) {
+        if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level) {
+	  // int k = 0;
+          // while (level > insert && k < floor((double)level * coef[m_data->getValue(i, j)->mask-1]+0.5)) {
             preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
-          //   insert++;
-          // }
+	  //   insert++;
+	  // }
+	}
       }
       else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
         preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
     }
   }
 
-  // int level = 0;
-  // bool copy = true;
-  // if (m_heightTarget < m_heightInit) {
-  //   copy = false;
-  //   level = m_heightInit - m_heightTarget;
-  // }
-  // else level = m_heightTarget - m_heightInit;
+  return preview;
+}
 
-  // refreshMinimumPathH();  
-  // while (m_iteration < level) computeRemoveLine(++m_iteration);
+Matrix<unsigned int>* SeamCarvingOperation::updatePreviewVertical() {
+  int level = 0;
+  bool copy = true;
+  if (m_heightTarget < m_heightInit) {
+    copy = false;
+    level = m_heightInit - m_heightTarget;
+  }
+  else level = m_heightTarget - m_heightInit;
+
+  refreshMinimumPathH();  
+  while (m_iterationV < level) m_pathValue[m_iterationV-1] = computeRemoveLine(++m_iterationV);
   
-  // Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
-  // for (int i = 0; i < m_widthInit; i++) {
-  //   m_height = 0;
-  //   for (int j = 0; j < m_heightInit; j++) {
-  //     if (copy) {
-  //       preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
-  //       if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
-  //         preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
-  //     }
-  //     else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
-  //       preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
-  //   }
-  // }
+  Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
+  for (int i = 0; i < m_widthInit; i++) {
+    m_height = 0;
+    for (int j = 0; j < m_heightInit; j++) {
+      if (copy) {
+        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+        if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
+          preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+      }
+      else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
+        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+    }
+  }
+
   return preview;
 }
 

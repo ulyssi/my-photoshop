@@ -23,6 +23,8 @@ public:
 
   /** Methodes */
   Matrix<unsigned int>* updatePreview();
+  Matrix<unsigned int>* updatePreviewHorizontal();
+  Matrix<unsigned int>* updatePreviewVertical();
   Picture* applyOperation();
 
 private:
@@ -67,7 +69,7 @@ private:
   int m_widthTarget, m_heightTarget;
   int m_width, m_height;
   Matrix<Point*>* m_data;
-  int m_iteration;
+  int m_iteration, m_iterationV;
   int* m_pathValue;
 
 };

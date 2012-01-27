@@ -40,6 +40,8 @@ void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) {
 
 /** Methodes */
 void ToolBoxChooser::refresh() {
+  if (m_pictureModifier != NULL)
+    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
   refreshPreview(); 
 }
 
@@ -98,7 +100,6 @@ void ToolBoxChooser::applyOperation() {
     picture = op->applyOperation();
     picture->refresh();
     m_pictureModifier->refresh();
-    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
     resetOperation();
   }
 }

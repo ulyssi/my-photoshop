@@ -57,8 +57,8 @@ private:
   inline void updateMinimumPathH(Point*);
   inline void updateMinimumPathV(Point*);
 
-  void computeRemoveRow(int);
-  void computeRemoveLine(int);
+  unsigned int computeRemoveRow(int);
+  unsigned int computeRemoveLine(int);
 
   /** Attributs */
   Picture* m_picture;
@@ -68,6 +68,7 @@ private:
   int m_width, m_height;
   Matrix<Point*>* m_data;
   int m_iteration;
+  int* m_pathValue;
 
 };
 

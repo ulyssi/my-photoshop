@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QSpinBox>
+#include <QRadioButton>
 #include <QSlider>
 
 class UserInterface;
@@ -33,19 +34,20 @@ public slots:
   void resetOperation();
   void refreshPreview();
   void applyOperation();
+  void resetSeamCarvingOperation();
 
 private:
 
   /** Methodes internes */
   QGroupBox* createSeamCarvingGroupBox();
   QHBoxLayout* createControlsLayout();
-  void resetSeamCarvingOperation();
 
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
-  QSpinBox *m_spinBoxSeamCarvingWidth, *m_spinBoxSeamCarvingHeight;
-  QSlider *m_sliderSeamCarvingWidth, *m_sliderSeamCarvingHeight;
+  QRadioButton *m_radioWidth, *m_radioHeight; 
+  QSpinBox *m_spinBoxSeamCarvingSize;
+  QSlider *m_sliderSeamCarvingSize;
   SeamCarvingOperation* m_seamCarvingOperation;
 
 };

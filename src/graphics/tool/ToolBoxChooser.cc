@@ -1,7 +1,6 @@
 #include "ToolBoxChooser.hh"
 
 #include <QVBoxLayout>
-#include <QGridLayout>
 #include <QPushButton>
 
 #include "Picture.hh"
@@ -34,26 +33,8 @@ ToolBoxChooser::~ToolBoxChooser() {}
 /** Mutateurs */
 void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) { 
   m_pictureModifier = pictureModifier; 
-  if (m_pictureModifier != NULL) {
-    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
-    disconnect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-    disconnect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-
-    int width = m_pictureModifier->getPicture()->getWidth();
-    m_sliderSeamCarvingWidth->setRange(0, 2 * width);
-    m_sliderSeamCarvingWidth->setValue(width);
-    m_spinBoxSeamCarvingWidth->setRange(0, 2 * width);
-    m_spinBoxSeamCarvingWidth->setValue(width);
-
-    int height = m_pictureModifier->getPicture()->getHeight();
-    m_sliderSeamCarvingHeight->setRange(0, 2 * height);
-    m_sliderSeamCarvingHeight->setValue(height);
-    m_spinBoxSeamCarvingHeight->setRange(0, 2 * height);
-    m_spinBoxSeamCarvingHeight->setValue(height);
-
-    connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-    connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-  }
+  if (m_pictureModifier != NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
+  resetSeamCarvingOperation();
 }
 
 
@@ -72,12 +53,38 @@ void ToolBoxChooser::resetOperation() {
   resetSeamCarvingOperation();
 }
 
+void ToolBoxChooser::resetSeamCarvingOperation() {
+  if (m_pictureModifier != NULL) {
+    disconnect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+
+    int valueMax = 0;
+    if (m_radioWidth->isChecked()) {
+      valueMax = m_pictureModifier->getPicture()->getWidth();
+      if (m_seamCarvingOperation != NULL) 
+	m_seamCarvingOperation->setTargetHeight(m_pictureModifier->getPicture()->getHeight());
+    }
+    else {
+      valueMax = m_pictureModifier->getPicture()->getHeight();
+      if (m_seamCarvingOperation != NULL) 
+	m_seamCarvingOperation->setTargetWidth(m_pictureModifier->getPicture()->getWidth());
+    }
+    
+    m_sliderSeamCarvingSize->setRange(0, 2 * valueMax);
+    m_sliderSeamCarvingSize->setValue(valueMax);
+    m_spinBoxSeamCarvingSize->setRange(0, 2 * valueMax);
+    m_spinBoxSeamCarvingSize->setValue(valueMax);
+
+    connect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+    refreshPreview();
+  }
+}
+
 void ToolBoxChooser::refreshPreview() {
   Previewer* previewer = m_userInterface->getPreviewer();
   if (m_pictureModifier != NULL) {
     if (m_seamCarvingOperation == NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
-    m_seamCarvingOperation->setTargetWidth(m_sliderSeamCarvingWidth->value());
-    m_seamCarvingOperation->setTargetHeight(m_sliderSeamCarvingHeight->value());
+    if (m_radioWidth->isChecked()) m_seamCarvingOperation->setTargetWidth(m_sliderSeamCarvingSize->value());
+    else m_seamCarvingOperation->setTargetHeight(m_sliderSeamCarvingSize->value());
     previewer->setData(m_seamCarvingOperation->updatePreview());
   }
 }
@@ -86,8 +93,8 @@ void ToolBoxChooser::applyOperation() {
   if (m_pictureModifier != NULL) {
     Picture* picture = m_pictureModifier->getPicture();
     SeamCarvingOperation* op = new SeamCarvingOperation(picture);
-    op->setTargetWidth(m_sliderSeamCarvingWidth->value());
-    op->setTargetHeight(m_sliderSeamCarvingHeight->value());
+    if (m_radioWidth->isChecked()) op->setTargetWidth(m_sliderSeamCarvingSize->value());
+    else op->setTargetHeight(m_sliderSeamCarvingSize->value());
     picture = op->applyOperation();
     picture->refresh();
     m_pictureModifier->refresh();
@@ -99,42 +106,36 @@ void ToolBoxChooser::applyOperation() {
 /** Methodes internes */
 QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
   QGroupBox* groupBox = new QGroupBox(tr("Seam Carving"));
-  QGridLayout* layout = new QGridLayout();
+  QVBoxLayout* layout = new QVBoxLayout();
 
-  m_spinBoxSeamCarvingWidth = new QSpinBox();
-  m_spinBoxSeamCarvingWidth->setRange(1, 1000);
-  m_spinBoxSeamCarvingWidth->setSingleStep(1);
+  m_spinBoxSeamCarvingSize = new QSpinBox();
+  m_spinBoxSeamCarvingSize->setRange(1, 1000);
+  m_spinBoxSeamCarvingSize->setSingleStep(1);
 
-  m_sliderSeamCarvingWidth = new QSlider(Qt::Horizontal);
-  m_sliderSeamCarvingWidth->setRange(1, 1000);
-  m_sliderSeamCarvingWidth->setTickInterval(10);
-  m_sliderSeamCarvingWidth->setSingleStep(1);
+  m_sliderSeamCarvingSize = new QSlider(Qt::Horizontal);
+  m_sliderSeamCarvingSize->setRange(1, 1000);
+  m_sliderSeamCarvingSize->setTickInterval(10);
+  m_sliderSeamCarvingSize->setSingleStep(1);
 
-  m_spinBoxSeamCarvingHeight = new QSpinBox();
-  m_spinBoxSeamCarvingHeight->setRange(1, 1000);
-  m_spinBoxSeamCarvingHeight->setSingleStep(1);
-
-  m_sliderSeamCarvingHeight = new QSlider(Qt::Horizontal);
-  m_sliderSeamCarvingHeight->setRange(1, 1000);
-  m_sliderSeamCarvingHeight->setTickInterval(10);
-  m_sliderSeamCarvingHeight->setSingleStep(1);
+  connect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+  connect(m_spinBoxSeamCarvingSize, SIGNAL(valueChanged(int)), m_sliderSeamCarvingSize, SLOT(setValue(int)));
+  connect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingSize, SLOT(setValue(int)));
   
-  connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-  connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+  QHBoxLayout* layoutAxe = new QHBoxLayout();
 
-  connect(m_spinBoxSeamCarvingWidth, SIGNAL(valueChanged(int)), m_sliderSeamCarvingWidth, SLOT(setValue(int)));
-  connect(m_spinBoxSeamCarvingHeight, SIGNAL(valueChanged(int)), m_sliderSeamCarvingHeight, SLOT(setValue(int)));
+  m_radioWidth = new QRadioButton(tr("Width"));
+  m_radioWidth->setChecked(true);
+  m_radioHeight = new QRadioButton(tr("Height"));
 
-  connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingWidth, SLOT(setValue(int)));
-  connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingHeight, SLOT(setValue(int)));
-  
-  layout->addWidget(new QLabel(tr("Width")), 0, 0);
-  layout->addWidget(m_sliderSeamCarvingWidth, 0, 1);
-  layout->addWidget(m_spinBoxSeamCarvingWidth, 0, 2);
+  connect(m_radioWidth, SIGNAL(toggled(bool)), this, SLOT(resetSeamCarvingOperation()));
+  connect(m_radioHeight, SIGNAL(toggled(bool)), this, SLOT(resetSeamCarvingOperation()));
 
-  layout->addWidget(new QLabel(tr("Height")), 1, 0);
-  layout->addWidget(m_sliderSeamCarvingHeight, 1, 1);
-  layout->addWidget(m_spinBoxSeamCarvingHeight, 1, 2);
+  layoutAxe->addWidget(m_radioWidth);
+  layoutAxe->addWidget(m_radioHeight);
+  layoutAxe->addWidget(m_spinBoxSeamCarvingSize);
+
+  layout->addLayout(layoutAxe);
+  layout->addWidget(m_sliderSeamCarvingSize);
   
   groupBox->setLayout(layout);
   return groupBox;
@@ -158,25 +159,4 @@ QHBoxLayout* ToolBoxChooser::createControlsLayout() {
   return layout;
 }
 
-void ToolBoxChooser::resetSeamCarvingOperation() {
-  if (m_pictureModifier != NULL) {
-    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
-    disconnect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-    disconnect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
 
-    int width = m_pictureModifier->getPicture()->getWidth();
-    m_sliderSeamCarvingWidth->setRange(0, 2 * width);
-    m_sliderSeamCarvingWidth->setValue(width);
-    m_spinBoxSeamCarvingWidth->setRange(0, 2 * width);
-    m_spinBoxSeamCarvingWidth->setValue(width);
-
-    int height = m_pictureModifier->getPicture()->getHeight();
-    m_sliderSeamCarvingHeight->setRange(0, 2 * height);
-    m_sliderSeamCarvingHeight->setValue(height);
-    m_spinBoxSeamCarvingHeight->setRange(0, 2 * height);
-    m_spinBoxSeamCarvingHeight->setValue(height);
-
-    connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-    connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
-  }
-}

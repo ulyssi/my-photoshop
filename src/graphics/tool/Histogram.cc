@@ -383,7 +383,7 @@ void Histogram::applyHistogramEqualization(){
 
 void Histogram::applyHistogramLinearization(){
   int bInf = 0;
-  int bSup = 0;
+  int bSup = 255;
   int i;
   if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red")) {
     i = 0;

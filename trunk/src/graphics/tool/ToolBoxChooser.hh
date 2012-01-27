@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGroupBox>
 #include <QHBoxLayout>
+#include <QSpinBox>
 #include <QSlider>
 
 class UserInterface;
@@ -43,6 +44,7 @@ private:
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
+  QSpinBox *m_spinBoxSeamCarvingWidth, *m_spinBoxSeamCarvingHeight;
   QSlider *m_sliderSeamCarvingWidth, *m_sliderSeamCarvingHeight;
   SeamCarvingOperation* m_seamCarvingOperation;
 

@@ -117,6 +117,7 @@ Matrix<unsigned int>* AffineTransformationOperation::updateInternalPreview() {
 
 Picture* AffineTransformationOperation::applyInternalOperation() { 
   // if (m_operation != NULL) m_picture = m_operation->doOperation();
+  std::cout<<"should not come here!!";
   double mappingData[3][3] = {
     { m_symetrieX * m_scaleX * m_cosAlpha, m_symetrieY * m_scaleY * -m_sinAlpha, -m_x0 * m_cosAlpha + m_y0 * m_sinAlpha + m_x0 },
     { m_symetrieX * m_scaleX * m_sinAlpha, m_symetrieY * m_scaleY * m_cosAlpha, -m_x0 * m_sinAlpha - m_y0 * m_cosAlpha + m_y0 },
@@ -222,6 +223,7 @@ void AffineTransformationOperation::createPreview() {
   }
 
   //if (m_previewData != NULL) delete m_previewData;
+  //std::cout<<"new"<<maxX-minX<<"x"<<maxY-minY<<std::endl;
   m_previewData = new Matrix<unsigned int>(maxX - minX, maxY - minY);
   //std::cout<<"sarky "<<maxX-minX<<"x"<<maxY-minY;
   double mappingDataInv[3][3] = {

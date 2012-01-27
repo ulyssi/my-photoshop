@@ -48,7 +48,7 @@ Matrix<unsigned int>* Operation::updatePreview() {
     m_pictureData = (Matrix<unsigned int>*)(*it);
     //m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(),m_pictureData->getHeight());
    
-    //std::cout<<"burerum"<<m_previewData->getWidth()<<"x"<<m_previewData->getHeight();
+
     int normX=0;
     int normY=0;
     Tracing * tr;
@@ -65,7 +65,7 @@ Matrix<unsigned int>* Operation::updatePreview() {
     else{
       tr=new Tracing(m_pictureData);
     }
-    
+    tr->setAlpha((*it)->getAlpha());
     tr->setVisible((*it)->isVisible());
     tr->setSelected((*it)->isSelected());
     tr->setOffX((*it)->getOffX()+normX);
@@ -99,9 +99,9 @@ Picture* Operation::applyInternalOperation(){std::cout<<"should not come here"<<
 
 Picture* Operation::applyOperation(){
   updatePreview(); 
-  std::cout<<"applying1"<<std::endl;
+
   if(!m_prev.empty()){
-    std::cout<<"applying"<<std::endl;
+
     std::vector<Tracing*> list=m_picture->getTracingList();
     std::vector<Tracing*>::iterator it=list.begin();
     std::vector<Tracing*>::iterator itsel=m_prev.begin();
@@ -110,6 +110,7 @@ Picture* Operation::applyOperation(){
 	(*it)->setData((Matrix<unsigned int>*)(*itsel));
 	(*it)->setOffX((*itsel)->getOffX());
 	(*it)->setOffY((*itsel)->getOffY());
+	(*it)->setAlpha((*itsel)->getAlpha());
 	(*it)->setVisible((*itsel)->isVisible());
 	delete(*itsel);
       }

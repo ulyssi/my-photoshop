@@ -1,6 +1,7 @@
 #include "ToolBoxChooser.hh"
 
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QPushButton>
 
 #include "Picture.hh"
@@ -43,12 +44,16 @@ void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) {
     disconnect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
 
     int width = m_pictureModifier->getPicture()->getWidth();
-    m_sliderSeamCarvingWidth->setRange(width / 2, 2 * width);
+    m_sliderSeamCarvingWidth->setRange(0, 2 * width);
     m_sliderSeamCarvingWidth->setValue(width);
+    m_spinBoxSeamCarvingWidth->setRange(0, 2 * width);
+    m_spinBoxSeamCarvingWidth->setValue(width);
 
     int height = m_pictureModifier->getPicture()->getHeight();
-    m_sliderSeamCarvingHeight->setRange(height / 2, 2 * height);
+    m_sliderSeamCarvingHeight->setRange(0, 2 * height);
     m_sliderSeamCarvingHeight->setValue(height);
+    m_spinBoxSeamCarvingHeight->setRange(0, 2 * height);
+    m_spinBoxSeamCarvingHeight->setValue(height);
 
     connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
     connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
@@ -89,12 +94,20 @@ void ToolBoxChooser::applyOperation() {}
 /** Methodes internes */
 QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
   QGroupBox* groupBox = new QGroupBox(tr("Seam Carving"));
-  QVBoxLayout* layout = new QVBoxLayout();
+  QGridLayout* layout = new QGridLayout();
+
+  m_spinBoxSeamCarvingWidth = new QSpinBox();
+  m_spinBoxSeamCarvingWidth->setRange(1, 1000);
+  m_spinBoxSeamCarvingWidth->setSingleStep(1);
 
   m_sliderSeamCarvingWidth = new QSlider(Qt::Horizontal);
   m_sliderSeamCarvingWidth->setRange(1, 1000);
   m_sliderSeamCarvingWidth->setTickInterval(10);
   m_sliderSeamCarvingWidth->setSingleStep(1);
+
+  m_spinBoxSeamCarvingHeight = new QSpinBox();
+  m_spinBoxSeamCarvingHeight->setRange(1, 1000);
+  m_spinBoxSeamCarvingHeight->setSingleStep(1);
 
   m_sliderSeamCarvingHeight = new QSlider(Qt::Horizontal);
   m_sliderSeamCarvingHeight->setRange(1, 1000);
@@ -103,12 +116,21 @@ QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
   
   connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
   connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+
+  connect(m_spinBoxSeamCarvingWidth, SIGNAL(valueChanged(int)), m_sliderSeamCarvingWidth, SLOT(setValue(int)));
+  connect(m_spinBoxSeamCarvingHeight, SIGNAL(valueChanged(int)), m_sliderSeamCarvingHeight, SLOT(setValue(int)));
+
+  connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingWidth, SLOT(setValue(int)));
+  connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingHeight, SLOT(setValue(int)));
   
-  layout->addWidget(m_sliderSeamCarvingWidth);
-  layout->addWidget(m_sliderSeamCarvingHeight);
+  layout->addWidget(new QLabel(tr("Width")), 0, 0);
+  layout->addWidget(m_sliderSeamCarvingWidth, 0, 1);
+  layout->addWidget(m_spinBoxSeamCarvingWidth, 0, 2);
+
+  layout->addWidget(new QLabel(tr("Height")), 1, 0);
+  layout->addWidget(m_sliderSeamCarvingHeight, 1, 1);
+  layout->addWidget(m_spinBoxSeamCarvingHeight, 1, 2);
   
-  // groupBox->setCheckable(true);
-  // connect(groupBox, SIGNAL(toggled(bool)), groupBox, SLOT(setEnabled(bool)));
   groupBox->setLayout(layout);
   return groupBox;
 }

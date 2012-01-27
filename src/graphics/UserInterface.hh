@@ -87,28 +87,10 @@ public slots:
   void fitToWindow();
   void updateToolBoxDocks();
 
-  void binary();
-  void greyScale();
-  void colorConvert();
-
-  void increaseContrast();
-
-  void sobelX();
-  void sobelY();
-  void averageBlur();
-  void gaussianBlur();
-  void leftEdgeStrengthening();
-  void edgeDetection();
-  void repulsing();
-
-  void convolve();
-  void rescale();
-
   void changeGIMode();
   void about();
   void print(QString);
-  
-      
+        
 private:
 
   /** Methodes internes */
@@ -128,7 +110,6 @@ private:
   void createEditAction();
   void createViewAction();
   void createHelpAction();
-  void createOperationAction();
   void createAffineTransformationOperationAction();
   void createColorConvertOperationAction();
   void createConvolveOperationAction();
@@ -138,17 +119,11 @@ private:
   QMenu* createEditMenu();
   QMenu* createViewMenu();
   QMenu* createHelpMenu();
-  QMenu* createOperationMenu();
-  QMenu* createAffineTransformationOperationMenu();
-  QMenu* createColorConvertOperationMenu();
-  QMenu* createConvolveOperationMenu();
-  QMenu* createAlgebricOperationMenu();
   
   QToolBar* createFileToolBar();
   QToolBar* createEditToolBar();
   QToolBar* createViewToolBar();
   QToolBar* createHelpToolBar();
-  QToolBar* createOperationToolBar();
 
   QDockWidget* createPreviewerDock();
   QDockWidget* createHistogramDock();
@@ -161,7 +136,6 @@ private:
   QDockWidget* createColorConvertOperationChooserDock();
 
   /** Attributs */
- 
   QApplication* m_QApplication;
   QClipboard* m_clipboard;
   PictureManager* m_pictureManager;
@@ -181,13 +155,11 @@ private:
   QMenu* m_editMenu;
   QMenu* m_viewMenu;
   QMenu* m_helpMenu;
-  QMenu* m_operationMenu;
   
   QToolBar* m_fileToolBar;
   QToolBar* m_editToolBar;
   QToolBar* m_viewToolBar;
   QToolBar* m_helpToolBar;
-  QToolBar* m_operationToolBar;
 
   QDockWidget* m_previewerDock;
   QDockWidget* m_histogramDock;
@@ -221,18 +193,6 @@ private:
   QAction* m_selection;
   QAction* m_move;
   QAction* m_crop;
-
-  QAction* m_increaseContrastAct;
-  QAction* m_averageBlurAct;
-  QAction* m_gaussianBlurAct;
-  QAction* m_leftEdgeStrengtheningAct;
-  QAction* m_edgeDetectionAct;
-  QAction* m_repulsingAct;
-
-  QAction* m_greyScaleAct;
-  QAction* m_colorConvertAct;
-  QAction* m_convolveAct;
-  QAction* m_rescaleAct;
   
   QAction* m_guiMode;
   QAction* m_aboutAct;

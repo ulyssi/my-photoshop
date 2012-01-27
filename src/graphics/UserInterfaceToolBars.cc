@@ -7,7 +7,6 @@ void UserInterface::createToolBars() {
   addToolBar(Qt::TopToolBarArea, createFileToolBar());
   addToolBar(Qt::TopToolBarArea, createEditToolBar());
   addToolBar(Qt::TopToolBarArea, createViewToolBar());
-  //[TOOLBAR] addToolBar(Qt::TopToolBarArea, createOperationToolBar());
   //[TOOLBAR] addToolBar(Qt::TopToolBarArea, createHelpToolBar());
 }
 
@@ -45,10 +44,4 @@ QToolBar* UserInterface::createHelpToolBar() {
   m_helpToolBar->addAction(m_aboutAct);
   m_helpToolBar->addAction(m_aboutQtAct);
   return m_helpToolBar;
-}
-
-QToolBar* UserInterface::createOperationToolBar() {
-  m_operationToolBar = new QToolBar(tr("&Operation"), this);
-  m_operationToolBar->addAction(m_rescaleAct);
-  return m_operationToolBar;
 }

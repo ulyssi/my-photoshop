@@ -9,7 +9,6 @@ void UserInterface::createMenuBar() {
   menuBar()->addMenu(createFileMenu());
   menuBar()->addMenu(createEditMenu());
   menuBar()->addMenu(createViewMenu());
-  menuBar()->addMenu(createOperationMenu());
   menuBar()->addMenu(createHelpMenu());
 }
 
@@ -59,43 +58,4 @@ QMenu* UserInterface::createHelpMenu() {
   m_helpMenu->addAction(m_aboutAct);
   m_helpMenu->addAction(m_aboutQtAct);
   return m_helpMenu;
-}
-
-QMenu* UserInterface::createOperationMenu() {
-  m_operationMenu = new QMenu(tr("&Operation"), this);
-  m_operationMenu->addMenu(createAffineTransformationOperationMenu());
-  m_operationMenu->addMenu(createColorConvertOperationMenu());
-  m_operationMenu->addMenu(createConvolveOperationMenu());
-  m_operationMenu->addMenu(createAlgebricOperationMenu());
-  return m_operationMenu;
-}
-
-QMenu* UserInterface::createAffineTransformationOperationMenu() {
-  QMenu* menu = new QMenu(tr("Affine Transformation"), this);
-  menu->addAction(m_rescaleAct);
-  return menu;
-}
-
-QMenu* UserInterface::createColorConvertOperationMenu() {
-  QMenu* menu = new QMenu(tr("Color Convert"), this);
-  menu->addAction(m_greyScaleAct);
-  menu->addAction(m_colorConvertAct);
-  return menu;
-}
-
-QMenu* UserInterface::createConvolveOperationMenu() {
-  QMenu* menu = new QMenu(tr("Convolve"), this);
-  menu->addAction(m_increaseContrastAct);
-  menu->addAction(m_averageBlurAct);
-  menu->addAction(m_gaussianBlurAct);
-  menu->addAction(m_leftEdgeStrengtheningAct);
-  menu->addAction(m_edgeDetectionAct);
-  menu->addAction(m_repulsingAct);
-  menu->addAction(m_convolveAct);
-  return menu;
-}
-
-QMenu* UserInterface::createAlgebricOperationMenu() {
-  QMenu* menu = new QMenu(tr("Algebric"), this);
-  return menu;
 }

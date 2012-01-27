@@ -136,17 +136,6 @@ void UserInterface::fitToWindow() {
   m_viewTabWidget->getTabPanel()->fitToWindow();
 }
 
-void UserInterface::binary() {}
-
-void UserInterface::greyScale() {
-  convolveOperation(ColorConvertOperation::createGreyScaleKernel());
-}
-
-
-void UserInterface::colorConvert() {
-  colorConvertOperation(ColorConvertOperation::createSepiaKernel());
-}
-
 void UserInterface::changeGIMode(){
   
   if(m_guiMode->isChecked()){
@@ -184,34 +173,12 @@ void UserInterface::changeGIMode(){
   
 }
 
-
-void UserInterface::rescale() {
-  TabPanel* panel = m_viewTabWidget->getTabPanel();
-  Picture* picture = panel->getSelectedPicture();
-  AffineTransformationOperation* op = new AffineTransformationOperation(picture);
-  op->setRescale(0.5, 0.5);
-  picture->getBackground()->setData(op->updatePreview());
-  picture->refresh();
-  panel->refresh();
-}
-
 void UserInterface::about() {
   QMessageBox::about(this, tr("About MyPhotoShop"), tr("Blablabla..."));
 }
 
 
 /** Methodes internes */
-void UserInterface::colorConvertOperation(Matrix<double>* kernel) {
-  TabPanel* panel = m_viewTabWidget->getTabPanel();
-  Picture* picture = panel->getSelectedPicture();
-  ColorConvertOperation* op = new ColorConvertOperation(picture);
-  op->setKernel(kernel);
-  picture = op->applyOperation();
-  delete op;
-  picture->refresh();
-  panel->refresh();
-}
-
 void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
   m_saveAct->setEnabled(true);
@@ -228,18 +195,6 @@ void UserInterface::updateActions() {
   m_normalSizeAct->setEnabled(true);
   m_fitToWindowAct->setEnabled(true);
 
-  m_increaseContrastAct->setEnabled(true);
-  m_averageBlurAct->setEnabled(true);
-  m_gaussianBlurAct->setEnabled(true);
-  m_leftEdgeStrengtheningAct->setEnabled(true);
-  m_edgeDetectionAct->setEnabled(true);
-  m_repulsingAct->setEnabled(true);
-  m_greyScaleAct->setEnabled(true);
-  m_colorConvertAct->setEnabled(true);
-  m_convolveAct->setEnabled(true);
-
-  m_rescaleAct->setEnabled(true);
-
   m_aboutAct->setEnabled(false);
   m_aboutQtAct->setEnabled(true);
 }
@@ -248,7 +203,6 @@ void UserInterface::createActions() {
   createFileAction();
   createEditAction();
   createViewAction();
-  createOperationAction();
   createHelpAction();
 }
 
@@ -301,12 +255,7 @@ void UserInterface::createEditAction() {
   
   m_crop= new QAction(tr("&Crop"), this);
   m_crop->setShortcut(tr("Ctrl+Q"));
-  connect(m_crop, SIGNAL(triggered()), this, SLOT(crop()));
-  
-
-  
-
-  
+  connect(m_crop, SIGNAL(triggered()), this, SLOT(crop())); 
 }
 
 void UserInterface::createViewAction() {
@@ -333,64 +282,7 @@ void UserInterface::createViewAction() {
   m_guiMode->setChecked(true);
   changeGIMode();
   connect(m_guiMode, SIGNAL(changed()), this, SLOT(changeGIMode()));
-  
-  
 }
-
-void UserInterface::createOperationAction() {
-  createAffineTransformationOperationAction();
-  createColorConvertOperationAction();
-  createConvolveOperationAction();
-  createAlgebricOperationAction();
-}
-
-void UserInterface::createAffineTransformationOperationAction() {
-  m_rescaleAct = new QAction(tr("Rescale"), this);
-  m_rescaleAct->setEnabled(false);
-  connect(m_rescaleAct, SIGNAL(triggered()), this, SLOT(rescale()));
-}
-
-void UserInterface::createColorConvertOperationAction() {
-  m_greyScaleAct = new QAction(tr("Grey Scale"), this);
-  m_greyScaleAct->setEnabled(false);
-  connect(m_greyScaleAct, SIGNAL(triggered()), this, SLOT(greyScale()));
-
-  m_colorConvertAct = new QAction(tr("ColorConvert"), this);
-  m_colorConvertAct->setEnabled(false);
-  connect(m_colorConvertAct, SIGNAL(triggered()), this, SLOT(colorConvert()));
-}
-
-void UserInterface::createConvolveOperationAction() {
-  m_increaseContrastAct = new QAction(tr("Increase Contrast"), this);
-  m_increaseContrastAct->setEnabled(false);
-  connect(m_increaseContrastAct, SIGNAL(triggered()), this, SLOT(increaseContrast()));
-
-  m_averageBlurAct = new QAction(tr("Blur"), this);
-  m_averageBlurAct->setEnabled(false);
-  connect(m_averageBlurAct, SIGNAL(triggered()), this, SLOT(averageBlur()));
-
-  m_gaussianBlurAct = new QAction(tr("Gaussian Blur"), this);
-  m_gaussianBlurAct->setEnabled(false);
-  connect(m_gaussianBlurAct, SIGNAL(triggered()), this, SLOT(gaussianBlur()));
-
-  m_leftEdgeStrengtheningAct = new QAction(tr("Left Edge Strenghtening"), this);
-  m_leftEdgeStrengtheningAct->setEnabled(false);
-  connect(m_leftEdgeStrengtheningAct, SIGNAL(triggered()), this, SLOT(leftEdgeStrengthening()));
-
-  m_edgeDetectionAct = new QAction(tr("Edge Detection"), this);
-  m_edgeDetectionAct->setEnabled(false);
-  connect(m_edgeDetectionAct, SIGNAL(triggered()), this, SLOT(edgeDetection()));
-
-  m_repulsingAct = new QAction(tr("Repulsing"), this);
-  m_repulsingAct->setEnabled(false);
-  connect(m_repulsingAct, SIGNAL(triggered()), this, SLOT(repulsing()));
-
-  m_convolveAct = new QAction(tr("Convolve"), this);
-  m_convolveAct->setEnabled(false);
-  connect(m_convolveAct, SIGNAL(triggered()), this, SLOT(convolve()));
-}
-
-void UserInterface::createAlgebricOperationAction() {}
 
 void UserInterface::createHelpAction() {
   m_aboutAct = new QAction(tr("&About"), this);

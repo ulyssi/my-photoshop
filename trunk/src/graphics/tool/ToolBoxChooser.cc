@@ -34,12 +34,8 @@ ToolBoxChooser::~ToolBoxChooser() {}
 /** Mutateurs */
 void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) { 
   m_pictureModifier = pictureModifier; 
-  // if (m_seamCarvingOperation != NULL) {
-  //   delete m_seamCarvingOperation;
-  //   m_seamCarvingOperation = NULL;
-  // }
   if (m_pictureModifier != NULL) {
-    // m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
+    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
     disconnect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
     disconnect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
 
@@ -78,17 +74,26 @@ void ToolBoxChooser::resetOperation() {
 
 void ToolBoxChooser::refreshPreview() {
   Previewer* previewer = m_userInterface->getPreviewer();
-  // if (m_seamCarvingOperation != NULL) {
   if (m_pictureModifier != NULL) {
     if (m_seamCarvingOperation == NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
-    // m_seamCarvingOperation->setTargetWidth(m_pictureModifier->getPicture()->getWidth() - 1);
     m_seamCarvingOperation->setTargetWidth(m_sliderSeamCarvingWidth->value());
     m_seamCarvingOperation->setTargetHeight(m_sliderSeamCarvingHeight->value());
     previewer->setData(m_seamCarvingOperation->updatePreview());
   }
 }
 
-void ToolBoxChooser::applyOperation() {}
+void ToolBoxChooser::applyOperation() {
+  if (m_pictureModifier != NULL) {
+    Picture* picture = m_pictureModifier->getPicture();
+    SeamCarvingOperation* op = new SeamCarvingOperation(picture);
+    op->setTargetWidth(m_sliderSeamCarvingWidth->value());
+    op->setTargetHeight(m_sliderSeamCarvingHeight->value());
+    picture = op->applyOperation();
+    picture->refresh();
+    m_pictureModifier->refresh();
+    resetOperation();
+  }
+}
 
 
 /** Methodes internes */
@@ -154,4 +159,24 @@ QHBoxLayout* ToolBoxChooser::createControlsLayout() {
 }
 
 void ToolBoxChooser::resetSeamCarvingOperation() {
+  if (m_pictureModifier != NULL) {
+    m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
+    disconnect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+    disconnect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+
+    int width = m_pictureModifier->getPicture()->getWidth();
+    m_sliderSeamCarvingWidth->setRange(0, 2 * width);
+    m_sliderSeamCarvingWidth->setValue(width);
+    m_spinBoxSeamCarvingWidth->setRange(0, 2 * width);
+    m_spinBoxSeamCarvingWidth->setValue(width);
+
+    int height = m_pictureModifier->getPicture()->getHeight();
+    m_sliderSeamCarvingHeight->setRange(0, 2 * height);
+    m_sliderSeamCarvingHeight->setValue(height);
+    m_spinBoxSeamCarvingHeight->setRange(0, 2 * height);
+    m_spinBoxSeamCarvingHeight->setValue(height);
+
+    connect(m_sliderSeamCarvingWidth, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+    connect(m_sliderSeamCarvingHeight, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
+  }
 }

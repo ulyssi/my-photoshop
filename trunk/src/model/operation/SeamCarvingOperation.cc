@@ -16,12 +16,16 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_width(m_widthInit),
   m_height(m_heightInit),
   m_data(createData()),
+  m_dataV(createData()),
   m_iteration(0),
   m_iterationV(0),
   m_pathValue(new int[m_widthInit])
 {
   refreshData();
   refreshGradient();
+
+  refreshDataV();
+  refreshGradientV();
 }
 
 SeamCarvingOperation::~SeamCarvingOperation() {}
@@ -120,12 +124,12 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreviewVertical() {
     m_height = 0;
     for (int j = 0; j < m_heightInit; j++) {
       if (copy) {
-        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
-        if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
-          preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+        preview->setValue(i, m_height++, m_dataV->getValue(i, j)->color);
+        if (0 < m_dataV->getValue(i, j)->mask && m_dataV->getValue(i, j)->mask <= level)
+          preview->setValue(i, m_height++, m_dataV->getValue(i, j)->color);
       }
-      else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
-        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+      else if (m_dataV->getValue(i, j)->mask == 0 || level < m_dataV->getValue(i, j)->mask)
+        preview->setValue(i, m_height++, m_dataV->getValue(i, j)->color);
     }
   }
 
@@ -180,11 +184,11 @@ inline SeamCarvingOperation::Point* SeamCarvingOperation::getSouthWestFrom(Point
 
 /** Methodes internes */
 Matrix<SeamCarvingOperation::Point*>* SeamCarvingOperation::createData() {
-  m_data = new Matrix<Point*>(m_widthInit, m_heightInit);
+  Matrix<Point*>* data = new Matrix<Point*>(m_widthInit, m_heightInit);
   for (int i = 0; i < m_widthInit; i++)
     for (int j = 0; j < m_heightInit; j++)
-      m_data->setValue(i, j, new Point);
-  return m_data;
+      data->setValue(i, j, new Point);
+  return data;
 }
  
 
@@ -209,7 +213,30 @@ void SeamCarvingOperation::refreshData() {
       
       if (i == 0) point->west = NULL;
       else point->west = m_data->getValue(i-1, j);
-      // point->test = false;
+    }
+}
+
+void SeamCarvingOperation::refreshDataV() { 
+  for (int i = 0; i < m_widthInit; i++)
+    for (int j = 0; j < m_heightInit; j++) {
+      Point* point = m_dataV->getValue(i, j);
+      point->color = m_pictureData->getValue(i, j);
+      point->gradient = 0;
+      point->pathValue = 0;
+      point->mask = 0;
+      point->previous = NULL;
+      point->next = NULL;
+      if (j == 0) point->north = NULL;
+      else point->north = m_dataV->getValue(i, j-1);
+
+      if (j == m_heightInit-1) point->south = NULL;
+      else point->south = m_dataV->getValue(i, j+1);
+
+      if (i == m_widthInit-1) point->east = NULL;
+      else point->east = m_dataV->getValue(i+1, j);
+      
+      if (i == 0) point->west = NULL;
+      else point->west = m_dataV->getValue(i-1, j);      // point->test = false;
     }
 }
 
@@ -219,10 +246,16 @@ void SeamCarvingOperation::refreshGradient() {
       updateGradient(m_data->getValue(i, j));
 }
 
+void SeamCarvingOperation::refreshGradientV() {
+  for (int i = 0; i < m_widthInit; i++)
+    for (int j = 0; j < m_heightInit; j++)
+      updateGradient(m_dataV->getValue(i, j));
+}
+
 void SeamCarvingOperation::refreshMinimumPathH() {
   for (int i = 0; i < m_widthInit; i++)
     for (int j = 0; j < m_heightInit; j++)
-      updateMinimumPathH(m_data->getValue(i, j));
+      updateMinimumPathH(m_dataV->getValue(i, j));
 }
 
 void SeamCarvingOperation::refreshMinimumPathV() {
@@ -367,9 +400,9 @@ unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
   // recherche du chemin de plus faible poids
   Point *pMin = NULL;
   for (int j = 0; j < m_heightInit; j++)
-    if (m_data->getValue(m_widthInit-1, j)->mask == 0)
-      if (pMin == NULL || m_data->getValue(m_widthInit-1, j)->pathValue < pMin->pathValue)
-        pMin = m_data->getValue(m_widthInit-1, j);
+    if (m_dataV->getValue(m_widthInit-1, j)->mask == 0)
+      if (pMin == NULL || m_dataV->getValue(m_widthInit-1, j)->pathValue < pMin->pathValue)
+        pMin = m_dataV->getValue(m_widthInit-1, j);
 
   // suppression du chemin
   Point* pInit = NULL;

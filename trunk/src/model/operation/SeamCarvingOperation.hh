@@ -51,7 +51,9 @@ private:
   Matrix<Point*>* createData();
   
   void refreshData();
+  void refreshDataV();
   void refreshGradient();
+  void refreshGradientV();
   void refreshMinimumPathH();
   void refreshMinimumPathV();
 
@@ -68,9 +70,10 @@ private:
   int m_widthInit, m_heightInit;
   int m_widthTarget, m_heightTarget;
   int m_width, m_height;
-  Matrix<Point*>* m_data;
+  Matrix<Point*> *m_data, *m_dataV;
   int m_iteration, m_iterationV;
   int* m_pathValue;
+  bool m_initH, m_initV;
 
 };
 

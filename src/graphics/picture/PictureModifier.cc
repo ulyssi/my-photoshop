@@ -73,6 +73,8 @@ void PictureModifier::refresh() {
   getUserInterface()->getHistogram()->refresh();
   getUserInterface()->getPreviewer()->refresh();
   getUserInterface()->getTracingManager()->refresh();
+  getUserInterface()->getToolBoxChooser()->refresh();
+
 }
 
 void PictureModifier::keyPressEvent(QKeyEvent* event){

@@ -2,6 +2,7 @@
 
 #include "PixelMod.hh"
 #include "Picture.hh"
+#include "Tracing.hh"
 
 
 /** Constructeurs et destructeur */
@@ -101,6 +102,9 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
 }
 
 Picture* SeamCarvingOperation::applyOperation() {
+  m_pictureData = m_picture->getData();
+  m_picture->getBackground()->setData(updatePreview());
+  m_picture->refresh();
   return m_picture;
 }
 

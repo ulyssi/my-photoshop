@@ -16,7 +16,8 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_width(m_widthInit),
   m_height(m_heightInit),
   m_data(createData()),
-  m_iteration(0)
+  m_iteration(0),
+  m_pathValue(new int[m_widthInit])
 {
   refreshData();
   refreshGradient();
@@ -48,56 +49,64 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreview() {
   //   }
   // }
 
-  // int level = 0;
-  // bool copy = true;
-  // if (m_widthTarget < m_widthInit) {
-  //   copy = false;
-  //   level = m_widthInit - m_widthTarget;
-  // }
-  // else level = m_widthTarget - m_widthInit;
-
-  // refreshMinimumPathV();
-  // while (m_iteration < level) computeRemoveRow(++m_iteration);
-  
-  // Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
-  // for (int j = 0; j < m_heightInit; j++) {
-  //   m_width = 0;
-  //   for (int i = 0; i < m_widthInit; i++) {
-  //     if (copy) {
-  //       preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
-  //       if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
-  //         preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
-  //       // preview->setValue(m_width++, j, PixelMod::createRGB(255, 0, 0));
-  //     }
-  //     else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
-  //       preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
-  //   }
-  // }
-
   int level = 0;
   bool copy = true;
-  if (m_heightTarget < m_heightInit) {
+  if (m_widthTarget < m_widthInit) {
     copy = false;
-    level = m_heightInit - m_heightTarget;
+    level = m_widthInit - m_widthTarget;
   }
-  else level = m_heightTarget - m_heightInit;
+  else level = m_widthTarget - m_widthInit;
 
-  refreshMinimumPathH();  
-  while (m_iteration < level) computeRemoveLine(++m_iteration);
-  
+  refreshMinimumPathV();
+  while (m_iteration < level) m_pathValue[m_iteration-1] = computeRemoveRow(++m_iteration);
+
+  // double* coef = new double[level+1];
+  // coef[level] = 1.0;
+  // for (int i = level-1; i > 0; i++)
+  //   coef[i-1] = ((double)m_pathValue[i]) * coef[i] / ((double)m_pathValue[i-1]);
+
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
-  for (int i = 0; i < m_widthInit; i++) {
-    m_height = 0;
-    for (int j = 0; j < m_heightInit; j++) {
+  for (int j = 0; j < m_heightInit; j++) {
+    m_width = 0;
+    int insert = 0;
+    for (int i = 0; i < m_widthInit; i++) {
       if (copy) {
-        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+        preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
         if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
-          preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+          // while (level > insert && coef[m_data->getValue(i, j)->mask-1] ) {
+            preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
+          //   insert++;
+          // }
       }
       else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
-        preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+        preview->setValue(m_width++, j, m_data->getValue(i, j)->color);
     }
   }
+
+  // int level = 0;
+  // bool copy = true;
+  // if (m_heightTarget < m_heightInit) {
+  //   copy = false;
+  //   level = m_heightInit - m_heightTarget;
+  // }
+  // else level = m_heightTarget - m_heightInit;
+
+  // refreshMinimumPathH();  
+  // while (m_iteration < level) computeRemoveLine(++m_iteration);
+  
+  // Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
+  // for (int i = 0; i < m_widthInit; i++) {
+  //   m_height = 0;
+  //   for (int j = 0; j < m_heightInit; j++) {
+  //     if (copy) {
+  //       preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+  //       if (0 < m_data->getValue(i, j)->mask && m_data->getValue(i, j)->mask <= level)
+  //         preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+  //     }
+  //     else if (m_data->getValue(i, j)->mask == 0 || level < m_data->getValue(i, j)->mask)
+  //       preview->setValue(i, m_height++, m_data->getValue(i, j)->color);
+  //   }
+  // }
   return preview;
 }
 
@@ -248,7 +257,7 @@ inline void SeamCarvingOperation::updateMinimumPathV(Point* point) {
   if (point->previous != NULL) point->pathValue += point->previous->pathValue;
 }
 
-void SeamCarvingOperation::computeRemoveRow(int iteration) {
+unsigned int SeamCarvingOperation::computeRemoveRow(int iteration) {
   // recherche du chemin de plus faible poids
   Point *pMin = NULL;
   for (int i = 0; i < m_widthInit; i++)
@@ -329,9 +338,10 @@ void SeamCarvingOperation::computeRemoveRow(int iteration) {
     }
     pSup = getSouthEastFrom(sup);
   }
+  return pMin->pathValue;
 }
 
-void SeamCarvingOperation::computeRemoveLine(int iteration) {
+unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
   // recherche du chemin de plus faible poids
   Point *pMin = NULL;
   for (int j = 0; j < m_heightInit; j++)
@@ -412,4 +422,5 @@ void SeamCarvingOperation::computeRemoveLine(int iteration) {
     }
     pSup = getNorthEastFrom(sup);
   }
+  return pMin->pathValue;
 }

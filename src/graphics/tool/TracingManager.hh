@@ -1,6 +1,6 @@
 #ifndef _TRACING_MANAGER_HH_
 #define _TRACING_MANAGER_HH_
-#include "Tracing.hh"
+#include "../../model/Tracing.hh"
 #include <QLabel>
 #include <QScrollArea>
 #include <QCheckBox>
@@ -25,16 +25,16 @@ public:
 
   /** Predicats */
   bool isEnabled();
-  
+
   /** Methodes */
   void refresh();
   void paste();
   void move(int,int);
   void addSelected(int);
-  
+
   void removeSelected(int);
   bool isSelected(int);
-    
+
   /**SLOTS*/
 private slots:
   void add();
@@ -46,7 +46,7 @@ private slots:
   void label_R(int);
 private:
 
- 
+
   /** Attributs */
   PictureModifier* m_pictureModifier;/*do not destroy*/
   QLabel * m_header;/*destroy*/
@@ -70,24 +70,24 @@ private:
   void buildHead(int);
   void buildLine(Tracing *,int);
   void buildButtons();
- 
+
   void deleteHead();
  };
 
 class SignalManager:public QObject{ Q_OBJECT
-  
+
 public:
   SignalManager(Tracing *,PictureModifier*,TracingManager *);
   ~SignalManager();
   /**Public Methods**/
-  
- private slots: 
+
+ private slots:
   void setAlpha(int);
   void setVisible(int);
   void setSelected(int);
   void setName_tmp(QString);
   void setName();
-  
+
 signals:
   void textSet(int id);
 
@@ -100,7 +100,7 @@ private:
   double m_prevV;
   QString m_name;
 
-  
+
 };
 
 #endif

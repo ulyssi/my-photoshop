@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <QImage>
-#include "Picture.hh"
-#include "Tracing.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
 #include "MergeOperation.hh"
 
 using namespace std;
@@ -17,7 +17,7 @@ CropOperation::~CropOperation() {}
 void CropOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1) {
   vector<Tracing *>tracings = picture->getTracingList();
   vector<Tracing *>::iterator it= tracings.begin();
- 
+
   Tracing * cTracing;
   while(it<tracings.end()){
     cTracing=(*it);
@@ -31,7 +31,7 @@ void CropOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1) {
 	  int ytr=j-cTracing->getOffY();
 	  if(xtr>=0&&xtr<cTracing->getWidth() &&ytr>=0&&ytr<cTracing->getHeight()){
 	    tr->setValue(i-x0,j-y0,cTracing->getValue(xtr,ytr));
-	    
+
 	  }
 	  else
 	    tr->setValue(i-x0,j-y0,(unsigned int)0x0);
@@ -44,13 +44,3 @@ void CropOperation::doOperation(Picture* picture,int x0,int y0, int x1,int y1) {
   }
   picture->refresh();
 }
-
-
-
-
-
-
-
-
- 
-

@@ -1,14 +1,14 @@
 #include "UserInterface.hh"
 
-#include "Histogram.hh"
-#include "Previewer.hh"
-#include "ColorChooser.hh"
-#include "TracingManager.hh"
-#include "ToolBoxChooser.hh"
-#include "AffineOperationChooser.hh"
-#include "ConvolveOperationChooser.hh"
-#include "ColorConvertOperationChooser.hh"
-#include "AlgebricOperationChooser.hh"
+#include "tool/Histogram.hh"
+#include "tool/Previewer.hh"
+#include "tool/ColorChooser.hh"
+#include "tool/TracingManager.hh"
+#include "tool/ToolBoxChooser.hh"
+#include "tool/AffineOperationChooser.hh"
+#include "tool/ConvolveOperationChooser.hh"
+#include "tool/ColorConvertOperationChooser.hh"
+#include "tool/AlgebricOperationChooser.hh"
 
 
 /** Accesseurs */
@@ -42,7 +42,7 @@ void UserInterface::createToolBoxDocks() {
   addDockWidget(Qt::LeftDockWidgetArea, m_algebricOperationChooserDock = createAlgebricOperationChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_colorConvertOperationChooserDock = createColorConvertOperationChooserDock());
   addDockWidget(Qt::LeftDockWidgetArea, m_toolBoxChooserDock = createToolBoxChooserDock());
-  
+
   tabifyDockWidget(m_affineOperationChooserDock, m_convolveOperationChooserDock);
   tabifyDockWidget(m_affineOperationChooserDock, m_colorConvertOperationChooserDock);
   tabifyDockWidget(m_affineOperationChooserDock, m_algebricOperationChooserDock);
@@ -63,37 +63,37 @@ void UserInterface::updateToolBoxDocks() {
 }
 
 QDockWidget* UserInterface::createPreviewerDock() {
-  return createDockWidget(m_previewer = createPreviewer()); 
+  return createDockWidget(m_previewer = createPreviewer());
 }
 
 QDockWidget* UserInterface::createHistogramDock() {
-  return createDockWidget(m_histogram = createHistogram()); 
+  return createDockWidget(m_histogram = createHistogram());
 }
 
-QDockWidget* UserInterface::createColorChooserDock() { 
+QDockWidget* UserInterface::createColorChooserDock() {
   return createDockWidget(m_colorChooser = createColorChooser());
 }
 
-QDockWidget* UserInterface::createToolBoxChooserDock() { 
+QDockWidget* UserInterface::createToolBoxChooserDock() {
   return createDockWidget(m_toolBoxChooser = createToolBoxChooser());
 }
 
-QDockWidget* UserInterface::createTracingManagerDock() { 
+QDockWidget* UserInterface::createTracingManagerDock() {
   return createDockWidget(m_tracingManager = createTracingManager());
 }
 
-QDockWidget* UserInterface::createAffineOperationChooserDock() { 
-  return createDockWidget(m_affineOperationChooser = createAffineOperationChooser()); 
+QDockWidget* UserInterface::createAffineOperationChooserDock() {
+  return createDockWidget(m_affineOperationChooser = createAffineOperationChooser());
 }
 
 QDockWidget* UserInterface::createConvolveOperationChooserDock() {
-  return createDockWidget(m_convolveOperationChooser = createConvolveOperationChooser()); 
+  return createDockWidget(m_convolveOperationChooser = createConvolveOperationChooser());
 }
 
 QDockWidget* UserInterface::createAlgebricOperationChooserDock() {
-  return createDockWidget(m_algebricOperationChooser = createAlgebricOperationChooser()); 
+  return createDockWidget(m_algebricOperationChooser = createAlgebricOperationChooser());
 }
 
-QDockWidget* UserInterface::createColorConvertOperationChooserDock() { 
-  return createDockWidget(m_colorConvertOperationChooser = createColorConvertOperationChooser()); 
+QDockWidget* UserInterface::createColorConvertOperationChooserDock() {
+  return createDockWidget(m_colorConvertOperationChooser = createColorConvertOperationChooser());
 }

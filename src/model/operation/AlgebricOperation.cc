@@ -1,7 +1,7 @@
 #include "AlgebricOperation.hh"
 
-#include "Tracing.hh"
-#include "Picture.hh"
+#include "../Tracing.hh"
+#include "../Picture.hh"
 
 
 /** Constructeurs et destructeur */
@@ -42,10 +42,10 @@ Matrix<unsigned int>* AlgebricOperation::binarization(Matrix<unsigned int>* data
   unsigned int color2 = PixelMod::createBinary(true);
 
   for (int k = 0; k < 5; k++) {
-    
+
 
 
   }
-  
+
   return data;
 }

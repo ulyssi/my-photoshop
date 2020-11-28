@@ -3,11 +3,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-#include "Picture.hh"
+#include "../../model/Picture.hh"
 #include "Previewer.hh"
-#include "UserInterface.hh"
-#include "PictureModifier.hh"
-#include "SeamCarvingOperation.hh"
+#include "../UserInterface.hh"
+#include "../picture/PictureModifier.hh"
+#include "../../model/operation/SeamCarvingOperation.hh"
 
 
 /** Constructeurs et destructeur */
@@ -17,7 +17,7 @@ ToolBoxChooser::ToolBoxChooser(UserInterface* userInterface) :
   m_seamCarvingOperation(NULL)
 {
   setAccessibleName(tr("ToolBox"));
-    
+
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(createSeamCarvingGroupBox());
   layout->addLayout(createControlsLayout());
@@ -31,8 +31,8 @@ ToolBoxChooser::~ToolBoxChooser() {}
 
 
 /** Mutateurs */
-void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) { 
-  m_pictureModifier = pictureModifier; 
+void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) {
+  m_pictureModifier = pictureModifier;
   if (m_pictureModifier != NULL) m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
   resetSeamCarvingOperation();
 }
@@ -42,7 +42,7 @@ void ToolBoxChooser::setPictureModifier(PictureModifier* pictureModifier) {
 void ToolBoxChooser::refresh() {
   if (m_pictureModifier != NULL)
     m_seamCarvingOperation = new SeamCarvingOperation(m_pictureModifier->getPicture());
-  refreshPreview(); 
+  refreshPreview();
 }
 
 
@@ -62,15 +62,15 @@ void ToolBoxChooser::resetSeamCarvingOperation() {
     int valueMax = 0;
     if (m_radioWidth->isChecked()) {
       valueMax = m_pictureModifier->getPicture()->getWidth();
-      if (m_seamCarvingOperation != NULL) 
+      if (m_seamCarvingOperation != NULL)
 	m_seamCarvingOperation->setTargetHeight(m_pictureModifier->getPicture()->getHeight());
     }
     else {
       valueMax = m_pictureModifier->getPicture()->getHeight();
-      if (m_seamCarvingOperation != NULL) 
+      if (m_seamCarvingOperation != NULL)
 	m_seamCarvingOperation->setTargetWidth(m_pictureModifier->getPicture()->getWidth());
     }
-    
+
     m_sliderSeamCarvingSize->setRange(0, 2 * valueMax);
     m_sliderSeamCarvingSize->setValue(valueMax);
     m_spinBoxSeamCarvingSize->setRange(0, 2 * valueMax);
@@ -122,7 +122,7 @@ QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
   connect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), this, SLOT(modifySeamCarving()));
   connect(m_spinBoxSeamCarvingSize, SIGNAL(valueChanged(int)), m_sliderSeamCarvingSize, SLOT(setValue(int)));
   connect(m_sliderSeamCarvingSize, SIGNAL(valueChanged(int)), m_spinBoxSeamCarvingSize, SLOT(setValue(int)));
-  
+
   QHBoxLayout* layoutAxe = new QHBoxLayout();
 
   m_radioWidth = new QRadioButton(tr("Width"));
@@ -138,7 +138,7 @@ QGroupBox* ToolBoxChooser::createSeamCarvingGroupBox() {
 
   layout->addLayout(layoutAxe);
   layout->addWidget(m_sliderSeamCarvingSize);
-  
+
   groupBox->setLayout(layout);
   return groupBox;
 }
@@ -149,7 +149,7 @@ QHBoxLayout* ToolBoxChooser::createControlsLayout() {
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
-  
+
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
@@ -157,8 +157,6 @@ QHBoxLayout* ToolBoxChooser::createControlsLayout() {
   layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonApply);
-  
+
   return layout;
 }
-
-

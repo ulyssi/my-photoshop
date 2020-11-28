@@ -1,7 +1,7 @@
 #include "CopyOperation.hh"
 
-#include "Picture.hh"
-#include "Tracing.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
 #include "MergeOperation.hh"
 
 using namespace std;
@@ -48,7 +48,7 @@ void CopyOperation::copyOperation(Picture* picture,int x0,int y0, int x1,int y1,
 
     }
   clipboard->setImage(img);
-  
+
   while(!trForClipboard.empty()){
     Tracing* del =trForClipboard.back();
     trForClipboard.pop_back();
@@ -62,6 +62,3 @@ void CopyOperation::copyOperation(Picture* picture,int x0,int y0, int x1,int y1,
 
 
 /** Methodes internes */
-
- 
-

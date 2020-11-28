@@ -4,7 +4,7 @@
 #include <math.h>
 #include <vector>
 #include "Operation.hh"
-#include "PixelMod.hh"
+#include "../PixelMod.hh"
 
 class Picture;
 class Tracing;
@@ -33,9 +33,9 @@ private:
   Matrix<unsigned int>* doOperation(Matrix<unsigned int>*, Tracing*);
 
   inline  unsigned int combineAlpha(float a1,float a2) {
-     return ((unsigned int)(floor((a1+a2-(a1*a2))*255.0f+0.5f)))<<24; 
+     return ((unsigned int)(floor((a1+a2-(a1*a2))*255.0f+0.5f)))<<24;
    }
-  
+
    inline unsigned int combineRed(unsigned int p1,unsigned int p2, float a2) {
      return ((unsigned int)(floor(float(PixelMod::getRed(p1))*(1.0f-a2)+float(PixelMod::getRed(p2))*a2+0.5)))<<16;
    }

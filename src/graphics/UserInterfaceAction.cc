@@ -6,16 +6,16 @@
 #include <QApplication>
 
 
-#include "Picture.hh"
-#include "PictureManager.hh"
-#include "PictureModifier.hh"
+#include "../model/Picture.hh"
+#include "picture/PictureManager.hh"
+#include "picture/PictureModifier.hh"
 #include "TabWidget.hh"
-#include "Histogram.hh"
-#include "Operation.hh"
-#include "ColorConvertOperation.hh"
-#include "AffineTransformationOperation.hh"
-#include "Tracing.hh"
-#include "TracingManager.hh"
+#include "tool/Histogram.hh"
+#include "../model/operation/Operation.hh"
+#include "../model/operation/ColorConvertOperation.hh"
+#include "../model/operation/AffineTransformationOperation.hh"
+#include "../model/Tracing.hh"
+#include "tool/TracingManager.hh"
 
 
 /** Slots */
@@ -42,9 +42,9 @@ void UserInterface::save() {
   Picture* picture = m_viewTabWidget->getTabPanel()->getSelectedPicture();
   std::cout << m_viewTabWidget->getTabPanel()->getTabName().toStdString()<< std::endl;
   if(picture != 0){
-    QString path = QFileDialog::getSaveFileName(this, 
-						"Enregistrer le fichier", 
-						picture->getPath() , 
+    QString path = QFileDialog::getSaveFileName(this,
+						"Enregistrer le fichier",
+						picture->getPath() ,
 						"All files *.* ;; Images () ;;Images *.bmp (*.bmp);; Images *.jpg(*.jpg);; Images *.jpeg(*.jpeg);; Images *.png(*.png);; Images *.ppm(*.ppm);; Images *.tiff(*.tiff);; Images *.xbm(*.xbm);; Images *.xpm(*.xpm)" );
 
     Matrix<unsigned int>* pictureData = picture->getData();
@@ -54,7 +54,7 @@ void UserInterface::save() {
 	m_image->setPixel(i, j, (uint)pictureData->getValue(i, j));
     picture->saveQImage(path, *m_image);
   }
-  } 
+  }
 }
 
 void UserInterface::close(QWidget* q) {
@@ -95,7 +95,7 @@ void UserInterface::select(){
     else
       m_selection->setChecked(false);
   }
-  
+
 }
 
 void UserInterface::move(){
@@ -137,7 +137,7 @@ void UserInterface::fitToWindow() {
 }
 
 void UserInterface::changeGIMode(){
-  
+
   if(m_guiMode->isChecked()){
     m_copy->setIcon(QPixmap("Icon/Copy.png"));
     m_cut->setIcon(QPixmap("Icon/Cut.png"));
@@ -170,7 +170,7 @@ void UserInterface::changeGIMode(){
     m_move->setIcon(QIcon());
     m_crop->setIcon(QIcon());
   }
-  
+
 }
 
 void UserInterface::about() {
@@ -183,13 +183,13 @@ void UserInterface::updateActions() {
   m_openAct->setEnabled(true);
   m_saveAct->setEnabled(true);
   m_exitAct->setEnabled(false);
-  
+
   m_undoAct->setEnabled(false);
   m_redoAct->setEnabled(false);
   m_copy->setEnabled(true);
   m_cut->setEnabled(true);
   m_paste->setEnabled(true);
- 
+
   m_zoomInAct->setEnabled(true);
   m_zoomOutAct->setEnabled(true);
   m_normalSizeAct->setEnabled(true);
@@ -210,7 +210,7 @@ void UserInterface::createFileAction() {
   m_openAct = new QAction(tr("&Open..."), this);
   m_openAct->setShortcut(tr("Ctrl+O"));
   connect(m_openAct, SIGNAL(triggered()), this, SLOT(open()));
-  
+
   m_saveAct = new QAction(tr("&Save..."), this);
   m_saveAct->setShortcut(tr("Ctrl+S"));
   connect(m_saveAct, SIGNAL(triggered()), this, SLOT(save()));
@@ -224,14 +224,14 @@ void UserInterface::createEditAction() {
   m_undoAct = new QAction(tr("&Undo"), this);
   m_undoAct->setShortcut(tr("Ctrl+Z"));
   connect(m_undoAct, SIGNAL(triggered()), this, SLOT(undo()));
-  
+
   m_redoAct = new QAction(tr("&Redo"), this);
   m_redoAct->setShortcut(tr("Ctrl+E"));
   connect(m_redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
   m_copy=  new QAction(tr("&Copy"), this);
   m_copy->setShortcut(tr("Ctrl+C"));
- 
+
   connect(m_copy, SIGNAL(triggered()), this, SLOT(copy()));
 
   m_paste=  new QAction(tr("&Paste"), this);
@@ -241,21 +241,21 @@ void UserInterface::createEditAction() {
   m_cut= new QAction(tr("&Cut"), this);
   m_cut->setShortcut(tr("Ctrl+X"));
   connect(m_cut, SIGNAL(triggered()), this, SLOT(cut()));
-  
-  
+
+
   m_selection= new QAction(tr("&Selection"), this);
   m_selection->setShortcut(tr("Alt"));
   m_selection->setCheckable(true);
   connect(m_selection, SIGNAL(triggered()), this, SLOT(select()));
-  
+
   m_move= new QAction(tr("&Move"), this);
   m_move->setShortcut(tr("Atl+S"));
   m_move->setCheckable(true);
   connect(m_move, SIGNAL(triggered()), this, SLOT(move()));
-  
+
   m_crop= new QAction(tr("&Crop"), this);
   m_crop->setShortcut(tr("Ctrl+Q"));
-  connect(m_crop, SIGNAL(triggered()), this, SLOT(crop())); 
+  connect(m_crop, SIGNAL(triggered()), this, SLOT(crop()));
 }
 
 void UserInterface::createViewAction() {
@@ -263,20 +263,20 @@ void UserInterface::createViewAction() {
   m_zoomInAct->setShortcut(tr("Ctrl++"));
   m_zoomInAct->setEnabled(false);
   connect(m_zoomInAct, SIGNAL(triggered()), this, SLOT(zoomIn()));
-  
+
   m_zoomOutAct = new QAction(tr("Zoom &Out"), this);
   m_zoomOutAct->setShortcut(tr("Ctrl+-"));
   m_zoomOutAct->setEnabled(false);
   connect(m_zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomOut()));
-  
+
   m_normalSizeAct = new QAction(tr("&Normal Size"), this);
   m_normalSizeAct->setEnabled(false);
   connect(m_normalSizeAct, SIGNAL(triggered()), this, SLOT(normalSize()));
-  
+
   m_fitToWindowAct = new QAction(tr("&Fit to Window"), this);
   m_fitToWindowAct->setEnabled(false);
   connect(m_fitToWindowAct, SIGNAL(triggered()), this, SLOT(fitToWindow()));
-  
+
   m_guiMode= new QAction(tr("Graphical Interface Icon Mode"),this);
   m_guiMode->setCheckable(true);
   m_guiMode->setChecked(true);
@@ -287,7 +287,7 @@ void UserInterface::createViewAction() {
 void UserInterface::createHelpAction() {
   m_aboutAct = new QAction(tr("&About"), this);
   connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
-  
+
   m_aboutQtAct = new QAction(tr("About &Qt"), this);
   connect(m_aboutQtAct, SIGNAL(triggered()),m_QApplication, SLOT(aboutQt()));
 }

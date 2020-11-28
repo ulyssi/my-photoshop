@@ -5,11 +5,11 @@
 #include <QGridLayout>
 #include <QSlider>
 
-#include "ConvolveOperation.hh"
-#include "UserInterface.hh"
-#include "PictureModifier.hh"
+#include "../../model/operation/ConvolveOperation.hh"
+#include "../UserInterface.hh"
+#include "../picture/PictureModifier.hh"
 #include "Previewer.hh"
-#include "Picture.hh"
+#include "../../model/Picture.hh"
 #include "MatrixGenerator.hh"
 
 
@@ -51,7 +51,7 @@ ConvolveOperationChooser::ConvolveOperationChooser(UserInterface* userInterface)
   m_minOperatorString(tr("Minimum"))
 {
   setAccessibleName(tr("ConvolveOp"));
-    
+
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(createKernelGroupBox());
   layout->addLayout(createSettingsGroupBox());
@@ -75,7 +75,7 @@ void ConvolveOperationChooser::setPictureModifier(PictureModifier* pictureModifi
 
 
 /** Methodes */
-void ConvolveOperationChooser::refresh() { 
+void ConvolveOperationChooser::refresh() {
   refreshPreview();
 }
 
@@ -117,7 +117,7 @@ void ConvolveOperationChooser::kernelUpdate() {
   m_spinBoxWidth->setValue(m_kernel->getWidth());
   m_spinBoxHeight->setValue(m_kernel->getHeight());
   m_matrixModifier->setMatrix(m_kernel);
-  
+
   connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
   connect(m_spinBoxHeight, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
   connect(m_spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(kernelUpdate()));
@@ -151,7 +151,7 @@ void ConvolveOperationChooser::refreshPreview() {
     op->setGreen(m_buttonCanalGreen->isChecked());
     op->setBlue(m_buttonCanalBlue->isChecked());
     op->setAlpha(m_buttonCanalAlpha->isChecked());
-    
+
     QString text = m_edgeControlComboBox->itemText(m_edgeControlComboBox->currentIndex());
     if (text == m_extendControlString) op->setEdgeControl(ConvolveOperation::EXTEND_EDGE);
     else if (text == m_cropControlString) op->setEdgeControl(ConvolveOperation::CROP_EDGE);
@@ -203,7 +203,7 @@ QComboBox* ConvolveOperationChooser::createKernelGroupBox() {
 
   m_kernelComboBox->addItem(m_identityKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
-  
+
   m_kernelComboBox->addItem(m_averageBlurKernelString);
   m_kernelComboBox->addItem(m_gaussianBlurKernelString);
   m_kernelComboBox->insertSeparator(m_kernelComboBox->count());
@@ -248,7 +248,7 @@ MatrixGenerator* ConvolveOperationChooser::createMatrixModifier() {
   m_matrixModifier = new MatrixGenerator(m_kernel->getWidth(), m_kernel->getHeight());
   m_matrixModifier->setRange(-255, 255);
   for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) 
+    for (int j = 0; j < m_kernel->getHeight(); j++)
       m_matrixModifier->setValue(i, j, m_kernel->getValue(i, j));
   connect(m_matrixModifier, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
   return m_matrixModifier;
@@ -272,7 +272,7 @@ QGroupBox* ConvolveOperationChooser::createCanalsGroupBox() {
   layout->addWidget(m_buttonCanalGreen);
   layout->addWidget(m_buttonCanalBlue);
   layout->addWidget(m_buttonCanalAlpha);
-  
+
   groupBox->setLayout(layout);
   return groupBox;
 }
@@ -285,7 +285,7 @@ QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
   m_spinBoxWidth->setRange(1, 99);
   m_spinBoxWidth->setValue(m_kernel->getWidth());
   m_spinBoxWidth->setSingleStep(2);
-  
+
   m_spinBoxHeight = new QSpinBox();
   m_spinBoxHeight->setRange(1, 99);
   m_spinBoxHeight->setValue(m_kernel->getHeight());
@@ -299,7 +299,7 @@ QGroupBox* ConvolveOperationChooser::createSizeGroupBox() {
 
   layout->addWidget(new QLabel(tr("Height")), 1, 0);
   layout->addWidget(m_spinBoxWidth, 1, 1);
-  
+
   groupBox->setLayout(layout);
   return groupBox;
 }
@@ -325,10 +325,10 @@ QHBoxLayout* ConvolveOperationChooser::createSettingsGroupBox() {
   layoutBis->addWidget(createSizeGroupBox());
   layoutBis->addWidget(m_edgeControlComboBox);
   layoutBis->addWidget(m_operatorComboBox);
-  
+
   layout->addWidget(createCanalsGroupBox());
   layout->addLayout(layoutBis);
-  
+
   return layout;
 }
 
@@ -338,7 +338,7 @@ QHBoxLayout* ConvolveOperationChooser::createControlsLayout() {
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
-  
+
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
@@ -346,6 +346,6 @@ QHBoxLayout* ConvolveOperationChooser::createControlsLayout() {
   layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonApply);
-  
+
   return layout;
 }

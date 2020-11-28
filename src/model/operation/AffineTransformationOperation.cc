@@ -1,8 +1,8 @@
 #include "AffineTransformationOperation.hh"
 
-#include "Picture.hh"
-#include "Tracing.hh"
-#include "PixelMod.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
+#include "../PixelMod.hh"
 #include <cmath>
 #include <iostream>
 
@@ -22,7 +22,7 @@ AffineTransformationOperation::AffineTransformationOperation(Picture* picture, O
   m_mapping(new Matrix<double>(3, 3)),
   m_mappingInv(new Matrix<double>(3, 3)),
   m_defaultColor(PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID))
-{ 
+{
   m_picture=picture;
   m_pictureData=NULL;
 }
@@ -40,16 +40,16 @@ Picture* AffineTransformationOperation::getPicture() { return m_picture; }
 
 PixelMod::Type AffineTransformationOperation::getInputType() { return PixelMod::COLOR; }
 
-PixelMod::Type AffineTransformationOperation::getOutputType() { 
+PixelMod::Type AffineTransformationOperation::getOutputType() {
   // if (m_operation != NULL) return m_operation->getOutType();
-  return PixelMod::COLOR; 
+  return PixelMod::COLOR;
 }
 
 
 /** Mutateurs */
 void AffineTransformationOperation::setRotationDegree(double alpha) { setRotation((alpha * 3.14159) / 180.0); }
 void AffineTransformationOperation::setRotation(double alpha) {
-  m_alpha = alpha; 
+  m_alpha = alpha;
   m_cosAlpha = cos(m_alpha);
   m_sinAlpha = sin(m_alpha);
 }
@@ -97,9 +97,9 @@ Matrix<unsigned int>* AffineTransformationOperation::updateInternalPreview() {
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
       m_mapping->setValue(i, j, mappingData[i][j]);
-  
+
   createPreview();
-  
+
   for (int i = 0; i < m_previewData->getWidth(); i++)
     for (int j = 0; j < m_previewData->getHeight(); j++) {
       double x = 0, y = 0;
@@ -110,12 +110,12 @@ Matrix<unsigned int>* AffineTransformationOperation::updateInternalPreview() {
       }
       m_previewData->setValue(i, j, bilinearInterpolation(x, y));
     }
-  
+
   return m_previewData;
 }
 
 
-Picture* AffineTransformationOperation::applyInternalOperation() { 
+Picture* AffineTransformationOperation::applyInternalOperation() {
   // if (m_operation != NULL) m_picture = m_operation->doOperation();
   std::cout<<"should not come here!!";
   double mappingData[3][3] = {
@@ -126,9 +126,9 @@ Picture* AffineTransformationOperation::applyInternalOperation() {
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
       m_mapping->setValue(i, j, mappingData[i][j]);
-  
+
   createPreview();
-  
+
   for (int i = 0; i < m_previewData->getWidth(); i++)
     for (int j = 0; j < m_previewData->getHeight(); j++) {
       double x = 0, y = 0;
@@ -139,7 +139,7 @@ Picture* AffineTransformationOperation::applyInternalOperation() {
       }
       m_previewData->setValue(i, j, bilinearInterpolation(x, y));
     }
-  
+
   m_picture->getBackground()->setData(m_previewData);
   return m_picture;
 }
@@ -160,25 +160,25 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
 
   xcl=xfl+1;
   ycl=yfl+1;
-  
+
   if(xcl>=m_pictureData->getWidth())xcl=xfl;
   if(ycl>=m_pictureData->getHeight())ycl=yfl;
-  
+
   pix[0]=m_pictureData->getValue(xfl,yfl);
   pix[1]=m_pictureData->getValue(xcl,yfl);
   pix[2]=m_pictureData->getValue(xfl,ycl);
   pix[3]=m_pictureData->getValue(xcl,ycl);
-  
+
   fracX=px-double(xfl);
   fracY=py-double(yfl);
   ifracY=1.0-fracY;
   ifracX=1.0-fracX;
-  
+
   red=(unsigned int) floor(((double(PixelMod::getRed(pix[0]))*ifracX)+
 	   (double(PixelMod::getRed(pix[1]))*fracX))*ifracY+
 	((double(PixelMod::getRed(pix[2]))*ifracX)+
 	 (double(PixelMod::getRed(pix[3]))*fracX))*fracY);
-   
+
  green=(unsigned int) floor(((double(PixelMod::getGreen(pix[0]))*ifracX)+
 	   (double(PixelMod::getGreen(pix[1]))*fracX))*ifracY+
 	((double(PixelMod::getGreen(pix[2]))*ifracX)+
@@ -189,13 +189,13 @@ unsigned int AffineTransformationOperation::bilinearInterpolation(double px, dou
 	((double(PixelMod::getBlue(pix[2]))*ifracX)+
 	 (double(PixelMod::getBlue(pix[3]))*fracX))*fracY);
 
- 
+
  alpha=(unsigned int) floor(((double(PixelMod::getAlpha(pix[0]))*ifracX)+
 	   (double(PixelMod::getAlpha(pix[1]))*fracX))*ifracY+
 	((double(PixelMod::getAlpha(pix[2]))*ifracX)+
 	 (double(PixelMod::getAlpha(pix[3]))*fracX))*fracY);
-  
-  
+
+
  return(unsigned int) ((alpha<<24)|(red<<16)|(green<<8)|(blue));
 }
 
@@ -240,5 +240,3 @@ void AffineTransformationOperation::createPreview() {
     for (int j = 0; j < 3; j++)
       m_mappingInv->setValue(i, j, mappingDataInv[i][j]);
 }
-
-

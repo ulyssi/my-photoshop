@@ -1,14 +1,14 @@
 #include "UserInterface.hh"
 
 #include "TabWidget.hh"
-#include "Picture.hh"
-#include "PictureManager.hh"
+#include "../model/Picture.hh"
+#include "picture/PictureManager.hh"
 
 
 
 /** Constructeurs et Destructeurs */
 UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
-  m_QApplication(qapplication){ 
+  m_QApplication(qapplication){
   m_clipboard = clipboard;
   createActions();
   m_pictureManager = new PictureManager(this);
@@ -21,9 +21,9 @@ UserInterface::UserInterface(QApplication* qapplication,QClipboard* clipboard) :
   resize(1024, 768);
   update();
   this->statusBar()->showMessage("ready");
-  
+
 }
-    
+
 UserInterface::~UserInterface() {
   delete m_pictureManager;
 }
@@ -43,7 +43,7 @@ TabWidget* UserInterface::createTabWidget() {
   QObject::connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(resetEditionTool(int)));
   return tabWidget;
 }
-  
+
 QDockWidget* UserInterface::createDockWidget(QWidget* widget) {
   QDockWidget* dockWidget = new QDockWidget(widget->accessibleName());
   dockWidget->setWidget(widget);

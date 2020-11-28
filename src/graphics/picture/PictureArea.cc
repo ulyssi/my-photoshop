@@ -3,11 +3,11 @@
 #include "PictureViewer.hh"
 #include "PictureModifier.hh"
 #include "SelectionTool.hh"
-#include "UserInterface.hh"
-#include "TracingManager.hh"
-#include "CutOperation.hh"
-#include "CopyOperation.hh"
-#include "CropOperation.hh"
+#include "../UserInterface.hh"
+#include "../tool/TracingManager.hh"
+#include "../../model/operation/CutOperation.hh"
+#include "../../model/operation/CopyOperation.hh"
+#include "../../model/operation/CropOperation.hh"
 PictureArea::PictureArea(PictureModifier* p,UserInterface* userinterface){
   m_userInterface = userinterface;
   m_pictureModifier=p;
@@ -40,7 +40,7 @@ void PictureArea::refresh(){
   this->repaint();
   setSceneRect ( (qreal) 0, (qreal) 0, (qreal) m_pictureViewer->width(), (qreal) m_pictureViewer->height() );
   resize(m_pictureViewer->width()+5,m_pictureViewer->height()+5);
-} 
+}
 
 /** getters **/
 PictureViewer* PictureArea::getPictureViewer(){
@@ -96,7 +96,7 @@ void PictureArea::zoomIn(){
 }
 void PictureArea::zoomOut(){
   m_fit=false;
-  
+
   down->setX(down->x()/m_pictureViewer->getScale());
   down->setY(down->y()/m_pictureViewer->getScale());
   up->setX(up->x()/m_pictureViewer->getScale());
@@ -108,7 +108,7 @@ void PictureArea::zoomOut(){
   up->setY(up->y()*m_pictureViewer->getScale());
   setSelection();
   refresh();
- 
+
 
 }
 
@@ -124,7 +124,7 @@ void PictureArea::copy(){
     copy->copyOperation(m_pictureModifier->getPicture(), up->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), down->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
   else if(up->x()>down->x()&& up->y()>down->y())
     copy->copyOperation(m_pictureModifier->getPicture(), down->x()/m_pictureViewer->getScale(), down->y()/m_pictureViewer->getScale(), up->x()/m_pictureViewer->getScale(), up->y()/m_pictureViewer->getScale(), m_userInterface->getClipBoard());
-  
+
 }
 
 void PictureArea::paste(){
@@ -221,11 +221,11 @@ void PictureArea::setSelection(){
     m_selectionTool->setRect(down->x(),down->y(),(up->x()-down->x()),(up->y()-down->y()));
   else if(down->x()<up->x())
     m_selectionTool->setRect(down->x(),up->y(),(up->x()-down->x()),(down->y()-up->y()));
-  else if(down->y()<up->y())      
+  else if(down->y()<up->y())
     m_selectionTool->setRect(up->x(),down->y(),(down->x()-up->x()),(up->y()-down->y()));
   else
     m_selectionTool->setRect(up->x(),up->y(),(down->x()-up->x()),(down->y()-up->y()));
-  
+
 }
 
 void PictureArea::refreshCoordinate(double resize){
@@ -257,7 +257,7 @@ void PictureArea::mouseDoubleClickEvent ( QMouseEvent * event ){
 }
 
 void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
-  
+
   if(event->x()<m_pictureViewer->width()&&event->y()<m_pictureViewer->height()){
     /** print the pixel info**/
     QString m_string;
@@ -275,20 +275,20 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
     m_string.append("  G:");
     m_coord.setNum(PixelMod::getGreen(pixel)); //int
     m_string=m_string+m_coord;
-    m_string.append("  B:"); 
+    m_string.append("  B:");
     m_coord.setNum(PixelMod::getBlue(pixel)); //int
     m_string=m_string+m_coord;
     m_string.append("  YUV :  Y:");
-    m_coord.setNum(PixelMod::getLuma(pixel),'g',6); 
+    m_coord.setNum(PixelMod::getLuma(pixel),'g',6);
     m_string=m_string+m_coord;
     m_string.append("  U:");
     m_coord.setNum(PixelMod::getChrominanceU(pixel),'g',6);
     m_string=m_string+m_coord;
-    m_string.append("  V:"); 
+    m_string.append("  V:");
     m_coord.setNum(PixelMod::getChrominanceV(pixel),'g',6);
     m_string=m_string+m_coord;
     m_userInterface->print(m_string);
-    
+
     if(cliked){
       setCursor(Qt::SizeFDiagCursor);
       setDownCoordinate(event);
@@ -298,13 +298,13 @@ void PictureArea::mouseMoveEvent ( QMouseEvent * event ){
     else if (m_indMove)
       setDownCoordinate(event);
   }
- 
+
 }
 
 void PictureArea::mousePressEvent ( QMouseEvent * event ){
   down->setY(event->y());
   down->setX(event->x());
-  
+
   if (m_indMove){
     up->setX(event->x());
     up->setY(event->y());
@@ -327,9 +327,9 @@ void PictureArea::mouseReleaseEvent ( QMouseEvent * event ){
 }
 
 void PictureArea::wheelEvent ( QWheelEvent * event ) {
-  QGraphicsView::wheelEvent(event); 
+  QGraphicsView::wheelEvent(event);
   int numDegrees = event->delta() / 8;
-  if(ctrl==true){  
+  if(ctrl==true){
     if (numDegrees>0)
       zoomIn();
     else
@@ -337,6 +337,3 @@ void PictureArea::wheelEvent ( QWheelEvent * event ) {
     refresh();
   }
 }
-
-
-

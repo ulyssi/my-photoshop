@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QPixmap>
 #include "graphics/UserInterface.hh"
+#include "model/Matrix.hh"
 #include <sys/resource.h>
 
 int main(int argc, char **argv) {

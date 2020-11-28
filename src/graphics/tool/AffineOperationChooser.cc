@@ -5,12 +5,12 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QImage>
-#include "Matrix.hh"
+#include "../../model/Matrix.hh"
 
-#include "Picture.hh"
-#include "PictureModifier.hh"
-#include "UserInterface.hh"
-#include "AffineTransformationOperation.hh"
+#include "../../model/Picture.hh"
+#include "../picture/PictureModifier.hh"
+#include "../UserInterface.hh"
+#include "../../model/operation/AffineTransformationOperation.hh"
 #include "Previewer.hh"
 
 
@@ -28,20 +28,20 @@ AffineOperationChooser::AffineOperationChooser(UserInterface* userInterface) :
   m_symetrieX(false),
   m_symetrieY(false),
   m_symetrie(false),
-  m_scaleX(100), 
-  m_scaleY(100), 
+  m_scaleX(100),
+  m_scaleY(100),
   m_alpha(0),
   m_pictureModifier(NULL)
 {
   setAccessibleName(tr("AffineOp"));
-  
+
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(createScaleGroupBox());
   layout->addWidget(createRotationGroupBox());
   layout->addWidget(createSymetrieGroupBox());
   layout->addLayout(createControlsLayout());
   layout->addStretch();
-  
+
   resetOperation();
   setLayout(layout);
 }
@@ -50,14 +50,14 @@ AffineOperationChooser::~AffineOperationChooser() {}
 
 
 /** Mutateurs */
-void AffineOperationChooser::setPictureModifier(PictureModifier* pictureModifier) { 
+void AffineOperationChooser::setPictureModifier(PictureModifier* pictureModifier) {
   m_pictureModifier = pictureModifier;
   refresh();
 }
 
 
 /** Methodes */
-void AffineOperationChooser::refresh() { 
+void AffineOperationChooser::refresh() {
   refreshPreview();
 }
 
@@ -65,37 +65,37 @@ void AffineOperationChooser::refresh() {
 /** Slots */
 void AffineOperationChooser::setValueScaleX(int scaleX) {
   m_scaleX = scaleX;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueScaleY(int scaleY) {
   m_scaleY = scaleY;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueRotation(int alpha) {
   m_alpha = alpha;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueSymetrieNormal(bool symetrieNormal) {
   m_symetrieNormal = symetrieNormal;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueSymetrieX(bool symetrieX) {
   m_symetrieX = symetrieX;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueSymetrieY(bool symetrieY) {
   m_symetrieY = symetrieY;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::setValueSymetrie(bool symetrie) {
   m_symetrie = symetrie;
-  refresh(); 
+  refresh();
 }
 
 void AffineOperationChooser::resetOperation() {
@@ -182,7 +182,7 @@ QGroupBox* AffineOperationChooser::createRotationGroupBox() {
     layout->addWidget(label);
     layout->addWidget(m_rotationSlider);
   }
-  
+
   groupBox->setLayout(layout);
   return groupBox;
 }
@@ -195,7 +195,7 @@ QGroupBox* AffineOperationChooser::createSymetrieGroupBox() {
   connect(m_buttonSymetrieX, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrieX(bool)));
   connect(m_buttonSymetrieY, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrieY(bool)));
   connect(m_buttonSymetrie, SIGNAL(toggled(bool)), this, SLOT(setValueSymetrie(bool)));
-  
+
   layout->addWidget(m_buttonSymetrieNormal);
   layout->addWidget(m_buttonSymetrieX);
   layout->addWidget(m_buttonSymetrieY);
@@ -207,14 +207,14 @@ QGroupBox* AffineOperationChooser::createSymetrieGroupBox() {
 
 QHBoxLayout* AffineOperationChooser::createControlsLayout() {
   QHBoxLayout* layout = new QHBoxLayout();
-  
+
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
   QPushButton* pushButtonCustomized = new QPushButton(tr("Customized"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
 
   pushButtonCustomized->setEnabled(false);
-  
+
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));

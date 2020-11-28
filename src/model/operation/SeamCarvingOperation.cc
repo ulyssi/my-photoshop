@@ -1,8 +1,8 @@
 #include "SeamCarvingOperation.hh"
 
-#include "PixelMod.hh"
-#include "Picture.hh"
-#include "Tracing.hh"
+#include "../PixelMod.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
 
 
 /** Constructeurs et destructeur */
@@ -23,9 +23,9 @@ SeamCarvingOperation::SeamCarvingOperation(Picture* picture) :
   m_initH(false),
   m_initV(false)
 {
-  
 
-  
+
+
 }
 
 SeamCarvingOperation::~SeamCarvingOperation() {}
@@ -79,7 +79,7 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreviewHorizontal() {
 
   // unsigned int sum = 0;
   // for (int i = 0; i < level; i++) sum += m_pathValue[i];
-   
+
   // double* coef = new double[level];
   // for (int i = 0; i < level; i++) coef[i] = ((double)m_pathValue[i]) / ((double)sum);
   // for (int i = 0; i < level-1; i++) {
@@ -128,7 +128,7 @@ Matrix<unsigned int>* SeamCarvingOperation::updatePreviewVertical() {
     m_initV = true;
   }
   while (m_iterationV < level) m_pathValue[m_iterationV-1] = computeRemoveLine(++m_iterationV);
-  
+
   Matrix<unsigned int>* preview = new Matrix<unsigned int>(m_widthTarget, m_heightTarget);
   for (int i = 0; i < m_widthInit; i++) {
     m_height = 0;
@@ -200,9 +200,9 @@ Matrix<SeamCarvingOperation::Point*>* SeamCarvingOperation::createData() {
       data->setValue(i, j, new Point);
   return data;
 }
- 
 
-void SeamCarvingOperation::refreshData() { 
+
+void SeamCarvingOperation::refreshData() {
   for (int i = 0; i < m_widthInit; i++)
     for (int j = 0; j < m_heightInit; j++) {
       Point* point = m_data->getValue(i, j);
@@ -220,13 +220,13 @@ void SeamCarvingOperation::refreshData() {
 
       if (i == m_widthInit-1) point->east = NULL;
       else point->east = m_data->getValue(i+1, j);
-      
+
       if (i == 0) point->west = NULL;
       else point->west = m_data->getValue(i-1, j);
     }
 }
 
-void SeamCarvingOperation::refreshDataV() { 
+void SeamCarvingOperation::refreshDataV() {
   for (int i = 0; i < m_widthInit; i++)
     for (int j = 0; j < m_heightInit; j++) {
       Point* point = m_dataV->getValue(i, j);
@@ -244,7 +244,7 @@ void SeamCarvingOperation::refreshDataV() {
 
       if (i == m_widthInit-1) point->east = NULL;
       else point->east = m_dataV->getValue(i+1, j);
-      
+
       if (i == 0) point->west = NULL;
       else point->west = m_dataV->getValue(i-1, j);      // point->test = false;
     }
@@ -284,7 +284,7 @@ inline void SeamCarvingOperation::updateGradient(Point* point) {
   };
 
   int gradientX = 0, gradientY = 0;
-  for (int i = 0; i < 3; i++) 
+  for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
       if (area[i][j] != NULL) {
         unsigned int color = area[i][j]->color;
@@ -292,7 +292,7 @@ inline void SeamCarvingOperation::updateGradient(Point* point) {
         gradientX += sobelX[i][j] * intensity;
         gradientY += sobelY[i][j] * intensity;
       }
-  
+
   point->gradient = gradientX * gradientX + gradientY * gradientY;
 }
 
@@ -336,7 +336,7 @@ unsigned int SeamCarvingOperation::computeRemoveRow(int iteration) {
     Point *pPrec = pCur->previous;
     Point *pGauche = getWestFrom(pCur), *pDroit = getEastFrom(pCur);
     Point *pHautGauche = getNorthWestFrom(pCur), *pHaut = getNorthFrom(pCur), *pHautDroit = getNorthEastFrom(pCur);
-    
+
     // Chainage lateral
     if (pDroit != NULL) pDroit->west = pGauche;
     if (pGauche != NULL) pGauche->east = pDroit;
@@ -352,7 +352,7 @@ unsigned int SeamCarvingOperation::computeRemoveRow(int iteration) {
     	pHaut->south = pDroit;
       }
       pPrec->next = pCur;
-    } 
+    }
     else pInit = pCur;
     pCur->mask = iteration;
   }
@@ -371,7 +371,7 @@ unsigned int SeamCarvingOperation::computeRemoveRow(int iteration) {
         updateGradient(pGauche->west);
       }
     }
-    
+
     if (pDroit != NULL) {
       // pDroit->test = true;
       updateGradient(pDroit);
@@ -420,7 +420,7 @@ unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
     Point *pPrec = pCur->previous;
     Point *pBas = getSouthFrom(pCur), *pHaut = getNorthFrom(pCur);
     Point *pHautGauche = getNorthWestFrom(pCur), *pGauche = getWestFrom(pCur), *pBasGauche = getSouthWestFrom(pCur);
-    
+
     // Chainage vertical
     if (pHaut != NULL) pHaut->south = pBas;
     if (pBas != NULL) pBas->north = pHaut;
@@ -436,7 +436,7 @@ unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
     	pGauche->east = pHaut;
       }
       pPrec->next = pCur;
-    } 
+    }
     else pInit = pCur;
     pCur->mask = iteration;
   }
@@ -455,7 +455,7 @@ unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
         updateGradient(pBas->south);
       }
     }
-    
+
     if (pHaut != NULL) {
       // pHaut->test = true;
       updateGradient(pHaut);
@@ -478,7 +478,7 @@ unsigned int SeamCarvingOperation::computeRemoveLine(int iteration) {
       if (point->pathValue != pathValue) inf = point;
     }
     pInf = getSouthEastFrom(inf);
-    
+
     for (Point* point = pCur->north; point != getNorthFrom(pSup); point = point->north) {
       unsigned int pathValue = point->pathValue;
       updateMinimumPathH(point);

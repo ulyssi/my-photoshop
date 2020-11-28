@@ -9,7 +9,7 @@
 #include <QSpinBox>
 #include <QString>
 
-#include "Matrix.hh"
+#include "../../model/Matrix.hh"
 
 class UserInterface;
 class ConvolveOperation;
@@ -30,7 +30,7 @@ public:
 
   /** Methodes */
   void refresh();
-		
+
 public slots:
 
   /** Slots */
@@ -54,14 +54,14 @@ private:
 private slots:
 
   /** Slots internes */
-  
+
 signals:
 
   /** Signaux internes */
   void dataChanged();
 
 private:
-  
+
   /** Attributs */
   UserInterface* m_userInterface;
   PictureModifier* m_pictureModifier;
@@ -109,7 +109,7 @@ private:
 
   QSpinBox *m_spinBoxWidth, *m_spinBoxHeight;
   QCheckBox *m_buttonCanalRed, *m_buttonCanalGreen, *m_buttonCanalBlue, *m_buttonCanalAlpha;
-  
+
 };
 
 #endif

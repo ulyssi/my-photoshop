@@ -1,16 +1,16 @@
 #include "PictureModifier.hh"
 
-#include "UserInterface.hh"
-#include "TracingManager.hh"
-#include "PictureViewer.hh"
-#include "Histogram.hh"
-#include "Previewer.hh"
-#include "Picture.hh"
-#include "Matrix.hh"
-#include "ToolBoxChooser.hh"
-#include "AffineOperationChooser.hh"
-#include "ConvolveOperationChooser.hh"
-#include "ColorConvertOperationChooser.hh"
+#include "../UserInterface.hh"
+#include "../tool/TracingManager.hh"
+#include "../picture/PictureViewer.hh"
+#include "../tool/Histogram.hh"
+#include "../tool/Previewer.hh"
+#include "../../model/Picture.hh"
+#include "../../model/Matrix.hh"
+#include "../tool/ToolBoxChooser.hh"
+#include "../tool/AffineOperationChooser.hh"
+#include "../tool/ConvolveOperationChooser.hh"
+#include "../tool/ColorConvertOperationChooser.hh"
 #include "PictureArea.hh"
 
 /** Constructeurs et destructeur */
@@ -79,7 +79,7 @@ void PictureModifier::refresh() {
 
 void PictureModifier::keyPressEvent(QKeyEvent* event){
   m_pictureArea->keyPressEvent(event);
-} 
+}
 
 void PictureModifier::keyReleaseEvent ( QKeyEvent * event ) {
   m_pictureArea->keyReleaseEvent(event);
@@ -94,7 +94,7 @@ void PictureModifier::zoomIn(){
 void PictureModifier::zoomOut(){
   m_pictureArea->zoomOut();
   refresh();
-}  
+}
 void PictureModifier::normalSize(){
   m_pictureArea->normalSize();
   refresh();
@@ -107,7 +107,7 @@ void PictureModifier::fitToWindow(){
 
 void PictureModifier:: copy(){
   m_pictureArea->copy();
-}		
+}
 void PictureModifier:: paste(){
   m_pictureArea->paste();
 }
@@ -123,7 +123,7 @@ void PictureModifier::crop(){
 
 bool PictureModifier::enableMove(){
   m_pictureArea->enableMove();
- 
+
   return true;
 }
 void PictureModifier::disableMove(){

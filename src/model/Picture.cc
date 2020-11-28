@@ -4,7 +4,7 @@
 #include "Picture.hh"
 #include "PixelMod.hh"
 #include "Tracing.hh"
-#include "MergeOperation.hh"
+#include "operation/MergeOperation.hh"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ Picture::Picture(QString path) :
       m_data->setValue(i, j, (unsigned int)image.pixel(i, j));
 
   m_tracingList.push_back(new Tracing(m_data));
- 
+
 }
 
 Picture::~Picture() {}
@@ -44,12 +44,12 @@ void Picture::refresh() {
   //  std::cout<<"refreshing"<<std::endl;
   MergeOperation* m=new MergeOperation();
 
- 
+
   if(m_data!=NULL)
     delete m_data;
   m_data = m->doOperation(m_tracingList);
- 
- 
+
+
 }
 
 // Charge une image à partir de son path
@@ -132,7 +132,7 @@ void Picture::normaliseOffs(std::vector<Tracing*> tracing){
     (*it)->setOffX((*it)->getOffX()-offX);
     (*it)->setOffY((*it)->getOffY()-offY);
   }
-  
+
 }
 int * Picture::getminOffs(std::vector<Tracing*> tracing){
   int *rslt=new int[2];
@@ -144,7 +144,7 @@ int * Picture::getminOffs(std::vector<Tracing*> tracing){
       rslt[0]=(*it)->getOffX();
     if(rslt[1]>(*it)->getOffY())
       rslt[1]=(*it)->getOffY();
-    
+
   }
   return rslt;
 }

@@ -1,8 +1,8 @@
 #include "ColorConvertOperation.hh"
 
-#include "Picture.hh"
-#include "Tracing.hh"
-#include "PixelMod.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
+#include "../PixelMod.hh"
 
 
 /** Constructeurs et destructeur */
@@ -11,7 +11,7 @@ ColorConvertOperation::ColorConvertOperation(Picture* picture, Operation* operat
   m_kernel(NULL),
   m_seuilMin(new int[4]),
   m_seuilMax(new int[4])
-  
+
 
 { std::cout<<"hellooo"<<std::endl;
   m_pictureData=NULL;
@@ -73,7 +73,7 @@ Matrix<unsigned int>* ColorConvertOperation::updateInternalPreview() {
   std::cout<<"should come here"<<std::endl;
   for (int i = 0; i < m_pictureData->getWidth(); i++)
     for (int j = 0; j < m_pictureData->getHeight(); j++) {
-      int color[4] = { 
+      int color[4] = {
 	PixelMod::getRed(m_pictureData->getValue(i, j)),
 	PixelMod::getGreen(m_pictureData->getValue(i, j)),
 	PixelMod::getBlue(m_pictureData->getValue(i, j)),

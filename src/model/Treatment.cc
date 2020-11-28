@@ -1,6 +1,6 @@
 #include "Treatment.hh"
 
-#include "Operation.hh"
+#include "operation/Operation.hh"
 #include "Picture.hh"
 #include "Tracing.hh"
 

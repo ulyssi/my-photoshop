@@ -2,8 +2,8 @@
 #define _AFFINE_TRANSFORMATION_OPERATION_HH_
 
 #include "Operation.hh"
-#include "PixelMod.hh"
-#include "Matrix.hh"
+#include "../PixelMod.hh"
+#include "../Matrix.hh"
 
 class Picture;
 
@@ -41,7 +41,7 @@ public:
   /** Methodes */
   Matrix<unsigned int>* updateInternalPreview();
   Picture* applyInternalOperation();
-  
+
 private:
 
   /** Methodes internes */
@@ -49,15 +49,15 @@ private:
   unsigned int bilinearInterpolation(double, double);
 
   /** Attributs */
- 
- 
+
+
   double m_scaleX, m_scaleY, m_alpha;
   double m_x0, m_y0;
   double m_cosAlpha, m_sinAlpha;
   int m_symetrieX, m_symetrieY;
   Interpolation m_interpolation;
-  
- 
+
+
   Matrix<double>* m_mapping;
   Matrix<double>* m_mappingInv;
   unsigned int m_defaultColor;

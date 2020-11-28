@@ -1,7 +1,7 @@
 #ifndef _OPERATION_HH_
 #define _OPERATION_HH_
 
-#include "Matrix.hh"
+#include "../Matrix.hh"
 #include <vector>
 
 class Picture;
@@ -28,7 +28,7 @@ public:
   Picture* applyOperation();
   virtual Matrix<unsigned int>* updateInternalPreview();
   virtual Picture* applyInternalOperation();
-  
+
   Picture* applyOn(Picture*);
   Tracing* applyOn(Tracing*);
 
@@ -37,17 +37,17 @@ public:
   //virtual Operation* clone() = 0;
 
 protected:
-  Picture* m_picture; 
+  Picture* m_picture;
   Matrix<unsigned int>* m_pictureData;
-  Matrix<unsigned int>* m_previewData; 
+  Matrix<unsigned int>* m_previewData;
 private:
 
   /** Attributs */
-  
+
   Operation* m_operation;
   std::vector<Tracing*>m_prev;
   std::vector<Tracing*>m_toBdel;
-  
+
 };
 
 #endif

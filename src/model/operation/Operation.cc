@@ -1,7 +1,7 @@
 #include "Operation.hh"
 
-#include "Picture.hh"
-#include "Tracing.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
 #include "MergeOperation.hh"
 #include <iostream>
 
@@ -29,8 +29,8 @@ Operation::~Operation() {
     delete(*it);
     it++;
   }
-  
-  
+
+
 }
 
 
@@ -47,7 +47,7 @@ Matrix<unsigned int>* Operation::updatePreview() {
       m_prev.reserve(1);
     m_pictureData = (Matrix<unsigned int>*)(*it);
     //m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(),m_pictureData->getHeight());
-   
+
 
     int normX=0;
     int normY=0;
@@ -57,10 +57,10 @@ Matrix<unsigned int>* Operation::updatePreview() {
       normX=((*it)->getWidth()-m_previewData->getWidth())/2;
       normY=((*it)->getHeight()-m_previewData->getHeight())/2;
       tr=new Tracing(m_previewData);
-      delete(m_previewData);   
-    
-     
-     
+      delete(m_previewData);
+
+
+
     }
     else{
       tr=new Tracing(m_pictureData);
@@ -70,10 +70,10 @@ Matrix<unsigned int>* Operation::updatePreview() {
     tr->setSelected((*it)->isSelected());
     tr->setOffX((*it)->getOffX()+normX);
     tr->setOffY((*it)->getOffY()+normY);
-     
-    
+
+
     m_prev.push_back(tr);
-     
+
     it++;
   }
   m_picture->normaliseOffs(m_prev);
@@ -84,21 +84,21 @@ Matrix<unsigned int>* Operation::updatePreview() {
     if((*it)->isSelected())
       delete(*it);
       it++;*/
- 
+
   return m_previewData;
 }
 
-  
 
 
 
-   
+
+
 Matrix<unsigned int>* Operation::updateInternalPreview(){std::cout<<"should not come here"<<std::endl;return NULL;}
 Picture* Operation::applyInternalOperation(){std::cout<<"should not come here"<<std::endl;return NULL;}
-   
+
 
 Picture* Operation::applyOperation(){
-  updatePreview(); 
+  updatePreview();
 
   if(!m_prev.empty()){
 
@@ -119,7 +119,7 @@ Picture* Operation::applyOperation(){
     }
     m_picture->normaliseOffs(list);
   }
- 
+
   return m_picture;
 }
 
@@ -145,11 +145,11 @@ Picture* Operation::doOperation(Picture* picture) {
 //Picture* Operation::doOperation(Tracing * tr){return tr;}
 
 // rgb2 = { r2, g2, b2, a2 } t2
-// rgb1 = { r1, g1, b1, a1 } t1 
+// rgb1 = { r1, g1, b1, a1 } t1
 
 // rgb2 = { r2, g2, b2, (a2 / 255) * t2 = a2. }
 // rgb1 = { r1, g1, b1, (a1 / 255) * t1 = a1. }
 
-// rgb3 = { r1 * (1 - a2.) + r2 * a2., , , (a1. + a2. - a1. * a2.) * 255 } 
+// rgb3 = { r1 * (1 - a2.) + r2 * a2., , , (a1. + a2. - a1. * a2.) * 255 }
 
-// rgbResult(rgb1, rgb2) = { r1 * (1 - a2.) + r2 * a2., , , (a1. + a2. - a1. * a2.) * 255 } 
+// rgbResult(rgb1, rgb2) = { r1 * (1 - a2.) + r2 * a2., , , (a1. + a2. - a1. * a2.) * 255 }

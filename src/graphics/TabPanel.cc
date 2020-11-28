@@ -1,13 +1,13 @@
 #include "TabPanel.hh"
 
 #include "UserInterface.hh"
-#include "TracingManager.hh"
-#include "Histogram.hh"
-#include "Previewer.hh"
-#include "ToolBoxChooser.hh"
-#include "AffineOperationChooser.hh"
-#include "ConvolveOperationChooser.hh"
-#include "ColorConvertOperationChooser.hh"
+#include "tool/TracingManager.hh"
+#include "tool/Histogram.hh"
+#include "tool/Previewer.hh"
+#include "tool/ToolBoxChooser.hh"
+#include "tool/AffineOperationChooser.hh"
+#include "tool/ConvolveOperationChooser.hh"
+#include "tool/ColorConvertOperationChooser.hh"
 
 
 /** Constructeurs et destructeur */
@@ -29,7 +29,7 @@ void TabPanel::notifyCurrent() {
   m_userInterface->getPreviewer()->setPictureModifier(NULL);
   m_userInterface->getToolBoxChooser()->setPictureModifier(NULL);
   m_userInterface->getAffineOperationChooser()->setPictureModifier(NULL);
-  m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL); 
+  m_userInterface->getConvolveOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getColorConvertOperationChooser()->setPictureModifier(NULL);
   m_userInterface->getTracingManager()->setPictureModifier(NULL);
   m_userInterface->getHistogram()->setPictureModifier(NULL);
@@ -43,7 +43,7 @@ void TabPanel:: zoomOut(){}
 void TabPanel:: normalSize(){}
 void TabPanel:: fitToWindow(){}
 
-void TabPanel:: copy(){}		
+void TabPanel:: copy(){}
 void TabPanel:: paste(){}
 void TabPanel:: cut(){}
 

@@ -8,7 +8,7 @@
 #include <QSpinBox>
 #include <QString>
 
-#include "Matrix.hh"
+#include "../../model/Matrix.hh"
 
 class UserInterface;
 class ColorConvertOperation;
@@ -53,13 +53,13 @@ private:
   MatrixGenerator* createMatrixModifier();
   void resetBlurOperation();
   void resetDetectionOperation();
-  
+
 private slots:
 
   /** Slots internes */
-  
+
 signals:
-  
+
   /** Signaux internes */
   void dataChanged();
 
@@ -71,18 +71,18 @@ private:
   QComboBox* m_kernelComboBox;
   Matrix<double>* m_kernel;
   ColorConvertOperation* m_colorConvertOperation;
-  
+
   MatrixGenerator* m_matrixGenerator;
   QString m_identityKernelString;
   QString m_greyScaleKernelString;
   QString m_sepiaKernelString;
   QString m_customizeKernelString;
 
-  // QSpinBox *m_spinBoxMinThreshold, *m_spinBoxMaxThreshold; 
-  QSpinBox *m_spinBoxMinThresholdRed, *m_spinBoxMaxThresholdRed; 
-  QSpinBox *m_spinBoxMinThresholdGreen, *m_spinBoxMaxThresholdGreen; 
-  QSpinBox *m_spinBoxMinThresholdBlue, *m_spinBoxMaxThresholdBlue; 
- 
+  // QSpinBox *m_spinBoxMinThreshold, *m_spinBoxMaxThreshold;
+  QSpinBox *m_spinBoxMinThresholdRed, *m_spinBoxMaxThresholdRed;
+  QSpinBox *m_spinBoxMinThresholdGreen, *m_spinBoxMaxThresholdGreen;
+  QSpinBox *m_spinBoxMinThresholdBlue, *m_spinBoxMaxThresholdBlue;
+
 };
 
 #endif

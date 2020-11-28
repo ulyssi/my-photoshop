@@ -6,10 +6,10 @@
 #include <cmath>
 #include <iostream>
 
-#include "PictureModifier.hh"
-#include "Tracing.hh"
-#include "Picture.hh"
-#include "PixelMod.hh"
+#include "../picture/PictureModifier.hh"
+#include "../../model/Tracing.hh"
+#include "../../model/Picture.hh"
+#include "../../model/PixelMod.hh"
 
 inline int min(int x, int y);
 inline int max(int x, int y);
@@ -31,7 +31,7 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   m_histogramImage(new QImage(PixelMod::nbValue, 100, QImage::Format_ARGB32))
 {
   setAccessibleName(tr("Histogram"));
-  
+
   m_radioButtonRGB->setChecked(true);
   //m_radioButtonYUV->setEnabled(false);
   refreshComboBoxLayer();
@@ -40,7 +40,7 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   m_sliderSup->setRange(0, +255);
   m_sliderInf->setValue(0);
   m_sliderSup->setValue(255);
-  
+
   connect(m_radioButtonRGB, SIGNAL(clicked()), this, SLOT(refreshComboBoxLayer()));
   connect(m_radioButtonYUV, SIGNAL(clicked()), this, SLOT(refreshComboBoxLayer()));
   connect(m_comboBoxLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(refreshImage()));
@@ -56,22 +56,22 @@ Histogram::Histogram(PictureModifier* pictureModifier) :
   selectLayout->addWidget(m_radioButtonRGB);
   selectLayout->addWidget(m_radioButtonYUV);
   selectLayout->addWidget(m_comboBoxLayer);
-  
+
   QVBoxLayout *slider = new QVBoxLayout;
   slider->addWidget(m_sliderInf);
   slider->addWidget(m_sliderSup);
-  
+
   QHBoxLayout* button = new QHBoxLayout;
   button->addWidget(m_applyRescale);
   button->addWidget(m_applyEqualization);
   button->addWidget(m_applyLinearization);
-  
+
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addLayout(selectLayout);
   layout->addWidget(m_histogramLabel);
   layout->addLayout(slider);
   layout->addLayout(button);
-  
+
   setLayout(layout);
 }
 
@@ -79,8 +79,8 @@ Histogram::~Histogram() {}
 
 
 /** Mutateurs */
-void Histogram::setPictureModifier(PictureModifier* pictureModifier) { 
-  m_pictureModifier = pictureModifier; 
+void Histogram::setPictureModifier(PictureModifier* pictureModifier) {
+  m_pictureModifier = pictureModifier;
   refresh();
 }
 
@@ -90,7 +90,7 @@ bool Histogram::isEnabled() { return QWidget::isEnabled() && m_pictureModifier !
 
 
 /** Methodes */
-void Histogram::refresh() {  
+void Histogram::refresh() {
   bool rgb = m_radioButtonRGB->isChecked();
   refreshData(rgb);
   if (m_pictureModifier != NULL) {
@@ -114,7 +114,7 @@ void Histogram::refresh() {
 	  int color[3] = { 255, 255, 255 };
 	  for (int k = 0; k < 3; k++)
 	    if ((m_comboBoxLayer->currentIndex() != k && m_comboBoxLayer->currentIndex() < 3) || j < 100 - seuil[2-k]) color[2-k] = 0;
-	    
+
 	  if (color[0] + color[1] + color[2] == 0) m_histogramImage->setPixel(i, j, PixelMod::createRGB(0, 0, 0, PixelMod::TRANSLUCID));
 	  else m_histogramImage->setPixel(i, j, PixelMod::createRGB(color[2], color[1], color[0]));
 	}
@@ -130,7 +130,7 @@ void Histogram::equalization() {
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 256; j++)
 	m_cumulativeHistogram[i][j] = 0;
-      
+
     //calcul de l'histogramme cumulé
     int kRed, kGreen, kBlue;
     for(int i=0; i<256; i++){
@@ -145,8 +145,8 @@ void Histogram::equalization() {
       m_cumulativeHistogram[PixelMod::RED][i] = kRed;
       m_cumulativeHistogram[PixelMod::GREEN][i] = kGreen;
       m_cumulativeHistogram[PixelMod::BLUE][i] = kBlue;
-    } 
-    
+    }
+
     //egalisation de l'image
     bool rgb = m_radioButtonRGB->isChecked();
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
@@ -185,7 +185,7 @@ void Histogram::equalization() {
 						  PixelMod::threshold(PixelMod::getIntFromDouble((255.0*((float)m_cumulativeHistogram[PixelMod::BLUE][PixelMod::getBlue(couleur)]))/ nbPixel)),
 						  PixelMod::getAlpha(couleur)));
 	} else { //yuv
-	  if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Luma")) 
+	  if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Luma"))
 	    tracing->setValue(j,
 	    		      i,
 	    		      PixelMod::createYUV(PixelMod::threshold((255.0*((float)m_cumulativeHistogram[PixelMod::LUMA][PixelMod::getIntFromDouble(PixelMod::getLuma(couleur))]))/ nbPixel),
@@ -290,25 +290,25 @@ void Histogram::refreshData(bool rgb) {
   for (int i = 0; i < 3; i++)
       for (int j = 0; j < 256; j++)
 	m_histogramData[i][j] = 0;
-      
-          
+
+
   if (m_pictureModifier != NULL) {
     Tracing* tracing = m_pictureModifier->getPicture()->getBackground();
     for(int i = 0; i < tracing->getWidth(); i++) {
       for(int j = 0; j < tracing->getHeight(); j++) {
 	unsigned int color = tracing->getValue(i,j);
 	if (PixelMod::getAlpha(color) != PixelMod::TRANSLUCID) {
-	  
+
 	  if (rgb) {
 	    if((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red Green Blue")){
 	      int a = PixelMod::getIntFromDouble(((float)PixelMod::getRed(color)+(float)PixelMod::getGreen(color) + (float)PixelMod::getBlue(color))/3.0);
 	      m_histogramData[PixelMod::RED][a]++;
 	      m_histogramData[PixelMod::GREEN][a]++;
-	      m_histogramData[PixelMod::BLUE][a]++;	
+	      m_histogramData[PixelMod::BLUE][a]++;
 	    } else{
 	      m_histogramData[PixelMod::RED][PixelMod::getRed(color)]++;
 	      m_histogramData[PixelMod::GREEN][PixelMod::getGreen(color)]++;
-	      m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;  
+	      m_histogramData[PixelMod::BLUE][PixelMod::getBlue(color)]++;
 	    }
 	  } else {
 	    m_histogramData[PixelMod::LUMA][PixelMod::getIntFromDouble(PixelMod::getLuma(color))]++;
@@ -324,7 +324,7 @@ void Histogram::refreshData(bool rgb) {
 int Histogram::getChrominanceUForHistogram(float color){
   float xa = -111.18;
   float xb = 111.18;
-  
+
   return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
   //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
 }
@@ -333,7 +333,7 @@ int Histogram::getChrominanceVForHistogram(float color){
   float xa = -156.825;
   float xb = 156.825;
   //return floor((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
-  return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb)); 
+  return PixelMod::getIntFromDouble((color * 255.) / (xb - xa) + (255. * xa) / (xa - xb));
 }
 
 /** Slots */
@@ -366,7 +366,7 @@ void Histogram::sliderInfChanged(int i){
 }
 
 void Histogram::sliderSupChanged(int i){
-  m_bSup = i;  
+  m_bSup = i;
   if(m_bSup < m_bInf){
     m_bInf = m_bSup;
     m_sliderInf->setValue(m_bInf);
@@ -418,7 +418,7 @@ void Histogram::applyHistogramLinearization(){
     }
   }
   else if ((m_comboBoxLayer->itemText(m_comboBoxLayer->currentIndex()))==QString("Red Green Blue")){
-    
+
     int bir = 0;
     int bsr = 255;
     i = 0;
@@ -429,7 +429,7 @@ void Histogram::applyHistogramLinearization(){
     while (i>0 && m_histogramData[PixelMod::RED][i]==0){
       bsr = i; i--;
     }
-    
+
     int big = 0;
     int bsg = 255;
     i = 0;
@@ -485,8 +485,8 @@ void Histogram::applyHistogramLinearization(){
   }
   crop(bInf,bSup);
 }
-    
-    
+
+
 inline int min(int x, int y){
   if (x < y) return x;
   else return y;

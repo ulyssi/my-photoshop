@@ -2,8 +2,8 @@
 #define _COLOR_CONVERT_OPERATION_HH_
 
 #include "Operation.hh"
-#include "Matrix.hh"
-#include "PixelMod.hh"
+#include "../Matrix.hh"
+#include "../PixelMod.hh"
 
 class Tracing;
 
@@ -33,12 +33,12 @@ public:
 private:
 
   /** Attributs */
- 
- 
+
+
   Matrix<double>* m_kernel;
   int *m_seuilMin, *m_seuilMax;
- 
-  
+
+
 };
 
 #endif

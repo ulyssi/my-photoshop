@@ -11,7 +11,7 @@
 #include <QShortcut>
 #include <QKeySequence>
 #include <QStatusBar>
-#include "Matrix.hh"
+#include "../model/Matrix.hh"
 
 class Previewer;
 class Histogram;
@@ -36,7 +36,7 @@ public:
   ~UserInterface();
 
   /** Accesseurs */
-  
+
   Previewer* getPreviewer();
   Histogram* getHistogram();
   ColorChooser* getColorChooser();
@@ -66,21 +66,21 @@ public slots:
   void open();
   void save();
   void close(QWidget*);
- 
+
   void exit();
 
   void undo();
   void redo();
-  
+
   void cut();
   void copy();
   void paste();
-  
+
   void crop();
   void select();
   void move();
   void resetEditionTool(int);
-  
+
   void zoomIn();
   void zoomOut();
   void normalSize();
@@ -90,7 +90,7 @@ public slots:
   void changeGIMode();
   void about();
   void print(QString);
-        
+
 private:
 
   /** Methodes internes */
@@ -103,9 +103,9 @@ private:
   void createToolBars();
   void createToolBoxDocks();
   TabWidget* createTabWidget();
-  
+
   QDockWidget* createDockWidget(QWidget* widget);
-  
+
   void createFileAction();
   void createEditAction();
   void createViewAction();
@@ -114,12 +114,12 @@ private:
   void createColorConvertOperationAction();
   void createConvolveOperationAction();
   void createAlgebricOperationAction();
-  
+
   QMenu* createFileMenu();
   QMenu* createEditMenu();
   QMenu* createViewMenu();
   QMenu* createHelpMenu();
-  
+
   QToolBar* createFileToolBar();
   QToolBar* createEditToolBar();
   QToolBar* createViewToolBar();
@@ -140,7 +140,7 @@ private:
   QClipboard* m_clipboard;
   PictureManager* m_pictureManager;
   TabWidget* m_viewTabWidget;
-  
+
   Previewer* m_previewer;
   Histogram* m_histogram;
   ColorChooser* m_colorChooser;
@@ -155,7 +155,7 @@ private:
   QMenu* m_editMenu;
   QMenu* m_viewMenu;
   QMenu* m_helpMenu;
-  
+
   QToolBar* m_fileToolBar;
   QToolBar* m_editToolBar;
   QToolBar* m_viewToolBar;
@@ -170,9 +170,9 @@ private:
   QDockWidget* m_convolveOperationChooserDock;
   QDockWidget* m_algebricOperationChooserDock;
   QDockWidget* m_colorConvertOperationChooserDock;
-  
+
   bool m_actionIconMod;
-  
+
   QAction* m_copy;
   QAction* m_cut;
   QAction* m_paste;
@@ -180,7 +180,7 @@ private:
   QAction* m_openAct;
   QAction* m_saveAct;
   QAction* m_exitAct;
-  
+
   QAction* m_closeTab;
 
   QAction* m_undoAct;
@@ -193,7 +193,7 @@ private:
   QAction* m_selection;
   QAction* m_move;
   QAction* m_crop;
-  
+
   QAction* m_guiMode;
   QAction* m_aboutAct;
   QAction* m_aboutQtAct;

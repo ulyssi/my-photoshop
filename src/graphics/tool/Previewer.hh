@@ -4,7 +4,7 @@
 #include <QScrollArea>
 #include <QLabel>
 
-#include "Matrix.hh"
+#include "../../model/Matrix.hh"
 
 class PictureModifier;
 class Picture;
@@ -22,7 +22,7 @@ public:
   void setPictureModifier(PictureModifier*);
   void setPicture(Picture*);
   void setData(Matrix<unsigned int>*);
-  
+
   /** Predicats */
   bool isEnabled();
 

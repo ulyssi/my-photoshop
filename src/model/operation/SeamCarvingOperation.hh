@@ -1,7 +1,7 @@
 #ifndef _SEAM_CARVING_OPERATION_HH_
 #define _SEAM_CARVING_OPERATION_HH_
 
-#include "Matrix.hh"
+#include "../Matrix.hh"
 
 class Picture;
 
@@ -9,7 +9,7 @@ class Picture;
 class SeamCarvingOperation {
 
 public:
-  
+
   /** Constructeurs et destructeur */
   SeamCarvingOperation(Picture*);
   ~SeamCarvingOperation();
@@ -49,7 +49,7 @@ private:
 
   /** Methodes internes */
   Matrix<Point*>* createData();
-  
+
   void refreshData();
   void refreshDataV();
   void refreshGradient();

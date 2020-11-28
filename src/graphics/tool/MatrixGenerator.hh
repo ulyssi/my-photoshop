@@ -6,13 +6,13 @@
 #include <QGridLayout>
 #include <QSignalMapper>
 
-#include "Matrix.hh"
+#include "../../model/Matrix.hh"
 
 
 class MatrixGenerator : public QWidget { Q_OBJECT
 
 public:
-  
+
   /** Constructeurs et destructeur */
   MatrixGenerator(int, int);
   ~MatrixGenerator();
@@ -40,21 +40,21 @@ public slots:
   void setValue(int, int, double);
 
 signals:
-  
+
   /** Signaux */
   void valueChanged(int, int, double);
   void widthChanged(int);
   void heightChanged(int);
-  
+
 private:
 
   /** Methodes internes */
 
 private slots:
-  
+
   /** Signaux internes */
   void valueChanged(QObject*);
-  
+
 private:
 
   /** Attributs */

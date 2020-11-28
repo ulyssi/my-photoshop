@@ -2,9 +2,9 @@
 #include <QTabBar>
 #include <QListIterator>
 #include "TabPanel.hh"
-#include "MPushButton.hh"
-#include "Picture.hh"
-#include "PictureManager.hh"
+#include "util/MPushButton.hh"
+#include "../model/Picture.hh"
+#include "picture/PictureManager.hh"
 #include "UserInterface.hh"
 
 
@@ -23,7 +23,7 @@ TabWidget::~TabWidget() {}
 
 
 /** Accesseurs */
-TabPanel* TabWidget::getTabPanel() { 
+TabPanel* TabWidget::getTabPanel() {
   m_mutex.lock();
   QWidget* t_widget=widget(currentIndex());
   m_mutex.unlock();
@@ -34,22 +34,22 @@ TabPanel* TabWidget::getTabPanel() {
 /** Methodes */
 int TabWidget::addTab(TabPanel* tabPanel) {
   int index = insertTab(count()-1, tabPanel, tabPanel->getTabName());
-  if (index == 0){ 
+  if (index == 0){
     setCurrentIndex(index);
   }
   else tabBar()->setTabButton(index, QTabBar::RightSide, (QWidget*)createCloseButton());
-  
+
   return index;
 }
 
 
 /** Slots */
 void TabWidget::selectTab(int index) {
-  if (index > 0  && index >= tabBar()->count()-1) 
+  if (index > 0  && index >= tabBar()->count()-1)
     setCurrentIndex(index-1);
   else {
     this->tabBar()->setTabTextColor(index, Qt::blue);
-    for(int i = 0; i < tabBar()->count(); i++) 
+    for(int i = 0; i < tabBar()->count(); i++)
       if (i != index)
         tabBar()->setTabTextColor(i, Qt::black);
   }
@@ -70,17 +70,17 @@ void TabWidget::closeTab(int index) {
   }
   if (r!=-1) m_listpushbutton.removeAt(r);
   m_mutex.unlock();
-  if (index != 0 && index != count()) { 
+  if (index != 0 && index != count()) {
     m_userInterface->close(widget(index-1));
     removeTab(index-1);
     setCurrentIndex(0);
-  }  
+  }
 }
 
 
 /** Methodes internes */
 QPushButton* TabWidget::createNewTabButton() {
-  QPushButton* newTabButton = new QPushButton(); 
+  QPushButton* newTabButton = new QPushButton();
   newTabButton->setFixedWidth(16);
   newTabButton->setFixedHeight(16);
   newTabButton->setIcon(QIcon("Icon/Open.png"));

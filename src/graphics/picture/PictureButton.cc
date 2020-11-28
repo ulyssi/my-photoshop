@@ -1,27 +1,27 @@
 #include "PictureButton.hh"
 #include "PictureModifier.hh"
-#include "Picture.hh"
-#include "UserInterface.hh"
+#include "../../model/Picture.hh"
+#include "../UserInterface.hh"
 #include <QFileInfo>
 /*Constructeur et destructeur */
 
 PictureButton::PictureButton(PictureModifier *pictureModifier,UserInterface* userinterface) :
   m_pictureModifier(pictureModifier)
-{ m_userInterface = userinterface; 
+{ m_userInterface = userinterface;
   setIcon(QPixmap::fromImage((const QImage&)(*(m_pictureModifier->getImage()))));
   setCheckable(true);
   m_size= new QSize(128,128);
   setIconSize(*m_size);
   setCheckable(true);
-  QObject::connect((QAbstractButton*)this,SIGNAL(pressed()),this, SLOT(clicked())); 
-  
+  QObject::connect((QAbstractButton*)this,SIGNAL(pressed()),this, SLOT(clicked()));
+
 
 }
 
 PictureButton::~PictureButton() {}
 
 QSize* PictureButton::geticonSize(){return m_size;}
- 
+
 void PictureButton::seticonSize(int width , int height){
   setIconSize(QSize(width,height));
 }

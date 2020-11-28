@@ -1,7 +1,7 @@
 #include "Previewer.hh"
 
-#include "PictureModifier.hh"
-#include "Picture.hh"
+#include "../picture/PictureModifier.hh"
+#include "../../model/Picture.hh"
 
 
 /** Constructeurs et destructeur */
@@ -21,13 +21,13 @@ Previewer::~Previewer() {}
 /** Mutateurs */
 void Previewer::setPictureModifier(PictureModifier* pictureModifier) {
   setPicture(NULL);
-  m_pictureModifier = pictureModifier; 
+  m_pictureModifier = pictureModifier;
   if (m_pictureModifier != NULL) refresh();
 }
 
 void Previewer::setPicture(Picture* picture) {
   setData(NULL);
-  m_picture = picture; 
+  m_picture = picture;
   if (m_picture != NULL) refresh();
 }
 
@@ -38,7 +38,7 @@ void Previewer::setData(Matrix<unsigned int>* data) {
 
 
 /** Predicats */
-bool Previewer::isEnabled() { 
+bool Previewer::isEnabled() {
   return (m_pictureModifier != NULL || m_picture != NULL || m_data != NULL);
 }
 
@@ -49,7 +49,7 @@ void Previewer::refresh() {
   if (m_data != NULL) data = m_data;
   else if (m_picture != NULL) data = m_picture->getData();
   else if (m_pictureModifier != NULL) data = m_pictureModifier->getPicture()->getData();
-  
+
   if (data != NULL) {
     int width = data->getWidth(), height = data->getHeight();
     QImage image(width, height, QImage::Format_ARGB32);

@@ -3,11 +3,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-#include "ColorConvertOperation.hh"
-#include "UserInterface.hh"
-#include "PictureModifier.hh"
-#include "Previewer.hh"
-#include "Picture.hh"
+#include "../../model/operation/ColorConvertOperation.hh"
+#include "../UserInterface.hh"
+#include "../picture/PictureModifier.hh"
+#include "../tool/Previewer.hh"
+#include "../../model/Picture.hh"
 #include "MatrixGenerator.hh"
 
 
@@ -45,7 +45,7 @@ void ColorConvertOperationChooser::setPictureModifier(PictureModifier* pictureMo
 
 
 /** Methodes */
-void ColorConvertOperationChooser::refresh() { 
+void ColorConvertOperationChooser::refresh() {
   refreshPreview();
 }
 
@@ -69,7 +69,7 @@ void ColorConvertOperationChooser::minThresholdUpdate(int minThreshold) {
     m_spinBoxMaxThresholdBlue->setValue(m_spinBoxMinThresholdBlue->value());
     connect(m_spinBoxMaxThresholdBlue, SIGNAL(valueChanged(int)), this, SLOT(maxThresholdUpdate(int)));
   }
-  
+
   emit(dataChanged());
 }
 
@@ -110,7 +110,7 @@ void ColorConvertOperationChooser::kernelComboBoxChanged(int index) {
 
   disconnect(m_matrixGenerator, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
   for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) 
+    for (int j = 0; j < m_kernel->getHeight(); j++)
       m_matrixGenerator->setValue(i, j, m_kernel->getValue(i, j));
   connect(m_matrixGenerator, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
   emit(dataChanged());
@@ -204,7 +204,7 @@ MatrixGenerator* ColorConvertOperationChooser::createMatrixModifier() {
   m_matrixGenerator->setSingleStep(0.01);
 
   for (int i = 0; i < m_kernel->getWidth(); i++)
-    for (int j = 0; j < m_kernel->getHeight(); j++) 
+    for (int j = 0; j < m_kernel->getHeight(); j++)
       m_matrixGenerator->setValue(i, j, m_kernel->getValue(i, j));
 
   connect(m_matrixGenerator, SIGNAL(valueChanged(int, int, double)), this, SLOT(setKernelValue(int, int, double)));
@@ -291,7 +291,7 @@ QHBoxLayout* ColorConvertOperationChooser::createControlsLayout() {
   QPushButton* pushButtonRefresh = new QPushButton(tr("Refresh"));
   QPushButton* pushButtonReset = new QPushButton(tr("Reset"));
   QPushButton* pushButtonApply = new QPushButton(tr("Apply"));
-  
+
   connect(pushButtonRefresh, SIGNAL(clicked()), this, SLOT(refreshPreview()));
   connect(pushButtonReset, SIGNAL(clicked()), this, SLOT(resetOperation()));
   connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(applyOperation()));
@@ -299,6 +299,6 @@ QHBoxLayout* ColorConvertOperationChooser::createControlsLayout() {
   layout->addWidget(pushButtonRefresh);
   layout->addWidget(pushButtonReset);
   layout->addWidget(pushButtonApply);
-  
+
   return layout;
 }

@@ -1,14 +1,14 @@
 #include "ConvolveOperation.hh"
 
-#include "Picture.hh"
-#include "Tracing.hh"
+#include "../Picture.hh"
+#include "../Tracing.hh"
 
 #include <algorithm>
 
 /** Constructeurs et destructeur */
 ConvolveOperation::ConvolveOperation(Picture* picture, Operation* operation) :
- 
- 
+
+
   m_kernel(NULL),
   m_red(true),
   m_green(true),
@@ -16,7 +16,7 @@ ConvolveOperation::ConvolveOperation(Picture* picture, Operation* operation) :
   m_alpha(false),
   m_convolutionCoef(1.0),
   m_decalage(0),
- 
+
   m_edgeControl(CROP_EDGE),
   m_operator(TIMES_OPERATOR)
 {
@@ -34,9 +34,9 @@ Picture* ConvolveOperation::getPicture() { return m_picture; }
 
 PixelMod::Type ConvolveOperation::getInputType() { return PixelMod::COLOR; }
 
-PixelMod::Type ConvolveOperation::getOutputType() { 
+PixelMod::Type ConvolveOperation::getOutputType() {
   // if (m_operation != NULL) return m_operation->getOutType();
-  return PixelMod::COLOR; 
+  return PixelMod::COLOR;
 }
 
 
@@ -65,14 +65,14 @@ void ConvolveOperation::setOperator(Operator op) { m_operator = op; }
 
 /** Methodes */
 Matrix<unsigned int>* ConvolveOperation::updateInternalPreview() {
-  
+
   m_previewData = new Matrix<unsigned int>(m_pictureData->getWidth(), m_pictureData->getHeight());
 
   m_convolutionCoef = 0;
   for (int i = 0; i < m_kernel->getWidth(); i++)
     for (int j = 0; j < m_kernel->getHeight(); j++)
       m_convolutionCoef += m_kernel->getValue(i, j);
-  
+
   m_decalage = 0;
   if (m_convolutionCoef <= 0) {
     m_convolutionCoef = 1;
@@ -83,7 +83,7 @@ Matrix<unsigned int>* ConvolveOperation::updateInternalPreview() {
   int startI = 0, endI = m_pictureData->getWidth(), startJ = 0, endJ = m_pictureData->getHeight();
   m_startI2 = -(m_endI2 = (m_kernel->getWidth()-1)/2);
   m_startJ2 = -(m_endJ2 = (m_kernel->getHeight()-1)/2);
-    
+
   if (m_edgeControl == CROP_EDGE) {
     startI += m_endI2;
     endI += m_startI2;
@@ -148,7 +148,7 @@ unsigned int ConvolveOperation::medianOperator(int i, int j) {
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int color = getPixelColor(i + i2, j + j2);
       double sum = getSum(color) * m_kernel->getValue(i2 + m_endI2, j2 + m_endJ2);
-      int k2 = k; 
+      int k2 = k;
       while (k2 > 0 && tabSum[k2-1] > sum) {
         tabColor[k2] = tabColor[k2-1];
         tabSum[k2] = tabSum[k2-1];
@@ -164,7 +164,7 @@ unsigned int ConvolveOperation::medianOperator(int i, int j) {
 unsigned int ConvolveOperation::maxOperator(int i, int j) {
   unsigned int color = m_pictureData->getValue(i, j);
   unsigned int sum = getSum(color) * m_kernel->getValue(m_endI2, m_endJ2);
-  
+
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int colorTmp = getPixelColor(i + i2, j + j2);
@@ -180,7 +180,7 @@ unsigned int ConvolveOperation::maxOperator(int i, int j) {
 unsigned int ConvolveOperation::minOperator(int i, int j) {
   unsigned int color = m_pictureData->getValue(i, j);
   unsigned int sum = getSum(color) * m_kernel->getValue(m_endI2, m_endJ2);
-  
+
   for (int i2 = m_startI2; i2 < m_endI2 + 1; i2++)
     for (int j2 = m_startJ2; j2 < m_endJ2 + 1; j2++) {
       unsigned int colorTmp = getPixelColor(i + i2, j + j2);

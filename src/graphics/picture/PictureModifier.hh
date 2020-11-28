@@ -1,7 +1,7 @@
 #ifndef _PICTURE_MODIFIER_HH_
 #define _PICTURE_MODIFIER_HH_
 
-#include "TabPanel.hh"
+#include "../TabPanel.hh"
 #include <QImage>
 #include <QClipboard>
 
@@ -13,11 +13,11 @@ class PictureArea;
 class PictureModifier : public TabPanel {
 
 public :
-  
+
   /** Constructeurs et destructeur */
-  PictureModifier(Picture*, UserInterface*); 
+  PictureModifier(Picture*, UserInterface*);
   ~PictureModifier();
-  
+
   /** Accesseurs */
   QImage* getImage();
   Picture* getPicture();
@@ -29,10 +29,10 @@ public :
   void refreshData();
   void refresh();
   void zoomIn();
-  void zoomOut();  
+  void zoomOut();
   void normalSize();
   void fitToWindow();
-  void copy();	
+  void copy();
   void paste();
   void cut();
   void crop();
@@ -40,7 +40,7 @@ public :
   void disableSelection();
   bool enableMove();
   void disableMove();
-  
+
 private :
 
   /** Attributs */
@@ -48,7 +48,7 @@ private :
   QImage* m_image;
   PictureArea* m_pictureArea;
   UserInterface* m_userInterface;
-  
+
 private slots:
   /** SLOTS**/
   void 	keyPressEvent ( QKeyEvent * event );

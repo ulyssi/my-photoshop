@@ -2,8 +2,8 @@
 #define _CONVOLVE_OPERATION_HH_
 
 #include "Operation.hh"
-#include "PixelMod.hh"
-#include "Matrix.hh"
+#include "../PixelMod.hh"
+#include "../Matrix.hh"
 
 class Picture;
 class Tracing;
@@ -74,10 +74,10 @@ private:
   inline unsigned int minOperator(int, int);
   inline unsigned int getPixelColor(int, int);
   inline unsigned int getSum(unsigned int);
-  
+
   /** Attributs */
- 
- 
+
+
   Matrix<double>* m_kernel;
   bool m_red, m_green, m_blue, m_alpha;
   double m_convolutionCoef;
